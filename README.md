@@ -95,8 +95,17 @@ This package aims to
     * current `max.energy()`
     * current for multiple inverters `max.energy_multiple()`
     * historical data `max.energy_history()`
-* SPH (*TYPE=5* - SPH)
-  * ***Not*** implemented yet
+* SPH (*TYPE=5* - SPH/MIX) (TODO: refactor rename to MIX?)
+  * general device data
+    * read device data `sph.details()`
+    * read alarms/notification `sph.alarms()`
+  * device settings
+    * read settings value `sph.setting_read()`
+    * write settings value `sph.setting_write()` (***use with caution***)
+  * device power/energy metrics
+    * current `sph.energy()`
+    * current for multiple inverters `sph.energy_multiple()`
+    * historical data `sph.energy_history()`
 * SPA (*TYPE=6* - SPA)
   * ***Not*** implemented yet
 * MIN (*TYPE=7* - MIN/MAC/MOD-XH/MID-XH/NEO)
@@ -231,6 +240,7 @@ To the best of our knowledge only the settings functions perform modifications t
 * 2025.03.05 (pre-alpha)
   * endpoints implemented:
     * MAX
+    * SPH (MIX)
 * 2025.03.04 (pre-alpha)
   * initial release
   * endpoints implemented:
