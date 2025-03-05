@@ -1,4 +1,5 @@
 import pickle
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Optional, Dict, Any
 from loguru import logger
@@ -149,6 +150,35 @@ if inverter:
     )
     logger.debug(
         f"energy_multiple:\n{ga.inverter.energy_multiple(device_sn=inverter_sn).model_dump()}"
+    )
+
+# try a MAX device
+max_device = next((d for d in device_details if d["device_type"] == 4), None)
+if inverter:
+    max_sn = max_device["device_sn"]
+
+    logger.debug(f"Found 'MAX' device {max_sn} for plant {max_device['plant_id']}")
+
+    logger.debug(f"alarms:\n{ga.max.alarms(device_sn=max_sn).model_dump()}")
+    logger.debug(f"details:\n{ga.max.details(device_sn=max_sn).model_dump()}")
+    max_energy = ga.max.energy(device_sn=max_sn)
+    logger.debug(f"energy:\n{max_energy.model_dump()}")
+    try:
+        last_data_ts = max_energy.data.time.date()
+    except AttributeError:
+        last_data_ts = date(2024, 12, 20)
+    max_history = ga.max.energy_history(
+        device_sn=max_sn,
+        # ensure we see some data (will probably have no data for "today"
+        start_date=last_data_ts - timedelta(days=1),
+        end_date=last_data_ts + timedelta(days=1),
+    )
+    logger.debug(f"energy_history:\n{max_history.model_dump()}")
+    logger.debug(
+        f"energy_multiple:\n{ga.max.energy_multiple(device_sn=max_sn).model_dump()}"
+    )
+    logger.debug(
+        f"settings read 'max_cmd_on_off':\n{ga.max.setting_read(device_sn=max_sn, parameter_id='max_cmd_on_off').model_dump()}"
     )
 
 logger.success("DONE")

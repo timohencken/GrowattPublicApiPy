@@ -599,6 +599,7 @@ class MinDetailData(ApiModel):
     battery_type: Union[EmptyStrToNone, int] = (
         None  # Battery Type (0:Lithium, 1:Lead-acid, 2:other), e.g. 0
     )
+    baudrate: Union[EmptyStrToNone, float] = None  # Baud rate selection, e.g. 0
     bct_adjust: Union[EmptyStrToNone, int] = (
         None  # Sensor adjustment (0:disable, 1:enable), e.g. 0
     )
@@ -672,7 +673,7 @@ class MinDetailData(ApiModel):
     p_charge: Union[EmptyStrToNone, float] = None  # e.g. 0
     p_discharge: Union[EmptyStrToNone, float] = None  # e.g. 0
     parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_VC51030322020001_22'
-    plant_Id: Union[EmptyStrToNone, int] = None  # e.g. 0
+    plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
     plantname: Union[EmptyStrToNone, str] = None  # e.g. ''
     pmax: Union[EmptyStrToNone, int] = (
         None  # Rated power in 0.1VA, e.g. 11400 for 1140.0 W
@@ -725,7 +726,6 @@ class MinDetailData(ApiModel):
         None  # Nominal PV voltage in 0.1V, e.g. 280 for 28.0 V
     )
     vpp_open: Union[EmptyStrToNone, float] = None  # e.g. 0
-    baudrate: Union[EmptyStrToNone, float] = None  # Baud rate selection, e.g. 0
 
 
 class MinDetails(ApiResponse):
