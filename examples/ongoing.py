@@ -51,7 +51,6 @@ if __name__ == "__main__":
     # # FIXME DEBUG
 
     # TODO user
-    # TODO max
     # TODO sph
     # TODO spa
     # TODO pcs
@@ -59,8 +58,12 @@ if __name__ == "__main__":
     # TODO pbd
     # TODO Smart meter
     # TODO Environmental tester
-    # TODO vpp
     # TODO groBoost
+
+    # TODO max
+    _max_energy_ = ga.max.energy(device_sn=INVERTER_SN)
+    _max_details_ = ga.max.details(device_sn=INVERTER_SN)
+    _max_alarms_ = ga.max.alarms(device_sn=INVERTER_SN)
 
     # vpp
     _vpp_write_multiple_ = ga.vpp.write_multiple(
