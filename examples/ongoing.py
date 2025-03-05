@@ -49,7 +49,7 @@ if __name__ == "__main__":
     # # FIXME DEBUG
 
     # TODO user
-    # TODO sph
+
     # TODO spa
     # TODO pcs
     # TODO hps
@@ -57,6 +57,16 @@ if __name__ == "__main__":
     # TODO Smart meter
     # TODO Environmental tester
     # TODO groBoost
+
+    # TODO sph
+    _sph_energy_history_ = ga.sph.energy_history(device_sn=INVERTER_SN)
+    _sph_energy_multiple_ = ga.sph.energy_multiple(device_sn=INVERTER_SN)
+    _sph_energy_ = ga.sph.energy(device_sn=INVERTER_SN)
+    _sph_details_ = ga.sph.details(device_sn=INVERTER_SN)
+    _sph_setting_read_by_name_ = ga.sph.setting_read(
+        device_sn=INVERTER_SN, parameter_id="pv_on_off"
+    )
+    _sph_alarms_ = ga.sph.alarms(device_sn=INVERTER_SN)
 
     # max
     _max_setting_read_by_name_ = ga.max.setting_read(
