@@ -58,7 +58,10 @@ if __name__ == "__main__":
     # TODO Environmental tester
     # TODO groBoost
 
-    # TODO sph
+    # TODO spa
+    _spa_alarms_ = ga.spa.alarms(device_sn=INVERTER_SN)
+
+    # sph
     _sph_energy_history_ = ga.sph.energy_history(device_sn=INVERTER_SN)
     _sph_energy_multiple_ = ga.sph.energy_multiple(device_sn=INVERTER_SN)
     _sph_energy_ = ga.sph.energy(device_sn=INVERTER_SN)

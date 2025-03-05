@@ -15,6 +15,7 @@ from min import Min  # noqa: E402
 from max import Max  # noqa: E402
 from vpp import Vpp  # noqa: E402
 from sph import Sph  # noqa: E402
+from spa import Spa  # noqa: E402
 
 
 class GrowattDeviceType(IntEnum):
@@ -43,6 +44,7 @@ class GrowattApi:
     max: Max
     vpp: Vpp
     sph: Sph
+    spa: Spa
 
     """
     API documents:
@@ -69,3 +71,4 @@ class GrowattApi:
         self.max = Max(self.session)
         self.vpp = Vpp(self.session)
         self.sph = Sph(self.session)
+        self.spa = Spa(self.session)
