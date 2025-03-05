@@ -89,13 +89,12 @@ This package aims to
     * read device data `max.details()`
     * read alarms/notification `max.alarms()`
   * device settings
-    * read settings overview `min.settings()` (TODO not implemented)
-    * read settings value `min.setting_read()` (TODO not implemented)
-    * write settings value `min.setting_write()` (***use with caution***) (TODO not implemented)
+    * read settings value `max.setting_read()`
+    * write settings value `max.setting_write()` (***use with caution***)
   * device power/energy metrics
     * current `max.energy()`
-    * current for multiple inverters `min.energy_multiple()` (TODO not implemented)
-    * historical data `min.energy_history()` (TODO not implemented)
+    * current for multiple inverters `max.energy_multiple()`
+    * historical data `max.energy_history()`
 * SPH (*TYPE=5* - SPH)
   * ***Not*** implemented yet
 * SPA (*TYPE=6* - SPA)
@@ -229,9 +228,9 @@ To the best of our knowledge only the settings functions perform modifications t
 
 
 # Changelog
-* TBA (pre-alpha)
+* 2025.03.05 (pre-alpha)
   * endpoints implemented:
-    * MAX (ongoing)
+    * MAX
 * 2025.03.04 (pre-alpha)
   * initial release
   * endpoints implemented:

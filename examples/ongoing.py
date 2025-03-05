@@ -35,18 +35,16 @@ if __name__ == "__main__":
     # sample_data = """"""
     # import json
     # import pprint
-    #
     # j = json.loads(sample_data)
     # pprint.pprint(j, indent=4, width=500)
-    # k = MinEnergyHistory.model_validate(j)
+    # k = MinEnergyHistory.model_validate(j)  # <-----------------------------
     # pprint.pprint(k.model_dump(), indent=4, width=500)
     # # FIXME DEBUG
     #
     # # FIXME DEBUG
     # import pprint
-    #
     # pprint.pprint(response, indent=4, width=500)
-    # k2 = MinEnergyHistory.model_validate(response)
+    # k2 = MinEnergyHistory.model_validate(response)  # <-----------------------------
     # pprint.pprint(k2.model_dump(), indent=4, width=500)
     # # FIXME DEBUG
 
@@ -60,7 +58,12 @@ if __name__ == "__main__":
     # TODO Environmental tester
     # TODO groBoost
 
-    # TODO max
+    # max
+    _max_setting_read_by_name_ = ga.max.setting_read(
+        device_sn=INVERTER_SN, parameter_id="max_cmd_on_off"
+    )
+    _max_energy_multiple_ = ga.max.energy_multiple(device_sn=INVERTER_SN)
+    _max_energy_history_ = ga.max.energy_history(device_sn=INVERTER_SN)
     _max_energy_ = ga.max.energy(device_sn=INVERTER_SN)
     _max_details_ = ga.max.details(device_sn=INVERTER_SN)
     _max_alarms_ = ga.max.alarms(device_sn=INVERTER_SN)

@@ -4,15 +4,14 @@ from typing import Optional, Union, List
 import truststore
 
 from growatt_public_api.pydantic_models.max import (
-    MinSettingRead,
-    MinSettingWrite,
+    MaxSettingRead,
+    MaxSettingWrite,
     MaxDetails,
     MaxEnergyOverview,
-    MinEnergyHistory,
+    MaxEnergyHistory,
     MaxAlarms,
-    MinEnergyOverviewMultiple,
-    MinEnergyOverviewMultipleItem,
-    MinSettings,
+    MaxEnergyOverviewMultiple,
+    MaxEnergyOverviewMultipleItem,
 )
 
 truststore.inject_into_ssl()
@@ -21,8 +20,8 @@ from growatt_public_api.session import GrowattApiSession  # noqa: E402
 
 class Max:
     """
-    endpoints for MIN / TLX inverters
-    https://www.showdoc.com.cn/262556420217021/6129816412127075
+    endpoints for MAX inverters
+    https://www.showdoc.com.cn/262556420217021/6120369315865619
     """
 
     session: GrowattApiSession
@@ -30,299 +29,16 @@ class Max:
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
 
-    # TODO
-    def settings(
-        self,
-        device_sn: str,
-    ) -> MinSettings:
-        """
-        Read Min settings
-        https://www.showdoc.com.cn/262556420217021/8696815667375182
-
-        Args:
-            device_sn (str): inverter SN
-
-        Returns:
-            MinSettings
-            {   'data': {   'ac_charge': None,
-                            'ac_charge_enable': False,
-                            'active_power_enable': False,
-                            'active_rate': 100.0,
-                            'afci_enabled': -1,
-                            'afci_reset': -1,
-                            'afci_self_check': -1,
-                            'afci_threshold_d': -1.0,
-                            'afci_threshold_h': -1.0,
-                            'afci_threshold_l': -1.0,
-                            'backflow_default_power': 0.0,
-                            'backflow_single_ctrl': None,
-                            'bdc_mode': -1,
-                            'bgrid_type': 0,
-                            'bsystem_work_mode': 500.0,
-                            'charge_power': None,
-                            'charge_power_command': 100.0,
-                            'charge_stop_soc': None,
-                            'compatible_flag': None,
-                            'delay_time': 0,
-                            'demand_manage_enable': None,
-                            'discharge_power': None,
-                            'discharge_power_command': 100.0,
-                            'discharge_stop_soc': None,
-                            'dry_contact_func_en': 0.0,
-                            'dry_contact_off_rate': 40.0,
-                            'dry_contact_on_rate': 40.0,
-                            'dry_contact_power': 50.0,
-                            'enable_n_line': None,
-                            'eps_freq_set': 0.0,
-                            'eps_fun_en': 1.0,
-                            'eps_volt_set': 2.0,
-                            'export_limit': 0.0,
-                            'export_limit_power_rate': 0.0,
-                            'export_limit_power_rate_str': None,
-                            'exter_comm_off_grid_en': 0,
-                            'fail_safe_curr': None,
-                            'fft_threshold_count': -1,
-                            'float_charge_current_limit': 600.0,
-                            'forced_stop_switch1': 0,
-                            'forced_stop_switch2': 0,
-                            'forced_stop_switch3': 0,
-                            'forced_stop_switch4': 0,
-                            'forced_stop_switch5': 0,
-                            'forced_stop_switch6': 0,
-                            'forced_stop_switch7': 0,
-                            'forced_stop_switch8': 0,
-                            'forced_stop_switch9': 0,
-                            'forced_time_start1': datetime.time(0, 0),
-                            'forced_time_start2': datetime.time(0, 0),
-                            'forced_time_start3': datetime.time(0, 0),
-                            'forced_time_start4': datetime.time(0, 0),
-                            'forced_time_start5': datetime.time(0, 0),
-                            'forced_time_start6': datetime.time(0, 0),
-                            'forced_time_start7': datetime.time(0, 0),
-                            'forced_time_start8': datetime.time(0, 0),
-                            'forced_time_start9': datetime.time(0, 0),
-                            'forced_time_stop1': datetime.time(0, 0),
-                            'forced_time_stop2': datetime.time(0, 0),
-                            'forced_time_stop3': datetime.time(0, 0),
-                            'forced_time_stop4': datetime.time(0, 0),
-                            'forced_time_stop5': datetime.time(0, 0),
-                            'forced_time_stop6': datetime.time(0, 0),
-                            'forced_time_stop7': datetime.time(0, 0),
-                            'forced_time_stop8': datetime.time(0, 0),
-                            'forced_time_stop9': datetime.time(0, 0),
-                            'frequency_high_limit': 50.099998474121094,
-                            'frequency_low_limit': 49.5,
-                            'gen_charge_enable': None,
-                            'gen_ctrl': None,
-                            'gen_rated_power': None,
-                            'last_update_time': {'date': 12, 'day': 2, 'hours': 10, 'minutes': 11, 'month': 3, 'seconds': 9, 'time': 1649729469000, 'timezone_offset': -480, 'year': 122},
-                            'last_update_time_text': datetime.datetime(2022, 4, 12, 10, 11, 9),
-                            'lcd_language': 1,
-                            'limit_device': -1.0,
-                            'loading_rate': 20.0,
-                            'maintain_mode_request': None,
-                            'maintain_mode_start_time': None,
-                            'max_allow_curr': None,
-                            'on_grid_discharge_stop_soc': None,
-                            'on_grid_mode': None,
-                            'on_grid_status': None,
-                            'on_off': 1,
-                            'over_fre_drop_point': 50.029998779296875,
-                            'over_fre_lo_red_delay_time': 0.0,
-                            'over_fre_lo_red_slope': 41.0,
-                            'peak_shaving_enable': None,
-                            'pf': 0.8899999856948853,
-                            'pf_model': 0.0,
-                            'pf_sys_year': None,
-                            'pflinep1_lp': 255.0,
-                            'pflinep1_pf': 1.0,
-                            'pflinep2_lp': 255.0,
-                            'pflinep2_pf': 1.0,
-                            'pflinep3_lp': 255.0,
-                            'pflinep3_pf': 1.0,
-                            'pflinep4_lp': 255.0,
-                            'pflinep4_pf': 1.0,
-                            'power_down_enable': None,
-                            'pre_pto': None,
-                            'prot_enable': None,
-                            'pu_enable': None,
-                            'pv_grid_frequency_high': None,
-                            'pv_grid_frequency_low': None,
-                            'pv_grid_voltage_high': None,
-                            'pv_grid_voltage_low': None,
-                            'pv_pf_cmd_memory_state': 0,
-                            'q_percent_max': 44.0,
-                            'qv_h1': 247.1999969482422,
-                            'qv_h2': 256.79998779296875,
-                            'qv_l1': 232.0,
-                            'qv_l2': 220.8000030517578,
-                            'reactive_rate': 0.0,
-                            'region': None,
-                            'restart_loading_rate': 20.0,
-                            'rrcr_enable': None,
-                            'safety_correspond_num': None,
-                            'safety_num': None,
-                            'season1_month_time': '0_0_0',
-                            'season1_time1': '0_0_0_0_0_0_0',
-                            'season1_time2': '0_0_0_0_0_0_0',
-                            'season1_time3': '0_0_0_0_0_0_0',
-                            'season1_time4': '0_0_0_0_0_0_0',
-                            'season1_time5': '0_0_0_0_0_0_0',
-                            'season1_time6': '0_0_0_0_0_0_0',
-                            'season1_time7': '0_0_0_0_0_0_0',
-                            'season1_time8': '0_0_0_0_0_0_0',
-                            'season1_time9': '0_0_0_0_0_0_0',
-                            'season2_month_time': '0_0_0',
-                            'season2_time1': '0_0_0_0_0_0_0',
-                            'season2_time2': '0_0_0_0_0_0_0',
-                            'season2_time3': '0_0_0_0_0_0_0',
-                            'season2_time4': '0_0_0_0_0_0_0',
-                            'season2_time5': '0_0_0_0_0_0_0',
-                            'season2_time6': '0_0_0_0_0_0_0',
-                            'season2_time7': '0_0_0_0_0_0_0',
-                            'season2_time8': '0_0_0_0_0_0_0',
-                            'season2_time9': '0_0_0_0_0_0_0',
-                            'season3_month_time': '0_0_0',
-                            'season3_time1': '0_0_0_0_0_0_0',
-                            'season3_time2': '0_0_0_0_0_0_0',
-                            'season3_time3': '0_0_0_0_0_0_0',
-                            'season3_time4': '0_0_0_0_0_0_0',
-                            'season3_time5': '0_0_0_0_0_0_0',
-                            'season3_time6': '0_0_0_0_0_0_0',
-                            'season3_time7': '0_0_0_0_0_0_0',
-                            'season3_time8': '0_0_0_0_0_0_0',
-                            'season3_time9': '0_0_0_0_0_0_0',
-                            'season4_month_time': '0_0_0',
-                            'season4_time1': '0_0_0_0_0_0_0',
-                            'season4_time2': '0_0_0_0_0_0_0',
-                            'season4_time3': '0_0_0_0_0_0_0',
-                            'season4_time4': '0_0_0_0_0_0_0',
-                            'season4_time5': '0_0_0_0_0_0_0',
-                            'season4_time6': '0_0_0_0_0_0_0',
-                            'season4_time7': '0_0_0_0_0_0_0',
-                            'season4_time8': '0_0_0_0_0_0_0',
-                            'season4_time9': '0_0_0_0_0_0_0',
-                            'serial_num': 'FDCJQ00003',
-                            'show_peak_shaving': None,
-                            'special1_month_time': '0_0_0',
-                            'special1_time1': '0_0_0_0_0_0',
-                            'special1_time2': '0_0_0_0_0_0',
-                            'special1_time3': '0_0_0_0_0_0',
-                            'special1_time4': '0_0_0_0_0_0',
-                            'special1_time5': '0_0_0_0_0_0',
-                            'special1_time6': '0_0_0_0_0_0',
-                            'special1_time7': '0_0_0_0_0_0',
-                            'special1_time8': '0_0_0_0_0_0',
-                            'special1_time9': '0_0_0_0_0_0',
-                            'special2_month_time': '0_0_0',
-                            'special2_time1': '0_0_0_0_0_0',
-                            'special2_time2': '0_0_0_0_0_0',
-                            'special2_time3': '0_0_0_0_0_0',
-                            'special2_time4': '0_0_0_0_0_0',
-                            'special2_time5': '0_0_0_0_0_0',
-                            'special2_time6': '0_0_0_0_0_0',
-                            'special2_time7': '0_0_0_0_0_0',
-                            'special2_time8': '0_0_0_0_0_0',
-                            'special2_time9': '0_0_0_0_0_0',
-                            'syn_enable': None,
-                            'sys_time': datetime.datetime(2022, 4, 12, 10, 11, 7),
-                            'sys_time_text': datetime.datetime(2022, 4, 12, 10, 11, 7),
-                            'time1_mode': 0,
-                            'time2_mode': 0,
-                            'time3_mode': 0,
-                            'time4_mode': 0,
-                            'time5_mode': 0,
-                            'time6_mode': 0,
-                            'time7_mode': 0,
-                            'time8_mode': 0,
-                            'time9_mode': 0,
-                            'tlx_ac_discharge_frequency': None,
-                            'tlx_ac_discharge_voltage': None,
-                            'tlx_backflow_default_power': None,
-                            'tlx_cc_current': None,
-                            'tlx_cv_voltage': None,
-                            'tlx_dry_contact_enable': None,
-                            'tlx_dry_contact_off_power': None,
-                            'tlx_dry_contact_power': None,
-                            'tlx_exter_comm_off_griden': None,
-                            'tlx_lcd_language': None,
-                            'tlx_limit_device': None,
-                            'tlx_off_grid_enable': None,
-                            'tlx_on_off': None,
-                            'tlx_pf': None,
-                            'tlx_pflinep1_lp': None,
-                            'tlx_pflinep1_pf': None,
-                            'tlx_pflinep2_lp': None,
-                            'tlx_pflinep2_pf': None,
-                            'tlx_pflinep3_lp': None,
-                            'tlx_pflinep3_pf': None,
-                            'tlx_pflinep4_lp': None,
-                            'tlx_pflinep4_pf': None,
-                            'ub_ac_charging_stop_soc': None,
-                            'ub_peak_shaving_backup_soc': None,
-                            'us_battery_type': None,
-                            'uw_ac_charging_max_power_limit': None,
-                            'uw_demand_mgt_down_strm_power_limit': None,
-                            'uw_demand_mgt_revse_power_limit': None,
-                            'uw_hf_rt2_ee': 52.0,
-                            'uw_hf_rt_ee': 51.20000076293945,
-                            'uw_hv_rt2_ee': 288.0,
-                            'uw_hv_rt_ee': 264.0,
-                            'uw_lf_rt2_ee': 46.5,
-                            'uw_lf_rt_ee': 48.5,
-                            'uw_lv_rt2_ee': 120.0,
-                            'uw_lv_rt_ee': 211.1999969482422,
-                            'vbat_start_for_charge': 5800.0,
-                            'vbat_start_for_discharge': 0.0,
-                            'vbat_stop_for_charge': 0.0,
-                            'vbat_stop_for_discharge': 0.0,
-                            'vbat_warn_clr': 0.0,
-                            'vbat_warning': 0,
-                            'voltage_high_limit': 252.0,
-                            'voltage_low_limit': 220.0,
-                            'w_charge_soc_low_limit': None,
-                            'w_discharge_soc_low_limit': 5.0,
-                            'win_mode_end_time': None,
-                            'win_mode_flag': None,
-                            'win_mode_off_grid_discharge_stop_soc': None,
-                            'win_mode_on_grid_discharge_stop_soc': None,
-                            'win_mode_start_time': None,
-                            'year_month_time': None,
-                            'year_time1': '0_0_0_0_0_0_0',
-                            'year_time2': '0_0_0_0_0_0_0',
-                            'year_time3': '0_0_0_0_0_0_0',
-                            'year_time4': '0_0_0_0_0_0_0',
-                            'year_time5': '0_0_0_0_0_0_0',
-                            'year_time6': '0_0_0_0_0_0_0',
-                            'year_time7': '0_0_0_0_0_0_0',
-                            'year_time8': '0_0_0_0_0_0_0',
-                            'year_time9': '0_0_0_0_0_0_0'},
-                'datalogger_sn': 'VC51030322020001',
-                'device_sn': 'FDCJQ00003',
-                'error_code': 0,
-                'error_msg': None}
-        """
-
-        response = self.session.get(
-            endpoint="device/tlx/tlx_set_info",
-            params={
-                "device_sn": device_sn,
-            },
-        )
-
-        return MinSettings.model_validate(response)
-
-    # TODO
     def setting_read(
         self,
         device_sn: str,
         parameter_id: Optional[str] = None,
         start_address: Optional[int] = None,
         end_address: Optional[int] = None,
-    ) -> MinSettingRead:
+    ) -> MaxSettingRead:
         """
-        Read Min setting parameter interface
-        https://www.showdoc.com.cn/262556420217021/6119793934974232
+        Read Max setting parameter interface
+        https://www.showdoc.com.cn/262556420217021/6127601154776404
 
         Note:
             Only applicable to devices with device type 4 (max) returned by device.list()
@@ -346,13 +62,13 @@ class Max:
         * 10009: The read setting parameter type does not exist
 
         Args:
-            device_sn (str): inverter SN
+            device_sn (str): MAX SN
             parameter_id (Optional[str]): parameter ID - specify either parameter_id ort start/end_address
             start_address (Optional[int]): register address to start reading from - specify either parameter_id ort start/end_address
             end_address (Optional[int]): register address to stop reading at
 
         Returns:
-            StorageSettingRead
+            MaxSettingRead
             e.g.
             {
                 "data": "0",
@@ -380,7 +96,7 @@ class Max:
                 end_address = start_address
 
         response = self.session.post(
-            endpoint="readMinParam",
+            endpoint="readMaxParam",
             data={
                 "device_sn": device_sn,
                 "paramId": parameter_id,
@@ -389,9 +105,8 @@ class Max:
             },
         )
 
-        return MinSettingRead.model_validate(response)
+        return MaxSettingRead.model_validate(response)
 
-    # TODO
     # noinspection PyUnusedLocal
     def setting_write(
         self,
@@ -416,11 +131,11 @@ class Max:
         parameter_value_17: Optional[str] = None,
         parameter_value_18: Optional[str] = None,
         parameter_value_19: Optional[str] = None,
-    ) -> MinSettingWrite:
+    ) -> MaxSettingWrite:
         """
-        Min parameter setting
-        Min parameter setting interface
-        https://www.showdoc.com.cn/262556420217021/6129826876191828
+        Max parameter setting interface
+        Max parameter setting interface interface
+        https://www.showdoc.com.cn/262556420217021/6127597452472600
 
         Note:
             Only applicable to devices with device type 4 (max) returned by device.list()
@@ -433,50 +148,13 @@ class Max:
         ========================+=======================================+===========================+============================================================================
         description             | parameter_id                          | parameter_value_[n]       | comment
         ========================+=======================================+===========================+============================================================================
-        Backflow prevention     | backflow_setting                      | [1]: 0 ~ 2                | 0 = disable, 1 = enable the meter, 2 = enable CT
-         setting item           |                                       |                           |
+        Set switch machine      | max_cmd_on_off                        | [1]: 0000 or 0001         | 0000 = off, 0001 = on
         ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Set switch machine      | tlx_on_off                            | [1]: 0000 or 0001         | 0000 = shut down, 0001 = switch on
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Set time                | pf_sys_year                           | [1]: YYYY-MM-DD hh:mm:ss  | 0 = enable, 1 = disable
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Set upper limit of      | pv_grid_voltage_high                  | [1]: 270                  |
-         mains voltage          |                                       |                           |
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Set lower limit of      | pv_grid_voltage_low                   | [1]: 180                  |
-         mains voltage          |                                       |                           |
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Set off-grid enable     | tlx_off_grid_enable                   | [1]: 0 or 1               | 0 = prohibited, 1 = enable/yes
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Set off-grid frequency  | tlx_ac_discharge_frequency            | [1]: 0 or 1               | 0 = 50 Hz, 1 = 60 Hz
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Set off-grid voltage    | tlx_ac_discharge_voltage              | [1]: 0 ~ 2                | 0 = 230 V, 1 = 208 V, 2 = 240 V
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Set active power        | pv_active_p_rate                      | [1]: 0 ~ 100              |
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Set none Power          | pv_reactive_p_rate                    | [1]: 0 ~ 100              |
+        Set active power        | pv_active_p_rate                      | [1]: 0 ~ 100              | [1]: percentage
+                                |                                       | [2]: 0 or 1               | [2]: 0 = no memory, 1 = memory
         ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
         Set PF value            | pv_power_factor                       | [1]: -0.8 ~ -1            |
                                 |                                       |    or 0.8 ~  1            |
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Charging power          | charge_power                          | [1]: 0 ~ 100              | charging power
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Charge stop SOC         | charge_stop_soc                       | [1]: 0 ~ 100              | charging stop SOC
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Discharge power         | discharge_power                       | [1]: 0 ~ 100              | discharging power
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Discharge stop SOC      | discharge_stop_soc                    | [1]: 0 ~ 100              | discharging stop SOC
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Mains charging          | ac_charge                             | [1]: 0 or 1               | Mains enable: 0 = disable, 1 = enable
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Time period 1           | time_segment1                         | [1]: 0 ~ 2                | [1]: Mode: 0 = load priority, 1 = battery priority, 2 = grid priority
-                                |                                       | [2]: Time: 0 ~ 23         | [2]: start hour
-                                |                                       | [3]: Time: 0 ~ 59         | [3]: start minute
-                                |                                       | [4]: Time: 0 ~ 23         | [4]: end hour
-                                |                                       | [5]: Time: 0 ~ 59         | [5]: end hour
-                                |                                       | [6]: 0 or 1               | [6]: 0 = disable, 1 = enable
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Time period 2 ~ 9       | time_segment2 ~ time_segment9         | see Time period 1         | see Time period 1
         ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
 
         Register settings
@@ -559,7 +237,7 @@ class Max:
             },
         )
 
-        return MinSettingWrite.model_validate(response)
+        return MaxSettingWrite.model_validate(response)
 
     def details(
         self,
@@ -839,16 +517,15 @@ class Max:
 
         return MaxEnergyOverview.model_validate(response)
 
-    # TODO
     def energy_multiple(
         self,
         device_sn: Union[str, List[str]],
         page: Optional[int] = None,
-    ) -> MinEnergyOverviewMultiple:
+    ) -> MaxEnergyOverviewMultiple:
         """
-        Get the latest real-time data of min in batches
+        Get the latest real-time data of max in batches
         Interface to obtain the latest real-time data of inverters in batches
-        https://www.showdoc.com.cn/262556420217021/6129830403882881
+        https://www.showdoc.com.cn/262556420217021/6127606661600864
 
         Note:
             Only applicable to devices with device type 4 (max) returned by device.list()
@@ -858,250 +535,211 @@ class Max:
 
         Specific error codes:
         * 10001: system error
-        * 10002: Min does not exist
-        * 10003: device SN error
+        * 10002: device serial number error
+        * 10003: date format error
+        * 10004: date interval exceeds seven days
+        * 10005: Max does not exist
 
         Args:
-            device_sn (Union[str, List[str]]): Inverter serial number or list of (multiple) inverter serial numbers (max 100)
+            device_sn (Union[str, List[str]]): MAX serial number or list of (multiple) MAX serial numbers (max 100)
             page (Optional[int]): page number, default 1, max 2
 
         Returns:
-            MinEnergyOverviewMultiple
-            {   'data': [   {   'datalogger_sn': 'XGD4A371YB',
-                                'device_sn': 'HMG2A3807H',
-                                'data': {   'address': 0,
+            MaxEnergyOverviewMultiple
+            {   'data': [   {   'data': {   'address': None,
                                             'again': False,
                                             'alias': None,
-                                            'b_merter_connect_flag': None,
-                                            'bat_sn': None,
-                                            'battery_no': None,
-                                            'battery_sn': None,
-                                            'bdc1_charge_power': 0.0,
-                                            'bdc1_charge_total': 0.0,
-                                            'bdc1_discharge_power': 0.0,
-                                            'bdc1_discharge_total': 0.0,
-                                            'bdc1_fault_type': 0,
-                                            'bdc1_ibat': 0.0,
-                                            'bdc1_ibb': 0.0,
-                                            'bdc1_illc': 0.0,
-                                            'bdc1_mode': 0,
-                                            'bdc1_soc': 0.0,
-                                            'bdc1_status': 0,
-                                            'bdc1_temp1': 0.0,
-                                            'bdc1_temp2': 0.0,
-                                            'bdc1_vbat': 0.0,
-                                            'bdc1_vbus1': 0.0,
-                                            'bdc1_vbus2': 0.0,
-                                            'bdc1_warn_code': 0,
-                                            'bdc2_charge_power': 0.0,
-                                            'bdc2_charge_total': 0.0,
-                                            'bdc2_discharge_power': 0.0,
-                                            'bdc2_discharge_total': 0.0,
-                                            'bdc2_fault_type': 0,
-                                            'bdc2_ibat': 0.0,
-                                            'bdc2_ibb': 0.0,
-                                            'bdc2_illc': 0.0,
-                                            'bdc2_mode': 0,
-                                            'bdc2_soc': 0.0,
-                                            'bdc2_status': 0,
-                                            'bdc2_temp1': 0.0,
-                                            'bdc2_temp2': 0.0,
-                                            'bdc2_vbat': 0.0,
-                                            'bdc2_vbus1': 0.0,
-                                            'bdc2_vbus2': 0.0,
-                                            'bdc2_warn_code': 0,
-                                            'bdc_bus_ref': 0,
-                                            'bdc_derate_reason': 0,
-                                            'bdc_fault_sub_code': 0,
-                                            'bdc_status': 0,
-                                            'bdc_vbus2_neg': 0.0,
-                                            'bdc_warn_sub_code': 0,
-                                            'bgrid_type': None,
-                                            'bms_communication_type': 0,
-                                            'bms_cv_volt': 0.0,
-                                            'bms_error2': 0,
-                                            'bms_error3': 0,
-                                            'bms_error4': None,
-                                            'bms_fault_type': 0,
-                                            'bms_fw_version': '0',
-                                            'bms_ibat': 0.0,
-                                            'bms_icycle': 0.0,
-                                            'bms_info': 0,
-                                            'bms_ios_status': None,
-                                            'bms_max_curr': 0.0,
-                                            'bms_mcu_version': '0',
-                                            'bms_pack_info': 0,
-                                            'bms_soc': 0.0,
-                                            'bms_soh': 0.0,
-                                            'bms_status': 0,
-                                            'bms_temp1_bat': 0.0,
-                                            'bms_using_cap': 0,
-                                            'bms_vbat': 0.0,
-                                            'bms_vdelta': 0.0,
-                                            'bms_warn2': 0,
-                                            'bms_warn_code': 0.0,
-                                            'bsystem_work_mode': None,
+                                            'apf_status': None,
+                                            'apf_status_text': None,
                                             'calendar': {   'first_day_of_week': 1,
                                                             'gregorian_change': {'date': 15, 'day': 5, 'hours': 8, 'minutes': 0, 'month': 9, 'seconds': 0, 'time': -12219292800000, 'timezone_offset': -480, 'year': -318},
                                                             'lenient': True,
                                                             'minimal_days_in_first_week': 1,
-                                                            'time': {'date': 7, 'day': 4, 'hours': 19, 'minutes': 29, 'month': 0, 'seconds': 10, 'time': 1610018950000, 'timezone_offset': -480, 'year': 121},
-                                                            'time_in_millis': 1610018950000,
+                                                            'time': {'date': 8, 'day': 5, 'hours': 9, 'minutes': 4, 'month': 0, 'seconds': 59, 'time': 1610067899000, 'timezone_offset': -480, 'year': 121},
+                                                            'time_in_millis': 1610067899000,
                                                             'time_zone': {'dirty': False, 'display_name': 'China Standard Time', 'dst_savings': 0, 'id': 'Asia/Shanghai', 'last_rule_instance': None, 'raw_offset': 28800000},
                                                             'week_date_supported': True,
                                                             'week_year': 2021,
                                                             'weeks_in_week_year': 52},
+                                            'comp_har_ir': 0,
+                                            'comp_har_is': 0,
+                                            'comp_har_it': 0,
+                                            'comp_qr': 0,
+                                            'comp_qs': 0,
+                                            'comp_qt': 0,
+                                            'ct_har_ir': 0,
+                                            'ct_har_is': 0,
+                                            'ct_har_it': 0,
+                                            'ct_ir': 0,
+                                            'ct_is': 0,
+                                            'ct_it': 0,
+                                            'ct_qr': 0,
+                                            'ct_qs': 0,
+                                            'ct_qt': 0,
+                                            'current_string1': 0.0,
+                                            'current_string10': 0.20000000298023224,
+                                            'current_string11': 0.0,
+                                            'current_string12': 0.20000000298023224,
+                                            'current_string13': 0.0,
+                                            'current_string14': 0.20000000298023224,
+                                            'current_string15': 0.0,
+                                            'current_string16': 0.0,
+                                            'current_string2': 0.30000001192092896,
+                                            'current_string3': 0.0,
+                                            'current_string4': 0.20000000298023224,
+                                            'current_string5': 0.0,
+                                            'current_string6': 0.10000000149011612,
+                                            'current_string7': 0.0,
+                                            'current_string8': 0.20000000298023224,
+                                            'current_string9': 0.0,
                                             'datalogger_sn': None,
                                             'day': None,
-                                            'dc_voltage': 0.0,
-                                            'dci_r': 6.0,
-                                            'dci_s': 0.0,
-                                            'dci_t': 0.0,
-                                            'debug1': '208, 15, 1, 2595, 2235, 3600, 0, 0',
-                                            'debug2': '0, 106, 165, 0, 0, 0, 7, 0',
-                                            'derating_mode': 15,
-                                            'dry_contact_status': 0,
-                                            'e_charge_today': 0.0,
-                                            'e_charge_total': 0.0,
-                                            'e_discharge_today': 0.0,
-                                            'e_discharge_total': 0.0,
-                                            'e_local_load_today': 0.0,
-                                            'e_local_load_total': 0.0,
-                                            'e_self_today': 0.0,
-                                            'e_self_total': 0.0,
-                                            'e_system_today': 0.0,
-                                            'e_system_total': 0.0,
-                                            'e_to_grid_today': 0.0,
-                                            'e_to_grid_total': 0.0,
-                                            'e_to_user_today': 0.0,
-                                            'e_to_user_total': 0.0,
-                                            'eac_charge_today': 0.0,
-                                            'eac_charge_total': 0.0,
-                                            'eac_today': 41.900001525878906,
-                                            'eac_total': 668.4,
-                                            'eex1_today': None,
-                                            'eex1_total': None,
-                                            'eex2_today': None,
-                                            'eex2_total': None,
-                                            'eps_fac': 0.0,
-                                            'eps_iac1': 0.0,
-                                            'eps_iac2': 0.0,
-                                            'eps_iac3': 0.0,
-                                            'eps_pac': 0.0,
-                                            'eps_pac1': 0.0,
-                                            'eps_pac2': 0.0,
-                                            'eps_pac3': 0.0,
-                                            'eps_pf': -1.0,
-                                            'eps_vac1': 0.0,
-                                            'eps_vac2': 0.0,
-                                            'eps_vac3': 0.0,
-                                            'epv1_today': 22.899999618530273,
-                                            'epv1_total': 367.9,
-                                            'epv2_today': 20.100000381469727,
-                                            'epv2_total': 318.5,
+                                            'debug1': '0, 0, 0, 250, 32998, 0, 5650, 6799',
+                                            'debug2': '0, 0, 0, 0, 0, 8000, 18870, 8439',
+                                            'derating_mode': None,
+                                            'dw_string_warning_value1': 0,
+                                            'e_rac_today': 0.0,
+                                            'e_rac_total': 0.0,
+                                            'eac_today': 0.1,
+                                            'eac_total': 43617.8,
+                                            'epv1_today': 0.0,
+                                            'epv1_total': 12129.7,
+                                            'epv2_today': 0.0,
+                                            'epv2_total': 12277.9,
                                             'epv3_today': 0.0,
-                                            'epv3_total': 0.0,
+                                            'epv3_total': None,
                                             'epv4_today': None,
-                                            'epv4_total': None,
-                                            'epv_total': 686.4,
-                                            'error_text': 'Unknown',
-                                            'fac': 50.0099983215332,
+                                            'epv4_total': 12116.8,
+                                            'epv5_today': 0.0,
+                                            'epv5_total': 12287.5,
+                                            'epv6_today': 0.0,
+                                            'epv6_total': 12320.6,
+                                            'epv7_today': 0.0,
+                                            'epv7_total': 12678.7,
+                                            'epv8_today': None,
+                                            'epv8_total': 0.0,
+                                            'epv_total': 86631.8,
+                                            'fac': 49.97999954223633,
+                                            'fault_code1': 0,
+                                            'fault_code2': 0,
                                             'fault_type': 0,
-                                            'fault_type1': None,
-                                            'gfci': 68.0,
-                                            'iac1': 0.30000001192092896,
-                                            'iac2': 0.0,
-                                            'iac3': 0.0,
-                                            'iacr': 0.0,
-                                            'inv_delay_time': 0.0,
-                                            'ipv1': 0.0,
-                                            'ipv2': 0.0,
-                                            'ipv3': 0.0,
-                                            'ipv4': 0.0,
-                                            'is_again': False,
-                                            'iso': 23182.0,
-                                            'load_percent': 0.0,
-                                            'lost': True,
-                                            'mtnc_mode': None,
-                                            'mtnc_rqst': None,
-                                            'n_bus_voltage': 0.0,
-                                            'new_warn_code': None,
-                                            'new_warn_sub_code': None,
-                                            'op_fullwatt': 0.0,
-                                            'operating_mode': 0,
-                                            'p_bus_voltage': 358.29998779296875,
-                                            'p_self': 0.0,
-                                            'p_system': 0.0,
-                                            'pac': 1.2,
-                                            'pac1': 3.0999999046325684,
-                                            'pac2': 0.0,
-                                            'pac3': 0.0,
-                                            'pac_to_grid_total': 0.0,
-                                            'pac_to_local_load': 0.0,
-                                            'pac_to_user_total': 0.0,
-                                            'pacr': 0.0,
-                                            'pex1': None,
-                                            'pex2': None,
+                                            'fault_value': 0,
+                                            'gfci': None,
+                                            'i_pid_pvape': 0.0,
+                                            'i_pid_pvbpe': 0.0,
+                                            'i_pid_pvcpe': 0.0,
+                                            'i_pid_pvdpe': 0.0,
+                                            'i_pid_pvepe': 0.0,
+                                            'i_pid_pvfpe': 0.0,
+                                            'i_pid_pvgpe': 0.0,
+                                            'i_pid_pvhpe': 0.0,
+                                            'iacr': None,
+                                            'iacs': None,
+                                            'iact': None,
+                                            'id': None,
+                                            'ipm_temperature': 0.0,
+                                            'ipv1': 0.20000000298023224,
+                                            'ipv2': 0.20000000298023224,
+                                            'ipv3': 0.10000000149011612,
+                                            'ipv4': 0.10000000149011612,
+                                            'ipv5': 0.10000000149011612,
+                                            'ipv6': 0.10000000149011612,
+                                            'ipv7': 0.20000000298023224,
+                                            'ipv8': 0.0,
+                                            'lost': None,
+                                            'max_bean': None,
+                                            'n_bus_voltage': 339.5,
+                                            'op_fullwatt': None,
+                                            'p_bus_voltage': None,
+                                            'pac': 755.3,
+                                            'pacr': None,
+                                            'pacs': None,
+                                            'pact': None,
                                             'pf': 1.0,
-                                            'ppv': 1.4,
-                                            'ppv1': 1.0,
-                                            'ppv2': 0.4,
-                                            'ppv3': 0.0,
-                                            'ppv4': 0.0,
+                                            'pid_bus': 0,
+                                            'pid_fault_code': 0,
+                                            'pid_status': None,
+                                            'pid_status_text': 'Lost',
+                                            'power_today': 0.0,
+                                            'power_total': 0.0,
+                                            'ppv': 601.7,
+                                            'ppv1': None,
+                                            'ppv2': None,
+                                            'ppv3': None,
+                                            'ppv4': None,
+                                            'ppv5': None,
+                                            'ppv6': 63.5,
+                                            'ppv7': 115.5,
+                                            'ppv8': 0.0,
+                                            'pv_iso': 107.0,
+                                            'r_dci': 47.70000076293945,
+                                            'rac': 0.0,
                                             'real_op_percent': 0.0,
-                                            'serial_num': 'HMG2A3807H',
-                                            'soc1': None,
-                                            'soc2': None,
-                                            'status': 1,
-                                            'status_text': 'Normal',
-                                            'sys_fault_word': 0,
-                                            'sys_fault_word1': 0,
-                                            'sys_fault_word2': 0,
-                                            'sys_fault_word3': 106,
-                                            'sys_fault_word4': 165,
-                                            'sys_fault_word5': 0,
-                                            'sys_fault_word6': 0,
-                                            'sys_fault_word7': 0,
-                                            't_mtnc_strt': None,
-                                            't_win_end': None,
-                                            't_win_start': None,
-                                            'temp1': 33.599998474121094,
-                                            'temp2': 0.0,
-                                            'temp3': 0.0,
-                                            'temp4': 0.0,
-                                            'temp5': 42.099998474121094,
-                                            'time': datetime.datetime(2021, 1, 7, 19, 29, 10),
-                                            'time_total': 169507.4,
-                                            'tlx_bean': None,
-                                            'total_working_time': None,
-                                            'uw_sys_work_mode': 0,
-                                            'vac1': 231.0,
-                                            'vac2': 0.0,
-                                            'vac3': 0.0,
-                                            'vac_rs': 231.0,
-                                            'vac_st': 0.0,
-                                            'vac_tr': 0.0,
-                                            'vacr': 0.0,
-                                            'vacrs': 0.0,
-                                            'vpv1': 257.0,
-                                            'vpv2': 224.0,
-                                            'vpv3': 0.0,
-                                            'vpv4': 0.0,
+                                            's_dci': 60.29999923706055,
+                                            'serial_num': 'GQF0A13002',
+                                            'status': None,
+                                            'status_text': None,
+                                            'str_Break': 0,
+                                            'str_Fault': None,
+                                            'str_unbalance': None,
+                                            'str_unmatch': 0,
+                                            't_dci': 121.80000305175781,
+                                            'temperature': 13.600000381469727,
+                                            'temperature2': 14.100000381469727,
+                                            'temperature3': 13.600000381469727,
+                                            'temperature4': None,
+                                            'temperature5': None,
+                                            'time': datetime.datetime(2021, 1, 8, 9, 4, 59),
+                                            'time_total': 1540931.6,
+                                            'v_pid_pvape': 0.0,
+                                            'v_pid_pvbpe': 0.0,
+                                            'v_pid_pvcpe': 0.0,
+                                            'v_pid_pvdpe': 0.0,
+                                            'v_pid_pvepe': 0.0,
+                                            'v_pid_pvfpe': 0.0,
+                                            'v_pid_pvgpe': 0.0,
+                                            'v_pid_pvhpe': 0.0,
+                                            'v_string1': None,
+                                            'v_string10': 639.2999877929688,
+                                            'v_string11': 637.4000244140625,
+                                            'v_string12': 637.4000244140625,
+                                            'v_string13': 581.5,
+                                            'v_string14': 581.5,
+                                            'v_string15': 0.0,
+                                            'v_string16': 0.0,
+                                            'v_string2': None,
+                                            'v_string3': None,
+                                            'v_string4': None,
+                                            'v_string5': None,
+                                            'v_string6': None,
+                                            'v_string7': None,
+                                            'v_string8': None,
+                                            'v_string9': None,
+                                            'vac_rs': None,
+                                            'vac_st': 404.1000061035156,
+                                            'vac_tr': 405.70001220703125,
+                                            'vacr': 233.60000610351562,
+                                            'vacs': 232.8000030517578,
+                                            'vact': 233.89999389648438,
+                                            'vpv1': 574.0,
+                                            'vpv2': 580.0999755859375,
+                                            'vpv3': 628.9000244140625,
+                                            'vpv4': 647.0999755859375,
+                                            'vpv5': 644.0999755859375,
+                                            'vpv6': 635.7999877929688,
+                                            'vpv7': 577.5999755859375,
+                                            'vpv8': 0.0,
+                                            'w_pid_fault_value': 0,
+                                            'w_string_status_value': 0,
+                                            'warn_bit': 0,
                                             'warn_code': 0,
-                                            'warn_code1': None,
-                                            'warn_text': 'Unknown',
-                                            'win_mode': None,
-                                            'win_off_grid_soc': None,
-                                            'win_on_grid_soc': None,
-                                            'win_request': None,
+                                            'warning_value1': 0,
+                                            'warning_value2': 0,
+                                            'warning_value3': 0,
                                             'with_time': False},
-                            },
-                            {   'datalogger_sn': 'XGD3A206CA',
-                                'device_sn': 'XTD7A2562B',
-                                'data': {   'address': 0,
-                                            # ...
-                                            'with_time': False},
-                                }],
+                                'datalogger_sn': 'AKE092600C',
+                                'device_sn': 'GQF0A13002'},
+                            {'data': None, 'datalogger_sn': None, 'device_sn': 'GQF0A1300C'}],
                 'error_code': 0,
                 'error_msg': None,
                 'page_num': 1}
@@ -1112,9 +750,9 @@ class Max:
             device_sn = ",".join(device_sn)
 
         response = self.session.post(
-            endpoint="device/tlx/tlxs_data",
+            endpoint="device/max/maxs_data",
             data={
-                "tlxs": device_sn,
+                "maxs": device_sn,
                 "pageNum": page or 1,
             },
         )
@@ -1122,7 +760,7 @@ class Max:
         # Unfortunately, the original response cannot be parsed by pydantic as the inverter_sn is used as key
         # To fix this, resulting data is restructured
         devices = [
-            MinEnergyOverviewMultipleItem(
+            MaxEnergyOverviewMultipleItem(
                 device_sn=inverter_sn,
                 datalogger_sn=response.get("data", {})
                 .get(inverter_sn, {})
@@ -1131,14 +769,13 @@ class Max:
                 .get(inverter_sn, {})
                 .get(inverter_sn, None),
             )
-            for inverter_sn in response.get("tlxs", [])
+            for inverter_sn in response.get("maxs", [])
         ]
-        response.pop("tlxs", None)
+        response.pop("maxs", None)
         response["data"] = devices
 
-        return MinEnergyOverviewMultiple.model_validate(response)
+        return MaxEnergyOverviewMultiple.model_validate(response)
 
-    # TODO
     def energy_history(
         self,
         device_sn: str,
@@ -1147,27 +784,24 @@ class Max:
         timezone: Optional[str] = None,
         page: Optional[int] = None,
         limit: Optional[int] = None,
-    ) -> MinEnergyHistory:
+    ) -> MaxEnergyHistory:
         """
-        Get historical data of a Min
-        An interface for obtaining historical data of a Min
-        https://www.showdoc.com.cn/262556420217021/8559849784929961
+        Get historical data of a Max
+        Interface to get historical data of a certain Max
+        https://www.showdoc.com.cn/262556420217021/6127583793839931
 
         Note:
             Only applicable to devices with device type 4 (max) returned by device.list()
 
-        This endpoint returns only a subset of the parameters returned by the min.energy() endpoint
-
         Rate limit(s):
-        * The frequency of acquisition is once every 10 seconds
+        * The frequency of acquisition is once every 5 minutes
 
         Specific error codes:
         * 10001: system error
-        * 10002: serial number is empty
-        * 10003: start date is wrong
-        * 10004: start date interval has exceeded seven days
-        * 10005: Min does not exist
-        * 10011: permission is not satisfied
+        * 10002: device serial number error
+        * 10003: date format error
+        * 10004: date interval exceeds seven days
+        * 10005: Max does not exist
 
         Args:
             device_sn (str): Inverter serial number
@@ -1178,209 +812,205 @@ class Max:
             limit (Optional[int]): Number of items per page, default 20, max 100
 
         Returns:
-            StorageEnergyHistory
+            MaxEnergyHistory
             e.g.
-            {   'data': {   'count': 125,
-                            'datalogger_sn': 'QMN0000000000000',
-                            'datas': [   {   'battery_no': -1,
-                                             'bdc1_charge_power': 0.0,
-                                             'bdc1_charge_total': 0.0,
-                                             'bdc1_discharge_power': 0.0,
-                                             'bdc1_discharge_total': 0.0,
-                                             'bdc1_fault_type': 0,
-                                             'bdc1_ibat': 0.0,
-                                             'bdc1_ibb': 0.0,
-                                             'bdc1_illc': 0.0,
-                                             'bdc1_mode': 0,
-                                             'bdc1_soc': 0.0,
-                                             'bdc1_status': 0,
-                                             'bdc1_temp1': 0.0,
-                                             'bdc1_temp2': 0.0,
-                                             'bdc1_vbat': 0.0,
-                                             'bdc1_vbus1': 0.0,
-                                             'bdc1_vbus2': 0.0,
-                                             'bdc1_warn_code': 0,
-                                             'bdc2_charge_power': 0.0,
-                                             'bdc2_charge_total': 0.0,
-                                             'bdc2_discharge_power': 0.0,
-                                             'bdc2_discharge_total': 0.0,
-                                             'bdc2_fault_type': 0,
-                                             'bdc2_ibat': 0.0,
-                                             'bdc2_ibb': 0.0,
-                                             'bdc2_illc': 0.0,
-                                             'bdc2_mode': 0,
-                                             'bdc2_soc': 0.0,
-                                             'bdc2_status': 0,
-                                             'bdc2_temp1': 0.0,
-                                             'bdc2_temp2': 0.0,
-                                             'bdc2_vbat': 0.0,
-                                             'bdc2_vbus1': 0.0,
-                                             'bdc2_vbus2': 0.0,
-                                             'bdc2_warn_code': 0,
-                                             'bdc_bus_ref': 0,
-                                             'bdc_derate_reason': 0,
-                                             'bdc_fault_sub_code': 0,
-                                             'bdc_status': 0,
-                                             'bdc_vbus2_neg': 0.0,
-                                             'bdc_warn_sub_code': 0,
-                                             'bms_communication_type': 0,
-                                             'bms_cv_volt': 0.0,
-                                             'bms_error2': 0,
-                                             'bms_error3': 0,
-                                             'bms_error4': 0,
-                                             'bms_fault_type': 0,
-                                             'bms_fw_version': '0',
-                                             'bms_ibat': 0.0,
-                                             'bms_icycle': 0.0,
-                                             'bms_info': 0,
-                                             'bms_ios_status': 0,
-                                             'bms_max_curr': 0.0,
-                                             'bms_mcu_version': '0',
-                                             'bms_pack_info': 0,
-                                             'bms_soc': 0.0,
-                                             'bms_soh': 0.0,
-                                             'bms_status': 0,
-                                             'bms_temp1_bat': 0.0,
-                                             'bms_using_cap': 0,
-                                             'bms_vbat': 0.0,
-                                             'bms_vdelta': 0.0,
-                                             'bms_warn2': 0,
-                                             'bms_warn_code': 0.0,
-                                             'calendar': {   'first_day_of_week': 1,
-                                                             'gregorian_change': {'date': 15, 'day': 5, 'hours': 8, 'minutes': 0, 'month': 9, 'seconds': 0, 'time': -12219292800000, 'timezone_offset': -480, 'year': -318},
+            {   'data': {   'count': 29,
+                            'datalogger_sn': 'SATA818009',
+                            'datas': [   {   'address': 0,
+                                             'again': False,
+                                             'alias': '',
+                                             'apfStatus': 0,
+                                             'apfStatusText': 'None',
+                                             'calendar': {   'firstDayOfWeek': 1,
+                                                             'gregorianChange': {'date': 15, 'day': 5, 'hours': 8, 'minutes': 0, 'month': 9, 'seconds': 0, 'time': -12219292800000, 'timezoneOffset': -480, 'year': -318},
                                                              'lenient': True,
-                                                             'minimal_days_in_first_week': 1,
-                                                             'time': {'date': 21, 'day': 5, 'hours': 16, 'minutes': 4, 'month': 1, 'seconds': 37, 'time': 1740125077000, 'timezone_offset': -480, 'year': 125},
-                                                             'time_in_millis': 1740125077000,
-                                                             'time_zone': {'dirty': False, 'display_name': 'China Standard Time', 'dst_savings': 0, 'id': 'Asia/Shanghai', 'last_rule_instance': None, 'raw_offset': 28800000},
-                                                             'week_date_supported': True,
-                                                             'week_year': 2025,
-                                                             'weeks_in_week_year': 52},
-                                             'dc_voltage': 0.0,
-                                             'dci_r': 0.0,
-                                             'dci_s': 0.0,
-                                             'dci_t': 0.0,
-                                             'debug1': '0，0，0，0，0，0，0，0',
-                                             'debug2': '0，0，9，5387，0，12260，1，0',
-                                             'derating_mode': 0,
-                                             'dry_contact_status': 0,
-                                             'e_charge_today': 0.0,
-                                             'e_charge_total': 0.0,
-                                             'e_discharge_today': 0.0,
-                                             'e_discharge_total': 0.0,
-                                             'e_local_load_today': 0.0,
-                                             'e_local_load_total': 0.0,
-                                             'e_self_today': 0.0,
-                                             'e_self_total': 0.0,
-                                             'e_system_today': 0.0,
-                                             'e_system_total': 0.0,
-                                             'e_to_grid_today': 0.0,
-                                             'e_to_grid_total': 0.0,
-                                             'e_to_user_today': 0.0,
-                                             'e_to_user_total': 0.0,
-                                             'eac_charge_today': 0.0,
-                                             'eac_charge_total': 0.0,
-                                             'eac_today': 1.8,
-                                             'eac_total': 43.5,
-                                             'eex1_today': -0.1,
-                                             'eex1_total': -0.1,
-                                             'eex2_today': -0.1,
-                                             'eex2_total': -0.1,
-                                             'eps_fac': 0.0,
-                                             'eps_iac1': 0.0,
-                                             'eps_iac2': 0.0,
-                                             'eps_iac3': 0.0,
-                                             'eps_pac': 0.0,
-                                             'eps_pac1': 0.0,
-                                             'eps_pac2': 0.0,
-                                             'eps_pac3': 0.0,
-                                             'eps_pf': -1.0,
-                                             'eps_vac1': 0.0,
-                                             'eps_vac2': 0.0,
-                                             'eps_vac3': 0.0,
-                                             'epv1_today': 1.9,
-                                             'epv1_total': 47.1,
-                                             'epv2_today': 0.0,
-                                             'epv2_total': 0.0,
-                                             'epv3_today': 0.0,
-                                             'epv3_total': 0.0,
-                                             'epv4_today': 0.0,
-                                             'epv4_total': 0.0,
-                                             'epv_total': 47.1,
-                                             'fac': 50.03,
-                                             'fault_type': 0,
-                                             'fault_type1': 0,
-                                             'gfci': 0.0,
-                                             'iac1': 0.7,
-                                             'iac2': 0.0,
-                                             'iac3': 0.0,
-                                             'inv_delay_time': 65.0,
-                                             'ipv1': 5.8,
-                                             'ipv2': 0.0,
-                                             'ipv3': 0.0,
-                                             'ipv4': 0.0,
-                                             'is_again': False,
-                                             'iso': 2630.0,
-                                             'load_percent': 0.0,
-                                             'n_bus_voltage': 0.0,
-                                             'new_warn_code': 0,
-                                             'new_warn_sub_code': 0,
-                                             'op_fullwatt': 0.0,
-                                             'operating_mode': 0,
-                                             'p_bus_voltage': 447.7,
-                                             'p_self': 0.0,
-                                             'p_system': 0.0,
-                                             'pac': 163.8,
-                                             'pac1': 164.8,
-                                             'pac2': 0.0,
-                                             'pac3': 0.0,
-                                             'pac_to_grid_total': 0.0,
-                                             'pac_to_local_load': 0.0,
-                                             'pac_to_user_total': 0.0,
-                                             'pex1': -0.1,
-                                             'pex2': -0.1,
-                                             'pf': 0.9974,
-                                             'ppv': 170.6,
-                                             'ppv1': 170.6,
-                                             'ppv2': 0.0,
-                                             'ppv3': 0.0,
-                                             'ppv4': 0.0,
-                                             'real_op_percent': 16.0,
-                                             'serial_num': 'BZP0000000',
-                                             'status': 1,
-                                             'sys_fault_word': 0,
-                                             'sys_fault_word1': 2,
-                                             'sys_fault_word2': 0,
-                                             'sys_fault_word3': 0,
-                                             'sys_fault_word4': 0,
-                                             'sys_fault_word5': 0,
-                                             'sys_fault_word6': 0,
-                                             'sys_fault_word7': 0,
-                                             'temp1': 33.0,
-                                             'temp2': 33.0,
-                                             'temp3': 33.0,
-                                             'temp4': 33.0,
-                                             'temp5': 0.0,
-                                             'time': datetime.datetime(2025, 2, 21, 16, 4, 37),
-                                             'time_total': 1894833.0,
-                                             'total_working_time': 0.0,
-                                             'uw_sys_work_mode': 0,
-                                             'vac1': 235.1,
-                                             'vac2': 0.0,
-                                             'vac3': 0.0,
-                                             'vac_rs': 235.1,
-                                             'vac_st': 0.0,
-                                             'vac_tr': 0.0,
-                                             'vpv1': 29.2,
-                                             'vpv2': 10.1,
-                                             'vpv3': 0.0,
-                                             'vpv4': 0.0,
-                                             'warn_code': 220,
-                                             'warn_code1': 2}],
-                            'device_sn': 'BZP0000000',
+                                                             'minimalDaysInFirstWeek': 1,
+                                                             'time': {'date': 11, 'day': 5, 'hours': 10, 'minutes': 49, 'month': 0, 'seconds': 36, 'time': 1547174976000, 'timezoneOffset': -480, 'year': 119},
+                                                             'timeInMillis': 1547174976000,
+                                                             'timeZone': {'DSTSavings': 0, 'ID': 'Asia/Shanghai', 'dirty': False, 'displayName': 'China Standard Time', 'lastRuleInstance': None, 'rawOffset': 28800000},
+                                                             'weekDateSupported': True,
+                                                             'weekYear': 2019,
+                                                             'weeksInWeekYear': 52},
+                                             'compharir': 0,
+                                             'compharis': 0,
+                                             'compharit': 0,
+                                             'compqr': 0,
+                                             'compqs': 0,
+                                             'compqt': 0,
+                                             'ctharir': 0,
+                                             'ctharis': 0,
+                                             'ctharit': 0,
+                                             'ctir': 0,
+                                             'ctis': 0,
+                                             'ctit': 0,
+                                             'ctqr': 0,
+                                             'ctqs': 0,
+                                             'ctqt': 0,
+                                             'currentString1': 0,
+                                             'currentString10': 0,
+                                             'currentString11': 0,
+                                             'currentString12': 0,
+                                             'currentString13': 0,
+                                             'currentString14': 0,
+                                             'currentString15': 0,
+                                             'currentString16': 0,
+                                             'currentString2': 0,
+                                             'currentString3': 0,
+                                             'currentString4': 0,
+                                             'currentString5': 0,
+                                             'currentString6': 0,
+                                             'currentString7': 0,
+                                             'currentString8': 0,
+                                             'currentString9': 0,
+                                             'dataLogSn': '',
+                                             'day': '',
+                                             'debug1': '0, 0, 0, 0, 0, 0, 0, 0',
+                                             'debug2': '0, 0, 0, 0, 0, 0, 0, 0',
+                                             'deratingMode': 0,
+                                             'dwStringWarningValue1': 0,
+                                             'eRacToday': 0,
+                                             'eRacTotal': 0,
+                                             'eacToday': 0,
+                                             'eacTotal': 0,
+                                             'epv1Today': 0,
+                                             'epv1Total': 0,
+                                             'epv2Today': 0,
+                                             'epv2Total': 0,
+                                             'epv3Today': 0,
+                                             'epv3Total': 0,
+                                             'epv4Today': 0,
+                                             'epv4Total': 0,
+                                             'epv5Today': 0,
+                                             'epv5Total': 0,
+                                             'epv6Today': 0,
+                                             'epv6Total': 0,
+                                             'epv7Today': 0,
+                                             'epv7Total': 0,
+                                             'epv8Today': 0,
+                                             'epv8Total': 0,
+                                             'epvTotal': 0,
+                                             'fac': 0,
+                                             'faultCode1': 2,
+                                             'faultCode2': 0,
+                                             'faultType': 2,
+                                             'faultValue': 3,
+                                             'gfci': 0,
+                                             'iPidPvape': 0,
+                                             'iPidPvbpe': 0,
+                                             'iPidPvcpe': 0,
+                                             'iPidPvdpe': 0,
+                                             'iPidPvepe': 0,
+                                             'iPidPvfpe': 0,
+                                             'iPidPvgpe': 0,
+                                             'iPidPvhpe': 0,
+                                             'iacr': 0,
+                                             'iacs': 0,
+                                             'iact': 0,
+                                             'id': 0,
+                                             'ipmTemperature': 0,
+                                             'ipv1': 0,
+                                             'ipv2': 0,
+                                             'ipv3': 0,
+                                             'ipv4': 0,
+                                             'ipv5': 0,
+                                             'ipv6': 0,
+                                             'ipv7': 0,
+                                             'ipv8': 0,
+                                             'lost': True,
+                                             'maxBean': None,
+                                             'nBusVoltage': 0,
+                                             'opFullwatt': 0,
+                                             'pBusVoltage': 0,
+                                             'pac': 0,
+                                             'pacr': 0,
+                                             'pacs': 0,
+                                             'pact': 0,
+                                             'pf': -1,
+                                             'pidBus': 0,
+                                             'pidFaultCode': 0,
+                                             'pidStatus': 0,
+                                             'pidStatusText': 'Lost',
+                                             'powerToday': 0,
+                                             'powerTotal': 0,
+                                             'ppv': 0,
+                                             'ppv1': 0,
+                                             'ppv2': 0,
+                                             'ppv3': 0,
+                                             'ppv4': 0,
+                                             'ppv5': 0,
+                                             'ppv6': 0,
+                                             'ppv7': 0,
+                                             'ppv8': 0,
+                                             'pvIso': 0,
+                                             'rDci': 0,
+                                             'rac': 0,
+                                             'realOPPercent': 0,
+                                             'sDci': 0,
+                                             'serialNum': 'TLMAX00B01',
+                                             'status': 3,
+                                             'statusText': 'Fault',
+                                             'strBreak': 0,
+                                             'strFault': 0,
+                                             'strUnblance': 0,
+                                             'strUnmatch': 0,
+                                             'tDci': 0,
+                                             'temperature': 0,
+                                             'temperature2': 0,
+                                             'temperature3': 0,
+                                             'temperature4': 0,
+                                             'temperature5': 25.899999618530273,
+                                             'time': '2019-01-11 10:49:36',
+                                             'timeTotal': 0,
+                                             'vPidPvape': 0,
+                                             'vPidPvbpe': 0,
+                                             'vPidPvcpe': 0,
+                                             'vPidPvdpe': 0,
+                                             'vPidPvepe': 0,
+                                             'vPidPvfpe': 0,
+                                             'vPidPvgpe': 0,
+                                             'vPidPvhpe': 0,
+                                             'vString1': 0,
+                                             'vString10': 0,
+                                             'vString11': 0,
+                                             'vString12': 0,
+                                             'vString13': 0,
+                                             'vString14': 0,
+                                             'vString15': 0,
+                                             'vString16': 0,
+                                             'vString2': 0,
+                                             'vString3': 0,
+                                             'vString4': 0,
+                                             'vString5': 0,
+                                             'vString6': 0,
+                                             'vString7': 0,
+                                             'vString8': 0,
+                                             'vString9': 0,
+                                             'vacRs': 0,
+                                             'vacSt': 0,
+                                             'vacTr': 0,
+                                             'vacr': 0,
+                                             'vacs': 0,
+                                             'vact': 0,
+                                             'vpv1': 0,
+                                             'vpv2': 0,
+                                             'vpv3': 0,
+                                             'vpv4': 0,
+                                             'vpv5': 0,
+                                             'vpv6': 0,
+                                             'vpv7': 0,
+                                             'vpv8': 0,
+                                             'wPIDFaultValue': 0,
+                                             'wStringStatusValue': 0,
+                                             'warnBit': 0,
+                                             'warnCode': 0,
+                                             'warningValue1': 0,
+                                             'warningValue2': 0,
+                                             'warningValue3': 0,
+                                             'withTime': False}],
+                            'max_sn': 'TLMAX00B01',
                             'next_page_start_id': 21},
                 'error_code': 0,
-                'error_msg': None}
+                'error_msg': ''}
         """
 
         if start_date is None and end_date is None:
@@ -1396,9 +1026,9 @@ class Max:
             raise ValueError("date interval must not exceed 7 days")
 
         response = self.session.post(
-            endpoint="device/tlx/tlx_data",
+            endpoint="device/max/max_data",
             data={
-                "tlx_sn": device_sn,
+                "max_sn": device_sn,
                 "start_date": start_date.strftime("%Y-%m-%d"),
                 "end_date": end_date.strftime("%Y-%m-%d"),
                 "timezone_id": timezone,
@@ -1407,7 +1037,7 @@ class Max:
             },
         )
 
-        return MinEnergyHistory.model_validate(response)
+        return MaxEnergyHistory.model_validate(response)
 
     def alarms(
         self,
