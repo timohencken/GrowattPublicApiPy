@@ -24,8 +24,8 @@ class GrowattDeviceType(IntEnum):
     other = 3  # smart meter / environmental tester / vpp / groBoost
     max = 4
     sph = 5
-    spa = 6
-    min = 7  # (including neo)
+    spa = 6  # MIX
+    min = 7  # MIN / MAC / MOD-XH / MID-XH / NEO
     pcs = 8
     hps = 9
     pdb = 10

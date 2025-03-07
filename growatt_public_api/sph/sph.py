@@ -320,7 +320,7 @@ class Sph:
             Only applicable to devices with device type 5 (sph) returned by device.list()
 
         Args:
-            device_sn (str): Max device SN
+            device_sn (str): Mix device SN
 
         Returns:
             SphDetails

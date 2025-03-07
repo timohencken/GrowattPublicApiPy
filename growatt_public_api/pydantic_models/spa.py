@@ -16,29 +16,26 @@ from growatt_public_api.pydantic_models.api_model import (
 
 
 # #####################################################################################################################
-# Sph setting read ####################################################################################################
+# Spa setting read ####################################################################################################
 
 
-class SphSettingRead(ApiResponse):
+class SpaSettingRead(ApiResponse):
     data: Union[EmptyStrToNone, str] = None  # current setting / register value
 
 
 # #####################################################################################################################
-# Sph setting write ###################################################################################################
+# Spa setting write ###################################################################################################
 
 
-class SphSettingWrite(ApiResponse):
+class SpaSettingWrite(ApiResponse):
     data: Union[EmptyStrToNone, Any] = None
 
 
 # #####################################################################################################################
-# Sph details #########################################################################################################
+# Spa details #########################################################################################################
 
 
-def _sph_detail_data_to_camel(snake: str) -> str:
-    """
-    define own to_camel function to support weird API naming
-    """
+def _spa_detail_data_to_camel(snake: str) -> str:
     override = {
         "address": "addr",
         "bat_aging_test_step": "bagingTestStep",
@@ -75,18 +72,17 @@ ForcedTime: TypeAlias = Annotated[
 ]
 
 
-class SphDetailData(ApiModel):
+class SpaDetailData(ApiModel):
     model_config = ConfigDict(
         from_attributes=True,
         populate_by_name=True,
-        alias_generator=_sph_detail_data_to_camel,
+        alias_generator=_spa_detail_data_to_camel,
         protected_namespaces=(),  # allow model_* keywords
     )
 
-    ac_charge_enable: Union[EmptyStrToNone, bool] = None  # AC charging enable, e.g. 1
-    activeRate: Union[EmptyStrToNone, int] = None  # Active power, e.g. 1
+    active_p_rate: Union[EmptyStrToNone, int] = None  # Set active power, e.g. 100
     address: Union[EmptyStrToNone, int] = None  # Inverter address, e.g. 1
-    alias: Union[EmptyStrToNone, str] = None  # alias, e.g. 'FDCJQ00003'
+    alias: Union[EmptyStrToNone, str] = None  # alias, e.g. 'LHD0847002'
     backflow_setting: Union[EmptyStrToNone, str] = (
         None  # Backflow prevention setting, e.g. ''
     )
@@ -96,12 +92,6 @@ class SphDetailData(ApiModel):
     bat_first_switch1: Union[EmptyStrToNone, int] = None  # e.g. 0
     bat_first_switch2: Union[EmptyStrToNone, int] = None  # e.g. 0
     bat_first_switch3: Union[EmptyStrToNone, int] = None  # e.g. 0
-    bat_parallel_num: Union[EmptyStrToNone, int] = (
-        None  # Number of parallel cells, e.g. 0
-    )
-    bat_series_num: Union[EmptyStrToNone, int] = (
-        None  # Number of cells in series, e.g. 0
-    )
     bat_temp_lower_limit_c: Union[EmptyStrToNone, float] = (
         None  # Lower limit of battery charging temperature, e.g. 110
     )
@@ -121,7 +111,6 @@ class SphDetailData(ApiModel):
     )
     buck_ups_volt_set: Union[EmptyStrToNone, float] = None  # Off-grid voltage, e.g. 0
     buck_ups_fun_en: Union[EmptyStrToNone, bool] = None  # Off-grid enable, e.g. 1
-    cc_current: Union[EmptyStrToNone, float] = None  # e.g. 0
     charge_power_command: Union[EmptyStrToNone, int] = (
         None  # Charging power setting, e.g. 100
     )
@@ -134,11 +123,9 @@ class SphDetailData(ApiModel):
         None  # Communication version number, e.g. 'GJAA-0003'
     )
     country_selected: Union[EmptyStrToNone, int] = None  # country selection, e.g. 0
-    cv_voltage: Union[EmptyStrToNone, int] = None  # e.g. 0
     datalogger_sn: Union[EmptyStrToNone, str] = (
         None  # The serial number of the collector, e.g. 'VC51030322020001'
     )
-    device_type: Union[EmptyStrToNone, int] = None  # 0: Mix6k, 1: Mix4-10k, e.g. 0
     discharge_power_command: Union[EmptyStrToNone, int] = (
         None  # Discharge power setting, e.g. 100
     )
@@ -155,24 +142,9 @@ class SphDetailData(ApiModel):
     eps_volt_set: Union[EmptyStrToNone, int] = (
         None  # Emergency power supply voltage, e.g. 1
     )
-    export_limit: Union[EmptyStrToNone, int] = (
-        None  # Backflow prevention enable, e.g. 0
-    )
-    export_limit_power_rate: Union[EmptyStrToNone, int] = (
-        None  # Backflow prevention, e.g. 0
-    )
-    failsafe: Union[EmptyStrToNone, int] = None  # e.g. 0
+    equipment_type: Union[EmptyStrToNone, str] = None  # e.g. ''
     float_charge_current_limit: Union[EmptyStrToNone, int] = (
         None  # float charge current limit, e.g. 600
-    )
-    forced_charge_stop_switch1: Union[EmptyStrToNone, bool] = (
-        None  # Charge 1 enable bit, e.g. 1
-    )
-    forced_charge_stop_switch2: Union[EmptyStrToNone, bool] = (
-        None  # Charge 2 enable bit, e.g. 1
-    )
-    forced_charge_stop_switch3: Union[EmptyStrToNone, bool] = (
-        None  # Charge 3 enable bit, e.g. 1
     )
     forced_charge_time_start1: Union[EmptyStrToNone, ForcedTime] = (
         None  # Charge 1 start time, e.g. '18:0'
@@ -192,15 +164,6 @@ class SphDetailData(ApiModel):
     forced_charge_time_stop3: Union[EmptyStrToNone, ForcedTime] = (
         None  # Charge 3 stop time, e.g. '4:30'
     )
-    forced_discharge_stop_switch1: Union[EmptyStrToNone, bool] = (
-        None  # Discharge 1 enable bit, e.g. 1
-    )
-    forced_discharge_stop_switch2: Union[EmptyStrToNone, bool] = (
-        None  # Discharge 2 enable bit, e.g. 1
-    )
-    forced_discharge_stop_switch3: Union[EmptyStrToNone, bool] = (
-        None  # Discharge 3 enable bit, e.g. 1
-    )
     forced_discharge_time_start1: Union[EmptyStrToNone, ForcedTime] = (
         None  # Discharge 1 start time, e.g. '0:0'
     )
@@ -219,7 +182,7 @@ class SphDetailData(ApiModel):
     forced_discharge_time_stop3: Union[EmptyStrToNone, ForcedTime] = (
         None  # Discharge 3 stop time, e.g. '0:0'
     )
-    fw_version: Union[EmptyStrToNone, str] = None  # Inverter version, e.g. 'RA1.0'
+    fw_version: Union[EmptyStrToNone, str] = None  # Inverter version, e.g. 'RH1.0'
     grid_first_switch1: Union[EmptyStrToNone, bool] = None  # e.g. 0
     grid_first_switch2: Union[EmptyStrToNone, bool] = None  # e.g. 0
     grid_first_switch3: Union[EmptyStrToNone, bool] = None  # e.g. 0
@@ -227,7 +190,7 @@ class SphDetailData(ApiModel):
     id: Union[EmptyStrToNone, int] = None  # e.g. 0
     img_path: Union[EmptyStrToNone, str] = None  # e.g. './css/img/status_gray.gif'
     inner_version: Union[EmptyStrToNone, str] = (
-        None  # Internal version number, e.g. 'GJAA03xx'
+        None  # Internal version number, e.g. 'rHAA020202'
     )
     last_update_time: Union[EmptyStrToNone, GrowattTime] = (
         None  # Last update time, e.g. {'date': 12, 'day': 2, 'hours': 16, 'minutes': 46, 'month': 3, 'seconds': 22, 'time': 1649753182000, 'timezoneOffset': -480, 'year': 122}
@@ -237,21 +200,40 @@ class SphDetailData(ApiModel):
     )
     lcd_language: Union[EmptyStrToNone, int] = None  # e.g. 1
     level: Union[EmptyStrToNone, int] = None  # e.g. 4
+    load_first_start_time1: Union[EmptyStrToNone, ForcedTime] = (
+        None  # Load priority period 1 start time, e.g. '0:0'
+    )
+    load_first_start_time2: Union[EmptyStrToNone, ForcedTime] = (
+        None  # Load priority period 2 start time, e.g. '4:30'
+    )
+    load_first_start_time3: Union[EmptyStrToNone, ForcedTime] = (
+        None  # Load priority period 3 start time, e.g. '0:0'
+    )
+    load_first_stop_time1: Union[EmptyStrToNone, ForcedTime] = (
+        None  # Load priority period 1 end time, e.g. '23:59'
+    )
+    load_first_stop_time2: Union[EmptyStrToNone, ForcedTime] = (
+        None  # Load priority period 2 end time, e.g. '7:29'
+    )
+    load_first_stop_time3: Union[EmptyStrToNone, ForcedTime] = (
+        None  # Load priority period 3 end time, e.g. '0:0'
+    )
+    load_first_switch1: Union[EmptyStrToNone, bool] = (
+        None  # Load priority enable bit 1, e.g. 0
+    )
+    load_first_switch2: Union[EmptyStrToNone, bool] = (
+        None  # Load priority enable bit 2, e.g. 0
+    )
+    load_first_switch3: Union[EmptyStrToNone, bool] = (
+        None  # Load priority enable bit 3, e.g. 0
+    )
     location: Union[EmptyStrToNone, str] = None  # address, e.g. ''
     lost: Union[EmptyStrToNone, bool] = (
         None  # Device online status (0: online, 1: disconnected), e.g. True
     )
-    lv_voltage: Union[EmptyStrToNone, int] = None  # e.g. 0
     manufacturer: Union[EmptyStrToNone, str] = (
         None  # Manufacturer Code, e.g. 'New Energy'
     )
-    mix_ac_discharge_frequency: Union[EmptyStrToNone, float] = (
-        None  # Off-grid frequency, e.g. ''
-    )
-    mix_ac_discharge_voltage: Union[EmptyStrToNone, float] = (
-        None  # Off-grid voltage, e.g. ''
-    )
-    mix_off_grid_enable: Union[EmptyStrToNone, bool] = None  # Off-grid enable, e.g. ''
     modbus_version: Union[EmptyStrToNone, int] = None  # MODBUS version, e.g. 305
     model: Union[EmptyStrToNone, int] = None  # model, e.g. 2666130979655057522
     model_text: Union[EmptyStrToNone, str] = (
@@ -261,6 +243,9 @@ class SphDetailData(ApiModel):
     p_charge: Union[EmptyStrToNone, int] = None  # e.g. 0
     p_discharge: Union[EmptyStrToNone, int] = None  # e.g. 0
     parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_VC51030322020001_22'
+    pf_cmd_memory_state: Union[EmptyStrToNone, int] = (
+        None  # Set storage PF command, e.g. 0
+    )
     pf_sys_year: Union[EmptyStrToNone, str] = None  # Set time, e.g. ''
     plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
     plant_name: Union[EmptyStrToNone, str] = None  # e.g. ''
@@ -284,9 +269,6 @@ class SphDetailData(ApiModel):
     pv_pf_cmd_memory_state: Union[EmptyStrToNone, bool] = (
         None  # Set whether to store the following PF commands, e.g. ''
     )
-    pv_pf_cmd_memory_state_mix: Union[EmptyStrToNone, bool] = (
-        None  # mix Does the inverter store the following commands, e.g. 1
-    )
     pv_power_factor: Union[EmptyStrToNone, float] = None  # Set PF value, e.g. ''
     pv_reactive_p_rate: Union[EmptyStrToNone, float] = (
         None  # Set reactive power, e.g. ''
@@ -294,9 +276,16 @@ class SphDetailData(ApiModel):
     pv_reactive_p_rate_two: Union[EmptyStrToNone, float] = (
         None  # No power capacity/inductive, e.g. ''
     )
-    reactive_rate: Union[EmptyStrToNone, int] = None  # Reactive power, e.g. 100
+    reactive_p_rate: Union[EmptyStrToNone, int] = None  # Reactive power, e.g. 100
     record: Union[EmptyStrToNone, Any] = None  # e.g. None
-    serial_num: Union[EmptyStrToNone, str] = None  # Device SN, e.g. 'FDCJQ00003'
+    serial_num: Union[EmptyStrToNone, str] = None  # Device SN, e.g. 'LHD0847002'
+    spa_ac_discharge_frequency: Union[EmptyStrToNone, float] = (
+        None  # Off-grid frequency, e.g. ''
+    )
+    spa_ac_discharge_voltage: Union[EmptyStrToNone, float] = (
+        None  # Off-grid voltage, e.g. ''
+    )
+    spa_off_grid_enable: Union[EmptyStrToNone, bool] = None  # Off-grid enable, e.g. ''
     status: Union[EmptyStrToNone, int] = (
         None  # Device status (0: waiting, 1: self-check, 3: failure, 4: upgrade, 5, 6, 7, 8: normal mode), e.g. 0
     )
@@ -309,10 +298,13 @@ class SphDetailData(ApiModel):
     )
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_FDCJQ00003'
     tree_name: Union[EmptyStrToNone, str] = None  # e.g. 'FDCJQ00003'
-    under_excited: Union[EmptyStrToNone, int] = None  # Capacitive or Perceptual, e.g. 0
     updating: Union[EmptyStrToNone, bool] = None  # e.g. False
-    user_name: Union[EmptyStrToNone, str] = None  # e.g. ''
     usp_freq_set: Union[EmptyStrToNone, int] = None  # Off-grid frequency, e.g. 0
+    user_name: Union[EmptyStrToNone, str] = None  # e.g. ''
+    vac_high: Union[EmptyStrToNone, float] = (
+        None  # Mains voltage upper limit, e.g. 264.5
+    )
+    vac_low: Union[EmptyStrToNone, float] = None  # Mains voltage lower limit, e.g. 184
     vbat_start_for_discharge: Union[EmptyStrToNone, float] = (
         None  # Lower limit of battery discharge voltage, e.g. 48
     )
@@ -331,13 +323,6 @@ class SphDetailData(ApiModel):
     vbat_warning: Union[EmptyStrToNone, float] = (
         None  # Low battery voltage alarm point, e.g. 480
     )
-    vnormal: Union[EmptyStrToNone, float] = None  # Rated PV voltage, e.g. 360
-    voltage_high_limit: Union[EmptyStrToNone, float] = (
-        None  # Mains voltage upper limit, e.g. 263
-    )
-    voltage_low_limit: Union[EmptyStrToNone, float] = (
-        None  # Mains voltage lower limit, e.g. 186
-    )
     wcharge_soc_low_limit1: Union[EmptyStrToNone, int] = (
         None  # Load priority mode charging, e.g. 100
     )
@@ -353,12 +338,12 @@ class SphDetailData(ApiModel):
     baudrate: Union[EmptyStrToNone, int] = None  # Baud rate selection, e.g. 0
 
 
-class SphDetails(ApiResponse):
-    data: Union[EmptyStrToNone, SphDetailData] = None
+class SpaDetails(ApiResponse):
+    data: Union[EmptyStrToNone, SpaDetailData] = None
     datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the energy storage machine, e.g. "ZT00100001"
+        None  # The collector SN of the energy storage machine, e.g. "JPC2827188"
     )
-    device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
+    device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "LHD0847002"
 
 
 # #####################################################################################################################
@@ -754,10 +739,10 @@ class SphEnergyHistory(ApiResponse):
 
 
 # #####################################################################################################################
-# Sph alarms ##########################################################################################################
+# Spa alarms ##########################################################################################################
 
 
-class SphAlarm(ApiModel):
+class SpaAlarm(ApiModel):
     alarm_code: Union[EmptyStrToNone, int] = None  # alarm code, e.g. 25
     status: Union[EmptyStrToNone, int] = None  # e.g. 1
     end_time: Union[EmptyStrToNone, datetime.datetime] = (
@@ -771,27 +756,24 @@ class SphAlarm(ApiModel):
     )
 
 
-def _sph_alarms_data_to_camel(snake: str) -> str:
-    """
-    define own to_camel function to support weird API naming
-    """
+def _spa_alarms_data_to_camel(snake: str) -> str:
     override = {
-        "device_sn": "mix_sn",
+        "device_sn": "spa_sn",
     }
     return override.get(snake, to_camel(snake=snake))
 
 
-class SphAlarmsData(ApiModel):
+class SpaAlarmsData(ApiModel):
     model_config = ConfigDict(
         from_attributes=True,
         populate_by_name=True,
-        alias_generator=_sph_alarms_data_to_camel,
+        alias_generator=_spa_alarms_data_to_camel,
     )
 
     count: int  # Total Records
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "SARN744005"
-    alarms: List[SphAlarm]
+    alarms: List[SpaAlarm]
 
 
-class SphAlarms(ApiResponse):
-    data: Union[EmptyStrToNone, SphAlarmsData] = None
+class SpaAlarms(ApiResponse):
+    data: Union[EmptyStrToNone, SpaAlarmsData] = None

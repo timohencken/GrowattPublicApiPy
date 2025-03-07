@@ -108,11 +108,11 @@ This package aims to
     * historical data `sph.energy_history()`
 * SPA (*TYPE=6* - SPA)
   * general device data
-    * read device data `spa.details()`              ***Not*** implemented yet
-    * read alarms/notification `spa.alarms()`              ***Not*** implemented yet
+    * read device data `spa.details()`
+    * read alarms/notification `spa.alarms()`
   * device settings
-    * read settings value `spa.setting_read()`              ***Not*** implemented yet
-    * write settings value `spa.setting_write()` (***use with caution***)              ***Not*** implemented yet
+    * read settings value `spa.setting_read()`
+    * write settings value `spa.setting_write()` (***use with caution***)
   * device power/energy metrics
     * current `spa.energy()`              ***Not*** implemented yet
     * current for multiple inverters `spa.energy_multiple()`              ***Not*** implemented yet

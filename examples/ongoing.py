@@ -59,6 +59,10 @@ if __name__ == "__main__":
     # TODO groBoost
 
     # TODO spa
+    _spa_details_ = ga.spa.details(device_sn=INVERTER_SN)
+    _spa_setting_read_by_name_ = ga.spa.setting_read(
+        device_sn=INVERTER_SN, parameter_id="pv_on_off"
+    )
     _spa_alarms_ = ga.spa.alarms(device_sn=INVERTER_SN)
 
     # sph

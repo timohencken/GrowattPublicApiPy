@@ -4,12 +4,12 @@ from typing import Optional, Union, List
 import truststore
 
 from growatt_public_api.pydantic_models.spa import (
-    SphSettingRead,
-    SphSettingWrite,
-    SphDetails,
+    SpaSettingRead,
+    SpaSettingWrite,
+    SpaDetails,
     SphEnergyOverview,
     SphEnergyHistory,
-    SphAlarms,
+    SpaAlarms,
     SphEnergyOverviewMultiple,
     SphEnergyOverviewMultipleItem,
 )
@@ -32,18 +32,17 @@ class Spa:
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
 
-    # TODO
     def setting_read(
         self,
         device_sn: str,
         parameter_id: Optional[str] = None,
         start_address: Optional[int] = None,
         end_address: Optional[int] = None,
-    ) -> SphSettingRead:
+    ) -> SpaSettingRead:
         """
-        Read SPH setting parameter interface
-        Read Mix setting parameter interface
-        https://www.showdoc.com.cn/262556420217021/6129766954561259
+        Read Spa setting parameter interface
+        Read Spa setting parameter interface
+        https://www.showdoc.com.cn/262556420217021/6129809145198328
 
         Note:
             Only applicable to devices with device type 6 (spa) returned by device.list()
@@ -67,13 +66,13 @@ class Spa:
         * 10009: The read setting parameter type does not exist
 
         Args:
-            device_sn (str): SPH/MIN SN
+            device_sn (str): SPA SN
             parameter_id (Optional[str]): parameter ID - specify either parameter_id ort start/end_address
             start_address (Optional[int]): register address to start reading from - specify either parameter_id ort start/end_address
             end_address (Optional[int]): register address to stop reading at
 
         Returns:
-            SphSettingRead
+            SpaSettingRead
             e.g.
             {
                 "data": "0",
@@ -101,7 +100,7 @@ class Spa:
                 end_address = start_address
 
         response = self.session.post(
-            endpoint="readMixParam",
+            endpoint="readSpaParam",
             data={
                 "device_sn": device_sn,
                 "paramId": parameter_id,
@@ -110,9 +109,8 @@ class Spa:
             },
         )
 
-        return SphSettingRead.model_validate(response)
+        return SpaSettingRead.model_validate(response)
 
-    # TODO
     # noinspection PyUnusedLocal
     def setting_write(
         self,
@@ -136,11 +134,11 @@ class Spa:
         parameter_value_16: Optional[str] = None,
         parameter_value_17: Optional[str] = None,
         parameter_value_18: Optional[str] = None,
-    ) -> SphSettingWrite:
+    ) -> SpaSettingWrite:
         """
-        SPH parameter settings
-        Interface for Mix parameter setting
-        https://www.showdoc.com.cn/262556420217021/6129761750718760
+        Spa parameter settings
+        Spa parameter setting interface
+        https://www.showdoc.com.cn/262556420217021/6129790987434517
 
         Note:
             Only applicable to devices with device type 6 (spa) returned by device.list()
@@ -153,7 +151,23 @@ class Spa:
         ========================+=======================================+===========================+============================================================================
         description             | parameter_id                          | parameter_value_[n]       | comment
         ========================+=======================================+===========================+============================================================================
-        Grid priority           | mix_ac_discharge_time_period          | [ 1]: 0 ~ 100             | [ 1]: discharge power
+        Load priority           | spa_load_flast                        | [ 1]: 0 ~ 23              | [ 1]: hour
+         discharge prohibition  |                                       | [ 2]: 0 ~ 59              | [ 2]: minute
+                                |                                       | [ 3]: 0 ~ 23              | [ 3]: hour
+                                |                                       | [ 4]: 0 ~ 59              | [ 4]: minute
+                                |                                       | [ 5]: 0  or 1             | [ 5]: 0 = disable, 1 = enable
+                                |                                       | [ 6]: 0 ~ 23              | [ 6]: hour
+                                |                                       | [ 7]: 0 ~ 59              | [ 7]: minute
+                                |                                       | [ 8]: 0 ~ 23              | [ 8]: hour
+                                |                                       | [ 9]: 0 ~ 59              | [ 9]: minute
+                                |                                       | [10]: 0  or 1             | [10]: 0 = disable, 1 = enable
+                                |                                       | [11]: 0 ~ 23              | [11]: hour
+                                |                                       | [12]: 0 ~ 59              | [12]: minute
+                                |                                       | [13]: 0 ~ 23              | [13]: hour
+                                |                                       | [14]: 0 ~ 59              | [14]: minute
+                                |                                       | [15]: 0  or 1             | [15]: 0 = disable, 1 = enable
+        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
+        Grid priority           | spa_ac_charge_time_period             | [ 1]: 0 ~ 100             | [ 1]: discharge power
                                 |                                       | [ 2]: 0 ~ 100             | [ 2]: discharge stop SOC
                                 |                                       | [ 3]: 0 ~ 23              | [ 3]: hour
                                 |                                       | [ 4]: 0 ~ 59              | [ 4]: minute
@@ -171,7 +185,7 @@ class Spa:
                                 |                                       | [16]: 0 ~ 59              | [16]: minute
                                 |                                       | [17]: 0  or 1             | [17]: 0 = disable, 1 = enable
         ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Battery priority        | mix_ac_charge_time_period             | [ 1]: 0 ~ 100             | [ 1]: charging power
+        Battery priority        | spa_ac_charge_time_period             | [ 1]: 0 ~ 100             | [ 1]: charging power
                                 |                                       | [ 2]: 0 ~ 100             | [ 2]: charge stop SOC
                                 |                                       | [ 3]: 0  or 1             | [ 3]: mains - 0 = disable, 1 = enable
                                 |                                       | [ 4]: 0 ~ 23              | [ 4]: hour
@@ -190,9 +204,6 @@ class Spa:
                                 |                                       | [17]: 0 ~ 59              | [17]: minute
                                 |                                       | [18]: 0  or 1             | [18]: 0 = disable, 1 = enable
         ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Anti-backflow           | backflow_setting                      | [1]: 0 or 1               | [1]: 0 = off, 1 = on
-                                |                                       | [2]: 0 ~ 100              | [2]: anti-reverse flow power percentage
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
         Power on and off        | pv_on_off                             | [1]: 0000 or 0001         | 0000 = off, 0001 = on
         ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
         Set time                | pf_sys_year                           | [1]: "00:00" ~ "23:59"    | HH:MM
@@ -203,11 +214,11 @@ class Spa:
         Lower limit             | pv_grid_voltage_low                   | [1]: e.g. 180             | V
          of mains voltage       |                                       |                           |
         ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Off-grid                | mix_off_grid_enable                   | [1]: 0 or 1               | 0 = disabled, 1 = enable
+        Off-grid                | spa_off_grid_enable                   | [1]: 0 or 1               | 0 = disabled, 1 = enable
         ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Off-grid frequency      | mix_ac_discharge_frequency            | [1]: 0 or 1               | 0 = 50Hz, 1 = 60Hz
+        Off-grid frequency      | spa_ac_discharge_frequency            | [1]: 0 or 1               | 0 = 50Hz, 1 = 60Hz
         ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Off-grid voltage        | mix_ac_discharge_voltage              | [1]: 0 or 1 or 2          | 0 = 230V, 1 = 208V, 2 = 240V
+        Off-grid voltage        | spa_ac_discharge_voltage              | [1]: 0 or 1 or 2          | 0 = 230V, 1 = 208V, 2 = 240V
         ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
         Whether to store the    | pv_pf_cmd_memory_state                | [1]: 0 or 1               | 0 = off, 1 = on
          following PF commands  |                                       |                           |
@@ -219,14 +230,6 @@ class Spa:
         PF value                | pv_power_factor                       | [1]: -0.8 ~ -1            |
                                 |                                       |   or  0.8 ~  1            |
         ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Discharge stop SOC      | mix_load_flast_value_multi            | [1]: 0 ~ 100              |
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        LoadFirst three-phase   | mix_load_first_control                | [1]: 0 or 1               | 0 = three-phase sum, 1 = single phase
-         independent output     |                                       |                           |
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Single-phase            | mix_single_export                     | [1]: 0 or 1               | 0 = off, 1 = on
-         anti-reverse flow      |                                       |                           |
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
 
         Register settings
         =================
@@ -234,19 +237,19 @@ class Spa:
 
         Specific error codes:
         * 10001: system error
-        * 10002: server error of the mixed storage integrated machine
-        * 10003: mixed storage integrated machine offline
-        * 10004: mixed storage integrated machine serial number is empty
+        * 10002: AC energy storage machine server error
+        * 10003: AC energy storage machine offline
+        * 10004: AC energy storage machine serial number is empty
         * 10005: collector offline
         * 10006: Setting parameter type does not exist
-        * 10007: Parameter value is empty
-        * 10008: Parameter value is out of range
-        * 10009: Date and time format is wrong
-        * 10012: Hybrid storage integrated machine does not exist
-        * 10013: End time cannot be less than start time
+        * 10007: parameter value is empty
+        * 10008: parameter value is out of range
+        * 10009: date and time format is wrong
+        * 10012: AC energy storage machine does not exist
+        * 10013: end time cannot be less than start time
 
         Args:
-            device_sn (str): energy storage machine SN
+            device_sn (str): SPA SN
             parameter_id (str): parameter ID - pass "set_any_reg" to write register address
             parameter_value_1 (str): parameter value 1
             parameter_value_2 (Optional[str]): parameter value 2
@@ -268,12 +271,12 @@ class Spa:
             parameter_value_18 (Optional[str]): parameter value 18
 
         Returns:
-            MinSettingWrite
+            SpaSettingWrite
             e.g. (success)
             {
                 "data": "",
                 "error_code": 0,
-                "error_msg": ""
+                "error_msg": "Set Successful spa return"
             }
         """
         # put parameters to a dict to make handling easier
@@ -299,57 +302,52 @@ class Spa:
             parameters[i] = str(parameters[i])
 
         response = self.session.post(
-            endpoint="mixSet",
+            endpoint="spaSet",
             data={
-                "mix_sn": device_sn,
+                "spa_sn": device_sn,
                 "type": parameter_id,
                 **{f"param{i}": parameters[i] for i in range(1, 19)},
             },
         )
 
-        return SphSettingWrite.model_validate(response)
+        return SpaSettingWrite.model_validate(response)
 
-    # TODO
     def details(
         self,
         device_sn: str,
-    ) -> SphDetails:
+    ) -> SpaDetails:
         """
-        Get basic information of SPH
-        Interface to get basic information of Mix
-        https://www.showdoc.com.cn/262556420217021/6129763571291058
+        Get basic spa information
+        Interface to get basic information of Spa
+        https://www.showdoc.com.cn/262556420217021/6129791904178555
 
         Note:
             Only applicable to devices with device type 6 (spa) returned by device.list()
 
         Args:
-            device_sn (str): Max device SN
+            device_sn (str): SPA device SN
 
         Returns:
-            SphDetails
+            SpaDetails
             e.g.
-            {   'data': {   'ac_charge_enable': True,
-                            'activeRate': 50,
+            {   'data': {   'active_p_rate': 100,
                             'address': 1,
-                            'alias': 'SARN744005',
+                            'alias': 'LHD0847002',
                             'backflow_setting': None,
                             'bat_aging_test_step': 0,
                             'bat_first_switch1': 0,
                             'bat_first_switch2': 0,
                             'bat_first_switch3': 0,
-                            'bat_parallel_num': 0,
-                            'bat_series_num': 0,
-                            'bat_temp_lower_limit_c': 110.0,
-                            'bat_temp_lower_limit_d': 110.0,
-                            'bat_temp_upper_limit_c': 60.0,
-                            'bat_temp_upper_limit_d': 70.0,
-                            'battery_type': 1,
+                            'bat_temp_lower_limit_c': 0.0,
+                            'bat_temp_lower_limit_d': 120.0,
+                            'bat_temp_upper_limit_c': 40.0,
+                            'bat_temp_upper_limit_d': 55.0,
+                            'battery_type': 0,
                             'baudrate': 0,
                             'bct_adjust': 0,
                             'bct_mode': 0,
                             'buck_ups_fun_en': True,
                             'buck_ups_volt_set': 0.0,
-                            'cc_current': 0.0,
                             'charge_power_command': 100,
                             'charge_time1': None,
                             'charge_time2': None,
@@ -358,128 +356,124 @@ class Spa:
                             'com_address': 1,
                             'communication_version': None,
                             'country_selected': 0,
-                            'cv_voltage': 0,
-                            'datalogger_sn': 'BQC0733010',
-                            'device_type': 0,
+                            'datalogger_sn': 'JPC2827188',
                             'discharge_power_command': 100,
                             'discharge_time1': None,
                             'discharge_time2': None,
                             'discharge_time3': None,
-                            'dtc': 3501,
+                            'dtc': 3701,
                             'energy_day': 0.0,
                             'energy_day_map': {},
                             'energy_month': 0.0,
                             'energy_month_text': '0',
-                            'eps_freq_set': 1,
-                            'eps_fun_en': True,
-                            'eps_volt_set': 1,
-                            'export_limit': 0,
-                            'export_limit_power_rate': 0,
-                            'failsafe': 0,
-                            'float_charge_current_limit': 600,
-                            'forced_charge_stop_switch1': True,
-                            'forced_charge_stop_switch2': True,
-                            'forced_charge_stop_switch3': True,
-                            'forced_charge_time_start1': datetime.time(18, 0),
-                            'forced_charge_time_start2': datetime.time(21, 30),
-                            'forced_charge_time_start3': datetime.time(3, 0),
-                            'forced_charge_time_stop1': datetime.time(19, 30),
-                            'forced_charge_time_stop2': datetime.time(23, 0),
-                            'forced_charge_time_stop3': datetime.time(4, 30),
-                            'forced_discharge_stop_switch1': True,
-                            'forced_discharge_stop_switch2': True,
-                            'forced_discharge_stop_switch3': True,
+                            'eps_freq_set': 0,
+                            'eps_fun_en': False,
+                            'eps_volt_set': 0,
+                            'equipment_type': None,
+                            'float_charge_current_limit': 650,
+                            'forced_charge_time_start1': datetime.time(0, 0),
+                            'forced_charge_time_start2': datetime.time(1, 30),
+                            'forced_charge_time_start3': datetime.time(10, 30),
+                            'forced_charge_time_stop1': datetime.time(23, 59),
+                            'forced_charge_time_stop2': datetime.time(4, 29),
+                            'forced_charge_time_stop3': datetime.time(13, 29),
                             'forced_discharge_time_start1': datetime.time(0, 0),
-                            'forced_discharge_time_start2': datetime.time(0, 0),
-                            'forced_discharge_time_start3': datetime.time(0, 0),
-                            'forced_discharge_time_stop1': datetime.time(0, 0),
-                            'forced_discharge_time_stop2': datetime.time(0, 0),
-                            'forced_discharge_time_stop3': datetime.time(0, 0),
-                            'fw_version': 'RA1.0',
-                            'grid_first_switch1': False,
+                            'forced_discharge_time_start2': datetime.time(7, 30),
+                            'forced_discharge_time_start3': datetime.time(13, 30),
+                            'forced_discharge_time_stop1': datetime.time(23, 59),
+                            'forced_discharge_time_stop2': datetime.time(10, 29),
+                            'forced_discharge_time_stop3': datetime.time(16, 29),
+                            'fw_version': 'RH1.0',
+                            'grid_first_switch1': True,
                             'grid_first_switch2': False,
                             'grid_first_switch3': False,
                             'group_id': -1,
                             'id': 0,
-                            'img_path': './css/img/status_green.gif',
-                            'inner_version': 'raaa040505',
-                            'last_update_time': {'date': 5, 'day': 2, 'hours': 14, 'minutes': 43, 'month': 2, 'seconds': 57, 'time': 1551768237000, 'timezone_offset': -480, 'year': 119},
-                            'last_update_time_text': datetime.datetime(2019, 3, 5, 14, 43, 57),
+                            'img_path': './css/img/status_gray.gif',
+                            'inner_version': 'rHAA020202',
+                            'last_update_time': {'date': 19, 'day': 3, 'hours': 16, 'minutes': 3, 'month': 11, 'seconds': 4, 'time': 1545206584000, 'timezone_offset': -480, 'year': 118},
+                            'last_update_time_text': datetime.datetime(2018, 12, 19, 16, 3, 4),
                             'lcd_language': 1,
                             'level': 4,
+                            'load_first_start_time1': datetime.time(0, 0),
+                            'load_first_start_time2': datetime.time(4, 30),
+                            'load_first_start_time3': datetime.time(0, 0),
+                            'load_first_stop_time1': datetime.time(23, 59),
+                            'load_first_stop_time2': datetime.time(7, 29),
+                            'load_first_stop_time3': datetime.time(0, 0),
+                            'load_first_switch1': False,
+                            'load_first_switch2': False,
+                            'load_first_switch3': False,
                             'location': 'null',
-                            'lost': False,
-                            'lv_voltage': 0,
+                            'lost': True,
                             'manufacturer': 'New Energy ',
-                            'mix_ac_discharge_frequency': None,
-                            'mix_ac_discharge_voltage': None,
-                            'mix_off_grid_enable': None,
                             'modbus_version': 305,
-                            'model': 1683928000000,
-                            'model_text': 'A0B1D0T0PFU2M7S0',
-                            'on_off': False,
+                            'model': 29136100000,
+                            'model_text': 'A0B0D0T4P7U2M2S1',
+                            'on_off': True,
                             'p_charge': 0,
                             'p_discharge': 0,
-                            'parent_id': 'LIST_BQC0733010_96',
+                            'parent_id': 'LIST_JPC2827188_96',
+                            'pf_cmd_memory_state': None,
                             'pf_sys_year': None,
                             'plant_id': 0,
                             'plant_name': None,
-                            'pmax': 0,
+                            'pmax': 3000,
                             'port_name': 'port_name',
-                            'power_factor': 0.0,
+                            'power_factor': 10000.0,
                             'power_max': None,
                             'power_max_text': None,
                             'power_max_time': None,
-                            'priority_choose': 0,
+                            'priority_choose': 2,
                             'pv_active_p_rate': None,
                             'pv_grid_voltage_high': None,
                             'pv_grid_voltage_low': None,
                             'pv_on_off': None,
-                            'pv_pf_cmd_memory_state': True,
-                            'pv_pf_cmd_memory_state_mix': True,
+                            'pv_pf_cmd_memory_state': None,
                             'pv_power_factor': None,
                             'pv_reactive_p_rate': None,
                             'pv_reactive_p_rate_two': None,
-                            'reactive_rate': 100,
+                            'reactive_p_rate': 100,
                             'record': None,
-                            'serial_num': 'SARN744005',
-                            'status': 5,
-                            'status_text': 'mix.status.normal',
-                            'sys_time': datetime.datetime(2019, 3, 5, 10, 37, 29),
+                            'serial_num': 'LHD0847002',
+                            'spa_ac_discharge_frequency': None,
+                            'spa_ac_discharge_voltage': None,
+                            'spa_off_grid_enable': None,
+                            'status': -1,
+                            'status_text': 'spa.status.lost',
+                            'sys_time': datetime.datetime(2018, 12, 19, 15, 59),
                             'tcp_server_ip': '192.168.3.35',
-                            'tree_id': 'ST_SARN744005',
-                            'tree_name': 'SARN744005',
-                            'under_excited': 0,
+                            'tree_id': 'ST_LHD0847002',
+                            'tree_name': 'LHD0847002',
                             'updating': False,
                             'user_name': None,
-                            'usp_freq_set': 0,
+                            'usp_freq_set': None,
+                            'vac_high': 264.5,
+                            'vac_low': 184.0,
                             'vbat_start_for_charge': 58.0,
                             'vbat_start_for_discharge': 48.0,
-                            'vbat_stop_for_charge': 5.75,
+                            'vbat_stop_for_charge': 5.880000114440918,
                             'vbat_stop_for_discharge': 4.699999809265137,
                             'vbat_warn_clr': 5.0,
                             'vbat_warning': 480.0,
-                            'vnormal': 360.0,
-                            'voltage_high_limit': 263.0,
-                            'voltage_low_limit': 186.0,
                             'wcharge_soc_low_limit1': 100,
                             'wcharge_soc_low_limit2': 100,
                             'wdis_charge_soc_low_limit1': 100,
                             'wdis_charge_soc_low_limit2': 5},
-                'datalogger_sn': 'BQC0733010',
-                'device_sn': 'SARN744005',
+                'datalogger_sn': 'JPC2827188',
+                'device_sn': 'LHD0847002',
                 'error_code': 0,
                 'error_msg': None}
         """
 
         response = self.session.get(
-            endpoint="device/mix/mix_data_info",
+            endpoint="device/spa/spa_data_info",
             params={
                 "device_sn": device_sn,
             },
         )
 
-        return SphDetails.model_validate(response)
+        return SpaDetails.model_validate(response)
 
     # TODO
     def energy(
@@ -503,7 +497,7 @@ class Spa:
         * 10003: device SN error
 
         Args:
-            device_sn (str): SPH/MIX serial number
+            device_sn (str): SPA serial number
 
         Returns:
             SphEnergyOverview
@@ -690,7 +684,7 @@ class Spa:
         * 10005: Mix does not exist
 
         Args:
-            device_sn (Union[str, List[str]]): SPH/MIX serial number or list of (multiple) SPH/MIX serial numbers (max 100)
+            device_sn (Union[str, List[str]]): SPA serial number or list of (multiple) SPA serial numbers (max 100)
             page (Optional[int]): page number, default 1, max 2
 
         Returns:
@@ -907,7 +901,7 @@ class Spa:
         * 10005: Mix does not exist
 
         Args:
-            device_sn (str): SPH/MIX serial number
+            device_sn (str): SPA serial number
             start_date (Optional[date]): Start Date - defaults to today
             end_date (Optional[date]): End Date (date interval cannot exceed 7 days) - defaults to today
             timezone (Optional[str]): The time zone code of the data display, the default is UTC
@@ -1092,18 +1086,17 @@ class Spa:
 
         return SphEnergyHistory.model_validate(response)
 
-    # TODO
     def alarms(
         self,
         device_sn: str,
         date_: Optional[date] = None,
         page: Optional[int] = None,
         limit: Optional[int] = None,
-    ) -> SphAlarms:
+    ) -> SpaAlarms:
         """
-        Get the alarm data of a certain SPH
-        Interface to get the alarm data of a certain Mix
-        https://www.showdoc.com.cn/262556420217021/6129766025111256
+        Get alarm data of a spa
+        Interface to get alarm data of a certain Spa
+        https://www.showdoc.com.cn/262556420217021/6129804467339594
 
         Note:
             Only applicable to devices with device type 6 (spa) returned by device.list()
@@ -1115,22 +1108,22 @@ class Spa:
         * 10001: system error
         * 10002: device serial number error
         * 10003: date format error
-        * 10005: Mix does not exist
+        * 10005: spa does not exist
 
         Args:
-            device_sn (str): SPH/MIX device serial number
+            device_sn (str): SPA device serial number
             date_ (Optional[date]): Date - defaults to today
             page (Optional[int]): page number, default 1
             limit (Optional[int]): Number of items per page, default 20, max 100
 
         Returns:
-            SphAlarms
+            SpaAlarms
             e.g.
             {
                 'data': {
                     'alarms': [
                         {
-                            'alarm_code': 1,
+                            'alarm_code': 3,
                             'alarm_message': '',
                             'end_time': datetime.datetime(2018, 12, 17, 14, 5, 54),
                             'start_time': datetime.datetime(2018, 12, 17, 14, 5, 54),
@@ -1138,7 +1131,7 @@ class Spa:
                         }
                     ],
                     'count': 1,
-                    'device_sn': 'SARN744005'
+                    'device_sn': 'LHD0847002'
                 },
                 'error_code': 0,
                 'error_msg': None
@@ -1149,13 +1142,13 @@ class Spa:
             date_ = date.today()
 
         response = self.session.post(
-            endpoint="device/mix/alarm_data",
+            endpoint="device/spa/alarm_data",
             data={
-                "mix_sn": device_sn,
+                "spa_sn": device_sn,
                 "date": date_.strftime("%Y-%m-%d"),
                 "page": page,
                 "perpage": limit,
             },
         )
 
-        return SphAlarms.model_validate(response)
+        return SpaAlarms.model_validate(response)

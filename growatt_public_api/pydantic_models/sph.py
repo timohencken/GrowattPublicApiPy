@@ -46,7 +46,7 @@ def _sph_detail_data_to_camel(snake: str) -> str:
         "datalogger_sn": "dataLogSn",
         "discharge_power_command": "disChargePowerCommand",
         "parent_id": "parentID",
-        "pv_pf_cmd_memory_state_mix": "pvPfCmdMemoryState",  # added _mix to differentiate from pv_pf_cmd_memory_state
+        "pf_cmd_memory_state": "pfCMDmemoryState",
         "plant_name": "plantname",
         "tree_id": "treeID",
         "baudrate": "wselectBaudrate",
@@ -84,7 +84,7 @@ class SphDetailData(ApiModel):
     )
 
     ac_charge_enable: Union[EmptyStrToNone, bool] = None  # AC charging enable, e.g. 1
-    activeRate: Union[EmptyStrToNone, int] = None  # Active power, e.g. 1
+    active_rate: Union[EmptyStrToNone, int] = None  # Active power, e.g. 1
     address: Union[EmptyStrToNone, int] = None  # Inverter address, e.g. 1
     alias: Union[EmptyStrToNone, str] = None  # alias, e.g. 'FDCJQ00003'
     backflow_setting: Union[EmptyStrToNone, str] = (
