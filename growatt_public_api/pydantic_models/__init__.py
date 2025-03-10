@@ -40,7 +40,6 @@ from .pcs import (  # noqa: F401
     PcsEnergyOverview,
     PcsEnergyHistory,
     PcsAlarms,
-    PcsEnergyOverviewMultiple,
 )
 from .plant import (  # noqa: F401
     PlantList,

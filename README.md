@@ -135,8 +135,7 @@ This package aims to
     * read alarms/notification `pcs.alarms()`
   * device power/energy metrics
     * current `pcs.energy()`
-    * current for multiple inverters `pcs.energy_multiple()`    ***Not*** implemented yet
-    * historical data `pcs.energy_history()`    ***Not*** implemented yet
+    * historical data `pcs.energy_history()`
 * HPS (*TYPE=9*)
   * ***Not*** implemented yet
 * PDB (*TYPE=10*)
@@ -252,12 +251,10 @@ To the best of our knowledge only the settings functions perform modifications t
 
 
 # Changelog
-* TBA_ONGOING (pre-alpha)
-  * endpoints implemented:
-    * PCS
 * 2025.03.10 (pre-alpha)
   * endpoints implemented:
     * SPA
+    * PCS
 * 2025.03.05 (pre-alpha)
   * endpoints implemented:
     * MAX

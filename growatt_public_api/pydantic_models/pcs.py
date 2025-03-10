@@ -349,29 +349,12 @@ class PcsEnergyOverview(ApiResponse):
 
 
 # #####################################################################################################################
-# Pcs energy overview multiple ########################################################################################
-
-
-class PcsEnergyOverviewMultipleItem(ApiModel):
-    device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "ZT00100001"
-    )
-    data: Union[EmptyStrToNone, PcsEnergyOverviewData] = None
-
-
-class PcsEnergyOverviewMultiple(ApiResponse):
-    data: List[PcsEnergyOverviewMultipleItem] = None
-    page_num: Union[EmptyStrToNone, int] = None  # Page number, e.g. 1
-
-
-# #####################################################################################################################
 # Pcs energy history ##################################################################################################
 
 
 def _pcs_energy_history_data_to_camel(snake: str) -> str:
     override = {
-        "device_sn": "spa_sn",
+        "device_sn": "pcs_sn",
     }
     return override.get(snake, to_camel(snake=snake))
 
@@ -385,10 +368,10 @@ class PcsEnergyHistoryData(ApiModel):
 
     count: int  # Total Records
     datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. ""SATA818009""
+        None  # The collector SN of the inverter, e.g. "MONITOR001"
     )
     datas: List[PcsEnergyOverviewData]
-    device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. ""TLMAX00B01""
+    device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "PCS1234567"
     next_page_start_id: Union[EmptyStrToNone, int] = None  # 21
 
 
