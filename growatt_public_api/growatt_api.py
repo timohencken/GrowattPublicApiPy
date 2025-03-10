@@ -15,6 +15,7 @@ from min import Min  # noqa: E402
 from max import Max  # noqa: E402
 from vpp import Vpp  # noqa: E402
 from sph import Sph  # noqa: E402
+from spa import Spa  # noqa: E402
 
 
 class GrowattDeviceType(IntEnum):
@@ -23,8 +24,8 @@ class GrowattDeviceType(IntEnum):
     other = 3  # smart meter / environmental tester / vpp / groBoost
     max = 4
     sph = 5
-    spa = 6
-    min = 7  # (including neo)
+    spa = 6  # MIX
+    min = 7  # MIN / MAC / MOD-XH / MID-XH / NEO
     pcs = 8
     hps = 9
     pdb = 10
@@ -43,6 +44,7 @@ class GrowattApi:
     max: Max
     vpp: Vpp
     sph: Sph
+    spa: Spa
 
     """
     API documents:
@@ -69,3 +71,4 @@ class GrowattApi:
         self.max = Max(self.session)
         self.vpp = Vpp(self.session)
         self.sph = Sph(self.session)
+        self.spa = Spa(self.session)

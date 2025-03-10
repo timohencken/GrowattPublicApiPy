@@ -58,7 +58,15 @@ if __name__ == "__main__":
     # TODO Environmental tester
     # TODO groBoost
 
-    # TODO sph
+    # TODO spa
+    _spa_energy_ = ga.spa.energy(device_sn=INVERTER_SN)
+    _spa_details_ = ga.spa.details(device_sn=INVERTER_SN)
+    _spa_setting_read_by_name_ = ga.spa.setting_read(
+        device_sn=INVERTER_SN, parameter_id="pv_on_off"
+    )
+    _spa_alarms_ = ga.spa.alarms(device_sn=INVERTER_SN)
+
+    # sph
     _sph_energy_history_ = ga.sph.energy_history(device_sn=INVERTER_SN)
     _sph_energy_multiple_ = ga.sph.energy_multiple(device_sn=INVERTER_SN)
     _sph_energy_ = ga.sph.energy(device_sn=INVERTER_SN)
@@ -105,7 +113,38 @@ if __name__ == "__main__":
         parameter_value_1="0",
         parameter_value_2="1",
     )
-    _min_setting_read_by_name_ = ga.min.setting_read(
+    _min_setting_by_name_dict_ = {}
+    for named_setting in [
+        "backflow_setting",
+        "tlx_on_off",
+        "pf_sys_year",
+        "pv_grid_voltage_high",
+        "pv_grid_voltage_low",
+        "tlx_off_grid_enable",
+        "tlx_ac_discharge_frequency",
+        "tlx_ac_discharge_voltage",
+        "pv_active_p_rate",
+        "pv_reactive_p_rate",
+        "pv_power_factor",
+        "charge_power",
+        "charge_stop_soc",
+        "discharge_power",
+        "discharge_stop_soc",
+        "ac_charge",
+        "time_segment1",
+        "time_segment2",
+        "time_segment3",
+        "time_segment4",
+        "time_segment5",
+        "time_segment6",
+        "time_segment7",
+        "time_segment8",
+        "time_segment9",
+    ]:
+        _min_setting_by_name_dict_[named_setting] = ga.min.setting_read(
+            device_sn=INVERTER_SN, parameter_id=named_setting
+        )
+    _min_setting_read_by_name_single_ = ga.min.setting_read(
         device_sn=INVERTER_SN, parameter_id="tlx_on_off"
     )
     _min_setting_read_by_reg_ = ga.min.setting_read(

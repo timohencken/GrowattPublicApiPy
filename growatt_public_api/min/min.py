@@ -350,7 +350,7 @@ class Min:
             end_address (Optional[int]): register address to stop reading at
 
         Returns:
-            StorageSettingRead
+            MinSettingRead
             e.g.
             {
                 "data": "0",
