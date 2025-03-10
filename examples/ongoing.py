@@ -50,15 +50,17 @@ if __name__ == "__main__":
 
     # TODO API v4
     # TODO user
-
-    # TODO pcs
     # TODO hps
     # TODO pbd
     # TODO Smart meter
     # TODO Environmental tester
     # TODO groBoost
 
-    # TODO pcs
+    # pcs
+    _pcs_energy_history_ = ga.pcs.energy_history(device_sn=INVERTER_SN)
+    _pcs_energy_ = ga.pcs.energy(device_sn=INVERTER_SN)
+    _pcs_details_ = ga.pcs.details(device_sn=INVERTER_SN)
+    _pcs_alarms_ = ga.pcs.alarms(device_sn=INVERTER_SN)
 
     # spa
     _spa_energy_multiple_ = ga.spa.energy_multiple(device_sn=INVERTER_SN)
