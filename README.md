@@ -114,7 +114,7 @@ This package aims to
     * read settings value `spa.setting_read()`
     * write settings value `spa.setting_write()` (***use with caution***)
   * device power/energy metrics
-    * current `spa.energy()`              ***Not*** implemented yet
+    * current `spa.energy()`
     * current for multiple inverters `spa.energy_multiple()`              ***Not*** implemented yet
     * historical data `spa.energy_history()`              ***Not*** implemented yet
 * MIN (*TYPE=7* - MIN/MAC/MOD-XH/MID-XH/NEO)
