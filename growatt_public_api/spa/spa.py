@@ -10,8 +10,8 @@ from growatt_public_api.pydantic_models.spa import (
     SpaEnergyOverview,
     SphEnergyHistory,
     SpaAlarms,
-    SphEnergyOverviewMultiple,
-    SphEnergyOverviewMultipleItem,
+    SpaEnergyOverviewMultiple,
+    SpaEnergyOverviewMultipleItem,
 )
 
 truststore.inject_into_ssl()
@@ -514,16 +514,15 @@ class Spa:
 
         return SpaEnergyOverview.model_validate(response)
 
-    # TODO
     def energy_multiple(
         self,
         device_sn: Union[str, List[str]],
         page: Optional[int] = None,
-    ) -> SphEnergyOverviewMultiple:
+    ) -> SpaEnergyOverviewMultiple:
         """
-        Get the latest real-time data of SPH in batches
+        Get the latest real-time data of Spa in batches
         Interface to obtain the latest real-time data of inverters in batches
-        https://www.showdoc.com.cn/262556420217021/6129786427013561
+        https://www.showdoc.com.cn/262556420217021/6138369063488649
 
         Note:
             Only applicable to devices with device type 6 (spa) returned by device.list()
@@ -536,57 +535,57 @@ class Spa:
         * 10002: Device serial number error
         * 10003: Date format error
         * 10004: Date interval exceeds seven days
-        * 10005: Mix does not exist
+        * 10005: Spa does not exist
 
         Args:
             device_sn (Union[str, List[str]]): SPA serial number or list of (multiple) SPA serial numbers (max 100)
             page (Optional[int]): page number, default 1, max 2
 
         Returns:
-            SphEnergyOverviewMultiple
-            {   'data': [   {   'data': {   'ac_charge_energy_today': 0.0,
-                                            'ac_charge_energy_total': 0.0,
+            SpaEnergyOverviewMultiple
+            {   'data': [   {   'data': {   'ac_charge_energy_today': 3.5999999046325684,
+                                            'ac_charge_energy_total': 1305.5,
                                             'ac_charge_power': 0.0,
                                             'address': 0,
                                             'again': False,
                                             'alias': None,
-                                            'battery_temperature': 329.0,
+                                            'battery_temperature': 36.900001525878906,
                                             'battery_type': 1,
-                                            'bms_battery_curr': -10.489999771118164,
-                                            'bms_battery_temp': 32.0,
-                                            'bms_battery_volt': 53.0,
-                                            'bms_cell10_volt': 3.313999891281128,
-                                            'bms_cell11_volt': 3.315000057220459,
-                                            'bms_cell12_volt': 3.313999891281128,
-                                            'bms_cell13_volt': 3.315000057220459,
-                                            'bms_cell14_volt': 3.315000057220459,
-                                            'bms_cell15_volt': 3.315000057220459,
-                                            'bms_cell16_volt': 3.313999891281128,
-                                            'bms_cell1_volt': 3.313999891281128,
-                                            'bms_cell2_volt': 3.313999891281128,
-                                            'bms_cell3_volt': 3.313999891281128,
-                                            'bms_cell4_volt': 3.313999891281128,
-                                            'bms_cell5_volt': 3.313999891281128,
-                                            'bms_cell6_volt': 3.313999891281128,
-                                            'bms_cell7_volt': 3.313999891281128,
-                                            'bms_cell8_volt': 3.313999891281128,
-                                            'bms_cell9_volt': 3.313999891281128,
+                                            'bms_battery_curr': -9.390000343322754,
+                                            'bms_battery_temp': 36.0,
+                                            'bms_battery_volt': 53.099998474121094,
+                                            'bms_cell10_volt': 3.316999912261963,
+                                            'bms_cell11_volt': 3.315999984741211,
+                                            'bms_cell12_volt': 3.315000057220459,
+                                            'bms_cell13_volt': 3.316999912261963,
+                                            'bms_cell14_volt': 3.316999912261963,
+                                            'bms_cell15_volt': 3.315999984741211,
+                                            'bms_cell16_volt': 3.318000078201294,
+                                            'bms_cell1_volt': 3.318000078201294,
+                                            'bms_cell2_volt': 0.0020000000949949026,
+                                            'bms_cell3_volt': 3.315999984741211,
+                                            'bms_cell4_volt': 3.316999912261963,
+                                            'bms_cell5_volt': 3.316999912261963,
+                                            'bms_cell6_volt': 3.316999912261963,
+                                            'bms_cell7_volt': 3.318000078201294,
+                                            'bms_cell8_volt': 3.315999984741211,
+                                            'bms_cell9_volt': 3.316999912261963,
                                             'bms_constant_volt': 56.79999923706055,
-                                            'bms_cycle_cnt': 196,
-                                            'bms_delta_volt': 1.0,
+                                            'bms_cycle_cnt': 100,
+                                            'bms_delta_volt': 3.0,
                                             'bms_error': 0,
                                             'bms_error_old': 0,
                                             'bms_fw': 70,
-                                            'bms_gauge_fcc': 228.0,
-                                            'bms_gauge_rm': 204.5399932861328,
-                                            'bms_info': 16720,
-                                            'bms_max_curr': 128.0,
+                                            'bms_gauge_fcc': 232.0,
+                                            'bms_gauge_rm': 243.27999877929688,
+                                            'bms_info': 0,
+                                            'bms_max_curr': 0.0,
                                             'bms_max_dischg_curr': 170.0,
                                             'bms_mcu_version': 70,
-                                            'bms_pack_info': 16720,
-                                            'bms_soc': 84,
+                                            'bms_pack_info': 0,
+                                            'bms_soc': 98,
                                             'bms_soh': 100,
-                                            'bms_status': 355,
+                                            'bms_status': 291,
                                             'bms_status_old': 0,
                                             'bms_using_cap': 0,
                                             'bms_warn_info': 0,
@@ -595,8 +594,8 @@ class Spa:
                                                             'gregorian_change': {'date': 15, 'day': 5, 'hours': 8, 'minutes': 0, 'month': 9, 'seconds': 0, 'time': -12219292800000, 'timezone_offset': -480, 'year': -318},
                                                             'lenient': True,
                                                             'minimal_days_in_first_week': 1,
-                                                            'time': {'date': 8, 'day': 5, 'hours': 18, 'minutes': 10, 'month': 0, 'seconds': 31, 'time': 1610100631000, 'timezone_offset': -480, 'year': 121},
-                                                            'time_in_millis': 1610100631000,
+                                                            'time': {'date': 11, 'day': 1, 'hours': 15, 'minutes': 43, 'month': 0, 'seconds': 42, 'time': 1610351022000, 'timezone_offset': -480, 'year': 121},
+                                                            'time_in_millis': 1610351022000,
                                                             'time_zone': {'dirty': False, 'display_name': 'China Standard Time', 'dst_savings': 0, 'id': 'Asia/Shanghai', 'last_rule_instance': None, 'raw_offset': 28800000},
                                                             'week_date_supported': True,
                                                             'week_year': 2021,
@@ -604,55 +603,45 @@ class Spa:
                                             'datalogger_sn': None,
                                             'day': None,
                                             'day_map': None,
-                                            'e_to_grid_today': 19.2,
-                                            'e_to_grid_total': 1539.7,
-                                            'e_to_user_today': 1.2,
-                                            'e_to_user_total': 3077.6,
-                                            'eac_today': 37.599998474121094,
-                                            'eac_total': 6595.9,
-                                            'echarge1_today': 6.6,
-                                            'echarge1_total': 2230.6,
-                                            'edischarge1_today': 4.4,
-                                            'edischarge1_total': 2280.8,
-                                            'elocal_load_today': 18.9,
-                                            'elocal_load_total': 30892.6,
-                                            'eps_vac2': 0.0,
-                                            'eps_vac3': 0.0,
-                                            'epv1_today': 20.899999618530273,
-                                            'epv1_total': 3527.3,
-                                            'epv2_today': 21.200000762939453,
-                                            'epv2_total': 3409.1,
-                                            'epv_total': 6936.4,
-                                            'error_code': 0,
+                                            'e_to_grid_today': 7.1,
+                                            'e_to_grid_total': 1493.6,
+                                            'e_to_user_today': 0.0,
+                                            'e_to_user_total': 198.5,
+                                            'eac_today': 1.5,
+                                            'eac_total': 989.1,
+                                            'echarge1_today': 3.3,
+                                            'echarge1_total': 1195.9,
+                                            'edischarge1_today': 1.8,
+                                            'edischarge1_total': 1103.4,
+                                            'elocal_load_today': 4.1,
+                                            'elocal_load_total': 1972.2,
+                                            'epv_inverter_today': 13.2,
+                                            'epv_inverter_total': 3390.3,
+                                            'error_code': -1,
                                             'error_text': 'Unknown',
                                             'fac': 50.029998779296875,
-                                            'fault_bit_code': 0,
-                                            'fault_code': 0,
+                                            'fault_bit_code': -1,
+                                            'fault_code': -1,
                                             'lost': True,
-                                            'mix_bean': None,
-                                            'pac': 780.9,
-                                            'pac1': 783.0,
-                                            'pac2': 0.0,
-                                            'pac3': 0.0,
-                                            'pac_to_grid_r': 0.0,
-                                            'pac_to_grid_total': 0.0,
-                                            'pac_to_user_r': 67.3,
-                                            'pac_to_user_total': 67.3,
+                                            'pac': 430.4,
+                                            'pac1': 418.3,
+                                            'pac_to_grid_r': 21.5,
+                                            'pac_to_grid_total': 21.5,
+                                            'pac_to_user_r': 0.0,
+                                            'pac_to_user_total': 0.0,
                                             'pcharge1': 0.0,
-                                            'pdischarge1': 605.1,
-                                            'plocal_load_r': 949.8,
-                                            'plocal_load_total': 949.8,
-                                            'ppv': 245.4,
-                                            'ppv1': 113.7,
-                                            'ppv2': 131.7,
-                                            'ppv_text': '245.4 W',
+                                            'pdischarge1': 521.2,
+                                            'plocal_load_r': 913.1,
+                                            'plocal_load_total': 0.0,
+                                            'ppv_inverter': 478.4,
                                             'priority_choose': 0.0,
-                                            'serial_num': 'NTCF946079',
-                                            'soc': 84.0,
-                                            'soc_text': '84%',
-                                            'status': 5,
-                                            'status_text': 'PV Bat Online',
-                                            'sys_en': 17056,
+                                            'serial_num': 'BKE4A02004',
+                                            'soc': 98.0,
+                                            'soc_text': '98%',
+                                            'spa_bean': None,
+                                            'status': 6,
+                                            'status_text': 'Bat Online',
+                                            'sys_en': -1,
                                             'sys_fault_word': 0,
                                             'sys_fault_word1': 0,
                                             'sys_fault_word2': 0,
@@ -660,37 +649,32 @@ class Spa:
                                             'sys_fault_word4': 0,
                                             'sys_fault_word5': 0,
                                             'sys_fault_word6': 0,
-                                            'sys_fault_word7': 0,
-                                            'temp1': 48.0,
-                                            'temp2': 44.0,
-                                            'temp3': 45.0,
-                                            'time': datetime.datetime(2021, 1, 8, 18, 10, 31),
-                                            'time_total': 26446612.5,
+                                            'sys_fault_word7': 256,
+                                            'temp1': 37.0,
+                                            'temp2': 35.0,
+                                            'time': datetime.datetime(2021, 1, 11, 15, 43, 42),
+                                            'time_total': -0.5,
                                             'ups_fac': 0.0,
                                             'ups_load_percent': 0.0,
                                             'ups_pac1': 0.0,
-                                            'ups_pac2': 0.0,
-                                            'ups_pac3': 0.0,
                                             'ups_pf': 1000.0,
                                             'ups_vac1': 0.0,
-                                            'uw_sys_work_mode': 5,
-                                            'v_bat_dsp': 53.29999923706055,
-                                            'v_bus1': 370.0,
-                                            'v_bus2': 298.0,
-                                            'vac1': 231.10000610351562,
-                                            'vac2': 0.0,
-                                            'vac3': 0.0,
-                                            'vbat': 53.0,
-                                            'vpv1': 324.70001220703125,
-                                            'vpv2': 328.8999938964844,
-                                            'warn_code': 0,
+                                            'uw_sys_work_mode': 6,
+                                            'v_bat_dsp': 53.20000076293945,
+                                            'v_bus1': 393.0,
+                                            'v_bus2': 300.0,
+                                            'vac1': 243.0,
+                                            'vbat': 52.79999923706055,
+                                            'warn_code': -1,
                                             'warn_text': 'Unknown',
                                             'with_time': False},
-                                'datalogger_sn': 'NAC59173CA',
-                                'device_sn': 'NTCF946079'},
-                            {   'data': {   'ac_charge_energy_today': 0.0, ...},
-                                'datalogger_sn': 'NAC59173CA',
-                                'device_sn': 'NTCF946079'}],
+                                'datalogger_sn': 'NAC591706C',
+                                'device_sn': 'BKE4A02004'},
+                            {   'data': {   'ac_charge_energy_today': 9.899999618530273,
+                                            #...
+                                            'with_time': False},
+                                'datalogger_sn': 'NAC59170BA',
+                                'device_sn': 'BKE192500D'}],
                 'error_code': 0,
                 'error_msg': None,
                 'page_num': 1}
@@ -701,9 +685,9 @@ class Spa:
             device_sn = ",".join(device_sn)
 
         response = self.session.post(
-            endpoint="device/mix/mixs_data",
+            endpoint="device/spa/spas_data",
             data={
-                "mixs": device_sn,
+                "spas": device_sn,
                 "pageNum": page or 1,
             },
         )
@@ -711,7 +695,7 @@ class Spa:
         # Unfortunately, the original response cannot be parsed by pydantic as the inverter_sn is used as key
         # To fix this, resulting data is restructured
         devices = [
-            SphEnergyOverviewMultipleItem(
+            SpaEnergyOverviewMultipleItem(
                 device_sn=inverter_sn,
                 datalogger_sn=response.get("data", {})
                 .get(inverter_sn, {})
@@ -720,12 +704,12 @@ class Spa:
                 .get(inverter_sn, {})
                 .get(inverter_sn, None),
             )
-            for inverter_sn in response.get("mixs", [])
+            for inverter_sn in response.get("spas", [])
         ]
-        response.pop("mixs", None)
+        response.pop("spas", None)
         response["data"] = devices
 
-        return SphEnergyOverviewMultiple.model_validate(response)
+        return SpaEnergyOverviewMultiple.model_validate(response)
 
     # TODO
     def energy_history(

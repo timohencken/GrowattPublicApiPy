@@ -669,10 +669,10 @@ class SpaEnergyOverview(ApiResponse):
 
 
 # #####################################################################################################################
-# Sph energy overview multiple ########################################################################################
+# Spa energy overview multiple ########################################################################################
 
 
-class SphEnergyOverviewMultipleItem(ApiModel):
+class SpaEnergyOverviewMultipleItem(ApiModel):
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
     datalogger_sn: Union[EmptyStrToNone, str] = (
         None  # The collector SN of the inverter, e.g. "ZT00100001"
@@ -680,30 +680,27 @@ class SphEnergyOverviewMultipleItem(ApiModel):
     data: Union[EmptyStrToNone, SpaEnergyOverviewData] = None
 
 
-class SphEnergyOverviewMultiple(ApiResponse):
-    data: List[SphEnergyOverviewMultipleItem] = None
+class SpaEnergyOverviewMultiple(ApiResponse):
+    data: List[SpaEnergyOverviewMultipleItem] = None
     page_num: Union[EmptyStrToNone, int] = None  # Page number, e.g. 1
 
 
 # #####################################################################################################################
-# Sph energy history ##################################################################################################
+# Spa energy history ##################################################################################################
 
 
-def _sph_energy_history_data_to_camel(snake: str) -> str:
-    """
-    define own to_camel function to support weird API naming
-    """
+def _spa_energy_history_data_to_camel(snake: str) -> str:
     override = {
         "device_sn": "mix_sn",
     }
     return override.get(snake, to_camel(snake=snake))
 
 
-class SphEnergyHistoryData(ApiModel):
+class SpaEnergyHistoryData(ApiModel):
     model_config = ConfigDict(
         from_attributes=True,
         populate_by_name=True,
-        alias_generator=_sph_energy_history_data_to_camel,
+        alias_generator=_spa_energy_history_data_to_camel,
     )
 
     count: int  # Total Records
@@ -715,8 +712,8 @@ class SphEnergyHistoryData(ApiModel):
     next_page_start_id: Union[EmptyStrToNone, int] = None  # 21
 
 
-class SphEnergyHistory(ApiResponse):
-    data: Union[EmptyStrToNone, SphEnergyHistoryData] = None
+class SpaEnergyHistory(ApiResponse):
+    data: Union[EmptyStrToNone, SpaEnergyHistoryData] = None
 
 
 # #####################################################################################################################
