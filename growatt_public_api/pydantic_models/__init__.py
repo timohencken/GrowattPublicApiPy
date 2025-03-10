@@ -16,6 +16,15 @@ from .inverter import (  # noqa: F401
     InverterEnergyHistory,
     InverterAlarms,
 )
+from .max import (  # noqa: F401
+    MaxSettingRead,
+    MaxSettingWrite,
+    MaxDetails,
+    MaxEnergyOverview,
+    MaxEnergyOverviewMultiple,
+    MaxEnergyHistory,
+    MaxAlarms,
+)
 from .min import (  # noqa: F401
     MinSettings,
     MinSettingRead,
@@ -26,6 +35,15 @@ from .min import (  # noqa: F401
     MinEnergyHistory,
     MinAlarms,
 )
+from .pcs import (  # noqa: F401
+    PcsSettingRead,
+    PcsSettingWrite,
+    PcsDetails,
+    PcsEnergyOverview,
+    PcsEnergyHistory,
+    PcsAlarms,
+    PcsEnergyOverviewMultiple,
+)
 from .plant import (  # noqa: F401
     PlantList,
     PlantDetails,
@@ -33,6 +51,22 @@ from .plant import (  # noqa: F401
     PlantEnergyHistory,
     PlantPower,
     PlantInfo,
+)
+from .spa import (  # noqa: F401
+    SpaSettingRead,
+    SpaSettingWrite,
+    SpaDetails,
+    SpaEnergyOverview,
+    SpaEnergyHistory,
+    SpaAlarms,
+)
+from .sph import (  # noqa: F401
+    SphSettingRead,
+    SphSettingWrite,
+    SphDetails,
+    SphEnergyOverview,
+    SphEnergyHistory,
+    SphAlarms,
 )
 from .storage import (  # noqa: F401
     StorageSettingRead,

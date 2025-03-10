@@ -130,7 +130,16 @@ This package aims to
     * current for multiple inverters `min.energy_multiple()`
     * historical data `min.energy_history()`
 * PCS (*TYPE=8*)
-  * ***Not*** implemented yet
+  * general device data
+    * read device data `pcs.details()`    ***Not*** implemented yet
+    * read alarms/notification `pcs.alarms()`    ***Not*** implemented yet
+  * device settings
+    * read settings value `pcs.setting_read()`    ***Not*** implemented yet
+    * write settings value `pcs.setting_write()` (***use with caution***)    ***Not*** implemented yet
+  * device power/energy metrics
+    * current `pcs.energy()`    ***Not*** implemented yet
+    * current for multiple inverters `pcs.energy_multiple()`    ***Not*** implemented yet
+    * historical data `pcs.energy_history()`    ***Not*** implemented yet
 * HPS (*TYPE=9*)
   * ***Not*** implemented yet
 * PDB (*TYPE=10*)
@@ -246,6 +255,9 @@ To the best of our knowledge only the settings functions perform modifications t
 
 
 # Changelog
+* TBA_ONGOING (pre-alpha)
+  * endpoints implemented:
+    * PCS
 * 2025.03.10 (pre-alpha)
   * endpoints implemented:
     * SPA

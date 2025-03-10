@@ -59,6 +59,7 @@ if __name__ == "__main__":
     # TODO groBoost
 
     # TODO pcs
+    _pcs_alarms_ = ga.pcs.alarms(device_sn=INVERTER_SN)
 
     # spa
     _spa_energy_multiple_ = ga.spa.energy_multiple(device_sn=INVERTER_SN)
