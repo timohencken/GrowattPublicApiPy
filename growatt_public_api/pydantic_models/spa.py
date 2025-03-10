@@ -691,7 +691,7 @@ class SpaEnergyOverviewMultiple(ApiResponse):
 
 def _spa_energy_history_data_to_camel(snake: str) -> str:
     override = {
-        "device_sn": "mix_sn",
+        "device_sn": "spa_sn",
     }
     return override.get(snake, to_camel(snake=snake))
 
