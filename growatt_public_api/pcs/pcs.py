@@ -4,8 +4,6 @@ from typing import Optional, Union, List
 import truststore
 
 from growatt_public_api.pydantic_models.pcs import (
-    PcsSettingRead,
-    PcsSettingWrite,
     PcsDetails,
     PcsEnergyOverview,
     PcsEnergyHistory,
@@ -32,445 +30,76 @@ class Pcs:
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
 
-    # TODO
-    def setting_read(
-        self,
-        device_sn: str,
-        parameter_id: Optional[str] = None,
-        start_address: Optional[int] = None,
-        end_address: Optional[int] = None,
-    ) -> PcsSettingRead:
-        """
-        Read Spa setting parameter interface
-        Read Spa setting parameter interface
-        https://www.showdoc.com.cn/262556420217021/6129809145198328
-
-        Note:
-            Only applicable to devices with device type 8 (pcs) returned by device.list()
-
-        This method allows to read
-        * predefined settings
-          * pass parameter_id, do not pass start_address or end_address
-        * any register value
-          * pass start_address and end_address, do not pass parameter_id
-        see setting_write() for more details
-
-        Specific error codes:
-        * 10001: Reading failed
-        * 10002: Device does not exist
-        * 10003: Device offline
-        * 10004: Collector serial number is empty
-        * 10005: Collector offline
-        * 10006: Collector type does not support reading Get function
-        * 10007: The collector version does not support the reading function
-        * 10008: The collector connects to the server error, please restart and try again
-        * 10009: The read setting parameter type does not exist
-
-        Args:
-            device_sn (str): SPA SN
-            parameter_id (Optional[str]): parameter ID - specify either parameter_id ort start/end_address
-            start_address (Optional[int]): register address to start reading from - specify either parameter_id ort start/end_address
-            end_address (Optional[int]): register address to stop reading at
-
-        Returns:
-            SpaSettingRead
-            e.g.
-            {
-                "data": "0",
-                "error_code": 0,
-                "error_msg": ""
-            }
-        """
-
-        if parameter_id is None and start_address is None:
-            raise ValueError("specify either parameter_id or start_address/end_address")
-        elif parameter_id is not None and start_address is not None:
-            raise ValueError(
-                "specify either parameter_id or start_address/end_address - not both."
-            )
-        elif parameter_id is not None:
-            # named parameter
-            start_address = 0
-            end_address = 0
-        else:
-            # using register-number mode
-            parameter_id = "set_any_reg"
-            if start_address is None:
-                start_address = end_address
-            if end_address is None:
-                end_address = start_address
-
-        response = self.session.post(
-            endpoint="readSpaParam",
-            data={
-                "device_sn": device_sn,
-                "paramId": parameter_id,
-                "startAddr": start_address,
-                "endAddr": end_address,
-            },
-        )
-
-        return PcsSettingRead.model_validate(response)
-
-    # TODO
-    # noinspection PyUnusedLocal
-    def setting_write(
-        self,
-        device_sn: str,
-        parameter_id: str,
-        parameter_value_1: str,
-        parameter_value_2: Optional[str] = None,
-        parameter_value_3: Optional[str] = None,
-        parameter_value_4: Optional[str] = None,
-        parameter_value_5: Optional[str] = None,
-        parameter_value_6: Optional[str] = None,
-        parameter_value_7: Optional[str] = None,
-        parameter_value_8: Optional[str] = None,
-        parameter_value_9: Optional[str] = None,
-        parameter_value_10: Optional[str] = None,
-        parameter_value_11: Optional[str] = None,
-        parameter_value_12: Optional[str] = None,
-        parameter_value_13: Optional[str] = None,
-        parameter_value_14: Optional[str] = None,
-        parameter_value_15: Optional[str] = None,
-        parameter_value_16: Optional[str] = None,
-        parameter_value_17: Optional[str] = None,
-        parameter_value_18: Optional[str] = None,
-    ) -> PcsSettingWrite:
-        """
-        Spa parameter settings
-        Spa parameter setting interface
-        https://www.showdoc.com.cn/262556420217021/6129790987434517
-
-        Note:
-            Only applicable to devices with device type 8 (pcs) returned by device.list()
-
-        This method allows to set
-        * predefined settings (see table below)
-        * any register value (see table below for most relevant settings, google for "Growatt Inverter Modbus RTU Protocol V1.20" for more)
-
-        Predefined settings
-        ========================+=======================================+===========================+============================================================================
-        description             | parameter_id                          | parameter_value_[n]       | comment
-        ========================+=======================================+===========================+============================================================================
-        Load priority           | spa_load_flast                        | [ 1]: 0 ~ 23              | [ 1]: hour
-         discharge prohibition  |                                       | [ 2]: 0 ~ 59              | [ 2]: minute
-                                |                                       | [ 3]: 0 ~ 23              | [ 3]: hour
-                                |                                       | [ 4]: 0 ~ 59              | [ 4]: minute
-                                |                                       | [ 5]: 0  or 1             | [ 5]: 0 = disable, 1 = enable
-                                |                                       | [ 6]: 0 ~ 23              | [ 6]: hour
-                                |                                       | [ 7]: 0 ~ 59              | [ 7]: minute
-                                |                                       | [ 8]: 0 ~ 23              | [ 8]: hour
-                                |                                       | [ 9]: 0 ~ 59              | [ 9]: minute
-                                |                                       | [10]: 0  or 1             | [10]: 0 = disable, 1 = enable
-                                |                                       | [11]: 0 ~ 23              | [11]: hour
-                                |                                       | [12]: 0 ~ 59              | [12]: minute
-                                |                                       | [13]: 0 ~ 23              | [13]: hour
-                                |                                       | [14]: 0 ~ 59              | [14]: minute
-                                |                                       | [15]: 0  or 1             | [15]: 0 = disable, 1 = enable
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Grid priority           | spa_ac_charge_time_period             | [ 1]: 0 ~ 100             | [ 1]: discharge power
-                                |                                       | [ 2]: 0 ~ 100             | [ 2]: discharge stop SOC
-                                |                                       | [ 3]: 0 ~ 23              | [ 3]: hour
-                                |                                       | [ 4]: 0 ~ 59              | [ 4]: minute
-                                |                                       | [ 5]: 0 ~ 23              | [ 5]: hour
-                                |                                       | [ 6]: 0 ~ 59              | [ 6]: minute
-                                |                                       | [ 7]: 0  or 1             | [ 7]: 0 = disable, 1 = enable
-                                |                                       | [ 8]: 0 ~ 23              | [ 8]: hour
-                                |                                       | [ 9]: 0 ~ 59              | [ 9]: minute
-                                |                                       | [10]: 0 ~ 23              | [10]: hour
-                                |                                       | [11]: 0 ~ 59              | [11]: minute
-                                |                                       | [12]: 0  or 1             | [12]: 0 = disable, 1 = enable
-                                |                                       | [13]: 0 ~ 23              | [13]: hour
-                                |                                       | [14]: 0 ~ 59              | [14]: minute
-                                |                                       | [15]: 0 ~ 23              | [15]: hour
-                                |                                       | [16]: 0 ~ 59              | [16]: minute
-                                |                                       | [17]: 0  or 1             | [17]: 0 = disable, 1 = enable
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Battery priority        | spa_ac_charge_time_period             | [ 1]: 0 ~ 100             | [ 1]: charging power
-                                |                                       | [ 2]: 0 ~ 100             | [ 2]: charge stop SOC
-                                |                                       | [ 3]: 0  or 1             | [ 3]: mains - 0 = disable, 1 = enable
-                                |                                       | [ 4]: 0 ~ 23              | [ 4]: hour
-                                |                                       | [ 5]: 0 ~ 59              | [ 5]: minute
-                                |                                       | [ 6]: 0 ~ 23              | [ 6]: hour
-                                |                                       | [ 7]: 0 ~ 59              | [ 7]: minute
-                                |                                       | [ 8]: 0  or 1             | [ 8]: 0 = disable, 1 = enable
-                                |                                       | [ 9]: 0 ~ 23              | [ 9]: hour
-                                |                                       | [10]: 0 ~ 59              | [10]: minute
-                                |                                       | [11]: 0 ~ 23              | [11]: hour
-                                |                                       | [12]: 0 ~ 59              | [12]: minute
-                                |                                       | [13]: 0  or 1             | [13]: 0 = disable, 1 = enable
-                                |                                       | [14]: 0 ~ 23              | [14]: hour
-                                |                                       | [15]: 0 ~ 59              | [15]: minute
-                                |                                       | [16]: 0 ~ 23              | [16]: hour
-                                |                                       | [17]: 0 ~ 59              | [17]: minute
-                                |                                       | [18]: 0  or 1             | [18]: 0 = disable, 1 = enable
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Power on and off        | pv_on_off                             | [1]: 0000 or 0001         | 0000 = off, 0001 = on
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Set time                | pf_sys_year                           | [1]: "00:00" ~ "23:59"    | HH:MM
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Upper limit             | pv_grid_voltage_high                  | [1]: e.g. 270             | V
-         of mains voltage       |                                       |                           |
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Lower limit             | pv_grid_voltage_low                   | [1]: e.g. 180             | V
-         of mains voltage       |                                       |                           |
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Off-grid                | spa_off_grid_enable                   | [1]: 0 or 1               | 0 = disabled, 1 = enable
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Off-grid frequency      | spa_ac_discharge_frequency            | [1]: 0 or 1               | 0 = 50Hz, 1 = 60Hz
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Off-grid voltage        | spa_ac_discharge_voltage              | [1]: 0 or 1 or 2          | 0 = 230V, 1 = 208V, 2 = 240V
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Whether to store the    | pv_pf_cmd_memory_state                | [1]: 0 or 1               | 0 = off, 1 = on
-         following PF commands  |                                       |                           |
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Active power            | pv_active_p_rate                      | [1]: 0 ~ 100              |
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        Reactive power          | pv_reactive_p_rate                    | [1]: 0 ~ 100              |
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-        PF value                | pv_power_factor                       | [1]: -0.8 ~ -1            |
-                                |                                       |   or  0.8 ~  1            |
-        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
-
-        Register settings
-        =================
-        google for "Growatt Inverter Modbus RTU Protocol V1.20" for more
-
-        Specific error codes:
-        * 10001: system error
-        * 10002: AC energy storage machine server error
-        * 10003: AC energy storage machine offline
-        * 10004: AC energy storage machine serial number is empty
-        * 10005: collector offline
-        * 10006: Setting parameter type does not exist
-        * 10007: parameter value is empty
-        * 10008: parameter value is out of range
-        * 10009: date and time format is wrong
-        * 10012: AC energy storage machine does not exist
-        * 10013: end time cannot be less than start time
-
-        Args:
-            device_sn (str): SPA SN
-            parameter_id (str): parameter ID - pass "set_any_reg" to write register address
-            parameter_value_1 (str): parameter value 1
-            parameter_value_2 (Optional[str]): parameter value 2
-            parameter_value_3 (Optional[str]): parameter value 3
-            parameter_value_4 (Optional[str]): parameter value 4
-            parameter_value_5 (Optional[str]): parameter value 5
-            parameter_value_6 (Optional[str]): parameter value 6
-            parameter_value_7 (Optional[str]): parameter value 7
-            parameter_value_8 (Optional[str]): parameter value 8
-            parameter_value_9 (Optional[str]): parameter value 9
-            parameter_value_10 (Optional[str]): parameter value 10
-            parameter_value_11 (Optional[str]): parameter value 11
-            parameter_value_12 (Optional[str]): parameter value 12
-            parameter_value_13 (Optional[str]): parameter value 13
-            parameter_value_14 (Optional[str]): parameter value 14
-            parameter_value_15 (Optional[str]): parameter value 15
-            parameter_value_16 (Optional[str]): parameter value 16
-            parameter_value_17 (Optional[str]): parameter value 17
-            parameter_value_18 (Optional[str]): parameter value 18
-
-        Returns:
-            SpaSettingWrite
-            e.g. (success)
-            {
-                "data": "",
-                "error_code": 0,
-                "error_msg": "Set Successful spa return"
-            }
-        """
-        # put parameters to a dict to make handling easier
-        parameters = {i: eval(f"parameter_value_{i}") for i in range(1, 19)}
-
-        if parameter_id == "set_any_reg":
-            assert parameters[1] is not None, "register address must be provided"
-            assert parameters[2] is not None, "new value must be provided"
-            for i in range(3, 19):
-                assert (
-                    parameters[i] is None
-                ), f"parameter {i} must not be used for set_any_reg"
-        else:
-            assert parameters[1] is not None, "new value must be provided"
-
-        # API docs: if there is no value, pass empty string ""
-        for i in range(2, 19):
-            if parameters[i] is None:
-                parameters[i] = ""
-
-        # parameter values must be string
-        for i in range(1, 19):
-            parameters[i] = str(parameters[i])
-
-        response = self.session.post(
-            endpoint="spaSet",
-            data={
-                "spa_sn": device_sn,
-                "type": parameter_id,
-                **{f"param{i}": parameters[i] for i in range(1, 19)},
-            },
-        )
-
-        return PcsSettingWrite.model_validate(response)
-
-    # TODO
     def details(
         self,
         device_sn: str,
     ) -> PcsDetails:
         """
-        Get basic spa information
-        Interface to get basic information of Spa
-        https://www.showdoc.com.cn/262556420217021/6129791904178555
+        Get Pcs basic information
+        Interface to get basic information of pcs
+        https://www.showdoc.com.cn/262556420217021/6129831722860832
 
         Note:
             Only applicable to devices with device type 8 (pcs) returned by device.list()
 
         Args:
-            device_sn (str): SPA device SN
+            device_sn (str): PCS device SN
 
         Returns:
-            SpaDetails
-            e.g.
-            {   'data': {   'active_p_rate': 100,
-                            'address': 1,
-                            'alias': 'LHD0847002',
-                            'backflow_setting': None,
-                            'bat_aging_test_step': 0,
-                            'bat_first_switch1': 0,
-                            'bat_first_switch2': 0,
-                            'bat_first_switch3': 0,
-                            'bat_temp_lower_limit_c': 0.0,
-                            'bat_temp_lower_limit_d': 120.0,
-                            'bat_temp_upper_limit_c': 40.0,
-                            'bat_temp_upper_limit_d': 55.0,
-                            'battery_type': 0,
-                            'baudrate': 0,
-                            'bct_adjust': 0,
-                            'bct_mode': 0,
-                            'buck_ups_fun_en': True,
-                            'buck_ups_volt_set': 0.0,
-                            'charge_power_command': 100,
-                            'charge_time1': None,
-                            'charge_time2': None,
-                            'charge_time3': None,
+            PcsDetails
+            {   'data': {   'address': 9,
+                            'alias': 'PCS000001',
+                            'charge_day_map': {},
+                            'charge_month': 0,
+                            'charge_month_text': '0',
                             'children': [],
-                            'com_address': 1,
-                            'communication_version': None,
-                            'country_selected': 0,
-                            'datalogger_sn': 'JPC2827188',
-                            'discharge_power_command': 100,
-                            'discharge_time1': None,
-                            'discharge_time2': None,
-                            'discharge_time3': None,
-                            'dtc': 3701,
-                            'energy_day': 0.0,
+                            'datalogger_sn': 'MONITOR002',
+                            'discharge_day_map': {},
+                            'discharge_month': 0.0,
+                            'discharge_month_2': 0.0,
+                            'discharge_month_text': '0',
+                            'e_charge_today': 0.0,
+                            'e_discharge_today': 0.0,
+                            'e_discharge_total': 0.0,
+                            'energy_day': None,
                             'energy_day_map': {},
                             'energy_month': 0.0,
                             'energy_month_text': '0',
-                            'eps_freq_set': 0,
-                            'eps_fun_en': False,
-                            'eps_volt_set': 0,
-                            'equipment_type': None,
-                            'float_charge_current_limit': 650,
-                            'forced_charge_time_start1': datetime.time(0, 0),
-                            'forced_charge_time_start2': datetime.time(1, 30),
-                            'forced_charge_time_start3': datetime.time(10, 30),
-                            'forced_charge_time_stop1': datetime.time(23, 59),
-                            'forced_charge_time_stop2': datetime.time(4, 29),
-                            'forced_charge_time_stop3': datetime.time(13, 29),
-                            'forced_discharge_time_start1': datetime.time(0, 0),
-                            'forced_discharge_time_start2': datetime.time(7, 30),
-                            'forced_discharge_time_start3': datetime.time(13, 30),
-                            'forced_discharge_time_stop1': datetime.time(23, 59),
-                            'forced_discharge_time_stop2': datetime.time(10, 29),
-                            'forced_discharge_time_stop3': datetime.time(16, 29),
-                            'fw_version': 'RH1.0',
-                            'grid_first_switch1': True,
-                            'grid_first_switch2': False,
-                            'grid_first_switch3': False,
+                            'fw_version': 'AB02',
                             'group_id': -1,
-                            'id': 0,
                             'img_path': './css/img/status_gray.gif',
-                            'inner_version': 'rHAA020202',
-                            'last_update_time': {'date': 19, 'day': 3, 'hours': 16, 'minutes': 3, 'month': 11, 'seconds': 4, 'time': 1545206584000, 'timezone_offset': -480, 'year': 118},
-                            'last_update_time_text': datetime.datetime(2018, 12, 19, 16, 3, 4),
-                            'lcd_language': 1,
-                            'level': 4,
-                            'load_first_start_time1': datetime.time(0, 0),
-                            'load_first_start_time2': datetime.time(4, 30),
-                            'load_first_start_time3': datetime.time(0, 0),
-                            'load_first_stop_time1': datetime.time(23, 59),
-                            'load_first_stop_time2': datetime.time(7, 29),
-                            'load_first_stop_time3': datetime.time(0, 0),
-                            'load_first_switch1': False,
-                            'load_first_switch2': False,
-                            'load_first_switch3': False,
-                            'location': 'null',
-                            'lost': True,
-                            'manufacturer': 'New Energy ',
-                            'modbus_version': 305,
-                            'model': 29136100000,
-                            'model_text': 'A0B0D0T4P7U2M2S1',
-                            'on_off': True,
-                            'p_charge': 0,
-                            'p_discharge': 0,
-                            'parent_id': 'LIST_JPC2827188_96',
-                            'pf_cmd_memory_state': None,
-                            'pf_sys_year': None,
+                            'inner_version': '2017',
+                            'last_update_time': {'date': 27, 'day': 1, 'hours': 16, 'minutes': 26, 'month': 6, 'seconds': 14, 'time': 1595838374000, 'timezone_offset': -480, 'year': 120},
+                            'last_update_time_text': datetime.datetime(2020, 7, 27, 16, 26, 14),
+                            'level': 6,
+                            'location': None,
+                            'lost': False,
+                            'model': 0,
+                            'model_text': 'A0B0D0T0P0U0M0S0',
+                            'normalPower': 500000,
+                            'parent_id': 'LIST_MONITOR002_3',
+                            'peak_clipping': 0.0,
+                            'peak_clipping_total': 0.0,
                             'plant_id': 0,
                             'plant_name': None,
-                            'pmax': 3000,
-                            'port_name': 'port_name',
-                            'power_factor': 10000.0,
-                            'power_max': None,
-                            'power_max_text': None,
-                            'power_max_time': None,
-                            'priority_choose': 2,
-                            'pv_active_p_rate': None,
-                            'pv_grid_voltage_high': None,
-                            'pv_grid_voltage_low': None,
-                            'pv_on_off': None,
-                            'pv_pf_cmd_memory_state': None,
-                            'pv_power_factor': None,
-                            'pv_reactive_p_rate': None,
-                            'pv_reactive_p_rate_two': None,
-                            'reactive_p_rate': 100,
+                            'port_name': 'ShinePano-MONITOR002',
                             'record': None,
-                            'serial_num': 'LHD0847002',
-                            'spa_ac_discharge_frequency': None,
-                            'spa_ac_discharge_voltage': None,
-                            'spa_off_grid_enable': None,
-                            'status': -1,
-                            'status_text': 'spa.status.lost',
-                            'sys_time': datetime.datetime(2018, 12, 19, 15, 59),
-                            'tcp_server_ip': '192.168.3.35',
-                            'tree_id': 'ST_LHD0847002',
-                            'tree_name': 'LHD0847002',
+                            'serial_num': 'PCS000001',
+                            'status': 2,
+                            'status_text': 'pcs.status.normal',
+                            'tcp_server_ip': '47.107.154.111',
+                            'tree_id': 'PCS000001',
+                            'tree_name': 'PCS000001',
                             'updating': False,
-                            'user_name': None,
-                            'usp_freq_set': None,
-                            'vac_high': 264.5,
-                            'vac_low': 184.0,
-                            'vbat_start_for_charge': 58.0,
-                            'vbat_start_for_discharge': 48.0,
-                            'vbat_stop_for_charge': 5.880000114440918,
-                            'vbat_stop_for_discharge': 4.699999809265137,
-                            'vbat_warn_clr': 5.0,
-                            'vbat_warning': 480.0,
-                            'wcharge_soc_low_limit1': 100,
-                            'wcharge_soc_low_limit2': 100,
-                            'wdis_charge_soc_low_limit1': 100,
-                            'wdis_charge_soc_low_limit2': 5},
-                'datalogger_sn': 'JPC2827188',
-                'device_sn': 'LHD0847002',
+                            'user_name': None},
+                'datalogger_sn': 'MONITOR002',
+                'device_sn': 'PCS000001',
                 'error_code': 0,
                 'error_msg': None}
         """
 
         response = self.session.get(
-            endpoint="device/spa/spa_data_info",
+            endpoint="device/pcs/pcs_data_info",
             params={
                 "device_sn": device_sn,
             },
@@ -478,40 +107,178 @@ class Pcs:
 
         return PcsDetails.model_validate(response)
 
-    # TODO
     def energy(
         self,
         device_sn: str,
     ) -> PcsEnergyOverview:
         """
-        Get the latest real-time data from Spa
-        Access to the latest real-time data of Spa
-        https://www.showdoc.com.cn/262556420217021/6129794031492135
+        Get the latest real-time data of Pcs
+        Interface to get the latest real-time data of pcs
+        https://www.showdoc.com.cn/262556420217021/6131235037123575
 
         Note:
             Only applicable to devices with device type 8 (pcs) returned by device.list()
 
         Rate limit(s):
-        * The frequency of acquisition is once every 10 seconds
+        * The frequency of acquisition is once every 5 minutes
 
         Specific error codes:
         * 10001: system error
-        * 10002: Mix does not exist
+        * 10002: Pcs does not exist
         * 10003: device SN error
 
         Args:
-            device_sn (str): SPA serial number
+            device_sn (str): PCS serial number
 
         Returns:
-            SpaEnergyOverview
-            e.g.
-
+            PcsEnergyOverview
+            {   'data': {   'address': 0,
+                            'again': False,
+                            'alarm_code1': 0,
+                            'alarm_code2': 0,
+                            'alias': None,
+                            'ats_bypass': 0,
+                            'b_active_power': 19.0,
+                            'b_apparent_power': 18.0,
+                            'b_reactive_power': 20.0,
+                            'bipv': 2.0,
+                            'bipvu': 7.0,
+                            'bipvv': 8.0,
+                            'bipvw': 9.0,
+                            'bms_protection': 0,
+                            'bms_status': 6,
+                            'bms_volt_status': 1690,
+                            'bvbus': 59.0,
+                            'bvbus_nega': 61.0,
+                            'bvbus_posi': 60.0,
+                            'bvpv': 1.0,
+                            'bvpvuv': 13.0,
+                            'bvpvvw': 14.0,
+                            'bvpvwu': 15.0,
+                            'bypass_freq': 8.100000381469727,
+                            'calendar': {   'first_day_of_week': 1,
+                                            'gregorian_change': {'date': 15, 'day': 5, 'hours': 8, 'minutes': 0, 'month': 9, 'seconds': 0, 'time': -12219292800000, 'timezone_offset': -480, 'year': -318},
+                                            'lenient': True,
+                                            'minimal_days_in_first_week': 1,
+                                            'time': {'date': 11, 'day': 4, 'hours': 17, 'minutes': 6, 'month': 5, 'seconds': 9, 'time': 1591866369000, 'timezone_offset': -480, 'year': 120},
+                                            'time_in_millis': 1591866369000,
+                                            'time_zone': {'dirty': False, 'display_name': 'China Standard Time', 'dst_savings': 0, 'id': 'Asia/Shanghai', 'last_rule_instance': None, 'raw_offset': 28800000},
+                                            'week_date_supported': True,
+                                            'week_year': 2020,
+                                            'weeks_in_week_year': 52},
+                            'capacity': 470.0,
+                            'datalogger_sn': None,
+                            'day': None,
+                            'dg_grid_power': 0.0,
+                            'dg_grid_select': 0,
+                            'e_charge_time_today': 27.0,
+                            'e_charge_time_total': 1690932.0,
+                            'e_charge_today': 26.0,
+                            'e_charge_total': 1690930.0,
+                            'e_discharge_time_today': 25.0,
+                            'e_discharge_time_total': 1690932.0,
+                            'e_discharge_today': 24.0,
+                            'e_discharge_total': 1690930.0,
+                            'electric_state': 5,
+                            'gfdi1': 42.0,
+                            'gfdi2': 43.0,
+                            'grid_freq': 210.0,
+                            'grid_time_today': 95.0,
+                            'grid_time_total': 6422627.0,
+                            'grid_today': 94.0,
+                            'grid_total': 6291553.0,
+                            'i1a': 10.0,
+                            'i1b': 11.0,
+                            'i1c': 12.0,
+                            'load_active_power': 49.0,
+                            'load_apparent_power': 48.0,
+                            'load_ia': 53.0,
+                            'load_ib': 54.0,
+                            'load_ic': 55.0,
+                            'load_pf': 52.0,
+                            'load_reactive_power': 50.0,
+                            'load_time_today': 83.0,
+                            'load_time_total': 5636183.0,
+                            'load_today': 82.0,
+                            'load_total': 5505109.0,
+                            'lost': True,
+                            'max_charge_curr': 100.0,
+                            'max_discharge_curr': 101.0,
+                            'max_min_temp_cell': 6.0,
+                            'max_temp': 6.0,
+                            'max_temp_num': 6.0,
+                            'max_volt': 1.0,
+                            'max_volt_cell': 6.0,
+                            'max_volt_num': 194.0,
+                            'maxmin_volt_cell': 6.0,
+                            'min_temp': 174.0,
+                            'min_temp_group': 134.0,
+                            'min_temp_num': 164.0,
+                            'min_volt': 1.0,
+                            'min_volt_cell': 6.0,
+                            'min_volt_group': 144.0,
+                            'min_volt_num': 184.0,
+                            'mvpv': 0.46000000834465027,
+                            'out_apparent_power': 78.0,
+                            'out_reactive_power': 80.0,
+                            'pac_to_battery': 17.0,
+                            'pac_to_grid': 0.0,
+                            'pcs_active_power': 79.0,
+                            'pcs_bean': None,
+                            'pf': 0.23000000417232513,
+                            'pf_symbol': 220,
+                            'power_grid': 0.0,
+                            'ppv': 108000.0,
+                            'pv_energy': 0.0,
+                            'riso_batn': 41.0,
+                            'riso_batp': 40.0,
+                            'self_time': 450.0,
+                            'serial_num': 'TND093000E',
+                            'status': 2,
+                            'status_lang': 'common_normal',
+                            'status_text': 'OnGridState',
+                            'sys_fault_word1': 8192,
+                            'sys_fault_word2': 512,
+                            'sys_fault_word3': 256,
+                            'sys_fault_word4': 0,
+                            'sys_fault_word5': 32816,
+                            'sys_fault_word6': 160,
+                            'sys_fault_word7': 0,
+                            'sys_fault_word8': 0,
+                            'temp1': 30.0,
+                            'temp2': 31.0,
+                            'temp3': 32.0,
+                            'temp4': 33.0,
+                            'temp5': 35.0,
+                            'temp6': 36.0,
+                            'time': datetime.datetime(2020, 6, 11, 17, 6, 9),
+                            'to_grid_time_today': 89.0,
+                            'to_grid_time_total': 6029405.0,
+                            'to_grid_today': 88.0,
+                            'to_grid_total': 5898331.0,
+                            'to_power_grid': 0.0,
+                            'type_flag': 1430,
+                            'vac_frequency': 1.600000023841858,
+                            'vacu': 135.0,
+                            'vacuv': 4.0,
+                            'vacv': 136.0,
+                            'vacvw': 5.0,
+                            'vacw': 137.0,
+                            'vacwu': 6.0,
+                            'vpvuv': 56.0,
+                            'vpvvw': 57.0,
+                            'vpvwu': 58.0,
+                            'with_time': False},
+                'datalogger_sn': 'WFD0947012',
+                'device_sn': 'TND093000E',
+                'error_code': 0,
+                'error_msg': None}
         """
 
         response = self.session.post(
-            endpoint="device/spa/spa_last_data",
+            endpoint="device/pcs/pcs_last_data",
             data={
-                "spa_sn": device_sn,
+                "pcs_sn": device_sn,
             },
         )
 
@@ -542,7 +309,7 @@ class Pcs:
         * 10005: Spa does not exist
 
         Args:
-            device_sn (Union[str, List[str]]): SPA serial number or list of (multiple) SPA serial numbers (max 100)
+            device_sn (Union[str, List[str]]): PCS serial number or list of (multiple) PCS serial numbers (max 100)
             page (Optional[int]): page number, default 1, max 2
 
         Returns:
@@ -744,7 +511,7 @@ class Pcs:
         * 10005: Mix does not exist
 
         Args:
-            device_sn (str): SPA serial number
+            device_sn (str): PCS serial number
             start_date (Optional[date]): Start Date - defaults to today
             end_date (Optional[date]): End Date (date interval cannot exceed 7 days) - defaults to today
             timezone (Optional[str]): The time zone code of the data display, the default is UTC
@@ -929,7 +696,6 @@ class Pcs:
 
         return PcsEnergyHistory.model_validate(response)
 
-    # TODO
     def alarms(
         self,
         device_sn: str,
@@ -938,24 +704,24 @@ class Pcs:
         limit: Optional[int] = None,
     ) -> PcsAlarms:
         """
-        Get alarm data of a spa
-        Interface to get alarm data of a certain Spa
-        https://www.showdoc.com.cn/262556420217021/6129804467339594
+        Get the alarm data of a certain Pcs
+        Interface to get the alarm data of a pcs
+        https://www.showdoc.com.cn/262556420217021/6131258854397548
 
         Note:
             Only applicable to devices with device type 8 (pcs) returned by device.list()
 
         Rate limit(s):
-        * The frequency of acquisition is once every 10 seconds
+        * The frequency of acquisition is once every 5 minutes
 
         Specific error codes:
         * 10001: system error
         * 10002: device serial number error
         * 10003: date format error
-        * 10005: spa does not exist
+        * 10005: pcs does not exist
 
         Args:
-            device_sn (str): SPA device serial number
+            device_sn (str): PCS device serial number
             date_ (Optional[date]): Date - defaults to today
             page (Optional[int]): page number, default 1
             limit (Optional[int]): Number of items per page, default 20, max 100
@@ -967,7 +733,7 @@ class Pcs:
                 'data': {
                     'alarms': [
                         {
-                            'alarm_code': 3,
+                            'alarm_code': 2,
                             'alarm_message': '',
                             'end_time': datetime.datetime(2018, 12, 17, 14, 5, 54),
                             'start_time': datetime.datetime(2018, 12, 17, 14, 5, 54),
@@ -975,7 +741,7 @@ class Pcs:
                         }
                     ],
                     'count': 1,
-                    'device_sn': 'LHD0847002'
+                    'device_sn': 'TLMAX00B01'
                 },
                 'error_code': 0,
                 'error_msg': None
@@ -986,9 +752,9 @@ class Pcs:
             date_ = date.today()
 
         response = self.session.post(
-            endpoint="device/spa/alarm_data",
+            endpoint="device/pcs/alarm_data",
             data={
-                "spa_sn": device_sn,
+                "pcs_sn": device_sn,
                 "date": date_.strftime("%Y-%m-%d"),
                 "page": page,
                 "perpage": limit,

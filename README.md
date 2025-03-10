@@ -131,13 +131,10 @@ This package aims to
     * historical data `min.energy_history()`
 * PCS (*TYPE=8*)
   * general device data
-    * read device data `pcs.details()`    ***Not*** implemented yet
-    * read alarms/notification `pcs.alarms()`    ***Not*** implemented yet
-  * device settings
-    * read settings value `pcs.setting_read()`    ***Not*** implemented yet
-    * write settings value `pcs.setting_write()` (***use with caution***)    ***Not*** implemented yet
+    * read device data `pcs.details()`
+    * read alarms/notification `pcs.alarms()`
   * device power/energy metrics
-    * current `pcs.energy()`    ***Not*** implemented yet
+    * current `pcs.energy()`
     * current for multiple inverters `pcs.energy_multiple()`    ***Not*** implemented yet
     * historical data `pcs.energy_history()`    ***Not*** implemented yet
 * HPS (*TYPE=9*)
