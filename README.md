@@ -61,7 +61,7 @@ This package aims to
     * `device.add()`
   * device power/energy metrics
     * get energy (sum) for specific day `device.energy_day()`
-* Inverter (*TYPE=1* - ??? (including MAX))
+* Inverter (*TYPE=1* (including MAX))
   * general device data
     * read device data `inverter.details()`
     * read alarms/notification `inverter.alarms()`
@@ -72,7 +72,7 @@ This package aims to
     * current `inverter.energy()`
     * current for multiple inverters `inverter.energy_multiple()`
     * historical data `inverter.energy_history()`
-* Storage (*TYPE=2* - ???)
+* Storage (*TYPE=2*)
   * general device data
     * read device data `storage.details()`
     * read alarms/notification `storage.alarms()`
@@ -137,7 +137,12 @@ This package aims to
     * current `pcs.energy()`
     * historical data `pcs.energy_history()`
 * HPS (*TYPE=9*)
-  * ***Not*** implemented yet
+  * general device data
+    * read device data `hps.details()`
+    * read alarms/notification `hps.alarms()`
+  * device power/energy metrics
+    * current `hps.energy()`
+    * historical data `hps.energy_history()`
 * PDB (*TYPE=10*)
   * ***Not*** implemented yet
 * Smart meter (*TYPE=3*)
@@ -255,6 +260,7 @@ To the best of our knowledge only the settings functions perform modifications t
   * endpoints implemented:
     * SPA
     * PCS
+    * HPS
 * 2025.03.05 (pre-alpha)
   * endpoints implemented:
     * MAX

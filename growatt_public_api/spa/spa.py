@@ -500,8 +500,6 @@ class Spa:
 
         Returns:
             SpaEnergyOverview
-            e.g.
-
         """
 
         response = self.session.post(
@@ -710,7 +708,6 @@ class Spa:
 
         return SpaEnergyOverviewMultiple.model_validate(response)
 
-    # TODO
     def energy_history(
         self,
         device_sn: str,
@@ -904,183 +901,6 @@ class Spa:
                 "perpage": limit,
             },
         )
-
-        # FIXME DEBUG
-        sample_data = """{
-    "data": {
-        "datas": [
-            {
-                "etogridTotal": 104.7,
-                "vBus2": 283,
-                "bmsCell1Volt": 0,
-                "faultBitCode": -1,
-                "eacToday": 5.099999904632568,
-                "socText": "88%",
-                "bmsMaxCurr": 0,
-                "vBus1": 378,
-                "errorText": "Unknown",
-                "vBatDsp": 51.400001525878906,
-                "time": "2018-12-19 16:03:04",
-                "upsVac1": 0,
-                "bmsStatusOld": 0,
-                "bmsPackInfo": 0,
-                "bmsGaugeRM": 0,
-                "bmsCell2Volt": 0,
-                "bmsCycleCnt": 0,
-                "pacToUserR": 0,
-                "acChargeEnergyToday": 0,
-                "again": false,
-                "bmsCell14Volt": 0,
-                "bmsUsingCap": 0,
-                "bmsCell12Volt": 0,
-                "soc": 88,
-                "epvInverterToday": 0.6,
-                "echarge1Today": 0,
-                "batteryTemperature": 26.299999237060547,
-                "bmsCell3Volt": 0,
-                "bmsCell13Volt": 0,
-                "plocalLoadR": 2946.4,
-                "upsFac": 0,
-                "bmsCell7Volt": 0,
-                "timeTotal": -0.5,
-                "bmsCell10Volt": 0,
-                "bmsGaugeFCC": 0,
-                "etoUserToday": 0,
-                "pcharge1": 0,
-                "sysFaultWord": 0,
-                "bmsCell5Volt": 0,
-                "dataLogSn": "",
-                "bmsError": 0,
-                "vbat": 51.400001525878906,
-                "uwSysWorkMode": 6,
-                "elocalLoadToday": 5.6,
-                "bmsCell9Volt": 0,
-                "bmsCell6Volt": 0,
-                "bmsFW": 0,
-                "bmsStatus": 0,
-                "acChargePower": 0,
-                "plocalLoadTotal": 0,
-                "bmsCell15Volt": 0,
-                "acChargeEnergyTotal": 35.900001525878906,
-                "bmsErrorOld": 0,
-                "bmsCell4Volt": 0,
-                "pac1": 2976.6,
-                "errorCode": -1,
-                "bmsBatteryCurr": 0,
-                "bmsMCUVersion": 0,
-                "epvInverterTotal": 0.6,
-                "etoUserTotal": 104.8,
-                "priorityChoose": 2,
-                "warnCode": -1,
-                "bmsDeltaVolt": 0,
-                "serialNum": "LHD0847002",
-                "pacToUserTotal": 0,
-                "sysFaultWord2": 0,
-                "dayMap": null,
-                "sysFaultWord1": 0,
-                "vac1": 230.6999969482422,
-                "bmsWarnInfoOld": 0,
-                "sysFaultWord6": 0,
-                "bmsCell16Volt": 0,
-                "edischarge1Today": 6,
-                "status": 6,
-                "sysEn": -1,
-                "sysFaultWord5": 0,
-                "sysFaultWord4": 0,
-                "sysFaultWord3": 0,
-                "ppvInverter": 6.8,
-                "sysFaultWord7": 256,
-                "elocalLoadTotal": 77.9,
-                "upsLoadpercent": 0,
-                "upsPF": 1000,
-                "fac": 50.02000045776367,
-                "day": "",
-                "faultCode": -1,
-                "bmsBatteryVolt": 0,
-                "eacTotal": 156.6,
-                "lost": true,
-                "pacToGridR": 9.4,
-                "statusText": "Bat Online",
-                "bmsWarnInfo": 0,
-                "bmsBatteryTemp": 0,
-                "warnText": "Unknown",
-                "upsPac1": 0,
-                "bmsSOH": 0,
-                "temp1": 72,
-                "temp2": 40,
-                "withTime": false,
-                "bmsCell8Volt": 0,
-                "bmsCell11Volt": 0,
-                "calendar": {
-                    "minimalDaysInFirstWeek": 1,
-                    "time": {
-                        "time": 1545206584000,
-                        "minutes": 3,
-                        "seconds": 4,
-                        "hours": 16,
-                        "month": 11,
-                        "timezoneOffset": -480,
-                        "year": 118,
-                        "day": 3,
-                        "date": 19
-                    },
-                    "weekYear": 2018,
-                    "weeksInWeekYear": 52,
-                    "gregorianChange": {
-                        "time": -12219292800000,
-                        "minutes": 0,
-                        "seconds": 0,
-                        "hours": 8,
-                        "month": 9,
-                        "timezoneOffset": -480,
-                        "year": -318,
-                        "day": 5,"date": 15
-                    },
-                    "timeZone": {
-                        "lastRuleInstance": null,
-                        "DSTSavings": 0,
-                        "rawOffset": 28800000,
-                        "ID": "Asia/Shanghai",
-                        "dirty": false,
-                        "displayName": "China Standard Time"
-                    },
-                    "lenient": true,
-                    "timeInMillis": 1545206584000,
-                    "firstDayOfWeek": 1,
-                    "weekDateSupported": true
-                },
-                "spaBean": null,
-                "pac": 2976.3,
-                "edischarge1Total": 167.1,
-                "alias": "",
-                "batteryType": 0,
-                "bmsSOC": 0,
-                "etoGridToday": 0.2,
-                "pdischarge1": 3083,
-                "bmsInfo": 0,
-                "pacToGridTotal": 9.4,
-                "address": 0,
-                "bmsConstantVolt": 0,
-                "bmsMaxDischgCurr": 0,
-                "echarge1Total": 32.9
-            }
-        ],
-        "spa_sn": "LHD0847002",
-        "next_page_start_id": 21,
-        "count": 3662,
-        "datalogger_sn": "JPC2827188"
-    },
-    "error_code": 0,
-    "error_msg": ""
-}"""
-        import json
-        import pprint
-
-        j = json.loads(sample_data)
-        pprint.pprint(j, indent=4, width=500)
-        k = SpaEnergyHistory.model_validate(j)  # <-----------------------------
-        pprint.pprint(k.model_dump(), indent=4, width=500)
-        # FIXME DEBUG
 
         return SpaEnergyHistory.model_validate(response)
 
