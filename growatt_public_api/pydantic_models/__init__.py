@@ -7,6 +7,12 @@ from .device import (  # noqa: F401
     DeviceDatalogger,
     DeviceAdd,
 )
+from .hps import (  # noqa: F401
+    HpsDetails,
+    HpsEnergyOverview,
+    HpsEnergyHistory,
+    HpsAlarms,
+)
 from .inverter import (  # noqa: F401
     InverterSettingRead,
     InverterSettingWrite,

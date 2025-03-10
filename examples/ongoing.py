@@ -49,12 +49,18 @@ if __name__ == "__main__":
     # # FIXME DEBUG
 
     # TODO API v4
+
     # TODO user
-    # TODO hps
     # TODO pbd
     # TODO Smart meter
     # TODO Environmental tester
     # TODO groBoost
+
+    # hps
+    _hps_energy_history_ = ga.hps.energy_history(device_sn=INVERTER_SN)
+    _hps_energy_ = ga.hps.energy(device_sn=INVERTER_SN)
+    _hps_details_ = ga.hps.details(device_sn=INVERTER_SN)
+    _hps_alarms_ = ga.hps.alarms(device_sn=INVERTER_SN)
 
     # pcs
     _pcs_energy_history_ = ga.pcs.energy_history(device_sn=INVERTER_SN)
