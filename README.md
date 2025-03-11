@@ -276,37 +276,5 @@ To the best of our knowledge only the settings functions perform modifications t
 
 
 # Changelog
-* TBA (pre-alpha)
-  * all API v1 endpoints implemented
-  * endpoints added:
-    * `Plant.add()`
-    * `Plant.modify()`
-    * `Plant.delete()`
-    * `Device.datalogger_add()`
-    * `Device.datalogger_delete()`
 * 2025.03.11 (pre-alpha)
-  * endpoints implemented:
-    * PBD
-    * Smart meter
-    * Environmental sensor
-    * GroBoost
-    * User
-* 2025.03.10 (pre-alpha)
-  * endpoints implemented:
-    * SPA
-    * PCS
-    * HPS
-* 2025.03.05 (pre-alpha)
-  * endpoints implemented:
-    * MAX
-    * SPH (MIX)
-* 2025.03.04 (pre-alpha)
-  * initial release
-  * endpoints implemented:
-    * Plant
-    * Device
-    * Datalogger
-    * Inverter
-    * Storage
-    * MIN (MIN/MAC/MOD-XH/MID-XH/NEO)
-    * VPP (MIN/SPH/SPA)
+  * all API v1 endpoints implemented
