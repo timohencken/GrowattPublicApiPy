@@ -58,8 +58,8 @@ class GrowattApi:
         self.session = GrowattApiSession(
             token=token, server_url=server_url or "https://openapi.growatt.com"
         )
-        # self.user = User(self.session)
-        # self.plant = Plant(self.session)
+        self.user = User(self.session)
+        self.plant = Plant(self.session)
         self.device = Device(self.session)
         self.inverter = Inverter(self.session)
         self.storage = Storage(self.session)

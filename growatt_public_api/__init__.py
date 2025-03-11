@@ -1,4 +1,4 @@
-from types import (  # noqa: F401
+from growatt_types import (  # noqa: F401
     GrowattDeviceType,
     GrowattCountry,
     PlantType,

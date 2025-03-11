@@ -3,7 +3,7 @@ import datetime
 from loguru import logger
 
 from growatt_public_api import GrowattApi
-from types import PlantType, GrowattCountry
+from growatt_types import PlantType, GrowattCountry
 
 if __name__ == "__main__":
     logger.info("DEBUG")

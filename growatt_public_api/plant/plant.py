@@ -3,7 +3,7 @@ from typing import Optional, Literal, Union
 
 import truststore
 
-from types import GrowattCountry, PlantType
+from growatt_types import GrowattCountry, PlantType
 from pydantic_models.plant import (
     PlantList,
     PlantDetails,

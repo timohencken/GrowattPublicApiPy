@@ -10,7 +10,7 @@ from pydantic_models.user import (
 )
 
 truststore.inject_into_ssl()
-from types import GrowattCountry  # noqa: E402
+from growatt_types import GrowattCountry  # noqa: E402
 from session import GrowattApiSession  # noqa: E402
 
 
