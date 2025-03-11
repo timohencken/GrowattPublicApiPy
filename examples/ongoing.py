@@ -55,7 +55,10 @@ if __name__ == "__main__":
     # TODO Environmental tester
     # TODO groBoost
 
-    # TODO pbd
+    # pbd
+    _pbd_energy_history_ = ga.pbd.energy_history(device_sn=INVERTER_SN)
+    _pbd_energy_ = ga.pbd.energy(device_sn=INVERTER_SN)
+    _pbd_details_ = ga.pbd.details(device_sn=INVERTER_SN)
     _pbd_alarms_ = ga.pbd.alarms(device_sn=INVERTER_SN)
 
     # hps

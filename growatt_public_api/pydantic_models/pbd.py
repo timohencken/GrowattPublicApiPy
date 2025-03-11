@@ -79,8 +79,10 @@ def _pbd_detail_data_to_camel(snake: str) -> str:
         "datalogger_sn": "dataLogSn",
         "discharge_day_map": "disChargeDayMap",
         "discharge_month": "disChargeMonth",
+        "discharge_month_2": "dischargeMonth",  # avoid name collision
         "parent_id": "parentID",
         "plant_name": "plantname",
+        "riso_min": "risomin",
         "tree_id": "treeID",
     }
     return override.get(snake, to_camel(snake=snake))
@@ -96,30 +98,38 @@ class PbdDetailData(ApiModel):
 
     address: Union[EmptyStrToNone, int] = None  # Inverter address, e.g. 9
     alias: Union[EmptyStrToNone, str] = None  # alias, e.g. 'PCS000001'
+    biout: Union[EmptyStrToNone, float] = None  # e.g. 0
+    bms_enable: Union[EmptyStrToNone, bool] = None  # 1
+    bvout: Union[EmptyStrToNone, float] = None  # 0
     charge_day_map: Union[EmptyStrToNone, Any] = None  # e.g. {},
     charge_month: Union[EmptyStrToNone, int] = None  # e.g. 0,
     children: List[Any]  # e.g. []
     datalogger_sn: Union[EmptyStrToNone, str] = (
         None  # The serial number of the collector, e.g. 'WFD091500E'
     )
-    device_type: Union[EmptyStrToNone, int] = None  # e.g. 0
     discharge_day_map: Union[EmptyStrToNone, Any] = None  # e.g. {}
     discharge_month: Union[EmptyStrToNone, float] = None  # e.g. 0
+    discharge_month_2: Union[EmptyStrToNone, float] = None  # e.g. 0
+    discharge_month_text: Union[EmptyStrToNone, str] = None  # '0'
     e_charge_today: Union[EmptyStrToNone, float] = None  # e.g. 0
     e_discharge_today: Union[EmptyStrToNone, float] = None  # e.g. 0
     e_discharge_total: Union[EmptyStrToNone, float] = None  # e.g. 0
-    energy_day_map: Union[EmptyStrToNone, Any] = None  # e.g. {}
-    energy_month: Union[EmptyStrToNone, float] = None  # e.g. 0
-    energy_month_text: Union[EmptyStrToNone, str] = None  # e.g. '0'
     fw_version: Union[EmptyStrToNone, str] = None  # Inverter version, e.g. 'RH1.0'
+    grid_detection_time: Union[EmptyStrToNone, float] = None  # 60
     group_id: Union[EmptyStrToNone, int] = None  # e.g. -1
-    hps_set_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
-    id: Union[EmptyStrToNone, int] = None  # e.g. 26
+    i_out_max: Union[EmptyStrToNone, float] = None  # 0
+    i_out_min: Union[EmptyStrToNone, float] = None  # 500
+    i_pv_l_max: Union[EmptyStrToNone, float] = None  # 500
+    i_pv_max: Union[EmptyStrToNone, float] = None  # 500
+    icharge: Union[EmptyStrToNone, float] = None  # 1
     img_path: Union[EmptyStrToNone, str] = None  # e.g. './css/img/status_gray.gif'
     inner_version: Union[EmptyStrToNone, str] = (
         None  # Internal version number, e.g. 'null'
     )
-    last_update_time: Union[EmptyStrToNone, GrowattTimeCalendar] = (
+    ipv: Union[EmptyStrToNone, float] = None  # 0
+    ipv1: Union[EmptyStrToNone, float] = None  # 0
+    ipv2: Union[EmptyStrToNone, float] = None  # 0
+    last_update_time: Union[EmptyStrToNone, GrowattTime] = (
         None  # Last update time, e.g. {'date': 12, 'day': 2, 'hours': 16, 'minutes': 46, 'month': 3, 'seconds': 22, 'time': 1649753182000, 'timezoneOffset': -480, 'year': 122}
     )
     last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = (
@@ -135,19 +145,27 @@ class PbdDetailData(ApiModel):
         None  # model, e.g. 'S25B00D00T00P0FU01M0072'
     )
     normalPower: Union[EmptyStrToNone, int] = None  # e.g. 500000
+    on_off: Union[EmptyStrToNone, bool] = None  # 1
+    out_power_max: Union[EmptyStrToNone, float] = None  # 100
     parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_VC51030322020001_22'
+    peak_clipping: Union[EmptyStrToNone, float] = None  # 0
+    peak_clipping_total: Union[EmptyStrToNone, float] = None  # 0
     plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
-    plant_name: Union[EmptyStrToNone, str] = None  # e.g. ''
     port_name: Union[EmptyStrToNone, str] = None  # e.g. 'port_name'
-    power_max: Union[EmptyStrToNone, float] = None  # e.g. ''
-    power_max_text: Union[EmptyStrToNone, str] = None  # e.g. ''
-    power_max_time: Union[EmptyStrToNone, str] = None  # e.g. ''
-    pv_today: Union[EmptyStrToNone, float] = None  # e.g. 0
+    power_start: Union[EmptyStrToNone, float] = None  # 1
     record: Union[EmptyStrToNone, Any] = None  # e.g. None
+    restore: Union[EmptyStrToNone, float] = None  # 0
+    riso_enable: Union[EmptyStrToNone, float] = None  # 0
+    riso_min: Union[EmptyStrToNone, float] = None  # 33
+    rs_addr: Union[EmptyStrToNone, float] = None  # 3
+    safety: Union[EmptyStrToNone, float] = None  # 2
     serial_num: Union[EmptyStrToNone, str] = None  # Device SN, e.g. 'LHD0847002'
+    soc_max: Union[EmptyStrToNone, float] = None  # 0
+    soc_min: Union[EmptyStrToNone, float] = None  # 0
     status: Union[EmptyStrToNone, int] = (
         None  # Device status (0: disconnected, 1: online, 2: standby, 3: failure, all others are offline), e.g. 0
     )
+    status_lang: Union[EmptyStrToNone, str] = None  # 'Lost'
     status_text: Union[EmptyStrToNone, str] = None  # e.g. 'hps.status.los'
     tcp_server_ip: Union[EmptyStrToNone, str] = (
         None  # Server address, e.g. '47.107.154.111'
@@ -155,16 +173,25 @@ class PbdDetailData(ApiModel):
     timezone: Union[EmptyStrToNone, int] = None  # e.g. 8
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_FDCJQ00003'
     tree_name: Union[EmptyStrToNone, str] = None  # e.g. 'FDCJQ00003'
+    type: Union[EmptyStrToNone, int] = None  # 1
     updating: Union[EmptyStrToNone, bool] = None  # e.g. False
-    user_name: Union[EmptyStrToNone, str] = None  # e.g. ''
+    v_mppt_max: Union[EmptyStrToNone, float] = None  # 844.7999877929688
+    v_mppt_min: Union[EmptyStrToNone, float] = None  # 14.800000190734863
+    v_out_max: Union[EmptyStrToNone, float] = None  # 450
+    v_out_min: Union[EmptyStrToNone, float] = None  # 450
+    v_pv_max: Union[EmptyStrToNone, float] = None  # 1000
+    v_start: Union[EmptyStrToNone, float] = None  # 450
+    vpv: Union[EmptyStrToNone, float] = None  # 0
+    vpv1: Union[EmptyStrToNone, float] = None  # 0
+    vpv2: Union[EmptyStrToNone, float] = None  # 545.5
 
 
 class PbdDetails(ApiResponse):
     data: Union[EmptyStrToNone, PbdDetailData] = None
     datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the energy storage machine, e.g. "WFD091500E"
+        None  # The collector SN of the energy storage machine, e.g. "MONITOR003"
     )
-    device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "UHD0918003"
+    device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "HPS0000001"
 
 
 # #####################################################################################################################
@@ -174,6 +201,15 @@ class PbdDetails(ApiResponse):
 def _pbd_energy_overview_data_to_camel(snake: str) -> str:
     override = {
         "datalogger_sn": "dataLogSn",
+        "biout_buck1": "biOutBuck1",
+        "biout_buck2": "biOutBuck2",
+        "pbd_out_power": "pbdOutPowe",
+        "riso_bat_n": "risoBatn",
+        "riso_bat_p": "risoBatp",
+        "riso_bus_n": "risoBusn",
+        "riso_bus_p": "risoBusp",
+        "riso_pv_n": "risoPVn",
+        "riso_pv_p": "risoPVp",
     }
     return override.get(snake, to_camel(snake=snake))
 
@@ -190,99 +226,55 @@ class PbdEnergyOverviewData(ApiModel):
     alarm_code1: Union[EmptyStrToNone, int] = None  # e.g. 0
     alarm_code2: Union[EmptyStrToNone, int] = None  # e.g. 0
     alias: Union[EmptyStrToNone, str] = None  # e.g. ''
-    ats_bypass: Union[EmptyStrToNone, int] = None  # e.g. 0
-    b_active_power: Union[EmptyStrToNone, float] = None  # e.g. 19
-    batcdct: Union[EmptyStrToNone, float] = None  # e.g. 0
-    batldt: Union[EmptyStrToNone, float] = None  # e.g. 0
-    batnir: Union[EmptyStrToNone, float] = None  # e.g. 0
-    batpir: Union[EmptyStrToNone, float] = None  # e.g. 0
+    biout_buck1: Union[EmptyStrToNone, float] = None  # e.g. 192
+    biout_buck2: Union[EmptyStrToNone, float] = None  # e.g. 193
+    biout: Union[EmptyStrToNone, float] = None  # e.g. 191
+    bipv_buck1: Union[EmptyStrToNone, float] = None  # e.g. 157
+    bipv_buck2: Union[EmptyStrToNone, float] = None  # e.g. 158
+    bipv_buck3: Union[EmptyStrToNone, float] = None  # e.g. 211
+    bipv_buck4: Union[EmptyStrToNone, float] = None  # e.g. 212
+    bipv_buck5: Union[EmptyStrToNone, float] = None  # e.g. 213
     bms_protection: Union[EmptyStrToNone, int] = None  # e.g. 0
-    bms_show_status: Union[EmptyStrToNone, int] = None  # e.g. 0
     bms_status: Union[EmptyStrToNone, int] = None  # Battery Status, e.g. 361
     bms_volt_status: Union[EmptyStrToNone, int] = None  # e.g. 1690
-    bmstc: Union[EmptyStrToNone, float] = None  # e.g. 0
-    bmstv: Union[EmptyStrToNone, float] = None  # e.g. 0
     bvbus: Union[EmptyStrToNone, float] = None  # e.g. 59
-    bvbus_nega: Union[EmptyStrToNone, float] = None  # e.g. 61
-    bvbus_posi: Union[EmptyStrToNone, float] = None  # e.g. 60
-    bypass_freq: Union[EmptyStrToNone, float] = None  # e.g. 8.100000381469727
+    bvout: Union[EmptyStrToNone, float] = None  # e.g. 190
     calendar: Union[EmptyStrToNone, GrowattTimeCalendar] = None
     capacity: Union[EmptyStrToNone, float] = None  # e.g. 470
-    cfdllc1: Union[EmptyStrToNone, float] = None  # e.g. 0
-    cfdllc2: Union[EmptyStrToNone, float] = None  # e.g. 0
     datalogger_sn: Union[EmptyStrToNone, str] = None  # e.g. 'QMN0000000000000'
     day: Union[EmptyStrToNone, str] = None  # e.g. ''
-    dg_grid_power: Union[EmptyStrToNone, float] = None  # e.g. 0
-    dg_grid_select: Union[EmptyStrToNone, int] = None  # e.g. 0
-    e_bat_charge_time_total: Union[EmptyStrToNone, float] = None  # e.g. 4.8
-    e_bat_charge_total: Union[EmptyStrToNone, float] = None  # e.g. 12
-    e_bat_discharge_time_total: Union[EmptyStrToNone, float] = None  # e.g. 0.6
-    e_bat_discharge_total: Union[EmptyStrToNone, float] = None  # e.g. 0.3
     e_charge_time_today: Union[EmptyStrToNone, float] = None  # e.g. 27
+    e_charge_time_total: Union[EmptyStrToNone, float] = None  # e.g. 156
     e_charge_today: Union[EmptyStrToNone, float] = (
         None  # The amount of charge in the system that day, e.g. 26
     )
+    e_charge_total: Union[EmptyStrToNone, float] = None  # Total system charge, e.g. 154
     e_discharge_time_today: Union[EmptyStrToNone, float] = None  # e.g. 25
+    e_discharge_time_total: Union[EmptyStrToNone, float] = None  # e.g. 152
     e_discharge_today: Union[EmptyStrToNone, float] = (
         None  # System discharge capacity of the day, e.g. 24
     )
-    e_grid_time_today: Union[EmptyStrToNone, float] = None  # e.g. 573.5
-    e_grid_time_total: Union[EmptyStrToNone, float] = None  # e.g. 8.90000057220459
-    e_grid_today: Union[EmptyStrToNone, float] = None  # e.g. 1.899999976158142
-    e_grid_total: Union[EmptyStrToNone, float] = None  # e.g. 1.899999976158142
-    e_load_time_today: Union[EmptyStrToNone, float] = None  # e.g. 92.80000305175781
-    e_load_time_total: Union[EmptyStrToNone, float] = None  # e.g. 1.2000000476837158
-    e_load_today: Union[EmptyStrToNone, float] = None  # e.g. 4.800000190734863
-    e_load_total: Union[EmptyStrToNone, float] = None  # e.g. 4.800000190734863
-    e_to_grid_time_today: Union[EmptyStrToNone, float] = None  # e.g. 296.29998779296875
-    e_to_grid_time_total: Union[EmptyStrToNone, float] = None  # e.g. 4.400000095367432
-    e_to_grid_today: Union[EmptyStrToNone, float] = (
-        None  # Daily incoming electricity of the grid, e.g. 5
+    e_discharge_total: Union[EmptyStrToNone, float] = (
+        None  # Total system discharge, e.g. 150
     )
-    e_to_grid_total: Union[EmptyStrToNone, float] = None  # Total grid power, e.g. 5
-    effectiveness: Union[EmptyStrToNone, float] = None  # e.g. 99
+    e_out_today: Union[EmptyStrToNone, float] = None  # e.g. 201
+    e_out_total: Union[EmptyStrToNone, float] = None  # e.g. 13238500.0
+    electric_state: Union[EmptyStrToNone, int] = None  # e.g. -1
     epv_time_today: Union[EmptyStrToNone, float] = None  # e.g. 358.1
     epv_time_total: Union[EmptyStrToNone, float] = None  # e.g. 5.5
     epv_today: Union[EmptyStrToNone, float] = None  # e.g. 0
     epv_total: Union[EmptyStrToNone, float] = (
         None  # PV total power generation, e.g. 21.8
     )
-    fac: Union[EmptyStrToNone, float] = None  # grid frequency, e.g. 0
-    grid_freq: Union[EmptyStrToNone, float] = None  # e.g. 210
-    gvpvuv: Union[EmptyStrToNone, float] = None  # e.g. 230.5
-    gvpvvw: Union[EmptyStrToNone, float] = None  # e.g. 0
-    gvpvwu: Union[EmptyStrToNone, float] = None  # e.g. 0
-    hps_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
-    i_buck1: Union[EmptyStrToNone, float] = None  # e.g. 0.10000000149011612
-    i_buck2: Union[EmptyStrToNone, float] = None  # e.g. 0.10000000149011612
-    i_buck3: Union[EmptyStrToNone, float] = None  # e.g. 0
-    i_buck4: Union[EmptyStrToNone, float] = None  # e.g. 0
-    i_buck5: Union[EmptyStrToNone, float] = None  # e.g. 0
-    ibat: Union[EmptyStrToNone, float] = None  # e.g. -0.10000000149011612
-    iboard: Union[EmptyStrToNone, float] = None  # e.g. -0.10000000149011612
     id: Union[EmptyStrToNone, int] = None  # e.g. 4
-    inductor_curr: Union[EmptyStrToNone, float] = None  # e.g. 0
-    insul_detec_nega: Union[EmptyStrToNone, float] = None  # e.g. 1000
-    insul_detec_posi: Union[EmptyStrToNone, float] = None  # e.g.  1000
-    invuv: Union[EmptyStrToNone, float] = None  # e.g. 0
-    invvw: Union[EmptyStrToNone, float] = None  # e.g. 0
-    invwu: Union[EmptyStrToNone, float] = None  # e.g. 0
     ipv: Union[EmptyStrToNone, float] = None  # e.g. 0.8999999761581421
+    ipv1: Union[EmptyStrToNone, float] = None  # PV1 input current, e.g. 84
     ipv2: Union[EmptyStrToNone, float] = (
         None  # PV2 input current, e.g. 0.800000011920929
     )
-    ipva: Union[EmptyStrToNone, float] = None  # e.g. 0.4000000059604645
-    ipvb: Union[EmptyStrToNone, float] = None  # e.g. 0
-    ipvc: Union[EmptyStrToNone, float] = None  # e.g. 0
-    ipvu: Union[EmptyStrToNone, float] = None  # e.g. 0.10000000149011612
-    ipvv: Union[EmptyStrToNone, float] = None  # e.g. 0
-    ipvw: Union[EmptyStrToNone, float] = None  # e.g. 0
-    load_active_power: Union[EmptyStrToNone, float] = None  # e.g. 49
-    load_ia: Union[EmptyStrToNone, float] = None  # e.g. 53
-    load_ib: Union[EmptyStrToNone, float] = None  # e.g. 54
-    load_ic: Union[EmptyStrToNone, float] = None  # e.g. 55
-    load_pf: Union[EmptyStrToNone, float] = None  # e.g. 52
-    load_reactive_power: Union[EmptyStrToNone, float] = None  # e.g. 50
+    ipv3: Union[EmptyStrToNone, float] = None  # PV3 input current, e.g. 208
+    ipv4: Union[EmptyStrToNone, float] = None  # PV4 input current, e.g. 209
+    ipv5: Union[EmptyStrToNone, float] = None  # PV5 input current, e.g. 210
     lost: Union[EmptyStrToNone, bool] = None  # e.g. True
     max_charge_curr: Union[EmptyStrToNone, float] = None  # e.g. 100
     max_discharge_curr: Union[EmptyStrToNone, float] = None  # e.g. 101
@@ -301,24 +293,21 @@ class PbdEnergyOverviewData(ApiModel):
     min_volt_group: Union[EmptyStrToNone, float] = None  # e.g. 144
     min_volt_num: Union[EmptyStrToNone, float] = None  # e.g. 184
     mvpv: Union[EmptyStrToNone, float] = None  # e.g. 0.46000000834465027
-    pac: Union[EmptyStrToNone, float] = None  # Inverter output power, e.g. 0
-    pac1: Union[EmptyStrToNone, float] = (
-        None  # Inverter output apparent power 1, e.g. 0
-    )
-    pac2: Union[EmptyStrToNone, float] = (
-        None  # Inverter output apparent power 2, e.g. 0
-    )
-    pf: Union[EmptyStrToNone, float] = None  # e.g. 0.23000000417232513
-    pf_symbol: Union[EmptyStrToNone, int] = None  # e.g. 220
+    pbd_bat_power: Union[EmptyStrToNone, float] = None  # e.g. 98
+    pbd_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
+    pbd_out_power: Union[EmptyStrToNone, float] = None  # e.g. 194
     ppv: Union[EmptyStrToNone, float] = None  # Total PV input power, e.g. 0
     ppv1: Union[EmptyStrToNone, float] = None  # PV1 input power, e.g. 0
     ppv2: Union[EmptyStrToNone, float] = None  # PV2 input power, e.g. 0
-    pvnir1: Union[EmptyStrToNone, float] = None  # e.g. 1000
-    pvpir1: Union[EmptyStrToNone, float] = None  # e.g. 1000
-    rac: Union[EmptyStrToNone, float] = None  # e.g. 0
-    run_model: Union[EmptyStrToNone, int] = None  # e.g. 5
-    run_status: Union[EmptyStrToNone, int] = None  # e.g. 0
-    scrtemp: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ppv3: Union[EmptyStrToNone, float] = None  # PV3 input power, e.g. 214
+    ppv4: Union[EmptyStrToNone, float] = None  # PV4 input power, e.g. 215
+    ppv5: Union[EmptyStrToNone, float] = None  # PV5 input power, e.g. 216
+    riso_bat_n: Union[EmptyStrToNone, float] = None  # e.g. 122
+    riso_bat_p: Union[EmptyStrToNone, float] = None  # e.g. 121
+    riso_bus_n: Union[EmptyStrToNone, float] = None  # e.g. 200
+    riso_bus_p: Union[EmptyStrToNone, float] = None  # e.g. 199
+    riso_pv_n: Union[EmptyStrToNone, float] = None  # e.g. 120
+    riso_pv_p: Union[EmptyStrToNone, float] = None  # e.g. 119
     self_time: Union[EmptyStrToNone, float] = None  # e.g. 450
     serial_num: Union[EmptyStrToNone, str] = None  # e.g. 'LHD0847002'
     status: Union[EmptyStrToNone, int] = None  # e.g. 5
@@ -330,26 +319,20 @@ class PbdEnergyOverviewData(ApiModel):
     sys_fault_word4: Union[EmptyStrToNone, int] = None  # e.g. 0
     sys_fault_word5: Union[EmptyStrToNone, int] = None  # e.g. 0
     sys_fault_word6: Union[EmptyStrToNone, int] = None  # e.g. 0
-    sys_fault_word7: Union[EmptyStrToNone, int] = None  # e.g. 256
-    sys_fault_word8: Union[EmptyStrToNone, int] = None  # e.g. 256
-    sys_fault_word9: Union[EmptyStrToNone, int] = None  # e.g. 256
-    temp1: Union[EmptyStrToNone, float] = None  # Temperature 1, e.g. 34
-    temp2: Union[EmptyStrToNone, float] = None  # Temperature 2, e.g. 33.099998474121094
-    temp3: Union[EmptyStrToNone, float] = None  # e.g. 32
-    temp4: Union[EmptyStrToNone, float] = None  # e.g. 33
-    temp5: Union[EmptyStrToNone, float] = None  # e.g. 35
-    temp6: Union[EmptyStrToNone, float] = None  # e.g. 36
+    temp: Union[EmptyStrToNone, float] = None  # Temperature, e.g. 117
+    tempout_buck_l: Union[EmptyStrToNone, float] = None  # e.g. 198
+    tempout_buck_module: Union[EmptyStrToNone, float] = None  # e.g. 196
+    temppv_buck_l: Union[EmptyStrToNone, float] = None  # e.g. 197
+    temppv_buck_module: Union[EmptyStrToNone, float] = None  # e.g. 195
     time: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2022-04-09 14:52:39'
     type_flag: Union[EmptyStrToNone, int] = None  # e.g. 1430
     vbat: Union[EmptyStrToNone, float] = None  # e.g. -1.5
     vpv: Union[EmptyStrToNone, float] = None  # e.g. 1.7000000476837158
+    vpv1: Union[EmptyStrToNone, float] = None  # PV1 input voltage, e.g. 81
     vpv2: Union[EmptyStrToNone, float] = None  # PV2 input voltage, e.g. -0.5
-    vpvun: Union[EmptyStrToNone, float] = None  # e.g. 1
-    vpvuv: Union[EmptyStrToNone, float] = None  # e.g. 56
-    vpvvn: Union[EmptyStrToNone, float] = None  # e.g. 0
-    vpvvw: Union[EmptyStrToNone, float] = None  # e.g. 57
-    vpvwn: Union[EmptyStrToNone, float] = None  # e.g. 0
-    vpvwu: Union[EmptyStrToNone, float] = None  # e.g. 58
+    vpv3: Union[EmptyStrToNone, float] = None  # PV3 input voltage, e.g. 204
+    vpv4: Union[EmptyStrToNone, float] = None  # PV4 input voltage, e.g. 205
+    vpv5: Union[EmptyStrToNone, float] = None  # PV5 input voltage, e.g. 207
     with_time: Union[EmptyStrToNone, bool] = (
         None  # Whether the data sent has its own time, e.g. False
     )
@@ -371,9 +354,9 @@ class PbdEnergyOverview(ApiResponse):
 
     data: Union[EmptyStrToNone, PbdEnergyOverviewData] = None
     datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "JPC2827188"
+        None  # The collector SN of the inverter, e.g. "MONITOR003"
     )
-    device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "LHD0847002"
+    device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "HPS0000001"
 
 
 # #####################################################################################################################
@@ -396,10 +379,10 @@ class PbdEnergyHistoryData(ApiModel):
 
     count: int  # Total Records
     datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. ""SATA818009""
+        None  # The collector SN of the inverter, e.g. ""MONITOR003""
     )
     datas: List[PbdEnergyOverviewData]
-    device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. ""TLMAX00B01""
+    device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. ""HPS0000001""
     next_page_start_id: Union[EmptyStrToNone, int] = None  # 21
 
 

@@ -145,11 +145,11 @@ This package aims to
     * historical data `hps.energy_history()`
 * PBD (*TYPE=10*)
   * general device data
-    * read device data `pbd.details()`     ***Not*** implemented yet
+    * read device data `pbd.details()`
     * read alarms/notification `pbd.alarms()`
   * device power/energy metrics
-    * current `pbd.energy()`     ***Not*** implemented yet
-    * historical data `pbd.energy_history()`     ***Not*** implemented yet
+    * current `pbd.energy()`
+    * historical data `pbd.energy_history()`
 * Smart meter (*TYPE=3*)
   * ***Not*** implemented yet
 * Environment sensor (*TYPE=3*)
@@ -261,6 +261,9 @@ To the best of our knowledge only the settings functions perform modifications t
 
 
 # Changelog
+* 2025.03.11 (pre-alpha)
+  * endpoints implemented:
+    * PBD
 * 2025.03.10 (pre-alpha)
   * endpoints implemented:
     * SPA
