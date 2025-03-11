@@ -16,7 +16,14 @@ This package aims to
 
 ### API v1 (full featured API)
 * User
-  * ***Not*** implemented yet
+  * list users
+    * `user.list()`
+  * check username available
+    * `user.check_username()`
+  * add user
+    * `user.register()`
+  * modify user information
+    * `user.modify()`
 * Plant
   * list plants
     * `plant.list()`
@@ -280,6 +287,7 @@ To the best of our knowledge only the settings functions perform modifications t
     * Smart meter
     * Environmental sensor
     * GroBoost
+    * User
 * 2025.03.10 (pre-alpha)
   * endpoints implemented:
     * SPA
