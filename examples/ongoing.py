@@ -51,9 +51,15 @@ if __name__ == "__main__":
     # TODO API v4
 
     # TODO user
-    # TODO Smart meter
     # TODO Environmental tester
     # TODO groBoost
+
+    # Smart meter
+    _sm_energy_history_ = ga.smart_meter.energy_history(
+        datalogger_sn=DATALOGGER_SN, meter_address=1
+    )
+    _sm_energy_ = ga.smart_meter.energy(datalogger_sn=DATALOGGER_SN, meter_address=1)
+    _sm_list_ = ga.smart_meter.list(datalogger_sn=DATALOGGER_SN)
 
     # pbd
     _pbd_energy_history_ = ga.pbd.energy_history(device_sn=INVERTER_SN)

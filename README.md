@@ -150,8 +150,12 @@ This package aims to
   * device power/energy metrics
     * current `pbd.energy()`
     * historical data `pbd.energy_history()`
-* Smart meter (*TYPE=3*)
-  * ***Not*** implemented yet
+* Smart meter (*TYPE=3* - SmartMeter/SDM/CHNT)
+  * get meters attached to datalogger
+    * `smart_meter.list()`
+  * device power/energy metrics
+    * current `smart_meter.energy()`
+    * historical data `smart_meter.energy_history()`
 * Environment sensor (*TYPE=3*)
   * ***Not*** implemented yet
 * VPP (*TYPE=3/5/6* MIN/SPH/SPA)
@@ -264,6 +268,7 @@ To the best of our knowledge only the settings functions perform modifications t
 * 2025.03.11 (pre-alpha)
   * endpoints implemented:
     * PBD
+    * Smart meter
 * 2025.03.10 (pre-alpha)
   * endpoints implemented:
     * SPA
