@@ -3,7 +3,7 @@ from typing import Optional, Union, List
 
 import truststore
 
-from growatt_public_api.pydantic_models.max import (
+from pydantic_models.max import (
     MaxSettingRead,
     MaxSettingWrite,
     MaxDetails,
@@ -15,7 +15,7 @@ from growatt_public_api.pydantic_models.max import (
 )
 
 truststore.inject_into_ssl()
-from growatt_public_api.session import GrowattApiSession  # noqa: E402
+from session import GrowattApiSession  # noqa: E402
 
 
 class Max:

@@ -25,6 +25,10 @@ This package aims to
   * modify user information
     * `user.modify()`
 * Plant
+  * plant management
+    * add new plant `plant.add()`
+    * modify plant `plant.modify()`
+    * delete plant `plant.delete()`
   * list plants
     * `plant.list()`
     * `plant.list_by_user()`
@@ -36,14 +40,10 @@ This package aims to
     * `plant.energy_history()`
   * power metrics by day
     * `plant.power()`
-  * ***Not*** implemented yet
-    * add new plant
-      * `plant.add()`
-    * modify plant
-      * `plant.modify()`
-    * delete plant
-      * `plant.delete()`
 * Datalogger
+  * datalogger management
+    * add datalogger to plant `device.datalogger_add()`
+    * remove datalogger from plant `device.datalogger_delete()`
   * list dataloggers
     * `device.datalogger_list()`
   * query device type
@@ -51,11 +51,6 @@ This package aims to
     * *** this is NOT the same as the inverter type ***
   * verify datalogger's CC code
     * `device.datalogger_validate()`
-  * ***Not*** implemented yet
-    * add datalogger to plant
-      * `device.datalogger_add()`
-    * remove datalogger from plant
-      * `device.datalogger_delete()`
 * Generic - all inverter types
   * get inverters assigned to plant
     * `device.list()`
@@ -281,6 +276,14 @@ To the best of our knowledge only the settings functions perform modifications t
 
 
 # Changelog
+* TBA (pre-alpha)
+  * all API v1 endpoints implemented
+  * endpoints added:
+    * `Plant.add()`
+    * `Plant.modify()`
+    * `Plant.delete()`
+    * `Device.datalogger_add()`
+    * `Device.datalogger_delete()`
 * 2025.03.11 (pre-alpha)
   * endpoints implemented:
     * PBD

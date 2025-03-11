@@ -3,7 +3,7 @@ from typing import Optional
 
 import truststore
 
-from growatt_public_api.pydantic_models.hps import (
+from pydantic_models.hps import (
     HpsDetails,
     HpsEnergyOverview,
     HpsEnergyHistory,
@@ -11,7 +11,7 @@ from growatt_public_api.pydantic_models.hps import (
 )
 
 truststore.inject_into_ssl()
-from growatt_public_api.session import GrowattApiSession  # noqa: E402
+from session import GrowattApiSession  # noqa: E402
 
 
 class Hps:

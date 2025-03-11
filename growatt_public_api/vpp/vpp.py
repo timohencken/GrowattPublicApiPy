@@ -3,13 +3,13 @@ from datetime import time
 from typing import List, Tuple
 
 import truststore
-from growatt_public_api.pydantic_models.vpp import (
+from pydantic_models.vpp import (
     VppSoc,
     VppWrite,
 )
 
 truststore.inject_into_ssl()
-from growatt_public_api.session import GrowattApiSession  # noqa: E402
+from session import GrowattApiSession  # noqa: E402
 
 
 class Vpp:

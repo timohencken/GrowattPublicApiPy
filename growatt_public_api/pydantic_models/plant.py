@@ -1,11 +1,39 @@
 import datetime
 from typing import List, Union, Literal
 
-from growatt_public_api.pydantic_models.api_model import (
+from pydantic_models.api_model import (
     ApiResponse,
     ApiModel,
     EmptyStrToNone,
 )
+
+
+# #####################################################################################################################
+# Plant add ###########################################################################################################
+
+
+class PlantAddData(ApiModel):
+    plant_id: Union[EmptyStrToNone, int] = None  # Plant ID, e.g. 24832
+
+
+class PlantAdd(ApiResponse):
+    data: Union[EmptyStrToNone, PlantAddData] = None
+
+
+# #####################################################################################################################
+# Plant modify ########################################################################################################
+
+
+class PlantModify(ApiResponse):
+    data: Union[EmptyStrToNone, str] = None
+
+
+# #####################################################################################################################
+# Plant delete ########################################################################################################
+
+
+class PlantDelete(ApiResponse):
+    data: Union[EmptyStrToNone, str] = None
 
 
 # #####################################################################################################################
@@ -77,18 +105,18 @@ class PlantDetailMax(ApiModel):
 class PlantDetailData(ApiModel):
     address1: Union[EmptyStrToNone, str] = None  # Plant address
     address2: Union[EmptyStrToNone, str] = None
-    arrays: List[
-        PlantDetailModule
-    ]  # e.g. [{'module_man': 'Growatt', 'module_md': '', 'num_modules': 0}]
+    arrays: List[PlantDetailModule] = (
+        []
+    )  # e.g. [{'module_man': 'Growatt', 'module_md': '', 'num_modules': 0}]
     city: Union[EmptyStrToNone, str] = None  # e.g. 'Günzburg'
     country: Union[EmptyStrToNone, str] = None  # country name, e.g. 'Germany'
     create_date: Union[EmptyStrToNone, datetime.date] = (
         None  # Building date, e.g. '2024-11-29'
     )
     currency: Union[EmptyStrToNone, str] = None  # currency unit, e.g. 'EUR'
-    dataloggers: List[
-        PlantDetailDatalogger
-    ]  # e.g. [{'datalogger_man': 'Growatt', 'datalogger_md': '', 'datalogger_num': 1}]
+    dataloggers: List[PlantDetailDatalogger] = (
+        []
+    )  # e.g. [{'datalogger_man': 'Growatt', 'datalogger_md': '', 'datalogger_num': 1}]
     description: Union[EmptyStrToNone, str] = None
     designercontact: Union[EmptyStrToNone, str] = None
     designerorganization: Union[EmptyStrToNone, str] = None
@@ -104,18 +132,18 @@ class PlantDetailData(ApiModel):
     installed_panel_area: Union[EmptyStrToNone, float] = None
     installercontact: Union[EmptyStrToNone, str] = None
     installerorganization: Union[EmptyStrToNone, str] = None
-    inverters: List[
-        PlantDetailInverter
-    ]  # e.g. [{'inverter_man': 'Growatt', 'inverter_md': '', 'inverter_num': 0}]
+    inverters: List[PlantDetailInverter] = (
+        []
+    )  # e.g. [{'inverter_man': 'Growatt', 'inverter_md': '', 'inverter_num': 0}]
     irradiationsensor_type: Union[EmptyStrToNone, str] = None
     jurisdictioncontact: Union[EmptyStrToNone, str] = None
     jurisdictionorganization: Union[EmptyStrToNone, str] = None
     latitude: Union[EmptyStrToNone, float] = None  # Latitude, e.g. '48.424232364163'
     locale: Union[EmptyStrToNone, str] = None  # , e.g. 'en_US'
     longitude: Union[EmptyStrToNone, float] = None  # Longitude, e.g. '10.298493652343'
-    maxs: List[
-        PlantDetailMax
-    ]  # , e.g. [{'max_man': 'Growatt', 'max_md': '', 'max_num': 0}]
+    maxs: List[PlantDetailMax] = (
+        []
+    )  # e.g. [{'max_man': 'Growatt', 'max_md': '', 'max_num': 0}]
     name: Union[EmptyStrToNone, str] = None  # power station name, e.g. 'Balkondach'
     notes: Union[EmptyStrToNone, str] = None
     offtakercontact: Union[EmptyStrToNone, str] = None
@@ -125,13 +153,17 @@ class PlantDetailData(ApiModel):
     ownercontact: Union[EmptyStrToNone, str] = None
     ownerorganization: Union[EmptyStrToNone, str] = None
     peak_power: Union[EmptyStrToNone, float] = None  # peak power (kWp), e.g. 1
-    plant_type: int  # Plant type (0=Residential Plant, 1=Commercial Plant, 2=Ground-Mounted Plants), e.g. 0
+    plant_type: Union[EmptyStrToNone, int] = (
+        None  # Plant type (0=Residential Plant, 1=Commercial Plant, 2=Ground-Mounted Plants), e.g. 0
+    )
     postal: Union[EmptyStrToNone, str] = None
     state: Union[EmptyStrToNone, str] = None
     status: Union[EmptyStrToNone, str] = None
     timezone: Union[EmptyStrToNone, str] = None  # Time Zone, e.g. 'GMT+1'
     tracker_type: Union[EmptyStrToNone, str] = None
-    user_id: int  # User ID to which the plant belongs, e.g. 3127501
+    user_id: Union[EmptyStrToNone, int] = (
+        None  # User ID to which the plant belongs, e.g. 3127501
+    )
     weather_type: Union[EmptyStrToNone, str] = None
     weathersensor_man: Union[EmptyStrToNone, str] = None
     weathersensor_md: Union[EmptyStrToNone, str] = None
