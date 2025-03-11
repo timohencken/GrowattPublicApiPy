@@ -47,6 +47,12 @@ from .pcs import (  # noqa: F401
     PcsEnergyHistory,
     PcsAlarms,
 )
+from .pbd import (  # noqa: F401
+    PbdDetails,
+    PbdEnergyOverview,
+    PbdEnergyHistory,
+    PbdAlarms,
+)
 from .plant import (  # noqa: F401
     PlantList,
     PlantDetails,
