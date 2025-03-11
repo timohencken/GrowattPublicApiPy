@@ -1,7 +1,9 @@
+import datetime
+
 from loguru import logger
 
 from growatt_public_api import GrowattApi
-from user.user import GrowattCountry
+from types import PlantType, GrowattCountry
 
 if __name__ == "__main__":
     logger.info("DEBUG")
@@ -30,6 +32,24 @@ if __name__ == "__main__":
     # # FIXME DEBUG
 
     # TODO API v4
+
+    # plant
+    _plant_add_ = ga.plant.add(
+        user_id=601,
+        plant_name="DummyTestPlant1",
+        peak_kw=0.8,
+        country=GrowattCountry.SWEDEN,
+        installer_code="GWATT",
+        currency="€",
+        longitude=22.2,
+        latitude=33.3,
+        # timezone_id=8,
+        plant_type=PlantType.RESIDENTIAL,
+        create_date=datetime.date.today(),
+        price_per_kwh=0.31,
+        city="London",
+        address="Westminster Abbey 1",
+    )
 
     # user
     _user_list_ = ga.user.list(page=5, limit=100)

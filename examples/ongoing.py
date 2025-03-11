@@ -50,6 +50,34 @@ if __name__ == "__main__":
 
     # TODO API v4
 
+    # DEBUG FIXME
+    # plant
+    _plant_device_sn_ = ga.plant.by_device(device_sn=INVERTER_SN)
+    _plant_power_ = ga.plant.power(plant_id=PLANT_ID, date_=date.today())
+    _plant_energy_history_d_ = ga.plant.energy_history(
+        plant_id=PLANT_ID,
+        date_interval="day",
+        start_date=date.today() - timedelta(days=7),
+        end_date=date.today(),
+    )
+    _plant_energy_history_m_ = ga.plant.energy_history(
+        plant_id=PLANT_ID,
+        date_interval="month",
+        start_date=date.today() - timedelta(days=30),
+        end_date=date.today(),
+    )
+    _plant_energy_history_y_ = ga.plant.energy_history(
+        plant_id=PLANT_ID,
+        date_interval="year",
+        start_date=date.today() - timedelta(days=365),
+        end_date=date.today(),
+    )
+    _plant_energy_overview_ = ga.plant.energy_overview(plant_id=PLANT_ID)
+    _plant_details_ = ga.plant.details(plant_id=PLANT_ID)
+    _plant_list_by_user_ = ga.plant.list_by_user(username=USERNAME)
+    _plant_list_ = ga.plant.list()
+    # DEBUG FIXME
+
     # user
     _user_list_ = ga.user.list(page=5, limit=100)
     _user_available_ = ga.user.check_username(username="DummyTestUser1")

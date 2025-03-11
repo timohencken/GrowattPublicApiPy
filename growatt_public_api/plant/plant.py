@@ -1,8 +1,9 @@
 from datetime import date, timedelta
-from typing import Optional, Literal
+from typing import Optional, Literal, Union
 
 import truststore
 
+from types import GrowattCountry, PlantType
 from growatt_public_api.pydantic_models.plant import (
     PlantList,
     PlantDetails,
@@ -10,6 +11,7 @@ from growatt_public_api.pydantic_models.plant import (
     PlantEnergyHistory,
     PlantPower,
     PlantInfo,
+    PlantAdd,
 )
 
 truststore.inject_into_ssl()
@@ -17,20 +19,114 @@ from growatt_public_api.session import GrowattApiSession  # noqa: E402
 
 
 class Plant:
+    """
+    endpoints for Plant (Power station) management
+    https://www.showdoc.com.cn/262556420217021/1494063254831721
+    """
+
     session: GrowattApiSession
 
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
 
-    def add(self):
+    def add(
+        self,
+        user_id: int,
+        plant_name: str,
+        peak_kw: float,
+        country: Optional[Union[GrowattCountry, str]] = None,
+        installer_code: Optional[str] = None,
+        currency: Optional[str] = None,
+        longitude: Optional[float] = None,
+        latitude: Optional[float] = None,
+        timezone_id: Optional[int] = None,
+        plant_type: Optional[Union[PlantType, int]] = None,
+        create_date: Optional[date] = None,
+        price_per_kwh: Optional[float] = None,
+        city: Optional[str] = None,
+        address: Optional[str] = None,
+    ) -> PlantAdd:
         """
         2.1 Add power station
         Add the interface of the power station
-
         https://www.showdoc.com.cn/262556420217021/1494063254831721
+
+        Rate limit(s):
+        * The acquisition frequency is once every 5 minutes
+
+        Specific error codes:
+        * 10001: System error
+        * 10002: Username ID is empty
+        * 10003: The power station name is empty
+        * 10004: Peak power is empty
+        * 10005: User does not exist
+        * 10006: The power station name already exists under this user
+
+        Args:
+            user_id (int): User ID ("c_user_id" as returned in register()), e.g. 74
+            plant_name (str): Power Station Name, e.g. "bole66"
+            peak_kw (float): peak power (kWp), e.g. 20
+            country (Optional[Union[GrowattCountry, str]]): Area country list, e.g. "Thailand"
+            installer_code (Optional[str]): Installer code, e.g. "AFLF6"
+            currency (Optional[str]): currency unit, e.g. "$"
+            longitude (Optional[float]): longitude, e.g. 30
+            latitude (Optional[float]): latitude, e.g. 20
+            timezone_id (Optional[int]): The time zone code of the data display, e.g. 8
+            plant_type (Optional[Union[PlantType, int]]): Power station type: 0: Residential, 1: Commercial, 2: Ground-Mounted
+            create_date (Optional[date]): Created time, e.g. "2022-10-13"
+            price_per_kwh (Optional[float]): Electricity price, e.g. 1.4
+            city (Optional[str]): City, e.g. "Shenzhen"
+            address (Optional[str]): Plant location (street,...), e.g. "123 Main St."
+
+        Returns:
+            PlantAdd
         """
 
-        raise NotImplementedError  # TODO
+        if isinstance(country, GrowattCountry):
+            country = country.value
+        if isinstance(plant_type, PlantType):
+            plant_type = plant_type.value
+        if isinstance(create_date, date):
+            create_date = create_date.isoformat()
+
+        response = self.session.post(
+            endpoint="plant/add",
+            data={
+                "c_user_id": user_id,
+                "name": plant_name,
+                "peak_power": peak_kw,
+                "latitude_f": country,
+                "latitude_d": installer_code,
+                "currency": currency,
+                "longitude": longitude,
+                "latitude": latitude,
+                "timezone_id": timezone_id,
+                "plant_type": plant_type,
+                "createDate": create_date,
+                "formulaMoney": price_per_kwh,
+                "city": city,
+                "plantAddress": address,
+            },
+        )
+
+        # FIXME DEBUG
+        sample_data = """{
+     "data": {
+         "plant_id": 24832
+     },
+     "error_code": 0,
+     "error_msg": ""
+}"""
+        import json
+        import pprint
+
+        j = json.loads(sample_data)
+        pprint.pprint(j, indent=4, width=500)
+        k = PlantAdd.model_validate(j)  # <-----------------------------
+        pprint.pprint(k.model_dump(), indent=4, width=500)
+        # FIXME DEBUG
+
+        return PlantAdd.model_validate(response)
 
     def modify(self):
         """
@@ -39,6 +135,16 @@ class Plant:
 
         https://www.showdoc.com.cn/262556420217021/1494059609631488
         """
+
+        # # FIXME DEBUG
+        # sample_data = """"""
+        # import json
+        # import pprint
+        # j = json.loads(sample_data)
+        # pprint.pprint(j, indent=4, width=500)
+        # k = MinEnergyHistory.model_validate(j)  # <-----------------------------
+        # pprint.pprint(k.model_dump(), indent=4, width=500)
+        # # FIXME DEBUG
 
         raise NotImplementedError  # TODO
 
@@ -49,6 +155,16 @@ class Plant:
         https://www.showdoc.com.cn/262556420217021/1494059771852057
         """
 
+        # # FIXME DEBUG
+        # sample_data = """"""
+        # import json
+        # import pprint
+        # j = json.loads(sample_data)
+        # pprint.pprint(j, indent=4, width=500)
+        # k = MinEnergyHistory.model_validate(j)  # <-----------------------------
+        # pprint.pprint(k.model_dump(), indent=4, width=500)
+        # # FIXME DEBUG
+
         raise NotImplementedError  # TODO
 
     def list_by_user(
@@ -58,8 +174,8 @@ class Plant:
         limit: Optional[int] = None,
     ) -> PlantList:
         """
-        2.5 Get a list of all user power stations
-        Get the interface to all user power station lists
+        2.4 Get a list of power plants for a user
+        Get the interface of a user's power station list
         https://www.showdoc.com.cn/262556420217021/1494064249382745
 
         Rate limit(s):
@@ -112,6 +228,7 @@ class Plant:
             endpoint="plant/user_plant_list",
             data={"user_name": username, "page": page, "perpage": limit},
         )
+
         return PlantList.model_validate(response)
 
     def list(
@@ -141,36 +258,27 @@ class Plant:
 
         Returns:
             PlantList
-            e.g.
-            {
-                "data": {
-                    "count": 1,
-                    "plants": [
-                        {
-                            "status": 1,
-                            "locale": "en-US",
-                            "total_energy": 0,
-                            "operator": "0",
-                            "country": "China",
-                            "city": "0",
-                            "current_power": "",
-                            "create_date": "2016-09-15",
-                            "image_url": null,
-                            "plant_id": 1185,
-                            "name": "9",
-                            "installer": "0",
-                            "user_id": 31,
-                            "longitude": "",
-                            "latitude": "",
-                            "peak_power": 0,
-                            "latitude_d": null,
-                            "latitude_f": null
-                        }
-                    ]
-                },
-                "error_code": 0,
-                "error_msg": ""
-            }
+            {   'data': {   'count': 1,
+                            'plants': [   {   'city': '0',
+                                              'country': 'China',
+                                              'create_date': datetime.date(2016, 9, 15),
+                                              'current_power': None,
+                                              'image_url': None,
+                                              'installer': '0',
+                                              'latitude': None,
+                                              'latitude_d': None,
+                                              'latitude_f': None,
+                                              'locale': 'en-US',
+                                              'longitude': None,
+                                              'name': '9',
+                                              'operator': '0',
+                                              'peak_power': 0.0,
+                                              'plant_id': 1185,
+                                              'status': 1,
+                                              'total_energy': 0.0,
+                                              'user_id': 31}]},
+                'error_code': 0,
+                'error_msg': None}
         """
 
         response = self.session.get(
@@ -182,6 +290,7 @@ class Plant:
                 "search_keyword": search_keyword,
             },
         )
+
         return PlantList.model_validate(response)
 
     def details(
@@ -207,81 +316,59 @@ class Plant:
 
         Returns:
             PlantDetails
-            e.g.
-            {
-                "data": {
-                    "address1": "",
-                    "jurisdictionorganization": "",
-                    "address2": "",
-                    "installed_dc_capacity": "",
-                    "city": "Shenzhen",
-                    "timezone": "GMT+8",
-                    "designerorganization": "",
-                    "installercontact": "",
-                    "create_date": "2018-12-12",
-                    "image_url": "2.png",
-                    "description": "",
-                    "longitude": "113.9",
-                    "fixed_azimuth": "",
-                    "offtakercontact": "",
-                    "status": "",
-                    "postal": "",
-                    "weathersensor_num": "",
-                    "weathersensor_man": "",
-                    "operatorcontact": "",
-                    "country": "China",
-                    "plant_type": "",
-                    "fixed_tilt": "",
-                    "inverters": [
-                        {
-                            "inverter_md": "",
-                            "inverter_num": 1,
-                            "inverter_man": "Growatt"
-                        }
-                    ],
-                    "installerorganization": "",
-                    "jurisdictioncontact": "",
-                    "installed_ac_capacity": "",
-                    "latitude": "22.6",
-                    "financiercontact": "",
-                    "ownerorganization": "rmb",
-                    "locale": "en_US",
-                    "designercontact": "",
-                    "state": "",
-                    "weather_type": "",
-                    "currency": "rmb",
-                    "installed_panel_area": "",
-                    "name": "API interface test power station",
-                    "user_id": 33,
-                    "grid_type": "",
-                    "operatororganization": "",
-                    "elevation": "",
-                    "irradiationsensor_type": "",
-                    "ownercontact": "rmb",
-                    "weathersensor_md": "",
-                    "tracker_type": "",
-                    "offtakerorganization": "",
-                    "dataloggers": [
-                        {
-                            "datalogger_num": 1,
-                            "datalogger_man": "Growatt",
-                            "datalogger_md": ""
-                        }
-                    ],
-                    "financierorganization": "",
-                    "peak_power": 20,
-                    "notes": "",
-                    "arrays": [
-                        {
-                            "num_modules": 0,
-                            "module_md": "",
-                            "module_man": "Growatt"
-                        }
-                    ]
-                },
-                "error_code": 0,
-                "error_msg": ""
-            }
+            {   'data': {   'address1': None,
+                            'address2': None,
+                            'arrays': [{'module_man': 'Growatt', 'module_md': None, 'num_modules': 0}],
+                            'city': 'Shenzhen',
+                            'country': 'China',
+                            'create_date': datetime.date(2018, 12, 12),
+                            'currency': 'rmb',
+                            'dataloggers': [{'datalogger_man': 'Growatt', 'datalogger_md': None, 'datalogger_num': 1}],
+                            'description': None,
+                            'designercontact': None,
+                            'designerorganization': None,
+                            'elevation': None,
+                            'financiercontact': None,
+                            'financierorganization': None,
+                            'fixed_azimuth': None,
+                            'fixed_tilt': None,
+                            'grid_type': None,
+                            'image_url': '2.png',
+                            'installed_ac_capacity': None,
+                            'installed_dc_capacity': None,
+                            'installed_panel_area': None,
+                            'installercontact': None,
+                            'installerorganization': None,
+                            'inverters': [{'inverter_man': 'Growatt', 'inverter_md': None, 'inverter_num': 1}],
+                            'irradiationsensor_type': None,
+                            'jurisdictioncontact': None,
+                            'jurisdictionorganization': None,
+                            'latitude': 22.6,
+                            'locale': 'en_US',
+                            'longitude': 113.9,
+                            'maxs': [],
+                            'name': 'API interface test power station',
+                            'notes': None,
+                            'offtakercontact': None,
+                            'offtakerorganization': None,
+                            'operatorcontact': None,
+                            'operatororganization': None,
+                            'ownercontact': 'rmb',
+                            'ownerorganization': 'rmb',
+                            'peak_power': 20.0,
+                            'plant_type': None,
+                            'postal': None,
+                            'state': None,
+                            'status': None,
+                            'timezone': 'GMT+8',
+                            'tracker_type': None,
+                            'user_id': 33,
+                            'weather_type': None,
+                            'weathersensor_man': None,
+                            'weathersensor_md': None,
+                            'weathersensor_num': None},
+                'error_code': 0,
+                'error_msg': None}
         """
 
         response = self.session.get(
@@ -290,6 +377,7 @@ class Plant:
                 "plant_id": plant_id,
             },
         )
+
         return PlantDetails.model_validate(response)
 
     def energy_overview(
@@ -314,23 +402,18 @@ class Plant:
 
         Returns:
             PlantEnergyOverview
-            e.g.
-            {
-                "data": {
-                    "peak_power_actual": 20,
-                    "monthly_energy": "15.7",
-                    "last_update_time": "2018-12-13 11:06:34",
-                    "current_power": 0,
-                    "timezone": "GMT+8",
-                    "yearly_energy": "15.7",
-                    "today_energy": "0",
-                    "carbon_offset": "9.4",
-                    "efficiency": "",
-                    "total_energy": "15.7"
-                },
-                "error_code": 0,
-                "error_msg": ""
-            }
+            {   'data': {   'carbon_offset': 9.4,
+                            'current_power': 0.0,
+                            'efficiency': None,
+                            'last_update_time': datetime.datetime(2018, 12, 13, 11, 6, 34),
+                            'monthly_energy': 15.7,
+                            'peak_power_actual': 20.0,
+                            'timezone': 'GMT+8',
+                            'today_energy': 0.0,
+                            'total_energy': 15.7,
+                            'yearly_energy': 15.7},
+                'error_code': 0,
+                'error_msg': None}
         """
 
         response = self.session.get(
@@ -339,6 +422,7 @@ class Plant:
                 "plant_id": plant_id,
             },
         )
+
         return PlantEnergyOverview.model_validate(response)
 
     def energy_history(  # noqa: C901 'Plant.energy_history' is too complex (13)
@@ -381,41 +465,40 @@ class Plant:
                 In order to be able to return valid dates, months are repoarted as YYYY-MM-01 and years as YYYY-01-01
 
             e.g. "day"
-            {
-                "data": {
-                    "count": 1,
-                    "time_unit": "day",
-                    "energys": [
-                        {"date": "2018-12-12", "energy": "0"}, # ...
-                    ]
-                },
-                "error_code": 0,
-                "error_msg": ""
-            }
+            {   'data': {   'count': 6,
+                            'energys': [   {   'date': datetime.date(2018, 12, 12),
+                                               'energy': 0.0},
+                                           {   'date': datetime.date(2018, 12, 13),
+                                               'energy': 7.6},
+                                           {   'date': datetime.date(2018, 12, 14),
+                                               'energy': 0.0},
+                                           {   'date': datetime.date(2018, 12, 15),
+                                               'energy': 0.0},
+                                           {   'date': datetime.date(2018, 12, 16),
+                                               'energy': 0.0},
+                                           {   'date': datetime.date(2018, 12, 17),
+                                               'energy': 0.0}],
+                            'time_unit': 'day'},
+                'error_code': 0,
+                'error_msg': None}
             e.g. "month"
-            {
-                "data": {
-                    "count": 1,
-                    "time_unit": "month",
-                    "energys": [
-                        {'date': '2025-02-01', 'energy': '17.8'}, # ...
-                    ]
-                },
-                "error_code": 0,
-                "error_msg": ""
-            }
+            {   'data': {   'count': 2,
+                            'energys': [   {   'date': datetime.date(2025, 2, 1),
+                                               'energy': 19.3},
+                                           {   'date': datetime.date(2025, 3, 1),
+                                               'energy': 18.5}],
+                            'time_unit': 'month'},
+                'error_code': 0,
+                'error_msg': None}
             e.g. "year"
-            {
-                "data": {
-                    "count": 1,
-                    "time_unit": "day",
-                    "energys": [
-                        {'date': 2025-01-01, 'energy': '36'}, # ...
-                    ]
-                },
-                "error_code": 0,
-                "error_msg": ""
-            }
+            {   'data': {   'count': 2,
+                            'energys': [   {   'date': datetime.date(2024, 1, 1),
+                                               'energy': 9.1},
+                                           {   'date': datetime.date(2025, 1, 1),
+                                               'energy': 56.0}],
+                            'time_unit': 'year'},
+                'error_code': 0,
+                'error_msg': None}
         """
 
         if start_date is None and end_date is None:
@@ -459,11 +542,11 @@ class Plant:
             for date_energy in response["data"]["energys"]:
                 if date_interval == "month":
                     date_energy["date"] = date.fromisoformat(
-                        date_energy["date"] + "-01"
+                        f'{date_energy["date"]}-01'
                     )
                 elif date_interval == "year":
                     date_energy["date"] = date.fromisoformat(
-                        date_energy["date"] + "-01-01"
+                        f'{date_energy["date"]}-01-01'
                     )
 
         return PlantEnergyHistory.model_validate(response)
@@ -495,17 +578,13 @@ class Plant:
         Returns:
             PlantPower
             e.g.
-            {
-                "data": {
-                    "powers": [
-                        {"time": "2018-12-13 10:45", "power": 7903.39990234375},
-                        {"time": "2018-12-13 10:40", "power": 7689.7001953125}
-                    ],
-                    "count": 2
-                },
-                "error_code": 0,
-                "error_msg": ""
-            }
+            {   'data': {   'count': 2,
+                            'powers': [   {   'power': 7903.39990234375,
+                                              'time': datetime.datetime(2018, 12, 13, 10, 45)},
+                                          {   'power': 7689.7001953125,
+                                              'time': datetime.datetime(2018, 12, 13, 10, 40)}]},
+                'error_code': 0,
+                'error_msg': None}
         """
 
         if date_ is None:
@@ -544,6 +623,26 @@ class Plant:
 
         Returns:
             PlantInfo
+            {   'data': {   'plant': {   'city': 'Shenzhen',
+                                         'country': 'China',
+                                         'create_date': datetime.date(2018, 12, 12),
+                                         'current_power': None,
+                                         'image_url': '2.png',
+                                         'installer': 'API interface test vendor',
+                                         'latitude': 22.6,
+                                         'latitude_d': None,
+                                         'latitude_f': None,
+                                         'locale': None,
+                                         'longitude': 113.9,
+                                         'name': 'API interface test power station',
+                                         'operator': 'API interface test vendor',
+                                         'peak_power': 20.0,
+                                         'plant_id': 24765,
+                                         'status': 4,
+                                         'total_energy': 15.699999809265137,
+                                         'user_id': 33}},
+                'error_code': 0,
+                'error_msg': None}
         """
 
         response = self.session.post(
