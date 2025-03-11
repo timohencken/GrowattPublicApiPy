@@ -156,8 +156,12 @@ This package aims to
   * device power/energy metrics
     * current `smart_meter.energy()`
     * historical data `smart_meter.energy_history()`
-* Environment sensor (*TYPE=3*)
-  * ***Not*** implemented yet
+* Environmental sensor (*TYPE=3* - Temperature/Humidity/Wind/...)
+  * get sensors attached to datalogger
+    * `env_sensor.list()`
+  * device metrics
+    * current `env_sensor.metrics()`
+    * historical data `env_sensor.metrics_history()`
 * VPP (*TYPE=3/5/6* MIN/SPH/SPA)
   * get current State-of-Charge (SOC) `vpp.soc()`
   * change time period settings
@@ -269,6 +273,7 @@ To the best of our knowledge only the settings functions perform modifications t
   * endpoints implemented:
     * PBD
     * Smart meter
+    * Environmental sensor
 * 2025.03.10 (pre-alpha)
   * endpoints implemented:
     * SPA

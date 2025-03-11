@@ -7,6 +7,11 @@ from .device import (  # noqa: F401
     DeviceDatalogger,
     DeviceAdd,
 )
+from .env_sensor import (  # noqa: F401
+    EnvSensorList,
+    EnvSensorMetricsOverview,
+    EnvSensorMetricsHistory,
+)
 from .hps import (  # noqa: F401
     HpsDetails,
     HpsEnergyOverview,
