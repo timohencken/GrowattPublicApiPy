@@ -143,8 +143,13 @@ This package aims to
   * device power/energy metrics
     * current `hps.energy()`
     * historical data `hps.energy_history()`
-* PDB (*TYPE=10*)
-  * ***Not*** implemented yet
+* PBD (*TYPE=10*)
+  * general device data
+    * read device data `pbd.details()`     ***Not*** implemented yet
+    * read alarms/notification `pbd.alarms()`
+  * device power/energy metrics
+    * current `pbd.energy()`     ***Not*** implemented yet
+    * historical data `pbd.energy_history()`     ***Not*** implemented yet
 * Smart meter (*TYPE=3*)
   * ***Not*** implemented yet
 * Environment sensor (*TYPE=3*)

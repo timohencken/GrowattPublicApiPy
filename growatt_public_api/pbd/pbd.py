@@ -3,24 +3,24 @@ from typing import Optional
 
 import truststore
 
-from growatt_public_api.pydantic_models.hps import (
-    HpsDetails,
-    HpsEnergyOverview,
-    HpsEnergyHistory,
-    HpsAlarms,
+from growatt_public_api.pydantic_models.pbd import (
+    PbdDetails,
+    PbdEnergyOverview,
+    PbdEnergyHistory,
+    PbdAlarms,
 )
 
 truststore.inject_into_ssl()
 from growatt_public_api.session import GrowattApiSession  # noqa: E402
 
 
-class Hps:
+class Pbd:
     """
-    endpoints for HPS inverters
-    https://www.showdoc.com.cn/262556420217021/6131272209142535
+    endpoints for PBD inverters
+    https://www.showdoc.com.cn/262556420217021/6131307847776153
 
     Note:
-        Only applicable to devices with device type 9 (hps) returned by device.list()
+        Only applicable to devices with device type 10 (pbd) returned by device.list()
     """
 
     session: GrowattApiSession
@@ -28,17 +28,18 @@ class Hps:
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
 
+    # TODO
     def details(
         self,
         device_sn: str,
-    ) -> HpsDetails:
+    ) -> PbdDetails:
         """
         Obtain basic Hps information
         Interface to get basic information of hps
         https://www.showdoc.com.cn/262556420217021/6131272209142535
 
         Note:
-            Only applicable to devices with device type 9 (hps) returned by device.list()
+            Only applicable to devices with device type 10 (pbd) returned by device.list()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -47,7 +48,7 @@ class Hps:
         * 10001: system error
 
         Args:
-            device_sn (str): HPS device SN
+            device_sn (str): PBD device SN
 
         Returns:
             HpsDetails
@@ -103,7 +104,7 @@ class Hps:
                             'status_text': 'hps.status.lost',
                             'tcp_server_ip': '47.107.154.111',
                             'timezone': 8,
-                            'tree_id': 'HPS_UHD0918003',
+                            'tree_id': 'PBD_UHD0918003',
                             'tree_name': 'UHD0918003',
                             'updating': False,
                             'user_name': None},
@@ -120,19 +121,123 @@ class Hps:
             },
         )
 
-        return HpsDetails.model_validate(response)
+        # FIXME DEBUG
+        sample_data = """{
+    "device_sn": "UHD0918003",
+    "dataloggerSn": "WFD091500E",
+    "data": {
+        "model": 0,
+        "fwVersion": "1324",
+        "hpsSetBean": null,
+        "treeName": "UHD0918003",
+        "lost": true,
+        "disChargeDayMap": {},
+        "location": "",
+        "treeID": "PBD_UHD0918003",
+        "powerMaxTime": "",
+        "lastUpdateTime": {
+            "minimalDaysInFirstWeek": 1,
+            "weekYear": 2020,
+            "time": {
+                "time": 1595828404000,
+                "minutes": 40,
+                "seconds": 4,
+                "hours": 13,
+                "month": 6,
+                "year": 120,
+                "timezoneOffset": -480,
+                "day": 1,
+                "date": 27
+            },
+            "weeksInWeekYear": 52,
+            "gregorianChange": {
+                "time": -12219292800000,
+                "minutes": 0,
+                "seconds": 0,
+                "hours": 8,
+                "month": 9,
+                "year": -318,
+                "timezoneOffset": -480,
+                "day": 5,
+                "date": 15
+            },
+            "timeZone": {
+                "lastRuleInstance": null,
+                "rawOffset": 28800000,
+                "DSTSavings": 0,
+                "dirty": false,
+                "ID": "Asia/Shanghai",
+                "displayName": "China Standard Time"
+            },
+            "timeInMillis": 1595828404000,
+            "lenient": true,
+            "firstDayOfWeek": 1,
+            "weekDateSupported": true
+        },
+        "eDischargeToday": 0,
+        "children": [],
+        "statusText": "hps.status.lost",
+        "energyMonthText": "0",
+        "updating": false,
+        "chargeMonth": 0,
+        "normalPower": 10000,
+        "id": 26,
+        "timezone": 8,
+        "plantname": "",
+        "level": 4,
+        "deviceType": 0,
+        "imgPath": "./css/img/status_gray.gif",
+        "eDischargeTotal": 0,
+        "userName": "",
+        "serialNum": "UHD0918003",
+        "dataLogSn": "WFD091500E",
+        "innerVersion": "null",
+        "portName": "ShinePano-WFD091500E",
+        "pvToday": 0,
+        "energyMonth": 0,
+        "powerMax": "",
+        "modelText": "A0B0D0T0P0U0M0S0",
+        "energyDayMap": {},
+        "status": -1,
+        "alias": "UHD0918003",
+        "powerMaxText": "",
+        "chargeDayMap": {},
+        "tcpServerIp": "47.107.154.111",
+        "record": null,
+        "groupId": -1,
+        "lastUpdateTimeText": "2020-07-27 13:40:04",
+        "parentID": "LIST_WFD091500E_82",
+        "address": 1,
+        "plantId": 0,
+        "disChargeMonth": 0,
+        "eChargeToday": 0
+    },
+    "error_code": 0,
+    "error_msg": ""
+}"""
+        import json
+        import pprint
 
+        j = json.loads(sample_data)
+        pprint.pprint(j, indent=4, width=500)
+        k = PbdDetails.model_validate(j)  # <-----------------------------
+        pprint.pprint(k.model_dump(), indent=4, width=500)
+        # FIXME DEBUG
+
+        return PbdDetails.model_validate(response)
+
+    # TODO
     def energy(
         self,
         device_sn: str,
-    ) -> HpsEnergyOverview:
+    ) -> PbdEnergyOverview:
         """
         Get the latest real-time data of Hps
         Interface to get the latest real-time data of hps
         https://www.showdoc.com.cn/262556420217021/6131278907853302
 
         Note:
-            Only applicable to devices with device type 9 (hps) returned by device.list()
+            Only applicable to devices with device type 10 (pbd) returned by device.list()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -143,7 +248,7 @@ class Hps:
         * 10003: device SN error
 
         Args:
-            device_sn (str): HPS serial number
+            device_sn (str): PBD serial number
 
         Returns:
             HpsEnergyOverview
@@ -321,8 +426,9 @@ class Hps:
             },
         )
 
-        return HpsEnergyOverview.model_validate(response)
+        return PbdEnergyOverview.model_validate(response)
 
+    # TODO
     def energy_history(
         self,
         device_sn: str,
@@ -331,14 +437,14 @@ class Hps:
         timezone: Optional[str] = None,
         page: Optional[int] = None,
         limit: Optional[int] = None,
-    ) -> HpsEnergyHistory:
+    ) -> PbdEnergyHistory:
         """
         Get historical data of a certain Hps
         Interface to get historical data of a certain hps
         https://www.showdoc.com.cn/262556420217021/6131286861044579
 
         Note:
-            Only applicable to devices with device type 9 (hps) returned by device.list()
+            Only applicable to devices with device type 10 (pbd) returned by device.list()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -349,7 +455,7 @@ class Hps:
         * 10003: device SN error
 
         Args:
-            device_sn (str): HPS serial number
+            device_sn (str): PBD serial number
             start_date (Optional[date]): Start Date - defaults to today
             end_date (Optional[date]): End Date (date interval cannot exceed 7 days) - defaults to today
             timezone (Optional[str]): The time zone code of the data display, the default is UTC
@@ -551,7 +657,7 @@ class Hps:
             },
         )
 
-        return HpsEnergyHistory.model_validate(response)
+        return PbdEnergyHistory.model_validate(response)
 
     def alarms(
         self,
@@ -559,54 +665,44 @@ class Hps:
         date_: Optional[date] = None,
         page: Optional[int] = None,
         limit: Optional[int] = None,
-    ) -> HpsAlarms:
+    ) -> PbdAlarms:
         """
-        Get the alarm data of a certain Hps
-        Interface to get alarm data of a certain hps
-        https://www.showdoc.com.cn/262556420217021/6131425592840458
+        Get the alarm data of a certain Pbd
+        Interface to get the alarm data of a pbd
+        https://www.showdoc.com.cn/262556420217021/6131327683011501
 
         Note:
-            Only applicable to devices with device type 9 (hps) returned by device.list()
+            Only applicable to devices with device type 10 (pbd) returned by device.list()
 
         Rate limit(s):
-        * The frequency of acquisition is once every 10 seconds
+        * The frequency of acquisition is once every 5 minutes
 
         Specific error codes:
         * 10001: system error
         * 10002: device serial number error
         * 10003: date format error
-        * 10005: Hps does not exist
+        * 10005: Pbd does not exist
 
         Args:
-            device_sn (str): HPS device serial number
+            device_sn (str): PBD device serial number
             date_ (Optional[date]): Date - defaults to today
             page (Optional[int]): page number, default 1
             limit (Optional[int]): Number of items per page, default 20, max 100
 
         Returns:
-            HpsAlarms
-            {   'data': {   'alarms': [   {'alarm_code': '7-114-5', 'alarm_message': 'BYTE114_5', 'end_time': datetime.datetime(2020, 7, 27, 11, 26, 10), 'start_time': datetime.datetime(2020, 7, 27, 11, 26, 10), 'status': 1},
-                                          {'alarm_code': '6-113-5', 'alarm_message': 'BYTE113_5', 'end_time': datetime.datetime(2020, 7, 27, 11, 26, 10), 'start_time': datetime.datetime(2020, 7, 27, 11, 26, 10), 'status': 1},
-                                          {'alarm_code': '2-104-3', 'alarm_message': 'BYTE104_3', 'end_time': datetime.datetime(2020, 7, 27, 11, 26, 10), 'start_time': datetime.datetime(2020, 7, 27, 11, 26, 10), 'status': 1},
-                                          {'alarm_code': '5-110-2', 'alarm_message': 'BYTE110_2', 'end_time': datetime.datetime(2020, 7, 27, 11, 21, 10), 'start_time': datetime.datetime(2020, 7, 27, 11, 21, 10), 'status': 1},
-                                          {'alarm_code': '5-110-2', 'alarm_message': 'BYTE110_2', 'end_time': datetime.datetime(2020, 7, 24, 18, 34, 21), 'start_time': datetime.datetime(2020, 7, 24, 18, 34, 21), 'status': 1},
-                                          {'alarm_code': '6-113-5', 'alarm_message': 'BYTE113_5', 'end_time': datetime.datetime(2020, 7, 24, 18, 9, 26), 'start_time': datetime.datetime(2020, 7, 24, 18, 9, 26), 'status': 1},
-                                          {'alarm_code': '2-104-3', 'alarm_message': 'BYTE104_3', 'end_time': datetime.datetime(2020, 7, 24, 18, 9, 26), 'start_time': datetime.datetime(2020, 7, 24, 18, 9, 26), 'status': 1},
-                                          {'alarm_code': '5-110-2', 'alarm_message': 'BYTE110_2', 'end_time': datetime.datetime(2020, 7, 24, 16, 12, 39), 'start_time': datetime.datetime(2020, 7, 24, 16, 12, 39), 'status': 1},
-                                          {'alarm_code': '5-110-2', 'alarm_message': 'BYTE110_2', 'end_time': datetime.datetime(2020, 7, 24, 15, 49, 20), 'start_time': datetime.datetime(2020, 7, 24, 15, 49, 20), 'status': 1},
-                                          {'alarm_code': '7-114-5', 'alarm_message': 'BYTE114_5', 'end_time': datetime.datetime(2020, 7, 24, 15, 34, 22), 'start_time': datetime.datetime(2020, 7, 24, 15, 34, 22), 'status': 1},
-                                          {'alarm_code': '6-113-5', 'alarm_message': 'BYTE113_5', 'end_time': datetime.datetime(2020, 7, 24, 15, 34, 22), 'start_time': datetime.datetime(2020, 7, 24, 15, 34, 22), 'status': 1},
-                                          {'alarm_code': '5-110-2', 'alarm_message': 'BYTE110_2', 'end_time': datetime.datetime(2020, 7, 24, 15, 34, 22), 'start_time': datetime.datetime(2020, 7, 24, 15, 34, 22), 'status': 1},
-                                          {'alarm_code': '5-110-2', 'alarm_message': 'BYTE110_2', 'end_time': datetime.datetime(2020, 7, 24, 15, 6, 42), 'start_time': datetime.datetime(2020, 7, 24, 15, 6, 42), 'status': 1},
-                                          {'alarm_code': '7-114-5', 'alarm_message': 'BYTE114_5', 'end_time': datetime.datetime(2020, 7, 24, 11, 25, 14), 'start_time': datetime.datetime(2020, 7, 24, 11, 25, 14), 'status': 1},
-                                          {'alarm_code': '6-113-5', 'alarm_message': 'BYTE113_5', 'end_time': datetime.datetime(2020, 7, 24, 11, 25, 14), 'start_time': datetime.datetime(2020, 7, 24, 11, 25, 14), 'status': 1},
-                                          {'alarm_code': '7-114-5', 'alarm_message': 'BYTE114_5', 'end_time': datetime.datetime(2020, 7, 24, 10, 52, 59), 'start_time': datetime.datetime(2020, 7, 24, 10, 52, 59), 'status': 1},
-                                          {'alarm_code': '6-113-5', 'alarm_message': 'BYTE113_5', 'end_time': datetime.datetime(2020, 7, 24, 10, 52, 59), 'start_time': datetime.datetime(2020, 7, 24, 10, 52, 59), 'status': 1},
-                                          {'alarm_code': '5-110-2', 'alarm_message': 'BYTE110_2', 'end_time': datetime.datetime(2020, 7, 24, 10, 48, 1), 'start_time': datetime.datetime(2020, 7, 24, 10, 48, 1), 'status': 1},
-                                          {'alarm_code': '5-110-2', 'alarm_message': 'BYTE110_2', 'end_time': datetime.datetime(2020, 7, 23, 17, 56), 'start_time': datetime.datetime(2020, 7, 23, 17, 56), 'status': 1},
-                                          {'alarm_code': '5-110-2', 'alarm_message': 'BYTE110_2', 'end_time': datetime.datetime(2020, 7, 23, 16, 9, 41), 'start_time': datetime.datetime(2020, 7, 23, 16, 9, 41), 'status': 1}],
-                            'count': 62,
-                            'device_sn': 'UHD0918003'},
+            PbdAlarms
+            {   'data': {   'alarms': [   {'alarm_code': '3-107-5', 'alarm_message': 'BYTE107_5', 'end_time': datetime.datetime(2019, 10, 16, 13, 51, 1), 'start_time': datetime.datetime(2019, 10, 16, 13, 51, 1), 'status': 1},
+                                          {'alarm_code': '3-107-4', 'alarm_message': 'BYTE107_4', 'end_time': datetime.datetime(2019, 10, 16, 13, 51, 1), 'start_time': datetime.datetime(2019, 10, 16, 13, 51, 1), 'status': 1},
+                                          {'alarm_code': '6-113-2', 'alarm_message': 'BYTE113_2', 'end_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'start_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'status': 1},
+                                          {'alarm_code': '6-113-1', 'alarm_message': 'BYTE113_1', 'end_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'start_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'status': 1},
+                                          {'alarm_code': '6-113-0', 'alarm_message': 'BYTE113_0', 'end_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'start_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'status': 1},
+                                          {'alarm_code': '6-112-7', 'alarm_message': 'BYTE112_7', 'end_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'start_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'status': 1},
+                                          {'alarm_code': '5-110-6', 'alarm_message': 'BYTE110_6', 'end_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'start_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'status': 1},
+                                          {'alarm_code': '5-110-5', 'alarm_message': 'BYTE110_5', 'end_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'start_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'status': 1},
+                                          {'alarm_code': '3-107-5', 'alarm_message': 'BYTE107_5', 'end_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'start_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'status': 1},
+                                          {'alarm_code': '3-107-4', 'alarm_message': 'BYTE107_4', 'end_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'start_time': datetime.datetime(2019, 10, 15, 15, 20, 16), 'status': 1}],
+                            'count': 10,
+                            'device_sn': 'HPS0000001'},
                 'error_code': 0,
                 'error_msg': None}
         """
@@ -615,13 +711,13 @@ class Hps:
             date_ = date.today()
 
         response = self.session.post(
-            endpoint="device/hps/alarm_data",
+            endpoint="device/pbd/alarm_data",
             data={
-                "hps_sn": device_sn,
+                "pbd_sn": device_sn,
                 "date": date_.strftime("%Y-%m-%d"),
                 "page": page,
                 "perpage": limit,
             },
         )
 
-        return HpsAlarms.model_validate(response)
+        return PbdAlarms.model_validate(response)

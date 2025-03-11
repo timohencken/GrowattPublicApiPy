@@ -51,10 +51,12 @@ if __name__ == "__main__":
     # TODO API v4
 
     # TODO user
-    # TODO pbd
     # TODO Smart meter
     # TODO Environmental tester
     # TODO groBoost
+
+    # TODO pbd
+    _pbd_alarms_ = ga.pbd.alarms(device_sn=INVERTER_SN)
 
     # hps
     _hps_energy_history_ = ga.hps.energy_history(device_sn=INVERTER_SN)
