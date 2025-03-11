@@ -12,6 +12,12 @@ from .env_sensor import (  # noqa: F401
     EnvSensorMetricsOverview,
     EnvSensorMetricsHistory,
 )
+from .groboost import (  # noqa: F401
+    GroboostDetails,
+    GroboostMetricsOverview,
+    GroboostMetricsOverviewMultiple,
+    GroboostMetricsHistory,
+)
 from .hps import (  # noqa: F401
     HpsDetails,
     HpsEnergyOverview,

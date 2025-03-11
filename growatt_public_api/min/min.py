@@ -23,6 +23,9 @@ class Min:
     """
     endpoints for MIN / TLX inverters
     https://www.showdoc.com.cn/262556420217021/6129816412127075
+
+    Note:
+        Only applicable to devices with device type 7 (min) returned by device.list()
     """
 
     session: GrowattApiSession
@@ -37,6 +40,9 @@ class Min:
         """
         Read Min settings
         https://www.showdoc.com.cn/262556420217021/8696815667375182
+
+        Note:
+            Only applicable to devices with device type 7 (min) returned by device.list()
 
         Args:
             device_sn (str): inverter SN
