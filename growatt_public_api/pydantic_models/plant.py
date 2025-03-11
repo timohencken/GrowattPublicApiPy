@@ -12,12 +12,28 @@ from pydantic_models.api_model import (
 # Plant add ###########################################################################################################
 
 
-class PlantAddData(ApiResponse):
+class PlantAddData(ApiModel):
     plant_id: Union[EmptyStrToNone, int] = None  # Plant ID, e.g. 24832
 
 
 class PlantAdd(ApiResponse):
     data: Union[EmptyStrToNone, PlantAddData] = None
+
+
+# #####################################################################################################################
+# Plant modify ########################################################################################################
+
+
+class PlantModify(ApiResponse):
+    data: Union[EmptyStrToNone, str] = None
+
+
+# #####################################################################################################################
+# Plant delete ########################################################################################################
+
+
+class PlantDelete(ApiResponse):
+    data: Union[EmptyStrToNone, str] = None
 
 
 # #####################################################################################################################

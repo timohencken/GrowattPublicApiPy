@@ -12,6 +12,8 @@ from pydantic_models.plant import (
     PlantPower,
     PlantInfo,
     PlantAdd,
+    PlantModify,
+    PlantDelete,
 )
 
 truststore.inject_into_ssl()
@@ -80,6 +82,9 @@ class Plant:
 
         Returns:
             PlantAdd
+            {   'data': {'plant_id': 24832},
+                'error_code': 0,
+                'error_msg': None}
         """
 
         if isinstance(country, GrowattCountry):
@@ -109,63 +114,112 @@ class Plant:
             },
         )
 
-        # FIXME DEBUG
-        sample_data = """{
-     "data": {
-         "plant_id": 24832
-     },
-     "error_code": 0,
-     "error_msg": ""
-}"""
-        import json
-        import pprint
-
-        j = json.loads(sample_data)
-        pprint.pprint(j, indent=4, width=500)
-        k = PlantAdd.model_validate(j)  # <-----------------------------
-        pprint.pprint(k.model_dump(), indent=4, width=500)
-        # FIXME DEBUG
-
         return PlantAdd.model_validate(response)
 
-    def modify(self):
+    def modify(
+        self,
+        user_id: int,
+        plant_id: int,
+        plant_name: str,
+        peak_kw: Optional[float] = None,
+        country: Optional[Union[GrowattCountry, str]] = None,
+        installer_code: Optional[str] = None,
+        currency: Optional[str] = None,
+        longitude: Optional[float] = None,
+        latitude: Optional[float] = None,
+        timezone_id: Optional[int] = None,
+        plant_type: Optional[Union[PlantType, int]] = None,
+    ) -> PlantModify:
         """
         2.2 Modifying the power station
         Modify the interface of the power station
-
         https://www.showdoc.com.cn/262556420217021/1494059609631488
+
+        Rate limit(s):
+        * This interface is only allowed to be called 10 times a day
+
+        Specific error codes:
+        * 10001: System error
+        * 10002: Username ID is empty
+        * 10003: The power station name is empty
+        * 10004: Peak power is empty
+        * 10005: User does not exist
+        * 10006: The power station name already exists under this user
+        * 10007: The power station does not exist
+
+        Args:
+            user_id (int): User ID ("c_user_id" as returned in register()), e.g. 74
+            plant_id (int): Power Station ID ("plant_id" as returned in add()), e.g. 77
+            plant_name (str): Power Station Name, e.g. "bole66"
+            peak_kw (Optional[float]): peak power (kWp), e.g. 20
+            country (Optional[Union[GrowattCountry, str]]): Area country list, e.g. "Thailand"
+            installer_code (Optional[str]): Installer code, e.g. "AFLF6"
+            currency (Optional[str]): currency unit, e.g. "$"
+            longitude (Optional[float]): longitude, e.g. 30
+            latitude (Optional[float]): latitude, e.g. 20
+            timezone_id (Optional[int]): The time zone code of the data display, e.g. 8
+            plant_type (Optional[Union[PlantType, int]]): Power station type: 0: Residential, 1: Commercial, 2: Ground-Mounted
+
+        Returns:
+            PlantModify
+            {'data': None, 'error_code': 0, 'error_msg': None}
         """
 
-        # # FIXME DEBUG
-        # sample_data = """"""
-        # import json
-        # import pprint
-        # j = json.loads(sample_data)
-        # pprint.pprint(j, indent=4, width=500)
-        # k = MinEnergyHistory.model_validate(j)  # <-----------------------------
-        # pprint.pprint(k.model_dump(), indent=4, width=500)
-        # # FIXME DEBUG
+        if isinstance(country, GrowattCountry):
+            country = country.value
+        if isinstance(plant_type, PlantType):
+            plant_type = plant_type.value
 
-        raise NotImplementedError  # TODO
+        response = self.session.post(
+            endpoint="plant/modify",
+            data={
+                "c_user_id": user_id,
+                "plant_id": plant_id,
+                "name": plant_name,
+                "latitude_f": country,
+                "latitude_d": installer_code,
+                "peak_power": peak_kw,
+                "currency": currency,
+                "longitude": longitude,
+                "latitude": latitude,
+                "timezone_id": timezone_id,
+                "plant_type": plant_type,
+            },
+        )
 
-    def delete(self):
+        return PlantModify.model_validate(response)
+
+    def delete(
+        self,
+        plant_id: int,
+    ) -> PlantDelete:
         """
         2.3 Delete power station
         Delete the interface of the power station
         https://www.showdoc.com.cn/262556420217021/1494059771852057
+
+        Specific error codes:
+        * 10001: System error
+        * 10002: The power plant ID is empty
+        * 10004: The power station does not exist
+
+        Args:
+            plant_id (int): Power Station ID ("plant_id" as returned in add()), e.g. 77
+
+        Returns:
+            PlantDelete
+            {'data': None, 'error_code': 0, 'error_msg': None}
+
         """
 
-        # # FIXME DEBUG
-        # sample_data = """"""
-        # import json
-        # import pprint
-        # j = json.loads(sample_data)
-        # pprint.pprint(j, indent=4, width=500)
-        # k = MinEnergyHistory.model_validate(j)  # <-----------------------------
-        # pprint.pprint(k.model_dump(), indent=4, width=500)
-        # # FIXME DEBUG
+        response = self.session.post(
+            endpoint="plant/delete",
+            data={
+                "plant_id": plant_id,
+            },
+        )
 
-        raise NotImplementedError  # TODO
+        return PlantDelete.model_validate(response)
 
     def list_by_user(
         self,

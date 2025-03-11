@@ -34,6 +34,13 @@ if __name__ == "__main__":
     # TODO API v4
 
     # plant
+    _plant_delete_ = ga.plant.delete(plant_id=730)
+    _plant_list_ = ga.plant.list(search_keyword="DummyTest", limit=100)
+    _plant_modify_ = ga.plant.modify(
+        user_id=601,
+        plant_id=730,
+        plant_name="DummyTestPlant1renamed",
+    )
     _plant_add_ = ga.plant.add(
         user_id=601,
         plant_name="DummyTestPlant1",
@@ -50,6 +57,7 @@ if __name__ == "__main__":
         city="London",
         address="Westminster Abbey 1",
     )
+    # returned "plant_id": 730
 
     # user
     _user_list_ = ga.user.list(page=5, limit=100)

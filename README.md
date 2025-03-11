@@ -25,6 +25,10 @@ This package aims to
   * modify user information
     * `user.modify()`
 * Plant
+  * plant management
+    * add new plant `plant.add()`
+    * modify plant `plant.modify()`
+    * delete plant `plant.delete()`
   * list plants
     * `plant.list()`
     * `plant.list_by_user()`
@@ -36,13 +40,6 @@ This package aims to
     * `plant.energy_history()`
   * power metrics by day
     * `plant.power()`
-  * ***Not*** implemented yet
-    * add new plant
-      * `plant.add()`
-    * modify plant
-      * `plant.modify()`
-    * delete plant
-      * `plant.delete()`
 * Datalogger
   * list dataloggers
     * `device.datalogger_list()`
@@ -281,6 +278,11 @@ To the best of our knowledge only the settings functions perform modifications t
 
 
 # Changelog
+* TBA (pre-alpha)
+  * endpoints implemented:
+    * `Plant.add()`
+    * `Plant.modify()`
+    * `Plant.delete()`
 * 2025.03.11 (pre-alpha)
   * endpoints implemented:
     * PBD

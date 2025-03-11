@@ -4,7 +4,6 @@ from loguru import logger
 
 from growatt_public_api import GrowattApi
 
-
 # ############################################################################################################
 # MAIN - used just for checking the implementation during development
 # expects following environment variables:
@@ -49,34 +48,6 @@ if __name__ == "__main__":
     # # FIXME DEBUG
 
     # TODO API v4
-
-    # DEBUG FIXME
-    # plant
-    _plant_device_sn_ = ga.plant.by_device(device_sn=INVERTER_SN)
-    _plant_power_ = ga.plant.power(plant_id=PLANT_ID, date_=date.today())
-    _plant_energy_history_d_ = ga.plant.energy_history(
-        plant_id=PLANT_ID,
-        date_interval="day",
-        start_date=date.today() - timedelta(days=7),
-        end_date=date.today(),
-    )
-    _plant_energy_history_m_ = ga.plant.energy_history(
-        plant_id=PLANT_ID,
-        date_interval="month",
-        start_date=date.today() - timedelta(days=30),
-        end_date=date.today(),
-    )
-    _plant_energy_history_y_ = ga.plant.energy_history(
-        plant_id=PLANT_ID,
-        date_interval="year",
-        start_date=date.today() - timedelta(days=365),
-        end_date=date.today(),
-    )
-    _plant_energy_overview_ = ga.plant.energy_overview(plant_id=PLANT_ID)
-    _plant_details_ = ga.plant.details(plant_id=PLANT_ID)
-    _plant_list_by_user_ = ga.plant.list_by_user(username=USERNAME)
-    _plant_list_ = ga.plant.list()
-    # DEBUG FIXME
 
     # user
     _user_list_ = ga.user.list(page=5, limit=100)
@@ -285,8 +256,37 @@ if __name__ == "__main__":
     _device_list_ = ga.device.list(plant_id=PLANT_ID)
 
     # plant
+    # from growatt_public_api import GrowattCountry, PlantType
+    # _plant_add_ = ga.plant.add(
+    #     user_id=601,
+    #     plant_name="DummyTestPlant1",
+    #     peak_kw=0.8,
+    #     country=GrowattCountry.SWEDEN,
+    #     installer_code="GWATT",
+    #     currency="€",
+    #     longitude=22.2,
+    #     latitude=33.3,
+    #     # timezone_id=8,
+    #     plant_type=PlantType.RESIDENTIAL,
+    #     create_date=date.today(),
+    #     price_per_kwh=0.31,
+    #     city="London",
+    #     address="Westminster Abbey 1",
+    # )
+    # _plant_modify_ = ga.plant.modify(
+    #     user_id=601,
+    #     plant_id=730,  # id from _plant_add_
+    #     plant_name="DummyTestPlant1renamed",  # rename plant
+    # )
+    # _plant_delete_ = ga.plant.delete(
+    #     plant_id=730  # id from _plant_add_
+    # )
+    _plant_list_ = ga.plant.list()
+    _plant_list_by_user_ = ga.plant.list_by_user(username=USERNAME)
     _plant_device_sn_ = ga.plant.by_device(device_sn=INVERTER_SN)
+    _plant_details_ = ga.plant.details(plant_id=PLANT_ID)
     _plant_power_ = ga.plant.power(plant_id=PLANT_ID, date_=date.today())
+    _plant_energy_overview_ = ga.plant.energy_overview(plant_id=PLANT_ID)
     _plant_energy_history_d_ = ga.plant.energy_history(
         plant_id=PLANT_ID,
         date_interval="day",
@@ -305,9 +305,5 @@ if __name__ == "__main__":
         start_date=date.today() - timedelta(days=365),
         end_date=date.today(),
     )
-    _plant_energy_overview_ = ga.plant.energy_overview(plant_id=PLANT_ID)
-    _plant_details_ = ga.plant.details(plant_id=PLANT_ID)
-    _plant_list_by_user_ = ga.plant.list_by_user(username=USERNAME)
-    _plant_list_ = ga.plant.list()
 
     logger.warning("DEBUG")
