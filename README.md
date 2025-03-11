@@ -171,7 +171,7 @@ This package aims to
   * general device data
     * read device data `groboost.details()`
   * device metrics
-    * current `groboost.metrics()` ***Not*** implemented yet
+    * current `groboost.metrics()`
     * current for multiple devices `groboost.metrics_multiple()` ***Not*** implemented yet
     * historical data `groboost.metrics_history()` ***Not*** implemented yet
 
