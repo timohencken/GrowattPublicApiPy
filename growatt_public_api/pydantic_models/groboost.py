@@ -431,7 +431,7 @@ def _groboost_metrics_history_data_to_camel(snake: str) -> str:
     define own to_camel function to support weird API naming
     """
     override = {
-        "device_sn": "tlx_sn",
+        "device_sn": "boost_sn",
     }
     return override.get(snake, to_camel(snake=snake))
 
@@ -445,9 +445,9 @@ class GroboostMetricsHistoryData(ApiModel):
 
     count: int  # Total Records
     next_page_start_id: Union[EmptyStrToNone, int] = None  # 21
-    device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
+    device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "GRO2020102"
     datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "ZT00100001"
+        None  # The collector SN of the inverter, e.g. "NACTEST128"
     )
     datas: List[BoostData]
 

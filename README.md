@@ -172,8 +172,8 @@ This package aims to
     * read device data `groboost.details()`
   * device metrics
     * current `groboost.metrics()`
-    * current for multiple devices `groboost.metrics_multiple()` ***Not*** implemented yet
-    * historical data `groboost.metrics_history()` ***Not*** implemented yet
+    * current for multiple devices `groboost.metrics_multiple()`
+    * historical data `groboost.metrics_history()`
 
 ### API v4 (a few additional endpoints)
 * ***Not*** implemented yet

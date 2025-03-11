@@ -52,7 +52,8 @@ if __name__ == "__main__":
 
     # TODO user
 
-    # TODO groBoost
+    # groBoost
+    _groboost_metrics_multiple_ = ga.groboost.metrics_multiple(device_sn=INVERTER_SN)
     _groboost_metrics_history_ = ga.groboost.metrics_history(device_sn=INVERTER_SN)
     _groboost_metrics_ = ga.groboost.metrics(device_sn=INVERTER_SN)
     _groboost_details_ = ga.groboost.details(device_sn=INVERTER_SN)
