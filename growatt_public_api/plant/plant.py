@@ -4,7 +4,7 @@ from typing import Optional, Literal, Union
 import truststore
 
 from types import GrowattCountry, PlantType
-from growatt_public_api.pydantic_models.plant import (
+from pydantic_models.plant import (
     PlantList,
     PlantDetails,
     PlantEnergyOverview,
@@ -15,7 +15,7 @@ from growatt_public_api.pydantic_models.plant import (
 )
 
 truststore.inject_into_ssl()
-from growatt_public_api.session import GrowattApiSession  # noqa: E402
+from session import GrowattApiSession  # noqa: E402
 
 
 class Plant:

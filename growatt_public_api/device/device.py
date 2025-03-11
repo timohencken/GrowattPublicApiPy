@@ -3,7 +3,7 @@ from typing import Optional, Union, List
 
 import truststore
 
-from growatt_public_api.pydantic_models.device import (
+from pydantic_models.device import (
     DeviceList,
     DataloggerList,
     DeviceTypeInfo,
@@ -15,7 +15,7 @@ from growatt_public_api.pydantic_models.device import (
 )
 
 truststore.inject_into_ssl()
-from growatt_public_api.session import GrowattApiSession  # noqa: E402
+from session import GrowattApiSession  # noqa: E402
 
 
 class Device:
