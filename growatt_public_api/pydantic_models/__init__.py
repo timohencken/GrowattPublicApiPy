@@ -101,6 +101,12 @@ from .storage import (  # noqa: F401
     StorageEnergyHistory,
     StorageAlarms,
 )
+from .user import (  # noqa: F401
+    UserRegistration,
+    UserModification,
+    UsernameAvailabilityCheck,
+    UserList,
+)
 from .vpp import (  # noqa: F401
     VppSoc,
     VppWrite,

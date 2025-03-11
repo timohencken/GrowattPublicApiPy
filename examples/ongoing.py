@@ -50,7 +50,25 @@ if __name__ == "__main__":
 
     # TODO API v4
 
-    # TODO user
+    # user
+    _user_list_ = ga.user.list(page=5, limit=100)
+    _user_available_ = ga.user.check_username(username="DummyTestUser1")
+    # from user.user import GrowattCountry
+    # _user_register_ = ga.user.register(
+    #     username="DummyTestUser1",
+    #     password="DummyTestUser1pw",
+    #     email="DummyTestUser1@example.com",
+    #     country=GrowattCountry.JAPAN,
+    #     user_type=1,
+    #     installer_code="GWATT",
+    #     phone_number="01234567890",
+    #     time_zone="GMT+09:00",
+    # )
+    # _user_modify_ = ga.user.modify(
+    #     user_id=601,
+    #     phone_number="01234567890123",
+    #     installer_code="GWATT",
+    # )
 
     # groBoost
     _groboost_metrics_multiple_ = ga.groboost.metrics_multiple(device_sn=INVERTER_SN)
