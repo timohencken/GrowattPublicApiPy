@@ -61,6 +61,11 @@ from .plant import (  # noqa: F401
     PlantPower,
     PlantInfo,
 )
+from .smart_meter import (  # noqa: F401
+    SmartMeterList,
+    SmartMeterEnergyOverview,
+    SmartMeterEnergyHistory,
+)
 from .spa import (  # noqa: F401
     SpaSettingRead,
     SpaSettingWrite,

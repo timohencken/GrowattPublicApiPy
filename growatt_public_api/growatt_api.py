@@ -19,6 +19,7 @@ from spa import Spa  # noqa: E402
 from pcs import Pcs  # noqa: E402
 from hps import Hps  # noqa: E402
 from pbd import Pbd  # noqa: E402
+from smart_meter import SmartMeter  # noqa: E402
 
 
 class GrowattDeviceType(IntEnum):
@@ -51,6 +52,7 @@ class GrowattApi:
     pcs: Pcs
     hps: Hps
     pbd: Pbd
+    smart_meter: SmartMeter
 
     """
     API documents:
@@ -81,3 +83,4 @@ class GrowattApi:
         self.pcs = Pcs(self.session)
         self.hps = Hps(self.session)
         self.pbd = Pbd(self.session)
+        self.smart_meter = SmartMeter(self.session)
