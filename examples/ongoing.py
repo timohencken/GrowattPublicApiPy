@@ -50,7 +50,7 @@ if __name__ == "__main__":
     # TODO API v4
 
     # user
-    _user_list_ = ga.user.list(page=5, limit=100)
+    _user_list_ = ga.user.list()
     _user_available_ = ga.user.check_username(username="DummyTestUser1")
     # from user.user import GrowattCountry
     # _user_register_ = ga.user.register(
@@ -245,12 +245,24 @@ if __name__ == "__main__":
 
     # device
     # TODO maybe split from device to inverter/datalogger?
-    _device_create_date_ = ga.device.create_date(device_sn=INVERTER_SN)
-    _device_get_datalogger_ = ga.device.get_datalogger(device_sn=INVERTER_SN)
-    _device_energy_day_ = ga.device.energy_day(device_sn=INVERTER_SN)
     _datalogger_check_ = ga.device.datalogger_validate(
         datalogger_sn=DATALOGGER_SN, validation_code=DATALOGGER_VALIDATION_CODE
     )
+    # _datalogger_add_ = ga.device.datalogger_add(
+    #     user_id=601,
+    #     plant_id=PLANT_ID,
+    #     datalogger_sn="QMN000BZP0000000",
+    # )
+    _datalogger_list_ = ga.device.datalogger_list(
+        plant_id=PLANT_ID,
+    )
+    # _datalogger_delete_ = ga.device.datalogger_delete(
+    #     plant_id=PLANT_ID,
+    #     datalogger_sn="QMN000BZP0000000",
+    # )
+    _device_create_date_ = ga.device.create_date(device_sn=INVERTER_SN)
+    _device_get_datalogger_ = ga.device.get_datalogger(device_sn=INVERTER_SN)
+    _device_energy_day_ = ga.device.energy_day(device_sn=INVERTER_SN)
     _device_type_dl_ = ga.device.type_info(device_sn=DATALOGGER_SN)
     _device_type_inv_ = ga.device.type_info(device_sn=INVERTER_SN)
     _device_list_ = ga.device.list(plant_id=PLANT_ID)

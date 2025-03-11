@@ -12,6 +12,8 @@ from pydantic_models.device import (
     DeviceDatalogger,
     DeviceCreateDate,
     DeviceAdd,
+    DataloggerAdd,
+    DataloggerDelete,
 )
 
 truststore.inject_into_ssl()
@@ -29,23 +31,91 @@ class Device:
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
 
-    def datalogger_add(self):
+    def datalogger_add(
+        self,
+        user_id: int,
+        plant_id: int,
+        datalogger_sn: str,
+    ) -> DataloggerAdd:
         """
         3.1 Add collector
         Add the interface of the collector
         https://www.showdoc.com.cn/262556420217021/6117939786619819
+
+        Rate limit(s):
+        * The acquisition frequency is once every 5 minutes
+
+        Specific error codes:
+        * 10001: system error
+        * 10002: power station ID is empty or collector serial number error
+        * 10003: collector already exists
+        * 10004: power station does not exist
+        * 10005: user does not exist
+        * 10006: user ID is empty
+
+        Args:
+            user_id (int): User ID ("c_user_id" as returned in register()), e.g. 74
+            plant_id (int): Power Station ID
+            datalogger_sn (str): Datalogger serial number
+
+        Returns:
+            DataloggerAdd
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': None}
         """
 
-        raise NotImplementedError  # TODO
+        response = self.session.post(
+            endpoint="device/datalogger/add",
+            data={
+                "plant_id": plant_id,
+                "sn": datalogger_sn,
+                "c_user_id": user_id,
+            },
+        )
 
-    def datalogger_delete(self):
+        return DataloggerAdd.model_validate(response)
+
+    def datalogger_delete(
+        self,
+        plant_id: int,
+        datalogger_sn: str,
+    ) -> DataloggerDelete:
         """
         3.2 Delete collector
         Delete the interface of the collector
         https://www.showdoc.com.cn/262556420217021/6117952419029888
+
+
+        Rate limit(s):
+        * The acquisition frequency is once every 5 minutes
+
+        Specific error codes:
+        * 10001: system error
+        * 10002: power station ID is empty or the collector serial number is wrong
+        * 10003: power station does not exist
+        * 10004: collector does not exist
+
+        Args:
+            plant_id (int): Power Station ID
+            datalogger_sn (str): Datalogger serial number
+
+        Returns:
+            DataloggerDelete
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': None}
         """
 
-        raise NotImplementedError
+        response = self.session.post(
+            endpoint="device/datalogger/delete",
+            data={
+                "plant_id": plant_id,
+                "sn": datalogger_sn,
+            },
+        )
+
+        return DataloggerDelete.model_validate(response)
 
     def list(
         self,
