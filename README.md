@@ -167,8 +167,13 @@ This package aims to
   * change time period settings
     * set current (dis)charge power `vpp.write()` (***use with caution***)
     * configure (dis)charge power for time periods `vpp.write_time_periods()` (***use with caution***)
-* PDB (*TYPE=11* - GroBoost)
-  * ***Not*** implemented yet
+* GroBoost (*TYPE=11* - GroBoost)
+  * general device data
+    * read device data `groboost.details()`
+  * device metrics
+    * current `groboost.metrics()` ***Not*** implemented yet
+    * current for multiple devices `groboost.metrics_multiple()` ***Not*** implemented yet
+    * historical data `groboost.metrics_history()` ***Not*** implemented yet
 
 ### API v4 (a few additional endpoints)
 * ***Not*** implemented yet
@@ -274,6 +279,7 @@ To the best of our knowledge only the settings functions perform modifications t
     * PBD
     * Smart meter
     * Environmental sensor
+    * GroBoost
 * 2025.03.10 (pre-alpha)
   * endpoints implemented:
     * SPA
