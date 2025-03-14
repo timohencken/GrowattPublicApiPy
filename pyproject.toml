@@ -28,3 +28,6 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/timohencken/GrowattPublicApiPy"
 Issues = "https://github.com/timohencken/GrowattPublicApiPy/issues"
+
+[tool.black]
+line-length = 120

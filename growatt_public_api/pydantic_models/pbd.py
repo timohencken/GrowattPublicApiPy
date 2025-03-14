@@ -65,9 +65,7 @@ def parse_forced_time(value: Optional[str] = None):
         return None
 
 
-ForcedTime: TypeAlias = Annotated[
-    Union[datetime.time, None], BeforeValidator(parse_forced_time)
-]
+ForcedTime: TypeAlias = Annotated[Union[datetime.time, None], BeforeValidator(parse_forced_time)]
 
 # #####################################################################################################################
 # PBD details #########################################################################################################
@@ -104,9 +102,7 @@ class PbdDetailData(ApiModel):
     charge_day_map: Union[EmptyStrToNone, Any] = None  # e.g. {},
     charge_month: Union[EmptyStrToNone, int] = None  # e.g. 0,
     children: List[Any]  # e.g. []
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The serial number of the collector, e.g. 'WFD091500E'
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The serial number of the collector, e.g. 'WFD091500E'
     discharge_day_map: Union[EmptyStrToNone, Any] = None  # e.g. {}
     discharge_month: Union[EmptyStrToNone, float] = None  # e.g. 0
     discharge_month_2: Union[EmptyStrToNone, float] = None  # e.g. 0
@@ -123,27 +119,19 @@ class PbdDetailData(ApiModel):
     i_pv_max: Union[EmptyStrToNone, float] = None  # 500
     icharge: Union[EmptyStrToNone, float] = None  # 1
     img_path: Union[EmptyStrToNone, str] = None  # e.g. './css/img/status_gray.gif'
-    inner_version: Union[EmptyStrToNone, str] = (
-        None  # Internal version number, e.g. 'null'
-    )
+    inner_version: Union[EmptyStrToNone, str] = None  # Internal version number, e.g. 'null'
     ipv: Union[EmptyStrToNone, float] = None  # 0
     ipv1: Union[EmptyStrToNone, float] = None  # 0
     ipv2: Union[EmptyStrToNone, float] = None  # 0
     last_update_time: Union[EmptyStrToNone, GrowattTime] = (
         None  # Last update time, e.g. {'date': 12, 'day': 2, 'hours': 16, 'minutes': 46, 'month': 3, 'seconds': 22, 'time': 1649753182000, 'timezoneOffset': -480, 'year': 122}
     )
-    last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # e.g. '2022-04-12 16:46:22'
-    )
+    last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2022-04-12 16:46:22'
     level: Union[EmptyStrToNone, int] = None  # e.g. 4
     location: Union[EmptyStrToNone, str] = None  # address, e.g. ''
-    lost: Union[EmptyStrToNone, bool] = (
-        None  # Device online status (0: online, 1: disconnected), e.g. True
-    )
+    lost: Union[EmptyStrToNone, bool] = None  # Device online status (0: online, 1: disconnected), e.g. True
     model: Union[EmptyStrToNone, int] = None  # model, e.g. 2666130979655057522
-    model_text: Union[EmptyStrToNone, str] = (
-        None  # model, e.g. 'S25B00D00T00P0FU01M0072'
-    )
+    model_text: Union[EmptyStrToNone, str] = None  # model, e.g. 'S25B00D00T00P0FU01M0072'
     normalPower: Union[EmptyStrToNone, int] = None  # e.g. 500000
     on_off: Union[EmptyStrToNone, bool] = None  # 1
     out_power_max: Union[EmptyStrToNone, float] = None  # 100
@@ -167,9 +155,7 @@ class PbdDetailData(ApiModel):
     )
     status_lang: Union[EmptyStrToNone, str] = None  # 'Lost'
     status_text: Union[EmptyStrToNone, str] = None  # e.g. 'hps.status.los'
-    tcp_server_ip: Union[EmptyStrToNone, str] = (
-        None  # Server address, e.g. '47.107.154.111'
-    )
+    tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. '47.107.154.111'
     timezone: Union[EmptyStrToNone, int] = None  # e.g. 8
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_FDCJQ00003'
     tree_name: Union[EmptyStrToNone, str] = None  # e.g. 'FDCJQ00003'
@@ -245,33 +231,23 @@ class PbdEnergyOverviewData(ApiModel):
     day: Union[EmptyStrToNone, str] = None  # e.g. ''
     e_charge_time_today: Union[EmptyStrToNone, float] = None  # e.g. 27
     e_charge_time_total: Union[EmptyStrToNone, float] = None  # e.g. 156
-    e_charge_today: Union[EmptyStrToNone, float] = (
-        None  # The amount of charge in the system that day, e.g. 26
-    )
+    e_charge_today: Union[EmptyStrToNone, float] = None  # The amount of charge in the system that day, e.g. 26
     e_charge_total: Union[EmptyStrToNone, float] = None  # Total system charge, e.g. 154
     e_discharge_time_today: Union[EmptyStrToNone, float] = None  # e.g. 25
     e_discharge_time_total: Union[EmptyStrToNone, float] = None  # e.g. 152
-    e_discharge_today: Union[EmptyStrToNone, float] = (
-        None  # System discharge capacity of the day, e.g. 24
-    )
-    e_discharge_total: Union[EmptyStrToNone, float] = (
-        None  # Total system discharge, e.g. 150
-    )
+    e_discharge_today: Union[EmptyStrToNone, float] = None  # System discharge capacity of the day, e.g. 24
+    e_discharge_total: Union[EmptyStrToNone, float] = None  # Total system discharge, e.g. 150
     e_out_today: Union[EmptyStrToNone, float] = None  # e.g. 201
     e_out_total: Union[EmptyStrToNone, float] = None  # e.g. 13238500.0
     electric_state: Union[EmptyStrToNone, int] = None  # e.g. -1
     epv_time_today: Union[EmptyStrToNone, float] = None  # e.g. 358.1
     epv_time_total: Union[EmptyStrToNone, float] = None  # e.g. 5.5
     epv_today: Union[EmptyStrToNone, float] = None  # e.g. 0
-    epv_total: Union[EmptyStrToNone, float] = (
-        None  # PV total power generation, e.g. 21.8
-    )
+    epv_total: Union[EmptyStrToNone, float] = None  # PV total power generation, e.g. 21.8
     id: Union[EmptyStrToNone, int] = None  # e.g. 4
     ipv: Union[EmptyStrToNone, float] = None  # e.g. 0.8999999761581421
     ipv1: Union[EmptyStrToNone, float] = None  # PV1 input current, e.g. 84
-    ipv2: Union[EmptyStrToNone, float] = (
-        None  # PV2 input current, e.g. 0.800000011920929
-    )
+    ipv2: Union[EmptyStrToNone, float] = None  # PV2 input current, e.g. 0.800000011920929
     ipv3: Union[EmptyStrToNone, float] = None  # PV3 input current, e.g. 208
     ipv4: Union[EmptyStrToNone, float] = None  # PV4 input current, e.g. 209
     ipv5: Union[EmptyStrToNone, float] = None  # PV5 input current, e.g. 210
@@ -333,9 +309,7 @@ class PbdEnergyOverviewData(ApiModel):
     vpv3: Union[EmptyStrToNone, float] = None  # PV3 input voltage, e.g. 204
     vpv4: Union[EmptyStrToNone, float] = None  # PV4 input voltage, e.g. 205
     vpv5: Union[EmptyStrToNone, float] = None  # PV5 input voltage, e.g. 207
-    with_time: Union[EmptyStrToNone, bool] = (
-        None  # Whether the data sent has its own time, e.g. False
-    )
+    with_time: Union[EmptyStrToNone, bool] = None  # Whether the data sent has its own time, e.g. False
 
 
 def _pbd_energy_overview_to_camel(snake: str) -> str:
@@ -353,9 +327,7 @@ class PbdEnergyOverview(ApiResponse):
     )
 
     data: Union[EmptyStrToNone, PbdEnergyOverviewData] = None
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "MONITOR003"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "MONITOR003"
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "HPS0000001"
 
 
@@ -378,9 +350,7 @@ class PbdEnergyHistoryData(ApiModel):
     )
 
     count: int  # Total Records
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. ""MONITOR003""
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. ""MONITOR003""
     datas: List[PbdEnergyOverviewData]
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. ""HPS0000001""
     next_page_start_id: Union[EmptyStrToNone, int] = None  # 21
@@ -397,15 +367,9 @@ class PbdEnergyHistory(ApiResponse):
 class PbdAlarm(ApiModel):
     alarm_code: Union[EmptyStrToNone, str] = None  # alarm code, e.g. 5-110-2
     status: Union[EmptyStrToNone, int] = None  # e.g. 1
-    end_time: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # Alarm start time, e.g. "2019-03-09 09:55:55.0"
-    )
-    start_time: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # Alarm end time, e.g. "2019-03-09 09:55:55.0"
-    )
-    alarm_message: Union[EmptyStrToNone, str] = (
-        None  # alarm information, e.g. "BYTE110_2"
-    )
+    end_time: Union[EmptyStrToNone, datetime.datetime] = None  # Alarm start time, e.g. "2019-03-09 09:55:55.0"
+    start_time: Union[EmptyStrToNone, datetime.datetime] = None  # Alarm end time, e.g. "2019-03-09 09:55:55.0"
+    alarm_message: Union[EmptyStrToNone, str] = None  # alarm information, e.g. "BYTE110_2"
 
 
 def _pbd_alarms_data_to_camel(snake: str) -> str:

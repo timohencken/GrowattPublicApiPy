@@ -40,15 +40,9 @@ class DeviceData(ApiModel):
     last_update_time: Union[EmptyStrToNone, datetime.datetime] = (
         None  # Last data received time, e.g. '2025-02-24 17:28:13'
     )
-    lost: Union[EmptyStrToNone, bool] = (
-        None  # whether the device is online or not (False=online, True=disconnected)
-    )
-    manufacturer: Union[EmptyStrToNone, str] = (
-        None  # Equipment manufacturer, e.g. 'Growatt'
-    )
-    model: Union[EmptyStrToNone, str] = (
-        None  # device model, e.g. 'S00B00D00T00P00U00M0000'
-    )
+    lost: Union[EmptyStrToNone, bool] = None  # whether the device is online or not (False=online, True=disconnected)
+    manufacturer: Union[EmptyStrToNone, str] = None  # Equipment manufacturer, e.g. 'Growatt'
+    model: Union[EmptyStrToNone, str] = None  # device model, e.g. 'S00B00D00T00P00U00M0000'
     status: Union[EmptyStrToNone, int] = (
         None  # Device status, if the device is 1 (inverter), then status (0: disconnected, 1: online, 2: standby, 3; fault, all others are offline), if the device is 2 ( Energy storage machine), then status (0: standby, 1: charging, 2: discharging, 3: fault, 4: burning, others are offline), if the device is 4 (Max device), then status(0: Standby, 1: online, 2: standby, 3; failure, all others are offline); if the device is 6 (Spa) Status 0: waiting mode 1: self-check mode, 3: failure mode, 4: upgrading, 5 , 6, 7, 8: normal mode, all others are offline; if the device is 5 (Mix) Status 0: waiting mode, 1: self-check mode, 3: failure mode, 4: upgrading, 5, 6, 7 , 8: Normal mode, all others are offline; if the device is in 7 (MIN) state, status (0 disconnected, 1: online, 2: standby, 3; failure, all others are offline)
     )
@@ -245,14 +239,10 @@ class DataloggerData(ApiModel):
         None  # Last data received time, e.g. {'date': 25, 'day': 2, 'hours': 0, 'minutes': 32, 'month': 1, 'seconds': 1, 'time': 1740414721500, 'timezoneOffset': -480, 'year': 125}
     )
     lost: Union[EmptyStrToNone, bool] = None  # True
-    manufacturer: Union[EmptyStrToNone, str] = (
-        None  # collector manufacturer, e.g. 'Growatt'
-    )
+    manufacturer: Union[EmptyStrToNone, str] = None  # collector manufacturer, e.g. 'Growatt'
     model: Union[EmptyStrToNone, str] = None  # 'ShineWeFi'
     netmode: Union[EmptyStrToNone, str] = None  # NONE | WIFI | 4G | LAN, e.g. 'NONE'
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # Collector SN, e.g. 'QMN000BZP0000000'
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # Collector SN, e.g. 'QMN000BZP0000000'
     type: Union[EmptyStrToNone, int] = None  # Collector type, e.g. 0
 
 
@@ -282,9 +272,7 @@ class DeviceTypeInfo(ApiModel):
     normal_power: Union[EmptyStrToNone, int] = (
         None  # Rated Power(Western Australia supports reading, others only partially), e.g. 0
     )
-    obj: Union[EmptyStrToNone, int] = (
-        None  # 1=inverter, 2=storage, 3=collector, 4=other
-    )
+    obj: Union[EmptyStrToNone, int] = None  # 1=inverter, 2=storage, 3=collector, 4=other
     result: Union[EmptyStrToNone, int] = None  # 1=success, other=fail
 
 
@@ -293,15 +281,9 @@ class DeviceTypeInfo(ApiModel):
 
 
 class DataloggerValidationData(ApiModel):
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # SN of the collector (if exists), e.g. 'QMN0000000000000'
-    )
-    plant_id: Union[EmptyStrToNone, int] = (
-        None  # plant ID to which the collector belongs (if exists), e.g. 9900000
-    )
-    user_id: Union[EmptyStrToNone, int] = (
-        None  # user ID to which the collector belongs  (if exists), e.g. 3100000
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # SN of the collector (if exists), e.g. 'QMN0000000000000'
+    plant_id: Union[EmptyStrToNone, int] = None  # plant ID to which the collector belongs (if exists), e.g. 9900000
+    user_id: Union[EmptyStrToNone, int] = None  # user ID to which the collector belongs  (if exists), e.g. 3100000
 
 
 class DataloggerValidation(ApiResponse):
@@ -313,15 +295,9 @@ class DataloggerValidation(ApiResponse):
 
 
 class DeviceEnergyDay(ApiResponse):
-    data: Union[EmptyStrToNone, float] = (
-        None  # daily energy production,e.g. 168.89999389648438
-    )
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # SN of the collector, e.g. 'QMN0000000000000'
-    )
-    device_sn: Union[EmptyStrToNone, str] = (
-        None  # SN of the inverter, e.g. 'BZP0000000'
-    )
+    data: Union[EmptyStrToNone, float] = None  # daily energy production,e.g. 168.89999389648438
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # SN of the collector, e.g. 'QMN0000000000000'
+    device_sn: Union[EmptyStrToNone, str] = None  # SN of the inverter, e.g. 'BZP0000000'
 
 
 # #####################################################################################################################
@@ -342,9 +318,7 @@ class DeviceDataloggerData(ApiModel):
         alias_generator=_device_datalogger_data_to_camel,
     )
 
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # SN of the collector, e.g. 'QMN0000000000000'
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # SN of the collector, e.g. 'QMN0000000000000'
 
 
 class DeviceDatalogger(ApiResponse):
@@ -369,25 +343,19 @@ class DeviceBasicData(ApiModel):
         alias_generator=_device_basic_data_to_camel,
     )
 
-    create_time: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # create time, e.g. '2024-11-30 17:37:00'
-    )
+    create_time: Union[EmptyStrToNone, datetime.datetime] = None  # create time, e.g. '2024-11-30 17:37:00'
     datalogger_sn: Union[EmptyStrToNone, str] = (
         None  # The SN of the collector to which the inverter belongs, e.g. 'QMN0000000000000'
     )
     device_name: Union[EmptyStrToNone, str] = None  # device name, e.g. 'MIN'
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. 'BZP0000000'
     device_type: Union[EmptyStrToNone, str] = None  # device type, e.g. 'CLOVE'
-    last_update_time: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # Last update time, e.g. '2025-02-24 23:03:00'
-    )
+    last_update_time: Union[EmptyStrToNone, datetime.datetime] = None  # Last update time, e.g. '2025-02-24 23:03:00'
     table_name: Union[EmptyStrToNone, str] = None
 
 
 class DeviceCreateDate(ApiResponse):
-    data: Union[
-        EmptyStrToNone, Dict[str, DeviceBasicData]  # key: device serial number
-    ] = None
+    data: Union[EmptyStrToNone, Dict[str, DeviceBasicData]] = None  # key: device serial number
 
 
 # #####################################################################################################################

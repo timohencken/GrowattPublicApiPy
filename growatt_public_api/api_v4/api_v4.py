@@ -6,13 +6,13 @@ from pydantic_models.api_v4 import (
     DeviceListV4,
     InverterDetailsV4,
     StorageDetailsV4,
-    MaxDetailsV4Max,
     SphDetailsV4,
     SpaDetailsV4,
     MinDetailsV4,
     WitDetailsV4,
     SphsDetailsV4,
     NoahDetailsV4,
+    MaxDetailsV4,
 )
 
 truststore.inject_into_ssl()
@@ -39,9 +39,7 @@ NEW_API_ERROR_CODES = {  # TODO use this for something?
     -1: "Please Use the New Domain for Access",
 }
 
-DeviceType = Literal[
-    "inv", "storage", "max", "sph", "spa", "min", "wit", "sph-s", "noah"
-]
+DeviceType = Literal["inv", "storage", "max", "sph", "spa", "min", "wit", "sph-s", "noah"]
 
 
 class ApiV4:
@@ -119,7 +117,7 @@ class ApiV4:
     ) -> Union[
         InverterDetailsV4,
         StorageDetailsV4,
-        MaxDetailsV4Max,
+        MaxDetailsV4,
         SphDetailsV4,
         SpaDetailsV4,
         MinDetailsV4,
@@ -142,7 +140,7 @@ class ApiV4:
             device_type (DeviceType): Device type (as returned by list())
 
         Returns:
-            Union[InverterDetailsV4, StorageDetailsV4, MaxDetailsV4Max, SphDetailsV4, SpaDetailsV4, MinDetailsV4, WitDetailsV4, SphsDetailsV4, NoahDetailsV4]
+            Union[InverterDetailsV4, StorageDetailsV4, MaxDetailsV4, SphDetailsV4, SpaDetailsV4, MinDetailsV4, WitDetailsV4, SphsDetailsV4, NoahDetailsV4]
 
             InverterDetailsV4:
             StorageDetailsV4:
@@ -486,8 +484,83 @@ class ApiV4:
                 'error_code': 0,
                 'error_msg': 'SUCCESSFUL_OPERATION'}
 
-            MaxDetailsV4Max:
-
+            MaxDetailsV4:
+            {   'data': {   'max': [   {   'active_rate': 0.0,
+                                           'address': 1,
+                                           'alias': 'HPJ0BF20FU',
+                                           'backflow_default_power': 0.0,
+                                           'big_device': False,
+                                           'children': None,
+                                           'communication_version': 'ZBab-0002',
+                                           'datalogger_sn': 'BLE4BEQ0BW',
+                                           'device_type': 1,
+                                           'dtc': 5001,
+                                           'e_today': 0.0,
+                                           'e_total': 0.0,
+                                           'energy_day': 0.0,
+                                           'energy_day_map': {},
+                                           'energy_month': 0.0,
+                                           'energy_month_text': '0',
+                                           'export_limit': 0.0,
+                                           'export_limit_power_rate': 0.0,
+                                           'fac_high': 0.0,
+                                           'fac_low': 0.0,
+                                           'frequency_high_limit': 0.0,
+                                           'frequency_low_limit': 0.0,
+                                           'fw_version': 'TJ1.0',
+                                           'group_id': -1,
+                                           'id': 0,
+                                           'img_path': './css/img/status_gray.gif',
+                                           'inner_version': 'TJAA08020002',
+                                           'last_update_time': 1716534733000,
+                                           'last_update_time_text': datetime.datetime(2024, 5, 24, 15, 12, 13),
+                                           'lcd_language': 0,
+                                           'level': 6,
+                                           'location': None,
+                                           'lost': False,
+                                           'max_set_bean': None,
+                                           'model': 720575940631003386,
+                                           'model_text': 'S0AB00D00T00P0FU01M00FA',
+                                           'normal_power': 25000.0,
+                                           'on_off': False,
+                                           'parent_id': 'LIST_BLE4BEQ0BW_3',
+                                           'pf': 0.0,
+                                           'pf_model': 0,
+                                           'pflinep1_lp': 0.0,
+                                           'pflinep1_pf': 0.0,
+                                           'pflinep2_lp': 0.0,
+                                           'pflinep2_pf': 0.0,
+                                           'pflinep3_lp': 0.0,
+                                           'pflinep3_pf': 0.0,
+                                           'pflinep4_lp': 0.0,
+                                           'pflinep4_pf': 0.0,
+                                           'plant_id': 0,
+                                           'plant_name': None,
+                                           'port_name': 'ShinePano - BLE4BEQ0BW',
+                                           'power': 0.0,
+                                           'power_max': None,
+                                           'power_max_text': None,
+                                           'power_max_time': None,
+                                           'pv_pf_cmd_memory_state': 0,
+                                           'reactive_rate': 0.0,
+                                           'record': None,
+                                           'serial_num': 'HPJ0BF20FU',
+                                           'status': 1,
+                                           'status_text': 'max.status.normal',
+                                           'str_num': 0,
+                                           'sys_time': None,
+                                           'tcp_server_ip': '47.119.22.101',
+                                           'timezone': 8.0,
+                                           'tree_id': 'HPJ0BF20FU',
+                                           'tree_name': 'HPJ0BF20FU',
+                                           'updating': False,
+                                           'user_name': None,
+                                           'vac_high': 0.0,
+                                           'vac_low': 0.0,
+                                           'voltage_high_limit': 0.0,
+                                           'voltage_low_limit': 0.0}]},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
         if isinstance(device_sn, list):
@@ -503,111 +576,209 @@ class ApiV4:
         )
 
         # FIXME DEBUG
-        sample_data = """{
-    "code": 0,
-    "data": {
-        "max": [
-            {
-                "id": 0,
-                "serialNum": "HPJ0BF20FU",
-                "bigDevice": false,
-                "portName": "ShinePano - BLE4BEQ0BW",
-                "dataLogSn": "BLE4BEQ0BW",
-                "groupId": -1,
-                "alias": "HPJ0BF20FU",
-                "location": "",
-                "addr": 1,
-                "fwVersion": "TJ1.0",
-                "model": 720575940631003386,
-                "innerVersion": "TJAA08020002",
-                "lost": false,
-                "status": 1,
-                "tcpServerIp": "47.119.22.101",
-                "lastUpdateTime": 1716534733000,
-                "normalPower": 25000,
-                "power": 0.0,
-                "communicationVersion": "ZBab-0002",
-                "deviceType": 1,
-                "eToday": 0.0,
-                "eTotal": 0.0,
-                "energyDayMap": {},
-                "energyMonth": 0.0,
-                "updating": false,
-                "record": null,
-                "energyDay": 0.0,
-                "powerMax": null,
-                "powerMaxTime": null,
-                "userName": null,
-                "plantId": 0,
-                "plantname": null,
-                "modelText": "S0AB00D00T00P0FU01M00FA",
-                "timezone": 8.0,
-                "sysTime": null,
-                "onOff": 0,
-                "activeRate": 0,
-                "reactiveRate": 0,
-                "pvPfCmdMemoryState": 0,
-                "pf": 0.0,
-                "exportLimit": 0,
-                "exportLimitPowerRate": 0.0,
-                "voltageHighLimit": 0.0,
-                "voltageLowLimit": 0.0,
-                "frequencyHighLimit": 0.0,
-                "frequencyLowLimit": 0.0,
-                "backflowDefaultPower": 0.0,
-                "lcdLanguage": 0,
-                "pfModel": 0,
-                "pflinep1_lp": 0,
-                "pflinep1_pf": 0.0,
-                "pflinep2_lp": 0,
-                "pflinep2_pf": 0.0,
-                "pflinep3_lp": 0,
-                "pflinep3_pf": 0.0,
-                "pflinep4_lp": 0,
-                "pflinep4_pf": 0.0,
-                "strNum": 0,
-                "vacLow": 0.0,
-                "vacHigh": 0.0,
-                "facLow": 0.0,
-                "facHigh": 0.0,
-                "maxSetBean": null,
-                "dtc": 5001,
-                "level": 6,
-                "lastUpdateTimeText": "2024-05-24 15:12:13",
-                "children": null,
-                "treeName": "HPJ0BF20FU",
-                "treeID": "HPJ0BF20FU",
-                "parentID": "LIST_BLE4BEQ0BW_3",
-                "imgPath": "./css/img/status_gray.gif",
-                "statusText": "max.status.normal",
-                "powerMaxText": "",
-                "energyMonthText": "0"
-            }
-        ]
-    },
-    "message": "SUCCESSFUL_OPERATION"
-}"""
-        import json
         import pprint
 
-        j = json.loads(sample_data)
-        pprint.pprint(j, indent=4, width=500)
-        k = SphDetailsV4.model_validate(j)  # <-----------------------------
-        pprint.pprint(k.model_dump(), indent=4, width=500)
+        pprint.pprint(response, indent=4, width=500)
         # FIXME DEBUG
+        #         sample_data = """{
+        #     "code": 0,
+        #     "data": {
+        #         "spa": [
+        #             {
+        #                 "id": 0,
+        #                 "serialNum": "MTN0H6800E",
+        #                 "portName": "ShinePano - XGD6CMM2VY",
+        #                 "dataLogSn": "XGD6CMM2VY",
+        #                 "groupId": -1,
+        #                 "alias": "MTN0H6800E",
+        #                 "location": "",
+        #                 "addr": 1,
+        #                 "fwVersion": "RA1.0",
+        #                 "model": 1710134400000,
+        #                 "innerVersion": "RBCA050306",
+        #                 "lost": true,
+        #                 "status": -1,
+        #                 "tcpServerIp": "127.0.0.1",
+        #                 "lastUpdateTime": 1716435475000,
+        #                 "sysTime": "2024-05-23 11:34",
+        #                 "communicationVersion": "ZCBC-0006",
+        #                 "deviceType": 2,
+        #                 "powerMax": null,
+        #                 "powerMaxTime": null,
+        #                 "energyDay": 0.0,
+        #                 "energyMonth": 0.0,
+        #                 "energyDayMap": {},
+        #                 "onOff": 1,
+        #                 "pmax": 3000,
+        #                 "lcdLanguage": 1,
+        #                 "countrySelected": 0,
+        #                 "wselectBaudrate": 0,
+        #                 "comAddress": 1,
+        #                 "manufacturer": "   New Energy   ",
+        #                 "dtc": 3735,
+        #                 "modbusVersion": 307,
+        #                 "floatChargeCurrentLimit": 600.0,
+        #                 "vbatWarning": 480.0,
+        #                 "vbatWarnClr": 5.0,
+        #                 "vbatStopForDischarge": 4.7,
+        #                 "vbatStopForCharge": 5.75,
+        #                 "vbatStartForDischarge": 48.0,
+        #                 "vbatStartforCharge": 58.0,
+        #                 "batTempLowerLimitD": 110.0,
+        #                 "batTempUpperLimitD": 70.0,
+        #                 "batTempLowerLimitC": 110.0,
+        #                 "batTempUpperLimitC": 60.0,
+        #                 "forcedDischargeTimeStart1": "0:0",
+        #                 "forcedDischargeTimeStart2": "0:0",
+        #                 "forcedDischargeTimeStart3": "0:0",
+        #                 "forcedDischargeTimeStop1": "23:0",
+        #                 "forcedDischargeTimeStop2": "0:0",
+        #                 "forcedDischargeTimeStop3": "0:0",
+        #                 "forcedChargeTimeStart1": "0:0",
+        #                 "forcedChargeTimeStart2": "0:0",
+        #                 "forcedChargeTimeStart3": "0:0",
+        #                 "forcedChargeTimeStop1": "23:0",
+        #                 "forcedChargeTimeStop2": "0:0",
+        #                 "forcedChargeTimeStop3": "0:0",
+        #                 "bctMode": 2,
+        #                 "bctAdjust": 0,
+        #                 "wdisChargeSOCLowLimit1": 10,
+        #                 "wdisChargeSOCLowLimit2": 10,
+        #                 "wchargeSOCLowLimit1": 100,
+        #                 "wchargeSOCLowLimit2": 100,
+        #                 "priorityChoose": 2,
+        #                 "chargePowerCommand": 100,
+        #                 "disChargePowerCommand": 100,
+        #                 "bagingTestStep": 0,
+        #                 "batteryType": 1,
+        #                 "epsFunEn": 0,
+        #                 "epsVoltSet": 0,
+        #                 "epsFreqSet": 0,
+        #                 "loadFirstStartTime1": "null",
+        #                 "loadFirstStopTime1": "null",
+        #                 "loadFirstStartTime2": "null",
+        #                 "loadFirstStopTime2": "null",
+        #                 "loadFirstStartTime3": "null",
+        #                 "loadFirstStopTime3": "null",
+        #                 "gridFirstSwitch1": 1,
+        #                 "gridFirstSwitch2": 0,
+        #                 "gridFirstSwitch3": 0,
+        #                 "batFirstSwitch1": 0,
+        #                 "batFirstSwitch2": 0,
+        #                 "batFirstSwitch3": 0,
+        #                 "loadFirstSwitch1": 0,
+        #                 "loadFirstSwitch2": 0,
+        #                 "loadFirstSwitch3": 0,
+        #                 "vacHigh": 263.0,
+        #                 "vacLow": 186.0,
+        #                 "buckUpsFunEn": 1,
+        #                 "buckUPSVoltSet": 0,
+        #                 "upsFreqSet": 0,
+        #                 "pfCMDmemoryState": 0,
+        #                 "activePRate": 100,
+        #                 "reactivePRate": 100,
+        #                 "powerFactor": 10000,
+        #                 "updating": false,
+        #                 "record": null,
+        #                 "chargeTime1": null,
+        #                 "chargeTime2": null,
+        #                 "chargeTime3": null,
+        #                 "dischargeTime1": null,
+        #                 "dischargeTime2": null,
+        #                 "dischargeTime3": null,
+        #                 "pv_on_off": null,
+        #                 "pf_sys_year": null,
+        #                 "pv_grid_voltage_high": null,
+        #                 "pv_grid_voltage_low": null,
+        #                 "spa_off_grid_enable": null,
+        #                 "spa_ac_discharge_frequency": null,
+        #                 "spa_ac_discharge_voltage": null,
+        #                 "pv_pf_cmd_memory_state": null,
+        #                 "pv_active_p_rate": null,
+        #                 "pv_reactive_p_rate": null,
+        #                 "pv_reactive_p_rate_two": null,
+        #                 "backflow_setting": null,
+        #                 "pv_power_factor": null,
+        #                 "userName": null,
+        #                 "modelText": "A0B1D0T4PFU2M2S0",
+        #                 "plantId": 0,
+        #                 "plantname": null,
+        #                 "timezone": 8.0,
+        #                 "pCharge": 0.0,
+        #                 "pDischarge": 0.0,
+        #                 "equipmentType": null,
+        #                 "sysTimeText": "2024-05-23 11:34:33",
+        #                 "wloadSOCLowLimit1": 0,
+        #                 "wloadSOCLowLimit2": 10,
+        #                 "invVersion": 1,
+        #                 "batSerialNum": null,
+        #                 "mcVersion": "-0000",
+        #                 "monitorVersion": "FFFF-30840",
+        #                 "forcedDischargeTimeStart4": "0:0",
+        #                 "forcedDischargeTimeStop4": "0:0",
+        #                 "forcedDischargeTimeStart5": "0:0",
+        #                 "forcedDischargeTimeStop5": "0:0",
+        #                 "forcedDischargeTimeStart6": "0:0",
+        #                 "forcedDischargeTimeStop6": "0:0",
+        #                 "forcedChargeTimeStart4": "0:0",
+        #                 "forcedChargeTimeStop4": "0:0",
+        #                 "forcedChargeTimeStart5": "0:0",
+        #                 "forcedChargeTimeStop5": "0:0",
+        #                 "forcedChargeTimeStart6": "0:0",
+        #                 "forcedChargeTimeStop6": "0:0",
+        #                 "forcedDischargeStopSwitch4": 0,
+        #                 "forcedDischargeStopSwitch5": 0,
+        #                 "forcedDischargeStopSwitch6": 0,
+        #                 "forcedChargeStopSwitch4": 0,
+        #                 "forcedChargeStopSwitch5": 0,
+        #                 "forcedChargeStopSwitch6": 0,
+        #                 "batSysRateEnergy": 0.0,
+        #                 "oldErrorFlag": 0,
+        #                 "region": 0,
+        #                 "vppOpen": 0,
+        #                 "underExcited": 0,
+        #                 "exportLimit": 0,
+        #                 "exportLimitPowerRate": 0.0,
+        #                 "failsafe": 0,
+        #                 "acChargeEnable": 0,
+        #                 "newSwVersionFlag": 0,
+        #                 "batPackNum": 0,
+        #                 "offGridDischargeSOC": 20,
+        #                 "level": 4,
+        #                 "children": null,
+        #                 "treeID": "ST_MTN0H6800E",
+        #                 "treeName": "MTN0H6800E",
+        #                 "parentID": "LIST_XGD6CMM2VY_96",
+        #                 "powerMaxText": "",
+        #                 "imgPath": "./css/img/status_gray.gif",
+        #                 "lastUpdateTimeText": "2024-05-23 11:37:55",
+        #                 "statusText": "spa.status.lost",
+        #                 "energyMonthText": "0"
+        #             }
+        #         ]
+        #     },
+        #     "message": "SUCCESSFUL_OPERATION"
+        # }"""
+        #         import json
+        #         import pprint
+        #         j = json.loads(sample_data)
+        #         pprint.pprint(j, indent=4, width=500)
+        #         k = SpaDetailsV4.model_validate(j)  # <-----------------------------
+        #         pprint.pprint(k.model_dump(), indent=4, width=500)
+        #         # FIXME DEBUG
 
         device_type = device_type.lower()
         if device_type == "inv":
             return InverterDetailsV4.model_validate(response)
-        elif device_type == "storage":
+        elif device_type == "storage":  # TODO check on test env
             return StorageDetailsV4.model_validate(response)
         elif device_type == "sph":
             return SphDetailsV4.model_validate(response)
-        elif device_type == "max":  # TODO ongoing
-            return MaxDetailsV4Max.model_validate(response)
-        elif device_type == "spa":  # TODO
+        elif device_type == "max":
+            return MaxDetailsV4.model_validate(response)
+        elif device_type == "spa":
             return SpaDetailsV4.model_validate(response)
-        elif device_type == "min":  # TODO
+        elif device_type == "min":  # TODO ongoing
             return MinDetailsV4.model_validate(response)
         elif device_type == "wit":  # TODO
             return WitDetailsV4.model_validate(response)

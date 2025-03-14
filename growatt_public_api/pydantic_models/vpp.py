@@ -27,12 +27,8 @@ class VppSoc(ApiResponse):
         alias_generator=_vpp_soc_to_camel,
     )
     soc: Union[EmptyStrToNone, float] = None  # SOC value, e.g. 65
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # Device collector serial number, e.g. "ZT00100001"
-    )
-    device_sn: Union[EmptyStrToNone, str] = (
-        None  # Device serial number, e.g. "CRAZT00001"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # Device collector serial number, e.g. "ZT00100001"
+    device_sn: Union[EmptyStrToNone, str] = None  # Device serial number, e.g. "CRAZT00001"
 
 
 # #####################################################################################################################

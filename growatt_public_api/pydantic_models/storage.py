@@ -68,23 +68,15 @@ class StorageDetailData(ApiModel):
     charge_config: Union[EmptyStrToNone, int] = None  # e.g. 0
     children: Union[EmptyStrToNone, List[Any]] = None  # e.g. []
     communication_version: Union[EmptyStrToNone, str] = None  # e.g. ''
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The serial number of the collector, e.g. "CRAZT00001"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The serial number of the collector, e.g. "CRAZT00001"
     device_type: Union[EmptyStrToNone, int] = None  # e.g. 1
     float_charge_volt: Union[EmptyStrToNone, float] = None  # e.g. 0
-    fw_version: Union[EmptyStrToNone, str] = (
-        None  # Energy storage device firmware version, e.g. "G.2.0")
-    )
+    fw_version: Union[EmptyStrToNone, str] = None  # Energy storage device firmware version, e.g. "G.2.0")
     group_id: Union[EmptyStrToNone, int] = None  # e.g. -1
     img_path: Union[EmptyStrToNone, str] = None  # e.g. './css/img/status_yellow.gif',
     inner_version: Union[EmptyStrToNone, str] = None  # e.g. 'fbaa1816',
-    last_update_time: Union[EmptyStrToNone, GrowattTime] = (
-        None  # Last update time, e.g. {"time": 1547000577000, ...}
-    )
-    last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # e.g. "2019-01-09 10:22:57"
-    )
+    last_update_time: Union[EmptyStrToNone, GrowattTime] = None  # Last update time, e.g. {"time": 1547000577000, ...}
+    last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. "2019-01-09 10:22:57"
     level: Union[EmptyStrToNone, int] = None  # e.g. 4
     location: Union[EmptyStrToNone, str] = None  # Address, e.g. ""
     lost: Union[EmptyStrToNone, bool] = (
@@ -311,89 +303,43 @@ class StorageEnergyOverviewData(ApiModel):
     day_map: Union[EmptyStrToNone, Any] = None  # e.g. None
     delta_volt: Union[EmptyStrToNone, float] = None  # e.g. 0
     delta_volt2: Union[EmptyStrToNone, float] = None  # e.g. 0
-    device_type: Union[EmptyStrToNone, int] = (
-        None  # Energy storage type (0: SP2000, 1: SP3000), e.g. 0
-    )
+    device_type: Union[EmptyStrToNone, int] = None  # Energy storage type (0: SP2000, 1: SP3000), e.g. 0
     discharge_month: Union[EmptyStrToNone, float] = None  # e.g. 0
     discharge_to_standby_reason: Union[EmptyStrToNone, int] = None  # e.g. 5
     discharge_to_standby_reason_text: Union[EmptyStrToNone, str] = (
         None  # e.g. 'Reason of state change from discharge to operating: Battery voltage low for discharge'
     )
     discharge_curr: Union[EmptyStrToNone, float] = None  # e.g. 0
-    e_bat_discharge_today: Union[EmptyStrToNone, float] = (
-        None  # Battery discharge energy on the day, e.g. 0
-    )
-    e_bat_discharge_total: Union[EmptyStrToNone, float] = (
-        None  # Total battery discharge energy, e.g. 0
-    )
-    e_charge_today: Union[EmptyStrToNone, float] = (
-        None  # Charge energy of the day (kWh), e.g. 0
-    )
-    e_charge_today2: Union[EmptyStrToNone, float] = (
-        None  # SP3000 today’s charging power (kWh), e.g. 0
-    )
+    e_bat_discharge_today: Union[EmptyStrToNone, float] = None  # Battery discharge energy on the day, e.g. 0
+    e_bat_discharge_total: Union[EmptyStrToNone, float] = None  # Total battery discharge energy, e.g. 0
+    e_charge_today: Union[EmptyStrToNone, float] = None  # Charge energy of the day (kWh), e.g. 0
+    e_charge_today2: Union[EmptyStrToNone, float] = None  # SP3000 today’s charging power (kWh), e.g. 0
     e_charge_today_text: Union[EmptyStrToNone, str] = None  # e.g. '0.0 kWh'
-    e_charge_total: Union[EmptyStrToNone, float] = (
-        None  # Total charging energy (kWh), e.g. 2.3
-    )
-    e_charge_total2: Union[EmptyStrToNone, float] = (
-        None  # SP3000 accumulative charging power (kWh), e.g. 2.6
-    )
+    e_charge_total: Union[EmptyStrToNone, float] = None  # Total charging energy (kWh), e.g. 2.3
+    e_charge_total2: Union[EmptyStrToNone, float] = None  # SP3000 accumulative charging power (kWh), e.g. 2.6
     e_charge_total_text: Union[EmptyStrToNone, str] = None  # e.g. '2.3 kWh'
-    e_discharge_today: Union[EmptyStrToNone, float] = (
-        None  # Discharge energy of the day (kWh), e.g. 0
-    )
-    e_discharge_today2: Union[EmptyStrToNone, float] = (
-        None  # SP3000 Discharge Today (kWh), e.g. 0
-    )
+    e_discharge_today: Union[EmptyStrToNone, float] = None  # Discharge energy of the day (kWh), e.g. 0
+    e_discharge_today2: Union[EmptyStrToNone, float] = None  # SP3000 Discharge Today (kWh), e.g. 0
     e_discharge_today_text: Union[EmptyStrToNone, str] = None  # e.g. '0.0 kWh'
-    e_discharge_total: Union[EmptyStrToNone, float] = (
-        None  # Total discharge energy (kWh), e.g. 1.7
-    )
-    e_discharge_total2: Union[EmptyStrToNone, float] = (
-        None  # SP3000 cumulative discharge (kWh), e.g. 1.7
-    )
+    e_discharge_total: Union[EmptyStrToNone, float] = None  # Total discharge energy (kWh), e.g. 1.7
+    e_discharge_total2: Union[EmptyStrToNone, float] = None  # SP3000 cumulative discharge (kWh), e.g. 1.7
     e_discharge_total_text: Union[EmptyStrToNone, str] = None  # e.g. '1.7 kWh'
-    e_to_grid_today: Union[EmptyStrToNone, float] = (
-        None  # Current day (user-grid) electricity (kWh), e.g. 0
-    )
-    e_to_grid_total: Union[EmptyStrToNone, float] = (
-        None  # Total (user-grid) electricity (kWh), e.g. 7648481.6
-    )
-    e_to_user_today: Union[EmptyStrToNone, float] = (
-        None  # Current day (grid-user) electricity (kWh), e.g. 6
-    )
-    e_to_user_total: Union[EmptyStrToNone, float] = (
-        None  # Total (grid-user) electricity (kWh), e.g. 24137119.8
-    )
+    e_to_grid_today: Union[EmptyStrToNone, float] = None  # Current day (user-grid) electricity (kWh), e.g. 0
+    e_to_grid_total: Union[EmptyStrToNone, float] = None  # Total (user-grid) electricity (kWh), e.g. 7648481.6
+    e_to_user_today: Union[EmptyStrToNone, float] = None  # Current day (grid-user) electricity (kWh), e.g. 6
+    e_to_user_total: Union[EmptyStrToNone, float] = None  # Total (grid-user) electricity (kWh), e.g. 24137119.8
     e_today: Union[EmptyStrToNone, float] = None  # e.g. 6.5
     e_total: Union[EmptyStrToNone, float] = None  # e.g. 1049.6000000000001
-    eac_charge_today: Union[EmptyStrToNone, float] = (
-        None  # AC charging energy of the day, e.g. 0
-    )
-    eac_charge_total: Union[EmptyStrToNone, float] = (
-        None  # AC total charging energy, e.g. 2.1
-    )
-    eac_discharge_today: Union[EmptyStrToNone, float] = (
-        None  # Bypass load energy on the day of the utility, e.g. 0
-    )
-    eac_discharge_total: Union[EmptyStrToNone, float] = (
-        None  # Mains total bypass load energy, e.g. 0
-    )
+    eac_charge_today: Union[EmptyStrToNone, float] = None  # AC charging energy of the day, e.g. 0
+    eac_charge_total: Union[EmptyStrToNone, float] = None  # AC total charging energy, e.g. 2.1
+    eac_discharge_today: Union[EmptyStrToNone, float] = None  # Bypass load energy on the day of the utility, e.g. 0
+    eac_discharge_total: Union[EmptyStrToNone, float] = None  # Mains total bypass load energy, e.g. 0
     eop_discharge_today: Union[EmptyStrToNone, float] = None  # e.g. 0
     eop_discharge_total: Union[EmptyStrToNone, float] = None  # e.g. 0
-    epv_today: Union[EmptyStrToNone, float] = (
-        None  # Panel power of the day (kWh), e.g. 3.3
-    )
-    epv_today2: Union[EmptyStrToNone, float] = (
-        None  # SP3000 The current panel power (kWh), e.g. 3.2
-    )
-    epv_total: Union[EmptyStrToNone, float] = (
-        None  # Total panel power (kWh), e.g. 539.6
-    )
-    epv_total2: Union[EmptyStrToNone, float] = (
-        None  # SP3000 panel cumulative power (kWh), e.g. 511.5
-    )
+    epv_today: Union[EmptyStrToNone, float] = None  # Panel power of the day (kWh), e.g. 3.3
+    epv_today2: Union[EmptyStrToNone, float] = None  # SP3000 The current panel power (kWh), e.g. 3.2
+    epv_total: Union[EmptyStrToNone, float] = None  # Total panel power (kWh), e.g. 539.6
+    epv_total2: Union[EmptyStrToNone, float] = None  # SP3000 panel cumulative power (kWh), e.g. 511.5
     error_code: Union[EmptyStrToNone, int] = None  # error code, e.g. 0
     error_text: Union[EmptyStrToNone, str] = None  # e.g. 'Unknown'
     fault_code: Union[EmptyStrToNone, int] = None  # error code, e.g. 0
@@ -408,27 +354,19 @@ class StorageEnergyOverviewData(ApiModel):
     gauge2_rm1: Union[EmptyStrToNone, float] = None  # e.g. 0
     gauge2_rm2: Union[EmptyStrToNone, float] = None  # e.g. 0
     i_ac_charge: Union[EmptyStrToNone, float] = None  # AC charging current, e.g. 0
-    i_charge: Union[EmptyStrToNone, float] = (
-        None  # PV terminal charging current (A), e.g. 0
-    )
+    i_charge: Union[EmptyStrToNone, float] = None  # PV terminal charging current (A), e.g. 0
     i_charge_pv1: Union[EmptyStrToNone, float] = None  # PV1 charging current, e.g. 0
     i_charge_pv2: Union[EmptyStrToNone, float] = None  # PV2 charging current, e.g. 0
     i_charge_text: Union[EmptyStrToNone, str] = None  # e.g. '0.0 A'
-    i_discharge: Union[EmptyStrToNone, float] = (
-        None  # PV end discharge current (A), e.g. 0
-    )
+    i_discharge: Union[EmptyStrToNone, float] = None  # PV end discharge current (A), e.g. 0
     i_discharge_text: Union[EmptyStrToNone, str] = None  # e.g. '0.0 A'
     iac_to_grid: Union[EmptyStrToNone, float] = None  # Grid side current (A), e.g. 0
     iac_to_grid_text: Union[EmptyStrToNone, str] = None  # e.g. '0.0 A'
     iac_to_user: Union[EmptyStrToNone, float] = None  # User side current (A), e.g. 0
     iac_to_user_text: Union[EmptyStrToNone, str] = None  # e.g. '0.0 A'
     inner_cw_code: Union[EmptyStrToNone, str] = None  # e.g. '0_0'
-    ipm_temperature: Union[EmptyStrToNone, float] = (
-        None  # IPM temperature (°C), e.g. 39.900001525878906
-    )
-    ipv: Union[EmptyStrToNone, float] = (
-        None  # Input PV current (A) / SP3000 Charging power (W), e.g. 0
-    )
+    ipm_temperature: Union[EmptyStrToNone, float] = None  # IPM temperature (°C), e.g. 39.900001525878906
+    ipv: Union[EmptyStrToNone, float] = None  # Input PV current (A) / SP3000 Charging power (W), e.g. 0
     ipv_text: Union[EmptyStrToNone, str] = None  # e.g. '0.0 A'
     load_percent: Union[EmptyStrToNone, float] = None  # Percentage of load, e.g. 0
     lost: Union[EmptyStrToNone, bool] = None  # e.g. True
@@ -446,9 +384,7 @@ class StorageEnergyOverviewData(ApiModel):
     p_charge2: Union[EmptyStrToNone, float] = None  # e.g. 0
     p_charge_text: Union[EmptyStrToNone, str] = None  # e.g. '0.0 W'
     p_discharge: Union[EmptyStrToNone, float] = None  # Discharge power (W), e.g. 0
-    p_discharge2: Union[EmptyStrToNone, float] = (
-        None  # SP3000 Discharge power (W), e.g. 0
-    )
+    p_discharge2: Union[EmptyStrToNone, float] = None  # SP3000 Discharge power (W), e.g. 0
     p_discharge_text: Union[EmptyStrToNone, str] = None  # e.g. '0.0 W'
     pac_to_grid: Union[EmptyStrToNone, float] = None  # Grid side power (W), e.g. 0
     pac_to_grid_text: Union[EmptyStrToNone, str] = None  # e.g. '0.0 W'
@@ -456,9 +392,7 @@ class StorageEnergyOverviewData(ApiModel):
     pac_touser_text: Union[EmptyStrToNone, float] = None  # e.g. '1922.9 W'
     pow_saving_en: Union[EmptyStrToNone, float] = None  # e.g. 0
     ppv: Union[EmptyStrToNone, float] = None  # Panel input power (W), e.g. 1075.4
-    ppv2: Union[EmptyStrToNone, float] = (
-        None  # SP3000 panel input power (W), e.g. 991.7
-    )
+    ppv2: Union[EmptyStrToNone, float] = None  # SP3000 panel input power (W), e.g. 991.7
     ppv_text: Union[EmptyStrToNone, str] = None  # e.g. '1075.4 W'
     rate_va: Union[EmptyStrToNone, float] = None  # e.g. 0
     rate_watt: Union[EmptyStrToNone, float] = None  # e.g. 0
@@ -474,16 +408,10 @@ class StorageEnergyOverviewData(ApiModel):
     status_text: Union[EmptyStrToNone, str] = None  # e.g. 'Operating'
     storage_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
     sys_out: Union[EmptyStrToNone, float] = None  # e.g. 2067.1000000000004
-    temperature: Union[EmptyStrToNone, float] = (
-        None  # temperature (°C), e.g. 39.79999923706055
-    )
-    time: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # Data time, e.g. '2019-01-14 13:20:57'
-    )
+    temperature: Union[EmptyStrToNone, float] = None  # temperature (°C), e.g. 39.79999923706055
+    time: Union[EmptyStrToNone, datetime.datetime] = None  # Data time, e.g. '2019-01-14 13:20:57'
     uw_bat_type2: Union[EmptyStrToNone, float] = None  # e.g. 0
-    v_bat: Union[EmptyStrToNone, float] = (
-        None  # Battery voltage (V), e.g. 50.20000076293945
-    )
+    v_bat: Union[EmptyStrToNone, float] = None  # Battery voltage (V), e.g. 50.20000076293945
     v_bat_text: Union[EmptyStrToNone, str] = None  # e.g. '50.2 V'
     v_buck: Union[EmptyStrToNone, float] = None  # vBuk (A), e.g. 161.39999389648438
     v_buck2: Union[EmptyStrToNone, float] = None  # vBuck2 (A), e.g. 167.3000030517578
@@ -492,12 +420,8 @@ class StorageEnergyOverviewData(ApiModel):
     v_grid: Union[EmptyStrToNone, float] = None  # Mains voltage, e.g. 0
     vac: Union[EmptyStrToNone, float] = None  # Grid voltage (V), e.g. 226.5
     vac_Text: Union[EmptyStrToNone, str] = None  # e.g. '226.5 V'
-    vpv: Union[EmptyStrToNone, float] = (
-        None  # Input PV voltage (V), e.g. 161.39999389648438
-    )
-    vpv2: Union[EmptyStrToNone, float] = (
-        None  # SP3000 Input PV voltage (V), e.g. 167.60000610351562
-    )
+    vpv: Union[EmptyStrToNone, float] = None  # Input PV voltage (V), e.g. 161.39999389648438
+    vpv2: Union[EmptyStrToNone, float] = None  # SP3000 Input PV voltage (V), e.g. 167.60000610351562
     vpv_text: Union[EmptyStrToNone, str] = None  # e.g. '161.4 V'
     warn_code: Union[EmptyStrToNone, int] = None  # Warn Code, e.g. 0
     warn_info: Union[EmptyStrToNone, int] = None  # e.g. 0
@@ -521,9 +445,7 @@ class StorageEnergyOverview(ApiResponse):
     )
 
     data: Union[EmptyStrToNone, StorageEnergyOverviewData] = None
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "ZT00100001"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "ZT00100001"
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
 
 
@@ -551,9 +473,7 @@ class StorageEnergyHistoryData(ApiModel):
     count: int  # Total Records
     next_page_start_id: Union[EmptyStrToNone, int] = None  # 21
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "ZT00100001"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "ZT00100001"
     datas: List[StorageEnergyOverviewData]
 
 
@@ -568,15 +488,9 @@ class StorageEnergyHistory(ApiResponse):
 class StorageAlarm(ApiModel):
     alarm_code: Union[EmptyStrToNone, int] = None  # alarm code, e.g. 25
     status: Union[EmptyStrToNone, int] = None  # e.g. 1
-    end_time: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # Alarm start time, e.g. "2019-03-09 09:55:55.0"
-    )
-    start_time: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # Alarm end time, e.g. "2019-03-09 09:55:55.0"
-    )
-    alarm_message: Union[EmptyStrToNone, str] = (
-        None  # alarm information, e.g. "No utility."
-    )
+    end_time: Union[EmptyStrToNone, datetime.datetime] = None  # Alarm start time, e.g. "2019-03-09 09:55:55.0"
+    start_time: Union[EmptyStrToNone, datetime.datetime] = None  # Alarm end time, e.g. "2019-03-09 09:55:55.0"
+    alarm_message: Union[EmptyStrToNone, str] = None  # alarm information, e.g. "No utility."
 
 
 def _storage_alarms_data_to_camel(snake: str) -> str:

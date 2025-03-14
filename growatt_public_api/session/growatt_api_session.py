@@ -113,14 +113,12 @@ class GrowattApiSession:
             url=url,
             params=params,
             data=data,
+            verify=False,  # FIXME remove this
         )
 
         if '<html data-name="login">' in response.text:
             logger.error("Login page shown")
-        elif (
-            "Note: Dear user, you have not login to the system, skip login page login.."
-            in response.text
-        ):
+        elif "Note: Dear user, you have not login to the system, skip login page login.." in response.text:
             logger.error("Forwarded to login page")
 
         try:
@@ -142,9 +140,7 @@ class GrowattApiSession:
                 generic_error_msg = self.generic_response_message(error_code_new)
                 if not error_msg:
                     json_data["message"] = generic_error_msg
-                error_log = (
-                    f"request failed with error code {error_code_new}: {error_msg}"
-                )
+                error_log = f"request failed with error code {error_code_new}: {error_msg}"
                 if generic_error_msg:
                     error_log += f" ({generic_error_msg})"
                 logger.warning(error_log)

@@ -86,16 +86,12 @@ if __name__ == "__main__":
     _groboost_details_ = ga.groboost.details(device_sn=INVERTER_SN)
 
     # Environmental sensor
-    _env_metrics_history_ = ga.env_sensor.metrics_history(
-        datalogger_sn=DATALOGGER_SN, sensor_address=1
-    )
+    _env_metrics_history_ = ga.env_sensor.metrics_history(datalogger_sn=DATALOGGER_SN, sensor_address=1)
     _env_metrics_ = ga.env_sensor.metrics(datalogger_sn=DATALOGGER_SN, sensor_address=1)
     _env_list_ = ga.env_sensor.list(datalogger_sn=DATALOGGER_SN)
 
     # Smart meter
-    _sm_energy_history_ = ga.smart_meter.energy_history(
-        datalogger_sn=DATALOGGER_SN, meter_address=1
-    )
+    _sm_energy_history_ = ga.smart_meter.energy_history(datalogger_sn=DATALOGGER_SN, meter_address=1)
     _sm_energy_ = ga.smart_meter.energy(datalogger_sn=DATALOGGER_SN, meter_address=1)
     _sm_list_ = ga.smart_meter.list(datalogger_sn=DATALOGGER_SN)
 
@@ -122,9 +118,7 @@ if __name__ == "__main__":
     _spa_energy_history_ = ga.spa.energy_history(device_sn=INVERTER_SN)
     _spa_energy_ = ga.spa.energy(device_sn=INVERTER_SN)
     _spa_details_ = ga.spa.details(device_sn=INVERTER_SN)
-    _spa_setting_read_by_name_ = ga.spa.setting_read(
-        device_sn=INVERTER_SN, parameter_id="pv_on_off"
-    )
+    _spa_setting_read_by_name_ = ga.spa.setting_read(device_sn=INVERTER_SN, parameter_id="pv_on_off")
     _spa_alarms_ = ga.spa.alarms(device_sn=INVERTER_SN)
 
     # sph
@@ -132,15 +126,11 @@ if __name__ == "__main__":
     _sph_energy_multiple_ = ga.sph.energy_multiple(device_sn=INVERTER_SN)
     _sph_energy_ = ga.sph.energy(device_sn=INVERTER_SN)
     _sph_details_ = ga.sph.details(device_sn=INVERTER_SN)
-    _sph_setting_read_by_name_ = ga.sph.setting_read(
-        device_sn=INVERTER_SN, parameter_id="pv_on_off"
-    )
+    _sph_setting_read_by_name_ = ga.sph.setting_read(device_sn=INVERTER_SN, parameter_id="pv_on_off")
     _sph_alarms_ = ga.sph.alarms(device_sn=INVERTER_SN)
 
     # max
-    _max_setting_read_by_name_ = ga.max.setting_read(
-        device_sn=INVERTER_SN, parameter_id="max_cmd_on_off"
-    )
+    _max_setting_read_by_name_ = ga.max.setting_read(device_sn=INVERTER_SN, parameter_id="max_cmd_on_off")
     _max_energy_multiple_ = ga.max.energy_multiple(device_sn=INVERTER_SN)
     _max_energy_history_ = ga.max.energy_history(device_sn=INVERTER_SN)
     _max_energy_ = ga.max.energy(device_sn=INVERTER_SN)
@@ -155,9 +145,7 @@ if __name__ == "__main__":
             (-60, time(hour=5, minute=1), time(hour=12, minute=0)),
         ],
     )
-    _vpp_write_ = ga.vpp.write(
-        device_sn=INVERTER_SN, time_=time(hour=12, minute=13), percentage=100
-    )
+    _vpp_write_ = ga.vpp.write(device_sn=INVERTER_SN, time_=time(hour=12, minute=13), percentage=100)
     _vpp_soc_ = ga.vpp.soc(device_sn=INVERTER_SN)
 
     # min
@@ -205,9 +193,7 @@ if __name__ == "__main__":
         _min_setting_by_name_dict_[named_setting] = ga.min.setting_read(
             device_sn=INVERTER_SN, parameter_id=named_setting
         )
-    _min_setting_read_by_name_single_ = ga.min.setting_read(
-        device_sn=INVERTER_SN, parameter_id="tlx_on_off"
-    )
+    _min_setting_read_by_name_single_ = ga.min.setting_read(device_sn=INVERTER_SN, parameter_id="tlx_on_off")
     _min_setting_read_by_reg_ = ga.min.setting_read(
         device_sn=INVERTER_SN,
         start_address=0,
@@ -226,20 +212,12 @@ if __name__ == "__main__":
     _storage_setting_write_by_name_ = ga.storage.setting_write(
         device_sn=INVERTER_SN, parameter_id="storage_cmd_on_off", parameter_value_1="1"
     )
-    _storage_setting_read_by_name_ = ga.storage.setting_read(
-        device_sn=INVERTER_SN, parameter_id="storage_cmd_on_off"
-    )
+    _storage_setting_read_by_name_ = ga.storage.setting_read(device_sn=INVERTER_SN, parameter_id="storage_cmd_on_off")
 
     # inverter
-    _inverter_setting_read_by_name_ = ga.inverter.setting_read(
-        device_sn=INVERTER_SN, parameter_id="pv_on_off"
-    )
-    _inverter_setting_read_by_reg_ = ga.inverter.setting_read(
-        device_sn=INVERTER_SN, start_address=0
-    )
-    _inverter_setting_read_by_regs_ = ga.inverter.setting_read(
-        device_sn=INVERTER_SN, start_address=0, end_address=10
-    )
+    _inverter_setting_read_by_name_ = ga.inverter.setting_read(device_sn=INVERTER_SN, parameter_id="pv_on_off")
+    _inverter_setting_read_by_reg_ = ga.inverter.setting_read(device_sn=INVERTER_SN, start_address=0)
+    _inverter_setting_read_by_regs_ = ga.inverter.setting_read(device_sn=INVERTER_SN, start_address=0, end_address=10)
     _inverter_energy_multiple_ = ga.inverter.energy_multiple(device_sn=INVERTER_SN)
     _inverter_alarms_ = ga.inverter.alarms(device_sn=INVERTER_SN)
     _inverter_energy_history_ = ga.inverter.energy_history(device_sn=INVERTER_SN)

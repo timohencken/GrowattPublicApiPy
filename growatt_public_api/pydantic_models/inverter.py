@@ -57,9 +57,7 @@ class InverterDetailData(ApiModel):
     big_device: Union[EmptyStrToNone, bool] = None  # e.g. false
     children: Union[EmptyStrToNone, List[Any]] = None  # e.g. []
     create_date: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. null
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The serial number of the collector, e.g. "CRAZT00001"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The serial number of the collector, e.g. "CRAZT00001"
     energy_day: Union[EmptyStrToNone, float] = None  # e.g. 0
     energy_day_map: Union[EmptyStrToNone, dict] = None  # e.g. {}
     energy_month: Union[EmptyStrToNone, float] = None  # e.g. 0
@@ -71,16 +69,10 @@ class InverterDetailData(ApiModel):
     id: Union[EmptyStrToNone, int] = None  # e.g. 116
     img_path: Union[EmptyStrToNone, str] = None  # e.g. "./css/img/status_green.gif"
     inner_version: Union[EmptyStrToNone, str] = None  # e.g. "1.2.3.4."
-    inverter_info_status_css: Union[EmptyStrToNone, str] = (
-        None  # e.g. "vsts_table_green"
-    )
+    inverter_info_status_css: Union[EmptyStrToNone, str] = None  # e.g. "vsts_table_green"
     ipm_temperature: Union[EmptyStrToNone, float] = None  # e.g. 0
-    last_update_time: Union[EmptyStrToNone, GrowattTime] = (
-        None  # Last update time, e.g. {"time": 1547000577000, ...}
-    )
-    last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # e.g. "2019-01-09 10:22:57"
-    )
+    last_update_time: Union[EmptyStrToNone, GrowattTime] = None  # Last update time, e.g. {"time": 1547000577000, ...}
+    last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. "2019-01-09 10:22:57"
     level: Union[EmptyStrToNone, int] = None  # e.g. 4
     load_text: Union[EmptyStrToNone, str] = None  # e.g. "0%"
     location: Union[EmptyStrToNone, str] = None  # Address, e.g. ""
@@ -100,9 +92,7 @@ class InverterDetailData(ApiModel):
     record: Union[EmptyStrToNone, str] = None  # e.g. null
     rf_stick: Union[EmptyStrToNone, str] = None  # e.g. null
     serial_num: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "ZT00100001"
-    status: Union[EmptyStrToNone, int] = (
-        None  # Device status, status (0: waiting, 1: normal, 3: failure), e.g. 1
-    )
+    status: Union[EmptyStrToNone, int] = None  # Device status, status (0: waiting, 1: normal, 3: failure), e.g. 1
     status_text: Union[EmptyStrToNone, str] = None  # e.g. "inverter.status.normal"
     tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. "127.0.0.1"
     temperature: Union[EmptyStrToNone, float] = None  # e.g. 0
@@ -116,9 +106,7 @@ class InverterDetailData(ApiModel):
 
 class InverterDetails(ApiResponse):
     data: Union[EmptyStrToNone, InverterDetailData] = None
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "ZT00100001"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "ZT00100001"
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
 
 
@@ -360,9 +348,7 @@ class InverterEnergyOverviewData(ApiModel):
 
 class InverterEnergyOverview(ApiResponse):
     data: Union[EmptyStrToNone, InverterEnergyOverviewData] = None
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "ZT00100001"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "ZT00100001"
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
 
 
@@ -372,9 +358,7 @@ class InverterEnergyOverview(ApiResponse):
 
 class InverterEnergyOverviewMultipleItem(ApiModel):
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "ZT00100001"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "ZT00100001"
     data: Union[EmptyStrToNone, InverterEnergyOverviewData] = None
 
 
@@ -399,12 +383,8 @@ class InverterEnergyHistoryDataItem(ApiModel):
     power: Union[EmptyStrToNone, float] = None  # Output power (W), e.g. 8912.400390625
     power_factor: Union[EmptyStrToNone, float] = None  # Power factor, e.g. -1
     temperature: Union[EmptyStrToNone, float] = None  # temperature (°C), e.g. 75
-    today_energy: Union[EmptyStrToNone, float] = (
-        None  # Today's power generation (kWh), e.g. "7.6"
-    )
-    total_energy: Union[EmptyStrToNone, float] = (
-        None  # Total power generation (kWh), e.g. "7.6"
-    )
+    today_energy: Union[EmptyStrToNone, float] = None  # Today's power generation (kWh), e.g. "7.6"
+    total_energy: Union[EmptyStrToNone, float] = None  # Total power generation (kWh), e.g. "7.6"
     vac1: Union[EmptyStrToNone, float] = None  # Output voltage 1 (V), e.g. 220
     vac2: Union[EmptyStrToNone, float] = None  # Output voltage 2 (V), e.g. 220
     vac3: Union[EmptyStrToNone, float] = None  # Output voltage 3 (V), e.g. 220
@@ -432,9 +412,7 @@ class InverterEnergyHistoryData(ApiModel):
 
     count: Union[EmptyStrToNone, int] = None  # Total Records
     next_page_start_id: Union[EmptyStrToNone, int] = None  # 21
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "ZT00100001"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "ZT00100001"
     datas: List[InverterEnergyHistoryDataItem]
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
 
@@ -450,15 +428,9 @@ class InverterEnergyHistory(ApiResponse):
 class InverterAlarm(ApiModel):
     alarm_code: Union[EmptyStrToNone, int] = None  # alarm code, e.g. 25
     status: Union[EmptyStrToNone, int] = None  # e.g. 1
-    end_time: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # Alarm start time, e.g. "2019-03-09 09:55:55.0"
-    )
-    start_time: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # Alarm end time, e.g. "2019-03-09 09:55:55.0"
-    )
-    alarm_message: Union[EmptyStrToNone, str] = (
-        None  # alarm information, e.g. "No utility."
-    )
+    end_time: Union[EmptyStrToNone, datetime.datetime] = None  # Alarm start time, e.g. "2019-03-09 09:55:55.0"
+    start_time: Union[EmptyStrToNone, datetime.datetime] = None  # Alarm end time, e.g. "2019-03-09 09:55:55.0"
+    alarm_message: Union[EmptyStrToNone, str] = None  # alarm information, e.g. "No utility."
 
 
 def _inverter_alarms_data_to_camel(snake: str) -> str:

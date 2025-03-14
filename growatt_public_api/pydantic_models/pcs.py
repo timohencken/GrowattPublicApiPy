@@ -44,9 +44,7 @@ def parse_forced_time(value: Optional[str] = None):
         return None
 
 
-ForcedTime: TypeAlias = Annotated[
-    Union[datetime.time, None], BeforeValidator(parse_forced_time)
-]
+ForcedTime: TypeAlias = Annotated[Union[datetime.time, None], BeforeValidator(parse_forced_time)]
 
 
 class PcsDetailData(ApiModel):
@@ -63,9 +61,7 @@ class PcsDetailData(ApiModel):
     charge_month: Union[EmptyStrToNone, int] = None  # e.g. 0,
     charge_month_text: Union[EmptyStrToNone, str] = None  # e.g. '0',
     children: List[Any]  # e.g. []
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The serial number of the collector, e.g. 'MONITOR002'
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The serial number of the collector, e.g. 'MONITOR002'
     discharge_day_map: Union[EmptyStrToNone, Any] = None  # e.g. {}
     discharge_month: Union[EmptyStrToNone, float] = None  # e.g. 0
     discharge_month_2: Union[EmptyStrToNone, float] = None  # e.g. 0
@@ -80,24 +76,16 @@ class PcsDetailData(ApiModel):
     fw_version: Union[EmptyStrToNone, str] = None  # Inverter version, e.g. 'RH1.0'
     group_id: Union[EmptyStrToNone, int] = None  # e.g. -1
     img_path: Union[EmptyStrToNone, str] = None  # e.g. './css/img/status_gray.gif'
-    inner_version: Union[EmptyStrToNone, str] = (
-        None  # Internal version number, e.g. 'rHAA020202'
-    )
+    inner_version: Union[EmptyStrToNone, str] = None  # Internal version number, e.g. 'rHAA020202'
     last_update_time: Union[EmptyStrToNone, GrowattTime] = (
         None  # Last update time, e.g. {'date': 12, 'day': 2, 'hours': 16, 'minutes': 46, 'month': 3, 'seconds': 22, 'time': 1649753182000, 'timezoneOffset': -480, 'year': 122}
     )
-    last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # e.g. '2022-04-12 16:46:22'
-    )
+    last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2022-04-12 16:46:22'
     level: Union[EmptyStrToNone, int] = None  # e.g. 4
     location: Union[EmptyStrToNone, str] = None  # address, e.g. ''
-    lost: Union[EmptyStrToNone, bool] = (
-        None  # Device online status (0: online, 1: disconnected), e.g. True
-    )
+    lost: Union[EmptyStrToNone, bool] = None  # Device online status (0: online, 1: disconnected), e.g. True
     model: Union[EmptyStrToNone, int] = None  # model, e.g. 2666130979655057522
-    model_text: Union[EmptyStrToNone, str] = (
-        None  # model, e.g. 'S25B00D00T00P0FU01M0072'
-    )
+    model_text: Union[EmptyStrToNone, str] = None  # model, e.g. 'S25B00D00T00P0FU01M0072'
     normalPower: Union[EmptyStrToNone, int] = None  # e.g. 500000
     parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_VC51030322020001_22'
     peak_clipping: Union[EmptyStrToNone, float] = None  # e.g. 0
@@ -111,9 +99,7 @@ class PcsDetailData(ApiModel):
         None  # Device status (0: disconnected, 1: online, 2: standby, 3: failure, all others are offline), e.g. 0
     )
     status_text: Union[EmptyStrToNone, str] = None  # e.g. 'tlx.status.operating'
-    tcp_server_ip: Union[EmptyStrToNone, str] = (
-        None  # Server address, e.g. '47.107.154.111'
-    )
+    tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. '47.107.154.111'
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_FDCJQ00003'
     tree_name: Union[EmptyStrToNone, str] = None  # e.g. 'FDCJQ00003'
     updating: Union[EmptyStrToNone, bool] = None  # e.g. False
@@ -219,20 +205,12 @@ class PcsEnergyOverviewData(ApiModel):
     dg_grid_select: Union[EmptyStrToNone, int] = None  # e.g. 0
     e_charge_time_today: Union[EmptyStrToNone, float] = None  # e.g. 27
     e_charge_time_total: Union[EmptyStrToNone, float] = None  # e.g. 1690932
-    e_charge_today: Union[EmptyStrToNone, float] = (
-        None  # The amount of charge in the system that day, e.g. 26
-    )
-    e_charge_total: Union[EmptyStrToNone, float] = (
-        None  # Total system charge, e.g. 1690930
-    )
+    e_charge_today: Union[EmptyStrToNone, float] = None  # The amount of charge in the system that day, e.g. 26
+    e_charge_total: Union[EmptyStrToNone, float] = None  # Total system charge, e.g. 1690930
     e_discharge_time_today: Union[EmptyStrToNone, float] = None  # e.g. 25
     e_discharge_time_total: Union[EmptyStrToNone, float] = None  # e.g. 1690932
-    e_discharge_today: Union[EmptyStrToNone, float] = (
-        None  # System discharge capacity of the day, e.g. 24
-    )
-    e_discharge_total: Union[EmptyStrToNone, float] = (
-        None  # Total system discharge, e.g. 1690930
-    )
+    e_discharge_today: Union[EmptyStrToNone, float] = None  # System discharge capacity of the day, e.g. 24
+    e_discharge_total: Union[EmptyStrToNone, float] = None  # Total system discharge, e.g. 1690930
     electric_state: Union[EmptyStrToNone, int] = None  # e.g. 5
     gfdi1: Union[EmptyStrToNone, float] = None  # e.g. 42
     gfdi2: Union[EmptyStrToNone, float] = None  # e.g. 43
@@ -322,9 +300,7 @@ class PcsEnergyOverviewData(ApiModel):
     vpvuv: Union[EmptyStrToNone, float] = None  # e.g. 56
     vpvvw: Union[EmptyStrToNone, float] = None  # e.g. 57
     vpvwu: Union[EmptyStrToNone, float] = None  # e.g. 58
-    with_time: Union[EmptyStrToNone, bool] = (
-        None  # Whether the data sent has its own time, e.g. False
-    )
+    with_time: Union[EmptyStrToNone, bool] = None  # Whether the data sent has its own time, e.g. False
 
 
 def _pcs_energy_overview_to_camel(snake: str) -> str:
@@ -342,9 +318,7 @@ class PcsEnergyOverview(ApiResponse):
     )
 
     data: Union[EmptyStrToNone, PcsEnergyOverviewData] = None
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "WFD0947012"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "WFD0947012"
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "TND093000E"
 
 
@@ -367,9 +341,7 @@ class PcsEnergyHistoryData(ApiModel):
     )
 
     count: int  # Total Records
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "MONITOR001"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "MONITOR001"
     datas: List[PcsEnergyOverviewData]
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "PCS1234567"
     next_page_start_id: Union[EmptyStrToNone, int] = None  # 21
@@ -386,15 +358,9 @@ class PcsEnergyHistory(ApiResponse):
 class PcsAlarm(ApiModel):
     alarm_code: Union[EmptyStrToNone, int] = None  # alarm code, e.g. 25
     status: Union[EmptyStrToNone, int] = None  # e.g. 1
-    end_time: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # Alarm start time, e.g. "2019-03-09 09:55:55.0"
-    )
-    start_time: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # Alarm end time, e.g. "2019-03-09 09:55:55.0"
-    )
-    alarm_message: Union[EmptyStrToNone, str] = (
-        None  # alarm information, e.g. "No utility."
-    )
+    end_time: Union[EmptyStrToNone, datetime.datetime] = None  # Alarm start time, e.g. "2019-03-09 09:55:55.0"
+    start_time: Union[EmptyStrToNone, datetime.datetime] = None  # Alarm end time, e.g. "2019-03-09 09:55:55.0"
+    alarm_message: Union[EmptyStrToNone, str] = None  # alarm information, e.g. "No utility."
 
 
 def _pcs_alarms_data_to_camel(snake: str) -> str:

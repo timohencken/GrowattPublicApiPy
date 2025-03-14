@@ -57,9 +57,7 @@ class GrowattApi:
         token: str = None,
         server_url: Optional[str] = None,
     ) -> None:
-        self.session = GrowattApiSession(
-            token=token, server_url=server_url or "https://openapi.growatt.com"
-        )
+        self.session = GrowattApiSession(token=token, server_url=server_url or "https://openapi.growatt.com")
         self.user = User(self.session)
         self.plant = Plant(self.session)
         self.device = Device(self.session)
