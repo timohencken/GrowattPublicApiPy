@@ -274,8 +274,11 @@ class Sph:
                 "error_msg": ""
             }
         """
+
         # put parameters to a dict to make handling easier
-        parameters = {i: eval(f"parameter_value_{i}") for i in range(1, 19)}
+        parameters = {}
+        for i in range(1, 19):
+            parameters[i] = eval(f"parameter_value_{i}")
 
         if parameter_id == "set_any_reg":
             assert parameters[1] is not None, "register address must be provided"

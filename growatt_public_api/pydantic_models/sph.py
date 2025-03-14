@@ -128,13 +128,13 @@ class SphDetailData(ApiModel):
     charge_time1: Union[EmptyStrToNone, str] = None  # e.g. ''
     charge_time2: Union[EmptyStrToNone, str] = None  # e.g. ''
     charge_time3: Union[EmptyStrToNone, str] = None  # e.g. ''
-    children: List[Any]  # e.g. []
+    children: Union[EmptyStrToNone, List[Any]] = None  # e.g. []
     com_address: Union[EmptyStrToNone, int] = None  # Mailing address, e.g. 1
     communication_version: Union[EmptyStrToNone, str] = (
         None  # Communication version number, e.g. 'GJAA-0003'
     )
     country_selected: Union[EmptyStrToNone, int] = None  # country selection, e.g. 0
-    cv_voltage: Union[EmptyStrToNone, int] = None  # e.g. 0
+    cv_voltage: Union[EmptyStrToNone, float] = None  # e.g. 0
     datalogger_sn: Union[EmptyStrToNone, str] = (
         None  # The serial number of the collector, e.g. 'VC51030322020001'
     )
@@ -158,11 +158,11 @@ class SphDetailData(ApiModel):
     export_limit: Union[EmptyStrToNone, int] = (
         None  # Backflow prevention enable, e.g. 0
     )
-    export_limit_power_rate: Union[EmptyStrToNone, int] = (
+    export_limit_power_rate: Union[EmptyStrToNone, float] = (
         None  # Backflow prevention, e.g. 0
     )
     failsafe: Union[EmptyStrToNone, int] = None  # e.g. 0
-    float_charge_current_limit: Union[EmptyStrToNone, int] = (
+    float_charge_current_limit: Union[EmptyStrToNone, float] = (
         None  # float charge current limit, e.g. 600
     )
     forced_charge_stop_switch1: Union[EmptyStrToNone, bool] = (
@@ -241,7 +241,7 @@ class SphDetailData(ApiModel):
     lost: Union[EmptyStrToNone, bool] = (
         None  # Device online status (0: online, 1: disconnected), e.g. True
     )
-    lv_voltage: Union[EmptyStrToNone, int] = None  # e.g. 0
+    lv_voltage: Union[EmptyStrToNone, float] = None  # e.g. 0
     manufacturer: Union[EmptyStrToNone, str] = (
         None  # Manufacturer Code, e.g. 'New Energy'
     )

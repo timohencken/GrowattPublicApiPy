@@ -33,9 +33,6 @@ class InverterSettingWrite(ApiResponse):
 
 
 def _inverter_detail_data_to_camel(snake: str) -> str:
-    """
-    define own to_camel function to support weird API naming
-    """
     override = {
         "datalogger_sn": "dataLogSn",
         "group_id": "groupID",

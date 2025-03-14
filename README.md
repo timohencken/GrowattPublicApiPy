@@ -178,6 +178,24 @@ This package aims to
     * historical data `groboost.metrics_history()`
 
 ### API v4 (a few additional endpoints)
+* get devices (inverters) assigned to current user
+  * `v4.list()`
+    *** use this to query your inverter's "*TYPE*" required for subsequent requests ***
+* general device data
+  * read device data `v4.details()`  # TODO
+    * Inv
+    * Storage
+    * Max ***Not*** implemented yet
+    * Sph
+    * Spa ***Not*** implemented yet
+    * Min ***Not*** implemented yet
+    * Wit ***Not*** implemented yet
+    * Sph-s ***Not*** implemented yet
+    * Noah ***Not*** implemented yet
+* device metrics
+  * current `v4.energy()`   ***Not*** implemented yet
+  * historical data `v4.energy_history()`   ***Not*** implemented yet
+* TODO: check if we can use /v4/ for /v1/ endpoints (seems to work)
 * ***Not*** implemented yet
 
 

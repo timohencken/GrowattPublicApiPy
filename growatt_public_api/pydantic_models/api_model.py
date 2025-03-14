@@ -45,6 +45,32 @@ class ApiResponse(ApiModel):
     error_msg: Union[EmptyStrToNone, str]
 
 
+def _new_api_response_to_camel(snake: str) -> str:
+    override = {
+        "error_code": "code",
+        "error_msg": "message",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
+class NewApiResponse(ApiModel):
+    """
+    Generic API response for v4/new-api.
+    Base class for other responses
+    renaming code->error_code and message->error_msg to be consistent with v1 API
+    """
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_new_api_response_to_camel,
+    )
+
+    data: Union[EmptyStrToNone, Any] = None
+    error_code: Union[EmptyStrToNone, int]
+    error_msg: Union[EmptyStrToNone, str]
+
+
 class GrowattTime(ApiModel):
     """Api returns datetime in a special format"""
 

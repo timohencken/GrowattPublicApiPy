@@ -95,8 +95,8 @@ class StorageDetailData(ApiModel):
     model: Union[EmptyStrToNone, int] = None  # e.g. 61748
     model_text: Union[EmptyStrToNone, str] = None  # e.g. "A0B0D0T0PFU1M3S4"
     output_config: Union[EmptyStrToNone, float] = None  # e.g. 0
-    output_freq_type: Union[EmptyStrToNone, float] = None  # e.g. 0
-    output_volt_type: Union[EmptyStrToNone, float] = None  # e.g. 0
+    output_freq_type: Union[EmptyStrToNone, int] = None  # e.g. 0
+    output_volt_type: Union[EmptyStrToNone, int] = None  # e.g. 0
     over_load_restart: Union[EmptyStrToNone, float] = None  # e.g. 0
     over_temp_restart: Union[EmptyStrToNone, float] = None  # e.g. 0
     p_charge: Union[EmptyStrToNone, float] = None  # e.g. 0
@@ -105,12 +105,12 @@ class StorageDetailData(ApiModel):
     plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
     plant_name: Union[EmptyStrToNone, str] = None  # e.g. ""
     port_name: Union[EmptyStrToNone, str] = None  # e.g. ""
-    pow_saving_en: Union[EmptyStrToNone, float] = None  # e.g. 0
-    pv_model: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pow_saving_en: Union[EmptyStrToNone, int] = None  # e.g. 0
+    pv_model: Union[EmptyStrToNone, int] = None  # e.g. 0
     rate_va: Union[EmptyStrToNone, float] = None  # e.g. 0
     rate_watt: Union[EmptyStrToNone, float] = None  # e.g. 0
     record: Union[EmptyStrToNone, str] = None  # e.g. null
-    sci_loss_chk_en: Union[EmptyStrToNone, float] = None  # e.g. 0
+    sci_loss_chk_en: Union[EmptyStrToNone, int] = None  # e.g. 0
     serial_num: Union[EmptyStrToNone, str] = None  # Device SN, e.g. 'JZB674901B'
     status: Union[EmptyStrToNone, int] = (
         None  # Device status (0: disconnect, 1: online, 2: charge, 3: discharge, 4: error, 5: burn, 6: solar charge, 7: mains charge, 8: combined charging (solar and mains), 9: combined charging and bypass (mains) output, 10: PV charging and bypass (mains) output, 11: mains charging and bypass (mains) output, 12 : Bypass (mains) output, 13: Solar charge and discharge at the same time, 14: Mains charge and discharge at the same time), e.g. 1
@@ -122,7 +122,7 @@ class StorageDetailData(ApiModel):
     status_led5: Union[EmptyStrToNone, bool] = None  # e.g. False
     status_led6: Union[EmptyStrToNone, bool] = None  # e.g. True
     status_text: Union[EmptyStrToNone, str] = None  # e.g. 'storage.status.operating'
-    sys_time: Union[EmptyStrToNone, Any] = None
+    sys_time: Union[EmptyStrToNone, datetime.datetime] = None
     tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. "127.0.0.1"
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_JZB674901B'
     tree_name: Union[EmptyStrToNone, str] = None  # e.g. '2',
