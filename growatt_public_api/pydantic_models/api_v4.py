@@ -472,8 +472,8 @@ class SphDetailDataV4(ApiModel):
     old_error_flag: Union[EmptyStrToNone, int] = None  # e.g. 0
     on_off: Union[EmptyStrToNone, bool] = None  # Power State (On/Off), e.g. 0
     out_power: Union[EmptyStrToNone, float] = None  # e.g. 20.0
-    p_charge: Union[EmptyStrToNone, int] = None  # e.g. 0
-    p_discharge: Union[EmptyStrToNone, int] = None  # e.g. 0
+    p_charge: Union[EmptyStrToNone, float] = None  # e.g. 0
+    p_discharge: Union[EmptyStrToNone, float] = None  # e.g. 0
     parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_JAD084800B_96'
     pf_sys_year: Union[EmptyStrToNone, str] = None  # Set time, e.g. None
     plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
@@ -1406,8 +1406,143 @@ class WitDetailsV4(NewApiResponse):
 # ------------------------------------------------------------------------------------------------
 
 
+def _sphs_details_to_camel(snake: str) -> str:
+    # TODO copied from SPH
+    override = {
+        "address": "addr",
+        "datalogger_sn": "dataLogSn",
+        "parent_id": "parentID",
+        # "tree_id": "treeID",
+        # "uw_hf_rt2_ee": "uwHFRT2EE",
+        # "uw_hf_rt_ee": "uwHFRTEE",
+        # "uw_hf_rt_time_ee": "uwHFRTTimeEE",
+        # "uw_hf_rt_time2_ee": "uwHFRTTime2EE",
+        # "uw_hv_rt2_ee": "uwHVRT2EE",
+        # "uw_hv_rt_ee": "uwHVRTEE",
+        # "uw_hv_rt_time_ee": "uwHVRTTimeEE",
+        # "uw_hv_rt_time2_ee": "uwHVRTTime2EE",
+        # "uw_lf_rt2_ee": "uwLFRT2EE",
+        # "uw_lf_rt_ee": "uwLFRTEE",
+        # "uw_lf_rt_time_ee": "uwLFRTTimeEE",
+        # "uw_lf_rt_time2_ee": "uwLFRTTime2EE",
+        # "uw_lv_rt2_ee": "uwLVRT2EE",
+        # "uw_lv_rt3_ee": "uwLVRT3EE",
+        # "uw_lv_rt_ee": "uwLVRTEE",
+        # "uw_lv_rt_time2_ee": "uwLVRTTime2EE",
+        # "uw_lv_rt_time3_ee": "uwLVRTTime3EE",
+        # "uw_lv_rt_time_ee": "uwLVRTTimeEE",
+        # "vbat_start_for_charge": "vbatStartforCharge",
+        # "w_charge_soc_low_limit1": "wchargeSOCLowLimit1",
+        # "w_charge_soc_low_limit2": "wchargeSOCLowLimit2",
+        # "w_discharge_soc_low_limit1": "wdisChargeSOCLowLimit1",
+        # "w_discharge_soc_low_limit2": "wdisChargeSOCLowLimit2",
+        # "baudrate": "wselectBaudrate",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
+class SphsDetailDataV4(ApiModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_sphs_details_to_camel,
+        protected_namespaces=(),  # allow model_* keywords
+    )
+
+    active_rate: Union[EmptyStrToNone, int] = None  # Active power, e.g. 100
+    address: Union[EmptyStrToNone, int] = None  # Inverter address, e.g. 1
+    alias: Union[EmptyStrToNone, str] = None  # Alias, e.g. 'AGP0N1600D'
+    children: Union[EmptyStrToNone, List[Any]] = None  # e.g. []
+    com_address: Union[EmptyStrToNone, int] = None  # Communication Address, e.g. 1
+    communication_version: Union[EmptyStrToNone, str] = None  # Communication version number, e.g. 'SKaa-0001'
+    country_selected: Union[EmptyStrToNone, int] = None  # Country Selection, e.g. 1
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # DataLog Serial Number, e.g. 'VC51010323468084'
+    device_type: Union[EmptyStrToNone, int] = None  # Device Type, e.g. 280
+    dtc: Union[EmptyStrToNone, int] = None  # Device code, e.g. 21200
+    e_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    e_total: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    energy_day: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    energy_day_map: Union[EmptyStrToNone, Any] = None  # e.g. {}
+    energy_month: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    energy_month_text: Union[EmptyStrToNone, str] = None  # e.g. '0'
+    export_limit: Union[EmptyStrToNone, int] = None  # Anti-Backflow Enable, e.g. 1
+    export_limit_power_rate: Union[EmptyStrToNone, float] = None  # Anti-Backflow, e.g. 100.0
+    failsafe: Union[EmptyStrToNone, int] = None  # e.g. 0
+    freq_high_limit: Union[EmptyStrToNone, float] = None  # e.g. 60.5
+    freq_low_limit: Union[EmptyStrToNone, float] = None  # e.g. 59.3
+    fw_version: Union[EmptyStrToNone, str] = None  # e.g. 'UL2.0'
+    group_id: Union[EmptyStrToNone, int] = None  # Inverter Group, e.g. -1
+    img_path: Union[EmptyStrToNone, str] = None  # e.g. './css/img/status_gray.gif'
+    last_update_time: Union[EmptyStrToNone, int] = None  # Last Update Time, e.g. 1716963973000
+    last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2024-05-29 14:26:13'
+    lcd_language: Union[EmptyStrToNone, int] = None  # LCD Language, e.g. 1
+    level: Union[EmptyStrToNone, int] = None  # e.g. 4
+    location: Union[EmptyStrToNone, str] = None  # Location, e.g. ''
+    lost: Union[EmptyStrToNone, bool] = None  # Communication Lost Status, e.g. False
+    manufacturer: Union[EmptyStrToNone, str] = None  # Manufacturer Code, e.g. 'www.sacolar.com'
+    modbus_version: Union[EmptyStrToNone, int] = None  # MODBUS version, e.g. 207
+    model: Union[EmptyStrToNone, int] = None  # Model, e.g. 0
+    model_text: Union[EmptyStrToNone, str] = None  # model, e.g. 'S00B00D00T00P00U00M0000'
+    p_charge: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    p_discharge: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_VC51010323468084_260'
+    plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
+    plant_name: Union[EmptyStrToNone, str] = None  # e.g. None
+    pmax: Union[EmptyStrToNone, int] = None  # Rated Power, e.g. 15000
+    port_name: Union[EmptyStrToNone, str] = (
+        None  # Communication Port Information (Type and Address), e.g. 'ShinePano - VC51010323468084'
+    )
+    power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    power_max: Union[EmptyStrToNone, float] = None  # e.g. None
+    power_max_text: Union[EmptyStrToNone, str] = None  # e.g. ''
+    power_max_time: Union[EmptyStrToNone, str] = None  # e.g. None
+    pv_pf_cmd_memory_state: Union[EmptyStrToNone, bool] = None  # Set Whether to Store the Following PF Commands, e.g. 0
+    reactive_output_priority: Union[EmptyStrToNone, int] = None  # e.g. 1
+    reactive_rate: Union[EmptyStrToNone, int] = None  # Reactive power, e.g. 100
+    reactive_value: Union[EmptyStrToNone, float] = None  # e.g. 1000.0
+    record: Union[EmptyStrToNone, Any] = None  # e.g. None
+    serial_num: Union[EmptyStrToNone, str] = None  # Serial Number, e.g. 'AGP0N1600D'
+    sph_set_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
+    status: Union[EmptyStrToNone, int] = (
+        None  # Device status (0: offline, 1: online, 2: standby, 3: fault, other values indicate disconnection), e.g. 3
+    )
+    status_text: Union[EmptyStrToNone, str] = None  # e.g. 'sph.status.fault'
+    sys_time: Union[EmptyStrToNone, datetime.datetime] = None  # System Time, e.g. '2018-01-01 00:00:00'
+    sys_time_text: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2018-01-01 00:00:00'
+    tcp_server_ip: Union[EmptyStrToNone, str] = None  # TCP Server IP Address, e.g. '47.119.16.193'
+    timezone: Union[EmptyStrToNone, float] = None  # e.g. 8.0
+    tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_AGP0N1600D'
+    tree_name: Union[EmptyStrToNone, str] = None  # e.g. 'AGP0N1600D'
+    updating: Union[EmptyStrToNone, bool] = None  # e.g. False
+    user_name: Union[EmptyStrToNone, str] = None  # e.g. None
+    uw_grid_watt_delay: Union[EmptyStrToNone, float] = None  # e.g. 1000
+    uw_nominal_grid_volt: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_reconnect_start_slope: Union[EmptyStrToNone, float] = None  # e.g. 10.0
+    version: Union[EmptyStrToNone, str] = None  # e.g. 'ULSP0000xx'
+    vnormal: Union[EmptyStrToNone, float] = None  # Rated PV Voltage, e.g. 350.0
+    voltage_high_limit: Union[EmptyStrToNone, float] = None  # Utility Voltage Upper Limit, e.g. 264.0
+    voltage_low_limit: Union[EmptyStrToNone, float] = None  # Utility Voltage Lower Limit, e.g. 213.0
+    baudrate: Union[EmptyStrToNone, int] = None  # Baud Rate Selection, e.g. 0
+
+
+def _sphs_details_data_to_camel(snake: str) -> str:
+    override = {
+        "sphs": "sph-s",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
+class SphsDetailsDataV4(ApiModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_sphs_details_data_to_camel,
+    )
+    sphs: List[SphsDetailDataV4] = None
+
+
 class SphsDetailsV4(NewApiResponse):
-    data: Union[EmptyStrToNone, InverterDetailsDataV4] = None
+    data: Union[EmptyStrToNone, SphsDetailsDataV4] = None
 
 
 # ------------------------------------------------------------------------------------------------

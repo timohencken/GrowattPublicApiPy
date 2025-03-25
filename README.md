@@ -186,11 +186,11 @@ This package aims to
     * Inv
     * Storage
     * Max
-    * Sph
+    * Sph (MIX)
     * Spa
     * Min
     * Wit
-    * Sph-s ***Not*** implemented yet
+    * Sph-s (SPH)
     * Noah ***Not*** implemented yet
 * device metrics
   * current `v4.energy()`   ***Not*** implemented yet

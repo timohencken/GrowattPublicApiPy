@@ -176,8 +176,8 @@ class SphDetailData(ApiModel):
     model: Union[EmptyStrToNone, int] = None  # model, e.g. 2666130979655057522
     model_text: Union[EmptyStrToNone, str] = None  # model, e.g. 'S25B00D00T00P0FU01M0072'
     on_off: Union[EmptyStrToNone, bool] = None  # Switch machine, e.g. 0
-    p_charge: Union[EmptyStrToNone, int] = None  # e.g. 0
-    p_discharge: Union[EmptyStrToNone, int] = None  # e.g. 0
+    p_charge: Union[EmptyStrToNone, float] = None  # e.g. 0
+    p_discharge: Union[EmptyStrToNone, float] = None  # e.g. 0
     parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_VC51030322020001_22'
     pf_sys_year: Union[EmptyStrToNone, str] = None  # Set time, e.g. ''
     plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
