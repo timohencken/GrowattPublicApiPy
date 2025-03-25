@@ -7,7 +7,7 @@ There are already other libraries accessing Growatt's APIs, they all use reverse
 * for example, see the faboulous work of [indykoning](https://github.com/indykoning) at [PyPi_GrowattServer](https://github.com/indykoning/PyPi_GrowattServer) used e.g. in HomeAssistant
 
 This package aims to
-* use Growatt's public API documented [here (v1)](https://www.showdoc.com.cn/262556420217021/0) and [here (v4)](https://www.showdoc.com.cn/2540838290984246/0)
+* use Growatt's public API documented [here (v1)](https://www.showdoc.com.cn/262556420217021/0) and [here (v4)](https://www.showdoc.com.cn/2540838290984246/0) and [here (v1/v4 mixed)](https://www.showdoc.com.cn/2598832417617967/0)
 * use type-aware pydantic objects as return values
 
 
@@ -184,9 +184,9 @@ This package aims to
 * general device data
   * read device data `v4.details()`
 * device metrics
-  * current `v4.energy()`   ***Not*** implemented yet
-    * Inv   ***Not*** implemented yet
-    * Storage   ***Not*** implemented yet
+  * current `v4.energy()`
+    * Inv
+    * Storage
     * Max   ***Not*** implemented yet
     * Sph (MIX)   ***Not*** implemented yet
     * Spa   ***Not*** implemented yet
@@ -207,6 +207,8 @@ This package aims to
 * TODO: check if we can use /v4/ for /v1/ endpoints (seems to work)
 * ***Not*** implemented yet
 * TODO: 'timezone' is float diff to UTC (MEZ results in "1.0")
+* TODO: check postman collection at https://www.postman.com/gold-water-163355/growatt-public/collection/fw8cldm/shineserver-public
+* TODO: check docs at https://www.showdoc.com.cn/2598832417617967/0
 
 
 # Usage

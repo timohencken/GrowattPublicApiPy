@@ -184,6 +184,7 @@ def _storage_energy_overview_data_to_camel(snake: str) -> str:
     """
     override = {
         "datalogger_sn": "dataLogSn",
+        "charge_current": "chgCurr",
         "e_today": "etoday",
         "e_total": "etotal",
         "freq_output": "freqOutPut",
@@ -202,7 +203,7 @@ def _storage_energy_overview_data_to_camel(snake: str) -> str:
         "p_ac_input": "pAcInPut",
         "rate_va": "rateVA",
         "discharge_month": "disChargeMonth",
-        "discharge_curr": "dischgCurr",
+        "discharge_current": "dischgCurr",
         "e_bat_discharge_today": "eBatDisChargeToday",
         "e_bat_discharge_total": "eBatDisChargeTotal",
         "eac_discharge_today": "eacDisChargeToday",
@@ -293,7 +294,7 @@ class StorageEnergyOverviewData(ApiModel):
         None  # e.g. "Reason of state change from charge to operating: Battery voltage high for charge"
     )
     charge_way: Union[EmptyStrToNone, int] = None  # e.g. 0
-    chg_curr: Union[EmptyStrToNone, float] = None  # e.g. 0
+    charge_current: Union[EmptyStrToNone, float] = None  # e.g. 0
     constant_volt: Union[EmptyStrToNone, float] = None  # e.g. 0
     constant_volt2: Union[EmptyStrToNone, float] = None  # e.g. 0
     cycle_count: Union[EmptyStrToNone, int] = None  # e.g. 0
@@ -309,7 +310,7 @@ class StorageEnergyOverviewData(ApiModel):
     discharge_to_standby_reason_text: Union[EmptyStrToNone, str] = (
         None  # e.g. 'Reason of state change from discharge to operating: Battery voltage low for discharge'
     )
-    discharge_curr: Union[EmptyStrToNone, float] = None  # e.g. 0
+    discharge_current: Union[EmptyStrToNone, float] = None  # e.g. 0
     e_bat_discharge_today: Union[EmptyStrToNone, float] = None  # Battery discharge energy on the day, e.g. 0
     e_bat_discharge_total: Union[EmptyStrToNone, float] = None  # Total battery discharge energy, e.g. 0
     e_charge_today: Union[EmptyStrToNone, float] = None  # Charge energy of the day (kWh), e.g. 0
@@ -389,7 +390,7 @@ class StorageEnergyOverviewData(ApiModel):
     pac_to_grid: Union[EmptyStrToNone, float] = None  # Grid side power (W), e.g. 0
     pac_to_grid_text: Union[EmptyStrToNone, str] = None  # e.g. '0.0 W'
     pac_to_user: Union[EmptyStrToNone, float] = None  # User-side power (V), e.g. 1922.9
-    pac_touser_text: Union[EmptyStrToNone, float] = None  # e.g. '1922.9 W'
+    pac_to_user_text: Union[EmptyStrToNone, float] = None  # e.g. '1922.9 W'
     pow_saving_en: Union[EmptyStrToNone, float] = None  # e.g. 0
     ppv: Union[EmptyStrToNone, float] = None  # Panel input power (W), e.g. 1075.4
     ppv2: Union[EmptyStrToNone, float] = None  # SP3000 panel input power (W), e.g. 991.7

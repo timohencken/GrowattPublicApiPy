@@ -158,6 +158,7 @@ def _inverter_energy_overview_data_to_camel(snake: str) -> str:
     define own to_camel function to support weird API naming
     """
     override = {
+        "device_sn": "inverterId",  # align with other endpoints using "deviceSn" instead
         "real_op_percent": "realOPPercent",
         "w_pid_fault_value": "wPIDFaultValue",
     }
@@ -238,7 +239,7 @@ class InverterEnergyOverviewData(ApiModel):
     iacs: Union[EmptyStrToNone, float] = None  # e.g. 12
     iact: Union[EmptyStrToNone, float] = None  # e.g. 12
     id: Union[EmptyStrToNone, int] = None  # e.g. 90180
-    inverter_id: Union[EmptyStrToNone, str] = None  # e.g. "ZT00100001"
+    device_sn: Union[EmptyStrToNone, str] = None  # e.g. "ZT00100001"
     i_pid_pvape: Union[EmptyStrToNone, float] = None  # e.g. 0
     i_pid_pvbpe: Union[EmptyStrToNone, float] = None  # e.g. 0
     i_pid_pvcpe: Union[EmptyStrToNone, float] = None  # e.g. 0
