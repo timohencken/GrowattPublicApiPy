@@ -157,7 +157,7 @@ class MinTlxSettingsData(ApiModel):
     on_grid_discharge_stop_soc: Union[EmptyStrToNone, float] = None  # e.g. 0
     on_grid_mode: Union[EmptyStrToNone, int] = None  # e.g. -1
     on_grid_status: Union[EmptyStrToNone, int] = None  # e.g. -1
-    on_off: Union[EmptyStrToNone, int] = None  # On/Off (1=on; 0=off), e.g. 1
+    on_off: Union[EmptyStrToNone, bool] = None  # On/Off (1=on; 0=off), e.g. 1
     over_fre_drop_point: Union[EmptyStrToNone, float] = None  # Over frequency drop point, e.g. 50.20000076293945
     over_fre_lo_red_delay_time: Union[EmptyStrToNone, float] = None  # Over frequency load reduction delay time, e.g. 0
     over_fre_lo_red_slope: Union[EmptyStrToNone, float] = None  # Over frequency derating slope, e.g. 40
@@ -476,7 +476,7 @@ class MinDetailData(ApiModel):
     p_discharge: Union[EmptyStrToNone, float] = None  # e.g. 0
     parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_VC51030322020001_22'
     plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
-    plantname: Union[EmptyStrToNone, str] = None  # e.g. ''
+    plant_name: Union[EmptyStrToNone, str] = None  # e.g. ''
     pmax: Union[EmptyStrToNone, int] = None  # Rated power in 0.1VA, e.g. 11400 for 1140.0 W
     port_name: Union[EmptyStrToNone, str] = None  # e.g. 'port_name'
     power: Union[EmptyStrToNone, float] = None  # Current power, e.g. 0

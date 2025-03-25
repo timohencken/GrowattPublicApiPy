@@ -963,10 +963,10 @@ class MinDetailDataV4(ApiModel):
     address: Union[EmptyStrToNone, int] = None  # Inverter address, e.g. 1
     alias: Union[EmptyStrToNone, str] = None  # alias, e.g. 'AFE494403F'
     bat_aging_test_step: Union[EmptyStrToNone, int] = (
-        None  # battery self-test (0: default, 1: charge, 2: discharge), e.g. 0
+        None  # Battery self-test (0: Default, 1: Charge, 2: Discharge), e.g. 0
     )
-    bat_parallel_num: Union[EmptyStrToNone, int] = None  # Number of parallel battery cells, e.g. 0
-    bat_series_num: Union[EmptyStrToNone, int] = None  # The number of battery cells in series, e.g. 0
+    bat_parallel_num: Union[EmptyStrToNone, int] = None  # Number of battery parallels, e.g. 0
+    bat_series_num: Union[EmptyStrToNone, int] = None  # Number of battery series, e.g. 0
     bat_sys_energy: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     bat_temp_lower_limit_c: Union[EmptyStrToNone, float] = (
         None  # Battery charging temperature lower limit in 0.1°C, e.g. 0.0
@@ -981,10 +981,10 @@ class MinDetailDataV4(ApiModel):
         None  # Battery discharge temperature upper limit in 0.1°C,e.g. 0.0
     )
     battery_type: Union[EmptyStrToNone, int] = None  # Battery Type (0:Lithium, 1:Lead-acid, 2:other), e.g. 0
-    bct_adjust: Union[EmptyStrToNone, int] = None  # Sensor adjustment (0:disable, 1:enable), e.g. 0
+    bct_adjust: Union[EmptyStrToNone, int] = None  # Sensor adjustment enable (0: Disable, 1: Enable), e.g. 0
     bct_mode: Union[EmptyStrToNone, int] = None  # Sensor class type (0:cWiredCT, 1:cWirelessCT, 2:METER), e.g. 0
     bcu_version: Union[EmptyStrToNone, str] = None  # e.g. ''
-    bdc1_model: Union[EmptyStrToNone, str] = None  # BDC1Model, e.g. '0'
+    bdc1_model: Union[EmptyStrToNone, str] = None  # BDC1 model, e.g. '0'
     bdc1_sn: Union[EmptyStrToNone, str] = None  # BDC1 serial number, e.g. 'XXXXXXXXXXXXXXXX'
     bdc1_version: Union[EmptyStrToNone, str] = None  # BDC1 version, e.g. '\x00\x00\x00\x00-0'
     bdc_auth_version: Union[EmptyStrToNone, int] = None  # e.g. 0
@@ -992,10 +992,10 @@ class MinDetailDataV4(ApiModel):
     bms_communication_type: Union[EmptyStrToNone, int] = None  # e.g. 0
     bms_software_version: Union[EmptyStrToNone, str] = None  # e.g. ''
     children: Union[EmptyStrToNone, List[Any]] = None  # e.g. []
-    com_address: Union[EmptyStrToNone, int] = None  # Mailing address 30, e.g. 1
+    com_address: Union[EmptyStrToNone, int] = None  # Communication address 30, e.g. 1
     communication_version: Union[EmptyStrToNone, str] = None  # Communication version number, e.g. 'ZAAA-0004'
-    country_selected: Union[EmptyStrToNone, int] = None  # country selected, e.g. 1
-    datalogger_sn: Union[EmptyStrToNone, str] = None  # The serial number of the collector, e.g. 'BLE094404C'
+    country_selected: Union[EmptyStrToNone, int] = None  # Country selection, e.g. 1
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # Data logger serial number, e.g. 'BLE094404C'
     device_type: Union[EmptyStrToNone, int] = None  # (0:Inverter, 1:Mix), e.g. 5
     dtc: Union[EmptyStrToNone, int] = None  # Device code, e.g. 5203
     e_today: Union[EmptyStrToNone, float] = None  # Today’s power generation, e.g. 0  # DEPRECATED
@@ -1017,9 +1017,9 @@ class MinDetailDataV4(ApiModel):
     location: Union[EmptyStrToNone, str] = None  # address, e.g. ''
     lost: Union[EmptyStrToNone, bool] = None  # Device online status (0: online, 1: disconnected), e.g. True
     manufacturer: Union[EmptyStrToNone, str] = None  # Manufacturer code 34-41, e.g. 'PV Inverter'
-    modbus_version: Union[EmptyStrToNone, int] = None  # modbus version, e.g. 307
-    model: Union[EmptyStrToNone, int] = None  # model, e.g. 2666130979655057522
-    model_text: Union[EmptyStrToNone, str] = None  # model, e.g. 'S25B00D00T00P0FU01M0072'
+    modbus_version: Union[EmptyStrToNone, int] = None  # Modbus version, e.g. 307
+    model: Union[EmptyStrToNone, int] = None  # Model, e.g. 2666130979655057522
+    model_text: Union[EmptyStrToNone, str] = None  # Model, e.g. 'S25B00D00T00P0FU01M0072'
     monitor_version: Union[EmptyStrToNone, str] = None  # e.g. 'null'
     mppt: Union[EmptyStrToNone, float] = None  # MPPT voltage, e.g. 513.0
     optimizer_list: Union[EmptyStrToNone, List[Any]] = None  # e.g. []
@@ -1027,8 +1027,8 @@ class MinDetailDataV4(ApiModel):
     p_discharge: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_BLE094404C_22'
     plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
-    plantname: Union[EmptyStrToNone, str] = None  # e.g. ''
-    pmax: Union[EmptyStrToNone, int] = None  # Rated power in 0.1VA, e.g. 11400 for 1140.0 W
+    plant_name: Union[EmptyStrToNone, str] = None  # e.g. ''
+    pmax: Union[EmptyStrToNone, int] = None  # Rated power (maybe in 0.1VA), e.g. 11400 for 1140.0 W
     port_name: Union[EmptyStrToNone, str] = None  # e.g. 'ShinePano - BLE094404C'
     power: Union[EmptyStrToNone, float] = None  # Current power, e.g. 0
     power_max: Union[EmptyStrToNone, float] = None  # e.g. ''
@@ -1050,7 +1050,7 @@ class MinDetailDataV4(ApiModel):
     tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. '47.119.160.91'
     timezone: Union[EmptyStrToNone, float] = None  # e.g. 8.0 / 1.0
     tlx_set_bean: Union[EmptyStrToNone, Any] = None  # FYI: in API v1, we see MinTlxSettingsData here
-    tracker_model: Union[EmptyStrToNone, int] = None  # task model, e.g. 0
+    tracker_model: Union[EmptyStrToNone, int] = None  # Task model, e.g. 0
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_AFE494403F'
     tree_name: Union[EmptyStrToNone, str] = None  # e.g. 'AFE494403F'
     updating: Union[EmptyStrToNone, bool] = None  # e.g. False
@@ -1060,9 +1060,9 @@ class MinDetailDataV4(ApiModel):
     )
     vbat_stop_for_charge: Union[EmptyStrToNone, float] = None  # Battery charge stop voltage in 0.01V, e.g. 0
     vbat_stop_for_discharge: Union[EmptyStrToNone, float] = None  # Battery discharge stop voltage in 0.01V, e.g. 0
-    vbat_warn_clr: Union[EmptyStrToNone, float] = None  # Battery voltage low voltage recovery point in 0.1V, e.g. 0
-    vbat_warning: Union[EmptyStrToNone, float] = None  # Battery voltage low voltage alarm point in 0.1V, e.g. 0
-    vnormal: Union[EmptyStrToNone, float] = None  # Nominal PV voltage in 0.1V, e.g. 280 for 28.0 V
+    vbat_warn_clr: Union[EmptyStrToNone, float] = None  # Battery low voltage recovery point in 0.1V, e.g. 0
+    vbat_warning: Union[EmptyStrToNone, float] = None  # Battery low voltage warning point in 0.1V, e.g. 0
+    vnormal: Union[EmptyStrToNone, float] = None  # Rated PV voltage in 0.1V, e.g. 280 for 28.0 V
     vpp_open: Union[EmptyStrToNone, float] = None  # e.g. 0
     baudrate: Union[EmptyStrToNone, int] = None  # Baud Rate Selection, e.g. 0
 
@@ -1076,10 +1076,331 @@ class MinDetailsV4(NewApiResponse):
 
 
 # ------------------------------------------------------------------------------------------------
+# WIT: TODO: what's the matching v1 device_type for WIT???
+
+
+def _wit_details_to_camel(snake: str) -> str:
+    override = {
+        "address": "addr",
+        "communication_version": "comVersion",
+        "datalogger_sn": "dataLogSn",
+        "parent_id": "parentID",
+        "line_n_disconnect_enable": "lineNdisconnectEnable",
+        "power_ud_forced_enable": "powerUDForcedEnable",
+        "safety_function": "saftyFunc",
+        "uw_1th_bat_charge_limit": "uw1thBatChgLimit",
+        "uw_1th_bat_discharge_limit": "uw1thBatDisChgLimit",
+        "uw_2th_bat_cap": "uw2thBatCap",
+        "uw_2th_bat_charge_limit": "uw2thBatChgLimit",
+        "uw_2th_bat_discharge_limit": "uw2thBatDisChgLimit",
+        "uw_2th_bat_end_of_vol": "uw2thBatEndOfVol",
+        "uw_2th_bat_max_charge_curr": "uw2thBatMaxChgCurr",
+        "uw_2th_bat_max_charge_vol": "uw2thBatMaxChgVol",
+        "uw_2th_bat_max_discharge_curr": "uw2thBatMaxDisChgCurr",
+        "uw_3th_bat_cap": "uw3thBatCap",
+        "uw_3th_bat_charge_limit": "uw3thBatChgLimit",
+        "uw_3th_bat_discharge_limit": "uw3thBatDisChgLimit",
+        "uw_3th_bat_end_of_vol": "uw3thBatEndOfVol",
+        "uw_3th_bat_max_charge_curr": "uw3thBatMaxChgCurr",
+        "uw_3th_bat_max_charge_vol": "uw3thBatMaxChgVol",
+        "uw_3th_bat_max_discharge_curr": "uw3thBatMaxDisChgCurr",
+        "uw_ac_charge_enable": "uwACChargeEnable",
+        "uw_ac_charge_power_rate": "uwACChargePowerRate",
+        "uw_a_couple_end_soc": "uwACoupleEndSOC",
+        "uw_a_couple_start_soc": "uwACoupleStartSOC",
+        "uw_bat_discharge_stop_soc": "uwBatDisChargeStopSoc",
+        "uw_bat_discharge_stop_soc2": "uwBatDisChargeStopSoc2",
+        "uw_bat_discharge_stop_soc3": "uwBatDisChargeStopSoc3",
+        "uw_bat_max_discharge_current": "uwBatMaxDisChargeCurrent",
+        "uw_batt_eod_vol": "uwBattEODVol",
+        "uw_demand_mange_charge_power_limit": "uwDemandMangeChgPowerLimit",
+        "uw_demand_mange_discharge_power_limit": "uwDemandMangeDisChgPowerLimit",
+        "uw_disconnect_phase_mode": "uwDisConnectPhaseMode",
+        "w_power_restart_slope_ee": "wPowerRestartSlopeEE",
+        "tree_id": "treeID",
+        "baudrate": "wselectBaudrate",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
+class WitDetailDataV4(ApiModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_wit_details_to_camel,
+        protected_namespaces=(),  # allow model_* keywords
+    )
+
+    ac_stop_charging_soc: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    active_rate: Union[EmptyStrToNone, float] = None  # Active power, 50
+    address: Union[EmptyStrToNone, int] = None  # Inverter address, e.g. 5
+    alias: Union[EmptyStrToNone, str] = None  # Alias, e.g. '0ZFN00R23ZBF0002'
+    anti_backflow_failure_power_percent: Union[EmptyStrToNone, float] = None  # e.g. -0.1
+    anti_backflow_failure_time: Union[EmptyStrToNone, float] = None  # e.g. -1
+    anti_backflow_flag: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    ats_version: Union[EmptyStrToNone, str] = None  # e.g. ''
+    b_bak_soc: Union[EmptyStrToNone, float] = None  # e.g. 0
+    b_bak_bat2_soc: Union[EmptyStrToNone, float] = None  # e.g. -1
+    b_bak_bat3_soc: Union[EmptyStrToNone, float] = None  # e.g. -1
+    bat_connection_type: Union[EmptyStrToNone, int] = None  # e.g. 1
+    bat_connection_type2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bat_connection_type3: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bat_serial_num1: Union[EmptyStrToNone, str] = None  # e.g. '0WZN00R23ZB0000C'
+    bat_serial_num2: Union[EmptyStrToNone, str] = None  # e.g. ''
+    bat_serial_num3: Union[EmptyStrToNone, str] = None  # e.g. ''
+    bat_serial_num4: Union[EmptyStrToNone, str] = None  # e.g. ''
+    bat_serial_num5: Union[EmptyStrToNone, str] = None  # e.g. ''
+    bat_sleep_wake_up1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bat_sleep_wake_up2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bat_sleep_wake_up3: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bms1_enable: Union[EmptyStrToNone, bool] = None  # e.g. 1
+    bms2_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    bms3_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    charge_soc_limit: Union[EmptyStrToNone, float] = None  # e.g. 0
+    children: Union[EmptyStrToNone, List[Any]] = None  # e.g. None
+    com_address: Union[EmptyStrToNone, int] = None  # Communication address 30, e.g. 2
+    com_name: Union[EmptyStrToNone, str] = None  # e.g. 'null'
+    communication_version: Union[EmptyStrToNone, str] = None  # Communication version number, e.g. 'ZBea-0037'
+    country_selected: Union[EmptyStrToNone, int] = None  # country selected, e.g. 1
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # Data Logger Serial Number, e.g. 'TTN0D9E01P'
+    device_type: Union[EmptyStrToNone, int] = None  # e.g. 218
+    discharge_soc_limit: Union[EmptyStrToNone, float] = None  # e.g. 0
+    drms_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    drms_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    dtc: Union[EmptyStrToNone, int] = None  # Device code, e.g. 5600
+    energy_day: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    energy_day_map: Union[EmptyStrToNone, dict] = None  # e.g. {}
+    energy_month: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    energy_month_text: Union[EmptyStrToNone, str] = None  # e.g. '0'
+    fac_high: Union[EmptyStrToNone, float] = None  # e.g. 525.0
+    fac_high2: Union[EmptyStrToNone, float] = None  # e.g. 50.5
+    fac_high3: Union[EmptyStrToNone, float] = None  # e.g. 50.5
+    fac_low: Union[EmptyStrToNone, float] = None  # e.g. 475.0
+    fac_low2: Union[EmptyStrToNone, float] = None  # e.g. 47.5
+    fac_low3: Union[EmptyStrToNone, float] = None  # e.g. 47.5
+    forced_stop_switch1: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    forced_stop_switch2: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    forced_stop_switch3: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    forced_stop_switch4: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    forced_stop_switch5: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    forced_stop_switch6: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    forced_time_start1: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '21:0'
+    forced_time_start2: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    forced_time_start3: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    forced_time_start4: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    forced_time_start5: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    forced_time_start6: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    forced_time_stop1: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '22:0'
+    forced_time_stop2: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    forced_time_stop3: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    forced_time_stop4: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    forced_time_stop5: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    forced_time_stop6: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    freq_change_enable: Union[EmptyStrToNone, int] = None  # e.g. -1
+    freq_high_limit: Union[EmptyStrToNone, float] = None  # e.g. 50.5
+    freq_low_limit: Union[EmptyStrToNone, float] = None  # e.g. 47.5
+    fw_version: Union[EmptyStrToNone, str] = None  # Inverter version, e.g. 'TO1.0'
+    grid_meter_enable: Union[EmptyStrToNone, bool] = None  # e.g. 1
+    grid_reconnection_time: Union[EmptyStrToNone, int] = None  # e.g. 300
+    group_id: Union[EmptyStrToNone, int] = None  # e.g. -1
+    heat_up_time: Union[EmptyStrToNone, float] = None  # e.g. -1
+    hl_voltage_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    id: Union[EmptyStrToNone, int] = None  # e.g. 1627
+    img_path: Union[EmptyStrToNone, str] = None  # e.g. './css/img/status_gray.gif'
+    last_update_time: Union[EmptyStrToNone, int] = None  # Last update time, e.g. 1716963248000
+    last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2024-05-29 14:14:08'
+    lcd_language: Union[EmptyStrToNone, int] = None  # Language settings, e.g. 1
+    level: Union[EmptyStrToNone, int] = None  # e.g. 4
+    line_n_disconnect_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    load_red_rate: Union[EmptyStrToNone, float] = None  # e.g. -0.1
+    location: Union[EmptyStrToNone, str] = None  # address, e.g. ''
+    lost: Union[EmptyStrToNone, bool] = None  # Device online status (0: online, 1: disconnected), e.g. True
+    max_spontaneous_selfuse: Union[EmptyStrToNone, float] = None  # e.g. 0
+    modbus_version: Union[EmptyStrToNone, int] = None  # Modbus version, e.g. 305
+    model: Union[EmptyStrToNone, int] = None  # model, e.g. 2377905207708287976
+    model_text: Union[EmptyStrToNone, str] = None  # model, e.g. 'S21B00D04T30P0FU01M03E8'
+    module1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    module2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    module3: Union[EmptyStrToNone, int] = None  # e.g. 0
+    module4: Union[EmptyStrToNone, int] = None  # e.g. 0
+    oil_charge_power_limit: Union[EmptyStrToNone, float] = None  # e.g. -0.1
+    oil_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    oil_rated_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    on_off: Union[EmptyStrToNone, bool] = None  # On/Off (1=on; 0=off), 1
+    over_fre_drop_point: Union[EmptyStrToNone, float] = None  # Over frequency drop point, e.g. 50.3
+    over_fre_lo_red_delay_time: Union[EmptyStrToNone, float] = (
+        None  # Over frequency load reduction delay time, e.g. 0.0
+    )
+    over_fre_lo_red_res_time: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    over_fre_lo_red_slope: Union[EmptyStrToNone, float] = None  # Over frequency derating slope, e.g. 50
+    parallel_enable: Union[EmptyStrToNone, bool] = None  # e.g. 1
+    param_protect_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_BLE094404C_22'
+    pf_level1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    pf_level2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    pf_level3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    pf_level4: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    pf_level5: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    pf_level6: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    pf_level7: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    pf_level8: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    pf_model: Union[EmptyStrToNone, float] = None  # PF model, e.g. 0
+    pflinep1_lp: Union[EmptyStrToNone, float] = None  # PF limit line point 1 load percentage, e.g. 0
+    pflinep1_pf: Union[EmptyStrToNone, float] = None  # PF limit line point 1 power factor, e.g. -1.0
+    pflinep2_lp: Union[EmptyStrToNone, float] = None  # PF limit line point 2 load percentage, e.g. 0
+    pflinep2_pf: Union[EmptyStrToNone, float] = None  # PF limit line point 2 power factor, e.g. -1.0
+    pflinep3_lp: Union[EmptyStrToNone, float] = None  # PF limit line point 3 load percentage, e.g. 0
+    pflinep3_pf: Union[EmptyStrToNone, float] = None  # PF limit line point 3 power factor, e.g. -1.0
+    pflinep4_lp: Union[EmptyStrToNone, float] = None  # PF limit line point 4 load percentage, e.g. 0
+    pflinep4_pf: Union[EmptyStrToNone, float] = None  # PF limit line point 4 power factor, e.g. -1.0
+    plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
+    plant_name: Union[EmptyStrToNone, str] = None  # e.g. None
+    pmax: Union[EmptyStrToNone, int] = None  # Rated power, e.g. 100000
+    pmax_level1: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pmax_level2: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pmax_level3: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pmax_level4: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pmax_level5: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pmax_level6: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pmax_level7: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pmax_level8: Union[EmptyStrToNone, float] = None  # e.g. 0
+    port_name: Union[EmptyStrToNone, str] = None  # e.g. 'ShinePano - TTN0D9E01P'
+    power_factor: Union[EmptyStrToNone, float] = None  # e.g. 1.0
+    power_imbalance_control_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    power_max: Union[EmptyStrToNone, float] = None  # e.g. None
+    power_max_text: Union[EmptyStrToNone, str] = None  # e.g. ''
+    power_max_time: Union[EmptyStrToNone, str] = None  # e.g. None
+    power_ud_forced_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    pu_enable: Union[EmptyStrToNone, int] = None  # e.g. 0
+    pv_num: Union[EmptyStrToNone, int] = None  # e.g. 0
+    pv_pf_cmd_memory_state: Union[EmptyStrToNone, bool] = None  # Whether to store commands, e.g. 0
+    reactive_output_priority: Union[EmptyStrToNone, int] = None  # e.g. 0
+    reactive_rate: Union[EmptyStrToNone, float] = None  # reactive power, e.g. 0
+    reactive_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    record: Union[EmptyStrToNone, Any] = None  # e.g. None
+    restart_time: Union[EmptyStrToNone, int] = None  # Reconnection countdown, e.g. 10
+    rrcr_enable: Union[EmptyStrToNone, float] = None  # e.g. 0
+    safety_correspond_num: Union[EmptyStrToNone, float] = None  # e.g. 0
+    safety_version: Union[EmptyStrToNone, int] = None  # e.g. 0
+    safety_function: Union[EmptyStrToNone, int] = None  # e.g. 0
+    serial_num: Union[EmptyStrToNone, str] = None  # Device SN, e.g. '0ZFN00R23ZBF0002'
+    single_export: Union[EmptyStrToNone, int] = None  # e.g. 0
+    status: Union[EmptyStrToNone, int] = None  # Device Status, e.g. 0
+    status_text: Union[EmptyStrToNone, str] = None  # e.g. 'wit.status.operating'
+    str_num: Union[EmptyStrToNone, int] = None  # e.g. 0
+    svg_function: Union[EmptyStrToNone, int] = None  # e.g. 0
+    sys_optical_storage_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    sys_time: Union[EmptyStrToNone, str] = None  # System time, e.g. ''
+    sys_time_text: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2024-05-29 14:00:25'
+    tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. '120.25.191.20'
+    time1_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time1_power: Union[EmptyStrToNone, float] = None  # e.g. 0
+    time2_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time2_power: Union[EmptyStrToNone, float] = None  # e.g. 0
+    time3_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time3_power: Union[EmptyStrToNone, float] = None  # e.g. 0
+    time4_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time4_power: Union[EmptyStrToNone, float] = None  # e.g. 0
+    time5_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time5_power: Union[EmptyStrToNone, float] = None  # e.g. 0
+    time6_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time6_power: Union[EmptyStrToNone, float] = None  # e.g. 0
+    time_start: Union[EmptyStrToNone, int] = None  # e.g. 30
+    timezone: Union[EmptyStrToNone, float] = None  # e.g. 8.0
+    tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_0ZFN00R23ZBF0002'
+    tree_name: Union[EmptyStrToNone, str] = None  # e.g. '0ZFN00R23ZBF0002'
+    underfreq_load_delay_time: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    underfreq_load_enable: Union[EmptyStrToNone, int] = None  # e.g. -1
+    underfreq_load_point: Union[EmptyStrToNone, float] = None  # e.g. 49.8
+    underfreq_load_res_time: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    underfreq_load_slope: Union[EmptyStrToNone, int] = None  # e.g. 400
+    updating: Union[EmptyStrToNone, bool] = None  # e.g. False
+    user_name: Union[EmptyStrToNone, str] = None  # e.g. None
+    uw_1th_bat_charge_limit: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_1th_bat_discharge_limit: Union[EmptyStrToNone, float] = None  # e.g. 0.1
+    uw_2th_bat_cap: Union[EmptyStrToNone, float] = None  # e.g. 10000
+    uw_2th_bat_charge_limit: Union[EmptyStrToNone, float] = None  # e.g. 1000.0
+    uw_2th_bat_discharge_limit: Union[EmptyStrToNone, float] = None  # e.g. 1000.0
+    uw_2th_bat_end_of_vol: Union[EmptyStrToNone, float] = None  # e.g. 1000.0
+    uw_2th_bat_max_charge_curr: Union[EmptyStrToNone, float] = None  # e.g. 1000.0
+    uw_2th_bat_max_charge_vol: Union[EmptyStrToNone, float] = None  # e.g. 1000.0
+    uw_2th_bat_max_discharge_curr: Union[EmptyStrToNone, float] = None  # e.g. 1000.0
+    uw_3th_bat_cap: Union[EmptyStrToNone, float] = None  # e.g. 10000
+    uw_3th_bat_charge_limit: Union[EmptyStrToNone, float] = None  # e.g. 1000.0
+    uw_3th_bat_discharge_limit: Union[EmptyStrToNone, float] = None  # e.g. 1000.0
+    uw_3th_bat_end_of_vol: Union[EmptyStrToNone, float] = None  # e.g. 1000.0
+    uw_3th_bat_max_charge_curr: Union[EmptyStrToNone, float] = None  # e.g. 1000.0
+    uw_3th_bat_max_charge_vol: Union[EmptyStrToNone, float] = None  # e.g. 1000.0
+    uw_3th_bat_max_discharge_curr: Union[EmptyStrToNone, float] = None  # e.g. 1000.0
+    uw_ac_charge_enable: Union[EmptyStrToNone, bool] = None  # e.g. 1
+    uw_ac_charge_power_rate: Union[EmptyStrToNone, float] = None  # e.g. 100
+    uw_a_couple_enable: Union[EmptyStrToNone, int] = None  # e.g. -1
+    uw_a_couple_end_soc: Union[EmptyStrToNone, float] = None  # e.g. 0
+    uw_a_couple_start_soc: Union[EmptyStrToNone, float] = None  # e.g. 0
+    uw_anti_backflow: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_bat_cap: Union[EmptyStrToNone, float] = None  # e.g. 100
+    uw_bat_charge_stop_soc: Union[EmptyStrToNone, float] = None  # e.g. 100
+    uw_bat_charge_stop_soc2: Union[EmptyStrToNone, float] = None  # e.g. -1
+    uw_bat_charge_stop_soc3: Union[EmptyStrToNone, float] = None  # e.g. -1
+    uw_bat_cnn_way: Union[EmptyStrToNone, float] = None  # e.g. 10000
+    uw_bat_discharge_stop_soc: Union[EmptyStrToNone, float] = None  # e.g. 10
+    uw_bat_discharge_stop_soc2: Union[EmptyStrToNone, float] = None  # e.g. -1
+    uw_bat_discharge_stop_soc3: Union[EmptyStrToNone, float] = None  # e.g. -1
+    uw_bat_enable1: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    uw_bat_enable2: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    uw_bat_enable3: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    uw_bat_max_charge_current: Union[EmptyStrToNone, float] = None  # e.g. 140.0
+    uw_bat_max_discharge_current: Union[EmptyStrToNone, float] = None  # e.g. 140.0
+    uw_batt_eod_vol: Union[EmptyStrToNone, float] = None  # e.g. 678.0
+    uw_batt_max_charge_vol: Union[EmptyStrToNone, float] = None  # e.g. 854.0
+    uw_batt_type1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_batt_type2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_batt_type3: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_connect_phase_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_demand_mange_charge_power_limit: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_demand_mange_discharge_power_limit: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_demand_mange_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    uw_dg_start_soc: Union[EmptyStrToNone, float] = None  # e.g. 20
+    uw_dg_stop_soc: Union[EmptyStrToNone, float] = None  # e.g. 30
+    uw_disconnect_phase_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_gen_port_dev_type: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_gen_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_load_pv_inverter: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_off_grid_enable: Union[EmptyStrToNone, bool] = None  # e.g. 1
+    uw_off_grid_freq: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_off_grid_soc1: Union[EmptyStrToNone, float] = None  # e.g. 5
+    uw_off_grid_soc2: Union[EmptyStrToNone, float] = None  # e.g. -1
+    uw_off_grid_soc3: Union[EmptyStrToNone, float] = None  # e.g. -1
+    uw_off_grid_vol: Union[EmptyStrToNone, float] = None  # e.g. 1.0
+    uw_on_off_change_manual_mode: Union[EmptyStrToNone, int] = None  # e.g. 1
+    uw_on_off_change_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_on_off_grid_set: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_pcs_type: Union[EmptyStrToNone, int] = None  # e.g. 1
+    v_bak_soc_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    vac_high: Union[EmptyStrToNone, float] = None  # e.g. 458.1
+    vac_high2: Union[EmptyStrToNone, float] = None  # e.g. 537.8
+    vac_high3: Union[EmptyStrToNone, float] = None  # e.g. 537.8
+    vac_low: Union[EmptyStrToNone, float] = None  # e.g. 276.0
+    vac_low2: Union[EmptyStrToNone, float] = None  # e.g. 199.1
+    vac_low3: Union[EmptyStrToNone, float] = None  # e.g. 199.1
+    version: Union[EmptyStrToNone, str] = None  # e.g. 'TOaa181390'
+    vnormal: Union[EmptyStrToNone, float] = None  # Nominal PV voltage, e.g. 2.0
+    voltage_high_limit: Union[EmptyStrToNone, float] = None  # Mains voltage upper limit, e.g. 456.4
+    voltage_low_limit: Union[EmptyStrToNone, float] = None  # Mains voltage lower limit, e.g. 277.7
+    vpv_start: Union[EmptyStrToNone, float] = None  # e.g. 250.0
+    w_anti_backflow_meter_power_limit: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    w_power_restart_slope_ee: Union[EmptyStrToNone, float] = None  # e.g. 50.0
+    w_power_start_slope: Union[EmptyStrToNone, float] = None  # e.g. 50.0
+    wide_voltage_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    baudrate: Union[EmptyStrToNone, int] = None  # Baud Rate Selection, e.g. 0
+
+
+class WitDetailsDataV4(ApiModel):
+    wit: List[WitDetailDataV4] = None
 
 
 class WitDetailsV4(NewApiResponse):
-    data: Union[EmptyStrToNone, InverterDetailsDataV4] = None
+    data: Union[EmptyStrToNone, WitDetailsDataV4] = None
 
 
 # ------------------------------------------------------------------------------------------------

@@ -9,7 +9,16 @@ logger.info("Example using Growatt API v4 TEST server")
 SERVER_URL = "http://183.62.216.35:8081"
 # test token from official API docs https://www.showdoc.com.cn/2540838290984246/11292912972201443
 API_TOKEN = "wa265d2h1og0873ml07142r81564hho6"  # gitleaks:allow
+
 PICKLE_DIR = Path.home() / "growatt-api-pickle-v4"
+
+"""
+Note:
+v4 API can also be tested using v1 test server & token,
+but v1 server returns only max and min devices.
+
+v1 API cannot be tested on v4 server, as it returns no plants.
+"""
 
 PICKLE_DIR.mkdir(parents=True, exist_ok=True)
 ga = GrowattApi(token=API_TOKEN, server_url=SERVER_URL)
@@ -62,7 +71,7 @@ device_sn_sphs = [d for d in devices if d.device_type == "sph-s"][0].device_sn
 # _v4_details_max_ = ga.v4.details(device_sn=device_sn_max, device_type="max")
 # _v4_details_spa_ = ga.v4.details(device_sn=device_sn_spa, device_type="spa")
 # _v4_details_min_ = ga.v4.details(device_sn=None, device_type="min")
-_v4_details_wit_ = ga.v4.details(device_sn=device_sn_wit, device_type="wit")
+# _v4_details_wit_ = ga.v4.details(device_sn=device_sn_wit, device_type="wit")
 _v4_details_sphs_ = ga.v4.details(device_sn=device_sn_sphs, device_type="sph-s")
 # _v4_details_noah_ = ga.v4.details(device_sn=None, device_type="noah")
 

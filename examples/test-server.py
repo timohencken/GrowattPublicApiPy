@@ -12,6 +12,14 @@ SERVER_URL = "https://test.growatt.com"
 API_TOKEN = "6eb6f069523055a339d71e5b1f6c88cc"  # gitleaks:allow
 PICKLE_DIR = Path.home() / "growatt-api-pickle"
 
+"""
+Note:
+v4 API can also be tested using v1 test server & token,
+but v1 server returns only max and min devices.
+
+v1 API cannot be tested on v4 server, as it returns no plants.
+"""
+
 PICKLE_DIR.mkdir(parents=True, exist_ok=True)
 ga = GrowattApi(token=API_TOKEN, server_url=SERVER_URL)
 logger.debug("API initialized")

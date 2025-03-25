@@ -189,7 +189,7 @@ This package aims to
     * Sph
     * Spa
     * Min
-    * Wit ***Not*** implemented yet
+    * Wit
     * Sph-s ***Not*** implemented yet
     * Noah ***Not*** implemented yet
 * device metrics
