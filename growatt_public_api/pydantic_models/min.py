@@ -414,22 +414,22 @@ class MinDetailData(ApiModel):
     bat_parallel_num: Union[EmptyStrToNone, int] = None  # Number of parallel battery cells, e.g. 0
     bat_series_num: Union[EmptyStrToNone, int] = None  # The number of battery cells in series, e.g. 0
     bat_sys_energy: Union[EmptyStrToNone, float] = None  # e.g. 0
-    bat_temp_lower_limit_c: Union[EmptyStrToNone, int] = (
+    bat_temp_lower_limit_c: Union[EmptyStrToNone, float] = (
         None  # Battery charging temperature lower limit in 0.1°C, e.g. 0
     )
-    bat_temp_lower_limit_d: Union[EmptyStrToNone, int] = (
+    bat_temp_lower_limit_d: Union[EmptyStrToNone, float] = (
         None  # Battery discharge temperature lower limit in 0.1°C,e.g. 0
     )
-    bat_temp_upper_limit_c: Union[EmptyStrToNone, int] = (
+    bat_temp_upper_limit_c: Union[EmptyStrToNone, float] = (
         None  # Battery charging temperature upper limit in 0.1°C,e.g. 0
     )
-    bat_temp_upper_limit_d: Union[EmptyStrToNone, int] = (
+    bat_temp_upper_limit_d: Union[EmptyStrToNone, float] = (
         None  # Battery discharge temperature upper limit in 0.1°C,e.g. 0
     )
     battery_type: Union[EmptyStrToNone, int] = None  # Battery Type (0:Lithium, 1:Lead-acid, 2:other), e.g. 0
     baudrate: Union[EmptyStrToNone, float] = None  # Baud rate selection, e.g. 0
     bct_adjust: Union[EmptyStrToNone, int] = None  # Sensor adjustment (0:disable, 1:enable), e.g. 0
-    bct_mode: Union[EmptyStrToNone, float] = None  # Sensor class type (0:cWiredCT, 1:cWirelessCT, 2:METER), e.g. 0
+    bct_mode: Union[EmptyStrToNone, int] = None  # Sensor class type (0:cWiredCT, 1:cWirelessCT, 2:METER), e.g. 0
     bcu_version: Union[EmptyStrToNone, str] = None  # e.g. ''
     bdc1_model: Union[EmptyStrToNone, str] = None  # BDC1Model, e.g. '0'
     bdc1_sn: Union[EmptyStrToNone, str] = None  # BDC1 serial number, e.g. 'XXXXXXXXXXXXXXXX'
@@ -449,7 +449,7 @@ class MinDetailData(ApiModel):
     e_total: Union[EmptyStrToNone, float] = None  # Total Power Generation, e.g. 0  # DEPRECATED
     energy_day_map: Union[EmptyStrToNone, dict] = None  # e.g. {}
     energy_month: Union[EmptyStrToNone, float] = None  # e.g. 0
-    energy_month_text: Union[EmptyStrToNone, float] = None  # e.g. '0'
+    energy_month_text: Union[EmptyStrToNone, str] = None  # e.g. '0'
     fw_version: Union[EmptyStrToNone, str] = None  # Inverter version, e.g. 'GJ1.0'
     group_id: Union[EmptyStrToNone, int] = None  # e.g. -1
     hw_version: Union[EmptyStrToNone, str] = None  # e.g. ''
@@ -496,20 +496,20 @@ class MinDetailData(ApiModel):
     str_num: Union[EmptyStrToNone, int] = None  # e.g. 0
     sys_time: Union[EmptyStrToNone, str] = None  # System time, e.g. ''
     tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. '47.107.154.111'
-    timezone: Union[EmptyStrToNone, int] = None  # e.g. 8
+    timezone: Union[EmptyStrToNone, float] = None  # e.g. 8.0 / 1.0
     tlx_set_bean: Union[EmptyStrToNone, MinTlxSettingsData] = None
     tracker_model: Union[EmptyStrToNone, int] = None  # task model, e.g. 0
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_FDCJQ00003'
     tree_name: Union[EmptyStrToNone, str] = None  # e.g. 'FDCJQ00003'
     updating: Union[EmptyStrToNone, bool] = None  # e.g. False
     user_name: Union[EmptyStrToNone, str] = None  # e.g. ''
-    vbat_start_for_discharge: Union[EmptyStrToNone, int] = (
+    vbat_start_for_discharge: Union[EmptyStrToNone, float] = (
         None  # Battery discharge lower limit voltage in 0.01V, e.g. 0
     )
-    vbat_stop_for_charge: Union[EmptyStrToNone, int] = None  # Battery charge stop voltage in 0.01V, e.g. 0
-    vbat_stop_for_discharge: Union[EmptyStrToNone, int] = None  # Battery discharge stop voltage in 0.01V, e.g. 0
-    vbat_warn_clr: Union[EmptyStrToNone, int] = None  # Battery voltage low voltage recovery point in 0.1V, e.g. 0
-    vbat_warning: Union[EmptyStrToNone, int] = None  # Battery voltage low voltage alarm point in 0.1V, e.g. 0
+    vbat_stop_for_charge: Union[EmptyStrToNone, float] = None  # Battery charge stop voltage in 0.01V, e.g. 0
+    vbat_stop_for_discharge: Union[EmptyStrToNone, float] = None  # Battery discharge stop voltage in 0.01V, e.g. 0
+    vbat_warn_clr: Union[EmptyStrToNone, float] = None  # Battery voltage low voltage recovery point in 0.1V, e.g. 0
+    vbat_warning: Union[EmptyStrToNone, float] = None  # Battery voltage low voltage alarm point in 0.1V, e.g. 0
     vnormal: Union[EmptyStrToNone, float] = None  # Nominal PV voltage in 0.1V, e.g. 280 for 28.0 V
     vpp_open: Union[EmptyStrToNone, float] = None  # e.g. 0
 

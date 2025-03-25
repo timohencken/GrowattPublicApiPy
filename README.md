@@ -185,10 +185,10 @@ This package aims to
   * read device data `v4.details()`  # TODO
     * Inv
     * Storage
-    * Max ***Not*** implemented yet
+    * Max
     * Sph
-    * Spa ***Not*** implemented yet
-    * Min ***Not*** implemented yet
+    * Spa
+    * Min
     * Wit ***Not*** implemented yet
     * Sph-s ***Not*** implemented yet
     * Noah ***Not*** implemented yet
@@ -197,6 +197,7 @@ This package aims to
   * historical data `v4.energy_history()`   ***Not*** implemented yet
 * TODO: check if we can use /v4/ for /v1/ endpoints (seems to work)
 * ***Not*** implemented yet
+* TODO: 'timezone' is float diff to UTC (MEZ results in "1.0")
 
 
 # Usage

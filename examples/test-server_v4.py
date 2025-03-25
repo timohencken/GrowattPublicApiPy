@@ -57,8 +57,7 @@ device_sn_sphs = [d for d in devices if d.device_type == "sph-s"][0].device_sn
 # no "noah" :(
 
 # _v4_details_inv_ = ga.v4.details(device_sn=device_sn_inv, device_type="inv")
-# TODO check storage for correctnett, then continue with wit
-_v4_details_sto_ = ga.v4.details(device_sn=device_sn_storage, device_type="storage")
+# _v4_details_sto_ = ga.v4.details(device_sn=device_sn_storage, device_type="storage")
 # _v4_details_sph_ = ga.v4.details(device_sn=device_sn_sph, device_type="sph")
 # _v4_details_max_ = ga.v4.details(device_sn=device_sn_max, device_type="max")
 # _v4_details_spa_ = ga.v4.details(device_sn=device_sn_spa, device_type="spa")

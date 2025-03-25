@@ -935,8 +935,144 @@ class SpaDetailsV4(NewApiResponse):
 # ------------------------------------------------------------------------------------------------
 
 
+def _min_details_to_camel(snake: str) -> str:
+    override = {
+        "address": "addr",
+        "bat_aging_test_step": "bagingTestStep",
+        "bdc_auth_version": "bdcAuthversion",
+        "datalogger_sn": "dataLogSn",
+        "optimizer_list": "optimezerList",
+        "parent_id": "parentID",
+        "plant_name": "plantname",
+        "tlx_set_bean": "tlxSetbean",
+        "tracker_model": "trakerModel",
+        "tree_id": "treeID",
+        "baudrate": "wselectBaudrate",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
+class MinDetailDataV4(ApiModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_min_details_to_camel,
+        protected_namespaces=(),  # allow model_* keywords
+    )
+
+    address: Union[EmptyStrToNone, int] = None  # Inverter address, e.g. 1
+    alias: Union[EmptyStrToNone, str] = None  # alias, e.g. 'AFE494403F'
+    bat_aging_test_step: Union[EmptyStrToNone, int] = (
+        None  # battery self-test (0: default, 1: charge, 2: discharge), e.g. 0
+    )
+    bat_parallel_num: Union[EmptyStrToNone, int] = None  # Number of parallel battery cells, e.g. 0
+    bat_series_num: Union[EmptyStrToNone, int] = None  # The number of battery cells in series, e.g. 0
+    bat_sys_energy: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bat_temp_lower_limit_c: Union[EmptyStrToNone, float] = (
+        None  # Battery charging temperature lower limit in 0.1°C, e.g. 0.0
+    )
+    bat_temp_lower_limit_d: Union[EmptyStrToNone, float] = (
+        None  # Battery discharge temperature lower limit in 0.1°C,e.g. 0.0
+    )
+    bat_temp_upper_limit_c: Union[EmptyStrToNone, float] = (
+        None  # Battery charging temperature upper limit in 0.1°C,e.g. 0.0
+    )
+    bat_temp_upper_limit_d: Union[EmptyStrToNone, float] = (
+        None  # Battery discharge temperature upper limit in 0.1°C,e.g. 0.0
+    )
+    battery_type: Union[EmptyStrToNone, int] = None  # Battery Type (0:Lithium, 1:Lead-acid, 2:other), e.g. 0
+    bct_adjust: Union[EmptyStrToNone, int] = None  # Sensor adjustment (0:disable, 1:enable), e.g. 0
+    bct_mode: Union[EmptyStrToNone, int] = None  # Sensor class type (0:cWiredCT, 1:cWirelessCT, 2:METER), e.g. 0
+    bcu_version: Union[EmptyStrToNone, str] = None  # e.g. ''
+    bdc1_model: Union[EmptyStrToNone, str] = None  # BDC1Model, e.g. '0'
+    bdc1_sn: Union[EmptyStrToNone, str] = None  # BDC1 serial number, e.g. 'XXXXXXXXXXXXXXXX'
+    bdc1_version: Union[EmptyStrToNone, str] = None  # BDC1 version, e.g. '\x00\x00\x00\x00-0'
+    bdc_auth_version: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bdc_mode: Union[EmptyStrToNone, int] = None  # e.g. -1/0
+    bms_communication_type: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bms_software_version: Union[EmptyStrToNone, str] = None  # e.g. ''
+    children: Union[EmptyStrToNone, List[Any]] = None  # e.g. []
+    com_address: Union[EmptyStrToNone, int] = None  # Mailing address 30, e.g. 1
+    communication_version: Union[EmptyStrToNone, str] = None  # Communication version number, e.g. 'ZAAA-0004'
+    country_selected: Union[EmptyStrToNone, int] = None  # country selected, e.g. 1
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The serial number of the collector, e.g. 'BLE094404C'
+    device_type: Union[EmptyStrToNone, int] = None  # (0:Inverter, 1:Mix), e.g. 5
+    dtc: Union[EmptyStrToNone, int] = None  # Device code, e.g. 5203
+    e_today: Union[EmptyStrToNone, float] = None  # Today’s power generation, e.g. 0  # DEPRECATED
+    e_total: Union[EmptyStrToNone, float] = None  # Total Power Generation, e.g. 0  # DEPRECATED
+    energy_day_map: Union[EmptyStrToNone, dict] = None  # e.g. {}
+    energy_month: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    energy_month_text: Union[EmptyStrToNone, str] = None  # e.g. '0'
+    fw_version: Union[EmptyStrToNone, str] = None  # Inverter version, e.g. 'AK1.0'
+    group_id: Union[EmptyStrToNone, int] = None  # e.g. -1
+    hw_version: Union[EmptyStrToNone, str] = None  # e.g. 'null'/'0'
+    id: Union[EmptyStrToNone, int] = None  # e.g. 1627
+    img_path: Union[EmptyStrToNone, str] = None  # e.g. './css/img/status_gray.gif'
+    inner_version: Union[EmptyStrToNone, str] = None  # Internal version number, e.g. 'AKAA0501'
+    last_update_time: Union[EmptyStrToNone, int] = None  # Last update time, e.g. 1716535759000
+    last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2024-05-24 15:29:19'
+    level: Union[EmptyStrToNone, int] = None  # e.g. 4
+    li_battery_fw_version: Union[EmptyStrToNone, int] = None  # e.g. 0
+    li_battery_manufacturers: Union[EmptyStrToNone, int] = None  # e.g. 0
+    location: Union[EmptyStrToNone, str] = None  # address, e.g. ''
+    lost: Union[EmptyStrToNone, bool] = None  # Device online status (0: online, 1: disconnected), e.g. True
+    manufacturer: Union[EmptyStrToNone, str] = None  # Manufacturer code 34-41, e.g. 'PV Inverter'
+    modbus_version: Union[EmptyStrToNone, int] = None  # modbus version, e.g. 307
+    model: Union[EmptyStrToNone, int] = None  # model, e.g. 2666130979655057522
+    model_text: Union[EmptyStrToNone, str] = None  # model, e.g. 'S25B00D00T00P0FU01M0072'
+    monitor_version: Union[EmptyStrToNone, str] = None  # e.g. 'null'
+    mppt: Union[EmptyStrToNone, float] = None  # MPPT voltage, e.g. 513.0
+    optimizer_list: Union[EmptyStrToNone, List[Any]] = None  # e.g. []
+    p_charge: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    p_discharge: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_BLE094404C_22'
+    plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
+    plantname: Union[EmptyStrToNone, str] = None  # e.g. ''
+    pmax: Union[EmptyStrToNone, int] = None  # Rated power in 0.1VA, e.g. 11400 for 1140.0 W
+    port_name: Union[EmptyStrToNone, str] = None  # e.g. 'ShinePano - BLE094404C'
+    power: Union[EmptyStrToNone, float] = None  # Current power, e.g. 0
+    power_max: Union[EmptyStrToNone, float] = None  # e.g. ''
+    power_max_text: Union[EmptyStrToNone, str] = None  # e.g. ''
+    power_max_time: Union[EmptyStrToNone, str] = None  # e.g. None
+    priority_choose: Union[EmptyStrToNone, int] = None  # Energy priority selection (0:Load, 1:Battery, 2:Grid), e.g. 0
+    pv_num: Union[EmptyStrToNone, int] = None  # e.g. 0
+    record: Union[EmptyStrToNone, Any] = None  # e.g. None
+    restart_time: Union[EmptyStrToNone, int] = None  # Reconnection countdown, e.g. 65
+    safety_version: Union[EmptyStrToNone, int] = None  # e.g. 0
+    serial_num: Union[EmptyStrToNone, str] = None  # Device SN, e.g. 'AFE494403F'
+    start_time: Union[EmptyStrToNone, int] = None  # Startup countdown, e.g. 65
+    status: Union[EmptyStrToNone, int] = (
+        None  # Device status (0: waiting, 1: self-check, 3: failure, 4: upgrade, 5, 6, 7, 8: normal mode), e.g. 0
+    )
+    status_text: Union[EmptyStrToNone, str] = None  # e.g. 'tlx.status.operating'
+    str_num: Union[EmptyStrToNone, int] = None  # e.g. 0
+    sys_time: Union[EmptyStrToNone, str] = None  # System time, e.g. ''
+    tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. '47.119.160.91'
+    timezone: Union[EmptyStrToNone, float] = None  # e.g. 8.0 / 1.0
+    tlx_set_bean: Union[EmptyStrToNone, Any] = None  # FYI: in API v1, we see MinTlxSettingsData here
+    tracker_model: Union[EmptyStrToNone, int] = None  # task model, e.g. 0
+    tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_AFE494403F'
+    tree_name: Union[EmptyStrToNone, str] = None  # e.g. 'AFE494403F'
+    updating: Union[EmptyStrToNone, bool] = None  # e.g. False
+    user_name: Union[EmptyStrToNone, str] = None  # e.g. ''
+    vbat_start_for_discharge: Union[EmptyStrToNone, float] = (
+        None  # Battery discharge lower limit voltage in 0.01V, e.g. 0
+    )
+    vbat_stop_for_charge: Union[EmptyStrToNone, float] = None  # Battery charge stop voltage in 0.01V, e.g. 0
+    vbat_stop_for_discharge: Union[EmptyStrToNone, float] = None  # Battery discharge stop voltage in 0.01V, e.g. 0
+    vbat_warn_clr: Union[EmptyStrToNone, float] = None  # Battery voltage low voltage recovery point in 0.1V, e.g. 0
+    vbat_warning: Union[EmptyStrToNone, float] = None  # Battery voltage low voltage alarm point in 0.1V, e.g. 0
+    vnormal: Union[EmptyStrToNone, float] = None  # Nominal PV voltage in 0.1V, e.g. 280 for 28.0 V
+    vpp_open: Union[EmptyStrToNone, float] = None  # e.g. 0
+    baudrate: Union[EmptyStrToNone, int] = None  # Baud Rate Selection, e.g. 0
+
+
+class MinDetailsDataV4(ApiModel):
+    min: List[MinDetailDataV4] = None
+
+
 class MinDetailsV4(NewApiResponse):
-    data: Union[EmptyStrToNone, InverterDetailsDataV4] = None
+    data: Union[EmptyStrToNone, MinDetailsDataV4] = None
 
 
 # ------------------------------------------------------------------------------------------------

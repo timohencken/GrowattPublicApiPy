@@ -19,6 +19,8 @@ def _empty_str_to_none(v: str | None) -> None:
         return None
     if v == "":
         return None
+    if v == "null":
+        return None
     raise ValueError(
         "IGNORE (not a string - checking next type)"
     )  # Not str or None, Fall to next type. e.g. Decimal, or a non-empty str
