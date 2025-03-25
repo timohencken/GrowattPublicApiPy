@@ -1171,8 +1171,79 @@ class ApiV4:
                 'error_msg': 'SUCCESSFUL_OPERATION'}
 
             NoahDetailsV4:
-            TBA
-
+            {   'data': {   'noah': [   {   'address': 1,
+                                            'alias': None,
+                                            'associated_inv_sn': None,
+                                            'bms_version': '213005',
+                                            'charging_soc_high_limit': 100.0,
+                                            'charging_soc_low_limit': 0.0,
+                                            'component_power': 0.0,
+                                            'datalogger_sn': None,
+                                            'default_power': 200.0,
+                                            'device_sn': '0PVPOXIEGENGHUI1',
+                                            'ebm_order_num': 0,
+                                            'fw_version': None,
+                                            'last_update_time': 1720667148000,
+                                            'last_update_time_text': datetime.datetime(2024, 7, 11, 11, 5, 48),
+                                            'location': None,
+                                            'lost': False,
+                                            'model': 'Noah 2000',
+                                            'mppt_version': '212004',
+                                            'ota_device_type_code_high': 'PB',
+                                            'ota_device_type_code_low': 'FU',
+                                            'pd_version': '211005',
+                                            'port_name': 'ShinePano-0PVPOXIEGENGHUI1',
+                                            'smart_socket_power': 0.0,
+                                            'status': 0,
+                                            'sys_time': 1720660008000,
+                                            'temp_type': 0,
+                                            'time1_enable': True,
+                                            'time1_end': datetime.time(23, 59),
+                                            'time1_mode': 0,
+                                            'time1_power': 400.0,
+                                            'time1_start': datetime.time(0, 0),
+                                            'time2_enable': False,
+                                            'time2_end': datetime.time(0, 0),
+                                            'time2_mode': 0,
+                                            'time2_power': 200.0,
+                                            'time2_start': datetime.time(0, 0),
+                                            'time3_enable': False,
+                                            'time3_end': datetime.time(0, 0),
+                                            'time3_mode': 0,
+                                            'time3_power': 200.0,
+                                            'time3_start': datetime.time(0, 0),
+                                            'time4_enable': False,
+                                            'time4_end': datetime.time(0, 0),
+                                            'time4_mode': 0,
+                                            'time4_power': 200.0,
+                                            'time4_start': datetime.time(0, 0),
+                                            'time5_enable': False,
+                                            'time5_end': datetime.time(0, 0),
+                                            'time5_mode': 0,
+                                            'time5_power': 200.0,
+                                            'time5_start': datetime.time(0, 0),
+                                            'time6_enable': False,
+                                            'time6_end': datetime.time(0, 0),
+                                            'time6_mode': 0,
+                                            'time6_power': 200.0,
+                                            'time6_start': datetime.time(0, 0),
+                                            'time7_enable': False,
+                                            'time7_end': datetime.time(0, 0),
+                                            'time7_mode': 0,
+                                            'time7_power': 200.0,
+                                            'time7_start': datetime.time(0, 0),
+                                            'time8_enable': False,
+                                            'time8_end': datetime.time(0, 0),
+                                            'time8_mode': 0,
+                                            'time8_power': 200.0,
+                                            'time8_start': datetime.time(0, 0),
+                                            'time9_enable': False,
+                                            'time9_end': datetime.time(0, 0),
+                                            'time9_mode': 0,
+                                            'time9_power': 200.0,
+                                            'time9_start': datetime.time(0, 0)}]},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
         if isinstance(device_sn, list):
@@ -1186,104 +1257,6 @@ class ApiV4:
                 "deviceType": device_type,
             },
         )
-
-        # FIXME DEBUG
-        import pprint
-
-        pprint.pprint(response, indent=4, width=500)
-        sample_data = """{
-    "code": 0,
-    "data": {
-        "noah": [
-            {
-                "deviceSn": "0PVPOXIEGENGHUI1",
-                "datalogSn": "0PVPOXIEGENGHUI1",
-                "associatedInvSn": null,
-                "portName": "ShinePano-0PVPOXIEGENGHUI1",
-                "alias": null,
-                "location": null,
-                "lost": false,
-                "address": 1,
-                "lastUpdateTime": 1720667148000,
-                "sysTime": 1720660008000,
-                "status": 0,
-                "chargingSocHighLimit": 100,
-                "chargingSocLowLimit": 0,
-                "defaultPower": 200,
-                "componentPower": 0.0,
-                "time1Start": "0:0",
-                "time1End": "23:59",
-                "time1Mode": 0,
-                "time1Power": 400,
-                "time2Start": "0:0",
-                "time2End": "0:0",
-                "time2Mode": 0,
-                "time2Power": 200,
-                "time3Start": "0:0",
-                "time3End": "0:0",
-                "time3Mode": 0,
-                "time3Power": 200,
-                "time4Start": "0:0",
-                "time4End": "0:0",
-                "time4Mode": 0,
-                "time4Power": 200,
-                "time5Start": "0:0",
-                "time5End": "0:0",
-                "time5Mode": 0,
-                "time5Power": 200,
-                "time6Start": "0:0",
-                "time6End": "0:0",
-                "time6Mode": 0,
-                "time6Power": 200,
-                "time7Start": "0:0",
-                "time7End": "0:0",
-                "time7Mode": 0,
-                "time7Power": 200,
-                "time8Start": "0:0",
-                "time8End": "0:0",
-                "time8Mode": 0,
-                "time8Power": 200,
-                "time9Start": "0:0",
-                "time9End": "0:0",
-                "time9Mode": 0,
-                "time9Power": 200,
-                "time1Enable": 1,
-                "time2Enable": 0,
-                "time3Enable": 0,
-                "time4Enable": 0,
-                "time5Enable": 0,
-                "time6Enable": 0,
-                "time7Enable": 0,
-                "time8Enable": 0,
-                "time9Enable": 0,
-                "smartSocketPower": 0.0,
-                "otaDeviceTypeCodeHigh": "PB",
-                "otaDeviceTypeCodeLow": "FU",
-                "model": "Noah 2000",
-                "fwVersion": null,
-                "mpptVersion": "212004",
-                "pdVersion": "211005",
-                "bmsVersion": "213005",
-                "ebmOrderNum": 0,
-                "tempType": 0,
-                "lastUpdateTimeText": "2024-07-11 11:05:48"
-            }
-        ]
-    },
-    "message": "SUCCESSFUL_OPERATION"
-}"""
-
-        import json
-        import pprint
-
-        j = json.loads(sample_data)
-        pprint.pprint(j, indent=4, width=500)
-        k = NoahDetailsV4.model_validate(j)  # <-----------------------------
-        pprint.pprint(k.model_dump(), indent=4, width=500)
-        # FIXME DEBUG
-        pprint.pprint(response, indent=4, width=500)
-        k2 = NoahDetailsV4.model_validate(response)  # <-----------------------------
-        pprint.pprint(k2.model_dump(), indent=4, width=500)
 
         device_type = device_type.lower()
         if device_type == "inv":
@@ -1300,9 +1273,9 @@ class ApiV4:
             return MinDetailsV4.model_validate(response)
         elif device_type == "wit":
             return WitDetailsV4.model_validate(response)
-        elif device_type == "sph-s":  # TODO ongoing
+        elif device_type == "sph-s":
             return SphsDetailsV4.model_validate(response)
-        elif device_type == "noah":  # TODO ongoing
+        elif device_type == "noah":
             return NoahDetailsV4.model_validate(response)
         else:
             raise ValueError(f"Unknown device type: {device_type}")

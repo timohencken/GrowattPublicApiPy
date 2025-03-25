@@ -182,19 +182,28 @@ This package aims to
   * `v4.list()`
     *** use this to query your inverter's "*TYPE*" required for subsequent requests ***
 * general device data
-  * read device data `v4.details()`  # TODO
-    * Inv
-    * Storage
-    * Max
-    * Sph (MIX)
-    * Spa
-    * Min
-    * Wit
-    * Sph-s (SPH)
-    * Noah ***Not*** implemented yet
+  * read device data `v4.details()`
 * device metrics
   * current `v4.energy()`   ***Not*** implemented yet
+    * Inv   ***Not*** implemented yet
+    * Storage   ***Not*** implemented yet
+    * Max   ***Not*** implemented yet
+    * Sph (MIX)   ***Not*** implemented yet
+    * Spa   ***Not*** implemented yet
+    * Min   ***Not*** implemented yet
+    * Wit   ***Not*** implemented yet
+    * Sph-s (SPH)   ***Not*** implemented yet
+    * Noah   ***Not*** implemented yet
   * historical data `v4.energy_history()`   ***Not*** implemented yet
+    * Inv   ***Not*** implemented yet
+    * Storage   ***Not*** implemented yet
+    * Max   ***Not*** implemented yet
+    * Sph (MIX)   ***Not*** implemented yet
+    * Spa   ***Not*** implemented yet
+    * Min   ***Not*** implemented yet
+    * Wit   ***Not*** implemented yet
+    * Sph-s (SPH)   ***Not*** implemented yet
+    * Noah   ***Not*** implemented yet
 * TODO: check if we can use /v4/ for /v1/ endpoints (seems to work)
 * ***Not*** implemented yet
 * TODO: 'timezone' is float diff to UTC (MEZ results in "1.0")
@@ -295,5 +304,11 @@ To the best of our knowledge only the settings functions perform modifications t
 
 
 # Changelog
+* ONGOING (pre-alpha)
+  * APIv4 endpoints
+    * `v4.list()`
+    * `v4.details()`
+    * TODO: `v4.energy()`
+    * TODO: `v4.energy_history()`
 * 2025.03.11 (pre-alpha)
   * all API v1 endpoints implemented

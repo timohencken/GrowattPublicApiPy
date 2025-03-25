@@ -1407,36 +1407,12 @@ class WitDetailsV4(NewApiResponse):
 
 
 def _sphs_details_to_camel(snake: str) -> str:
-    # TODO copied from SPH
     override = {
         "address": "addr",
         "datalogger_sn": "dataLogSn",
         "parent_id": "parentID",
-        # "tree_id": "treeID",
-        # "uw_hf_rt2_ee": "uwHFRT2EE",
-        # "uw_hf_rt_ee": "uwHFRTEE",
-        # "uw_hf_rt_time_ee": "uwHFRTTimeEE",
-        # "uw_hf_rt_time2_ee": "uwHFRTTime2EE",
-        # "uw_hv_rt2_ee": "uwHVRT2EE",
-        # "uw_hv_rt_ee": "uwHVRTEE",
-        # "uw_hv_rt_time_ee": "uwHVRTTimeEE",
-        # "uw_hv_rt_time2_ee": "uwHVRTTime2EE",
-        # "uw_lf_rt2_ee": "uwLFRT2EE",
-        # "uw_lf_rt_ee": "uwLFRTEE",
-        # "uw_lf_rt_time_ee": "uwLFRTTimeEE",
-        # "uw_lf_rt_time2_ee": "uwLFRTTime2EE",
-        # "uw_lv_rt2_ee": "uwLVRT2EE",
-        # "uw_lv_rt3_ee": "uwLVRT3EE",
-        # "uw_lv_rt_ee": "uwLVRTEE",
-        # "uw_lv_rt_time2_ee": "uwLVRTTime2EE",
-        # "uw_lv_rt_time3_ee": "uwLVRTTime3EE",
-        # "uw_lv_rt_time_ee": "uwLVRTTimeEE",
-        # "vbat_start_for_charge": "vbatStartforCharge",
-        # "w_charge_soc_low_limit1": "wchargeSOCLowLimit1",
-        # "w_charge_soc_low_limit2": "wchargeSOCLowLimit2",
-        # "w_discharge_soc_low_limit1": "wdisChargeSOCLowLimit1",
-        # "w_discharge_soc_low_limit2": "wdisChargeSOCLowLimit2",
-        # "baudrate": "wselectBaudrate",
+        "tree_id": "treeID",
+        "baudrate": "wselectBaudrate",
     }
     return override.get(snake, to_camel(snake=snake))
 
@@ -1546,7 +1522,101 @@ class SphsDetailsV4(NewApiResponse):
 
 
 # ------------------------------------------------------------------------------------------------
+# NOAH: TODO: what's the matching v1 device_type for NOAH???
+
+
+def _noah_details_to_camel(snake: str) -> str:
+    override = {
+        "address": "addr",
+        "datalogger_sn": "dataLogSn",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
+class NoahDetailDataV4(ApiModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_noah_details_to_camel,
+        protected_namespaces=(),  # allow model_* keywords
+    )
+
+    address: Union[EmptyStrToNone, int] = None  # Inverter Address, e.g. 1
+    alias: Union[EmptyStrToNone, str] = None  # Alias, e.g. None
+    associated_inv_sn: Union[EmptyStrToNone, str] = None  # Associated Inverter, e.g. None
+    bms_version: Union[EmptyStrToNone, str] = None  # BMS Version, e.g. '213005'
+    charging_soc_high_limit: Union[EmptyStrToNone, float] = None  # Charging SOC Upper Limit, e.g. 100
+    charging_soc_low_limit: Union[EmptyStrToNone, float] = None  # Charging SOC Lower Limit, e.g. 0
+    component_power: Union[EmptyStrToNone, float] = None  # Component Power (W), e.g. 0.0
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # Data Logger Number, e.g. '0PVPOXIEGENGHUI1'
+    default_power: Union[EmptyStrToNone, float] = None  # Default Micro-Inverter Output Power, e.g. 200
+    device_sn: Union[EmptyStrToNone, str] = None  # Device Number, e.g. '0PVPOXIEGENGHUI1'
+    ebm_order_num: Union[EmptyStrToNone, int] = None  # Extended Battery Pack Serial Number, e.g. 0
+    fw_version: Union[EmptyStrToNone, str] = None  # Hardware Version, e.g. None
+    last_update_time: Union[EmptyStrToNone, int] = None  # Last update time, e.g. 1720667148000
+    last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2024-07-11 11:05:48'
+    location: Union[EmptyStrToNone, str] = None  # address, e.g. None
+    lost: Union[EmptyStrToNone, bool] = None  # Device online status (0: online, 1: disconnected), e.g. True
+    model: Union[EmptyStrToNone, str] = None  # Model, e.g. 'Noah 2000'
+    mppt_version: Union[EmptyStrToNone, str] = None  # MPPT Version, e.g. '212004'
+    ota_device_type_code_high: Union[EmptyStrToNone, str] = None  # OTA Device Type Code (High), e.g. 'PB'
+    ota_device_type_code_low: Union[EmptyStrToNone, str] = None  # e.g. 'FU'
+    pd_version: Union[EmptyStrToNone, str] = None  # PD Version, e.g. '211005'
+    port_name: Union[EmptyStrToNone, str] = None  # Communication Port Name, e.g. 'ShinePano-0PVPOXIEGENGHUI1'
+    smart_socket_power: Union[EmptyStrToNone, float] = None  # Smart Socket Power, e.g. 0.0
+    status: Union[EmptyStrToNone, int] = None  # Device Status (1: Normal; 4: Fault; 5: Heating), e.g. 0
+    sys_time: Union[EmptyStrToNone, int] = None  # System time, e.g. 1720660008000
+    temp_type: Union[EmptyStrToNone, int] = None  # Temperature Type, e.g. 0
+    time1_enable: Union[EmptyStrToNone, bool] = None  # Time Slot 1 Switch, e.g. 1
+    time1_end: Union[EmptyStrToNone, ForcedTime] = None  # Time Slot 1 End, e.g. '23:59'
+    time1_mode: Union[EmptyStrToNone, int] = None  # Time Slot 1 Mode, e.g. 0
+    time1_power: Union[EmptyStrToNone, float] = None  # Time Slot 1 Output Power Control, e.g. 400
+    time1_start: Union[EmptyStrToNone, ForcedTime] = None  # Time Slot 1 Start, e.g. '0:0'
+    time2_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    time2_end: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time2_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time2_power: Union[EmptyStrToNone, float] = None  # e.g. 200
+    time2_start: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time3_enable: Union[EmptyStrToNone, bool] = None  # 0
+    time3_end: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time3_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time3_power: Union[EmptyStrToNone, float] = None  # e.g. 200
+    time3_start: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time4_enable: Union[EmptyStrToNone, bool] = None  # 0
+    time4_end: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time4_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time4_power: Union[EmptyStrToNone, float] = None  # e.g. 2000
+    time4_start: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time5_enable: Union[EmptyStrToNone, bool] = None  # 0
+    time5_end: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time5_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time5_power: Union[EmptyStrToNone, float] = None  # e.g. 200
+    time5_start: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time6_enable: Union[EmptyStrToNone, bool] = None  # 0
+    time6_end: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time6_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time6_power: Union[EmptyStrToNone, float] = None  # e.g. 200
+    time6_start: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time7_enable: Union[EmptyStrToNone, bool] = None  # 0
+    time7_end: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time7_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time7_power: Union[EmptyStrToNone, float] = None  # e.g. 200
+    time7_start: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time8_enable: Union[EmptyStrToNone, bool] = None  # 0
+    time8_end: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time8_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time8_power: Union[EmptyStrToNone, float] = None  # e.g. 200
+    time8_start: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time9_enable: Union[EmptyStrToNone, bool] = None  # 0
+    time9_end: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+    time9_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time9_power: Union[EmptyStrToNone, float] = None  # e.g. 200
+    time9_start: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
+
+
+class NoahDetailsDataV4(ApiModel):
+    noah: List[NoahDetailDataV4] = None
 
 
 class NoahDetailsV4(NewApiResponse):
-    data: Union[EmptyStrToNone, InverterDetailsDataV4] = None
+    data: Union[EmptyStrToNone, NoahDetailsDataV4] = None

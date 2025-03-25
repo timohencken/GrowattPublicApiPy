@@ -113,7 +113,6 @@ class GrowattApiSession:
             url=url,
             params=params,
             data=data,
-            # verify=False,  # FIXME remove this
         )
 
         if '<html data-name="login">' in response.text:
