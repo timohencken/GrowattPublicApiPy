@@ -188,7 +188,7 @@ This package aims to
     * Inv
     * Storage
     * Max
-    * Sph (MIX)   ***Not*** implemented yet
+    * Sph (MIX)
     * Spa   ***Not*** implemented yet
     * Min   ***Not*** implemented yet
     * Wit   ***Not*** implemented yet

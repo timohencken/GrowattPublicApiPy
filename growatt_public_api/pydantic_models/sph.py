@@ -303,6 +303,7 @@ def _sph_energy_overview_data_to_camel(snake: str) -> str:
         "e_to_user_today": "etoUserToday",
         "e_to_user_total": "etoUserTotal",
         "e_to_grid_total": "etogridTotal",
+        "device_sn": "serialNum",  # align with other endpoints using "deviceSn" instead
         "ups_load_percent": "upsLoadpercent",
         "ups_pf": "upsPF",
     }
@@ -412,7 +413,7 @@ class SphEnergyOverviewData(ApiModel):
     ppv2: Union[EmptyStrToNone, float] = None  # PV2 input power, e.g. 1058
     ppv_text: Union[EmptyStrToNone, str] = None  # e.g. '3.9 W'
     priority_choose: Union[EmptyStrToNone, float] = None  # e.g. 0
-    serial_num: Union[EmptyStrToNone, str] = None  # e.g. 'BNE9A5100D'
+    device_sn: Union[EmptyStrToNone, str] = None  # e.g. 'BNE9A5100D'
     soc: Union[EmptyStrToNone, float] = None  # remaining battery capacity, e.g. 100
     soc_text: Union[EmptyStrToNone, str] = None  # e.g. '100%'
     status: Union[EmptyStrToNone, int] = None  # Mix Status 0 = waiting, 1 = normal, 2 = fault, e.g. 5
