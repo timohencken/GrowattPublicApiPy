@@ -296,6 +296,7 @@ def _sph_energy_overview_data_to_camel(snake: str) -> str:
         "bms_fw": "bmsFW",
         "bms_gauge_fcc": "bmsGaugeFCC",
         "bms_gauge_rm": "bmsGaugeRM",
+        "bms_max_discharge_curr": "bmsMaxDischgCurr",
         "bms_mcu_version": "bmsMCUVersion",
         "bms_soc": "bmsSOC",
         "bms_soh": "bmsSOH",
@@ -357,7 +358,7 @@ class SphEnergyOverviewData(ApiModel):
     bms_info: Union[EmptyStrToNone, int] = None  # BMS Information, e.g. 257
     bms_mcu_version: Union[EmptyStrToNone, int] = None  # BMS firmware version, e.g. 512
     bms_max_curr: Union[EmptyStrToNone, float] = None  # Maximum charge and discharge current, e.g. 100
-    bms_max_dischg_curr: Union[EmptyStrToNone, float] = None  # Maximum discharge current, e.g. 0
+    bms_max_discharge_curr: Union[EmptyStrToNone, float] = None  # Maximum discharge current, e.g. 0
     bms_pack_info: Union[EmptyStrToNone, int] = None  # Battery Pack Information, e.g. 257
     bms_soc: Union[EmptyStrToNone, int] = None  # Battery remaining capacity, e.g. 100
     bms_soh: Union[EmptyStrToNone, int] = None  # Battery health status, e.g. 47

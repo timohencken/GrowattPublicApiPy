@@ -363,4 +363,4 @@ class DeviceCreateDate(ApiResponse):
 
 
 class DeviceAdd(ApiResponse):
-    data: None = None
+    data: Union[EmptyStrToNone, Any] = None

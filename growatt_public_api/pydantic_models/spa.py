@@ -279,6 +279,7 @@ def _spa_energy_overview_data_to_camel(snake: str) -> str:
         "bms_fw": "bmsFW",
         "bms_gauge_fcc": "bmsGaugeFCC",
         "bms_gauge_rm": "bmsGaugeRM",
+        "bms_max_discharge_curr": "bmsMaxDischgCurr",
         "bms_mcu_version": "bmsMCUVersion",
         "bms_soc": "bmsSOC",
         "bms_soh": "bmsSOH",
@@ -286,6 +287,7 @@ def _spa_energy_overview_data_to_camel(snake: str) -> str:
         "e_to_user_today": "etoUserToday",
         "e_to_user_total": "etoUserTotal",
         "e_to_grid_total": "etogridTotal",
+        "device_sn": "serialNum",  # align with other endpoints using "deviceSn" instead
         "ups_load_percent": "upsLoadpercent",
         "ups_pf": "upsPF",
     }
@@ -339,7 +341,7 @@ class SpaEnergyOverviewData(ApiModel):
     bms_info: Union[EmptyStrToNone, int] = None  # BMS Information, e.g. 257
     bms_mcu_version: Union[EmptyStrToNone, int] = None  # BMS firmware version, e.g. 512
     bms_max_curr: Union[EmptyStrToNone, float] = None  # Maximum charge and discharge current, e.g. 100
-    bms_max_dischg_curr: Union[EmptyStrToNone, float] = None  # Maximum discharge current, e.g. 0
+    bms_max_discharge_curr: Union[EmptyStrToNone, float] = None  # Maximum discharge current, e.g. 0
     bms_pack_info: Union[EmptyStrToNone, int] = None  # Battery Pack Information, e.g. 257
     bms_soc: Union[EmptyStrToNone, int] = None  # Battery remaining capacity, e.g. 100
     bms_soh: Union[EmptyStrToNone, int] = None  # Battery health status, e.g. 47
@@ -388,7 +390,7 @@ class SpaEnergyOverviewData(ApiModel):
     plocal_load_total: Union[EmptyStrToNone, float] = None  # Total local load power consumption, e.g. 0
     ppv_inverter: Union[EmptyStrToNone, float] = None  # Photovoltaic inverter power generation, e.g. 6.8
     priority_choose: Union[EmptyStrToNone, float] = None  # e.g. 2
-    serial_num: Union[EmptyStrToNone, str] = None  # e.g. 'LHD0847002'
+    device_sn: Union[EmptyStrToNone, str] = None  # e.g. 'LHD0847002'
     soc: Union[EmptyStrToNone, float] = None  # remaining battery capacity, e.g. 100
     soc_text: Union[EmptyStrToNone, str] = None  # e.g. '100%'
     spa_bean: Union[EmptyStrToNone, Any] = None  # e.g. None,

@@ -189,7 +189,7 @@ This package aims to
     * Storage
     * Max
     * Sph (MIX)
-    * Spa   ***Not*** implemented yet
+    * Spa
     * Min   ***Not*** implemented yet
     * Wit   ***Not*** implemented yet
     * Sph-s (SPH)   ***Not*** implemented yet
