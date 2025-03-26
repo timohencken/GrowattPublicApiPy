@@ -187,7 +187,7 @@ This package aims to
   * current `v4.energy()`
     * Inv
     * Storage
-    * Max   ***Not*** implemented yet
+    * Max
     * Sph (MIX)   ***Not*** implemented yet
     * Spa   ***Not*** implemented yet
     * Min   ***Not*** implemented yet

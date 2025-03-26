@@ -2129,8 +2129,325 @@ class StorageEnergyV4(NewApiResponse):
 # ------------------------------------------------------------------------------------------------
 
 
+def _max_energy_to_camel(snake: str) -> str:
+    override = {
+        "comp_har_ir": "compharir",
+        "comp_har_is": "compharis",
+        "comp_har_it": "compharit",
+        "comp_qr": "compqr",
+        "comp_qs": "compqs",
+        "comp_qt": "compqt",
+        "ct_har_ir": "ctharir",
+        "ct_har_is": "ctharis",
+        "ct_har_it": "ctharit",
+        "ct_ir": "ctir",
+        "ct_is": "ctis",
+        "ct_it": "ctit",
+        "ct_qr": "ctqr",
+        "ct_qs": "ctqs",
+        "ct_qt": "ctqt",
+        "datalogger_sn": "dataLogSn",
+        "real_op_percent": "realOPPercent",
+        "device_sn": "serialNum",  # align with other endpoints using "deviceSn" instead
+        "str_unbalance": "strUnblance",
+        "w_pid_fault_value": "wPIDFaultValue",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
+class MaxEnergyDataV4(ApiModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_max_energy_to_camel,
+    )
+
+    address: Union[EmptyStrToNone, int] = None  # e.g. 0
+    afci_pv1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    afci_pv2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    afci_status: Union[EmptyStrToNone, int] = None  # e.g. 0
+    again: Union[EmptyStrToNone, bool] = None  # e.g. False
+    alias: Union[EmptyStrToNone, str] = None  # e.g. None
+    apf_status: Union[EmptyStrToNone, float] = None  # APF/SVG status, e.g. 0
+    apf_status_text: Union[EmptyStrToNone, str] = None  # e.g. 'None'
+    calendar: Union[EmptyStrToNone, int] = None  # Time (Calendar), e.g. 1716618863392
+    comp_har_ir: Union[EmptyStrToNone, float] = None  # R-phase compensation harmonic amount, e.g. 0.0
+    comp_har_is: Union[EmptyStrToNone, float] = None  # S-phase compensation harmonic amount, e.g. 0.0
+    comp_har_it: Union[EmptyStrToNone, float] = None  # T-phase compensation harmonic amount, e.g. 0.0
+    comp_qr: Union[EmptyStrToNone, float] = None  # R-phase compensation reactive power, e.g. 0.0
+    comp_qs: Union[EmptyStrToNone, float] = None  # S-phase compensation reactive power, e.g. 0.0
+    comp_qt: Union[EmptyStrToNone, float] = None  # T-phase compensation reactive power, e.g. 0.0
+    ct_har_ir: Union[EmptyStrToNone, float] = None  # R-phase CT side harmonic amount, e.g. 0.0
+    ct_har_is: Union[EmptyStrToNone, float] = None  # S-phase CT side harmonic amount, e.g. 0.0
+    ct_har_it: Union[EmptyStrToNone, float] = None  # T-phase CT side harmonic amount, e.g. 0.0
+    ct_ir: Union[EmptyStrToNone, float] = None  # R-phase CT side current, e.g. 0.0
+    ct_is: Union[EmptyStrToNone, float] = None  # S-phase CT side current, e.g. 0.0
+    ct_it: Union[EmptyStrToNone, float] = None  # T-phase CT side current, e.g. 0.0
+    ct_qr: Union[EmptyStrToNone, float] = None  # R-phase CT side reactive power, e.g. 0.0
+    ct_qs: Union[EmptyStrToNone, float] = None  # S-phase CT side reactive power, e.g. 0.0
+    ct_qt: Union[EmptyStrToNone, float] = None  # T-phase CT side power, e.g. 0.0
+    current_string1: Union[EmptyStrToNone, float] = None  # String current 1, e.g. 0.0
+    current_string2: Union[EmptyStrToNone, float] = None  # String current 2, e.g. 0.0
+    current_string3: Union[EmptyStrToNone, float] = None  # String current 3, e.g. 0.0
+    current_string4: Union[EmptyStrToNone, float] = None  # String current 4, e.g. 0.0
+    current_string5: Union[EmptyStrToNone, float] = None  # String current 5, e.g. 0.0
+    current_string6: Union[EmptyStrToNone, float] = None  # String current 6, e.g. 0.0
+    current_string7: Union[EmptyStrToNone, float] = None  # String current 7, e.g. 0.0
+    current_string8: Union[EmptyStrToNone, float] = None  # String current 8, e.g. 0.0
+    current_string9: Union[EmptyStrToNone, float] = None  # String current 9, e.g. 0.0
+    current_string10: Union[EmptyStrToNone, float] = None  # String current 10, e.g. 0.0
+    current_string11: Union[EmptyStrToNone, float] = None  # String current 11, e.g. 0.0
+    current_string12: Union[EmptyStrToNone, float] = None  # String current 12, e.g. 0.0
+    current_string13: Union[EmptyStrToNone, float] = None  # String current 13, e.g. 0.0
+    current_string14: Union[EmptyStrToNone, float] = None  # String current 14, e.g. 0.0
+    current_string15: Union[EmptyStrToNone, float] = None  # String current 15, e.g. 0.0
+    current_string16: Union[EmptyStrToNone, float] = None  # String current 16, e.g. 0.0
+    current_string17: Union[EmptyStrToNone, float] = None  # String current 17, e.g. 0.0
+    current_string18: Union[EmptyStrToNone, float] = None  # String current 18, e.g. 0.0
+    current_string19: Union[EmptyStrToNone, float] = None  # String current 19, e.g. 0.0
+    current_string20: Union[EmptyStrToNone, float] = None  # String current 20, e.g. 0.0
+    current_string21: Union[EmptyStrToNone, float] = None  # String current 21, e.g. 0.0
+    current_string22: Union[EmptyStrToNone, float] = None  # String current 22, e.g. 0.0
+    current_string23: Union[EmptyStrToNone, float] = None  # String current 23, e.g. 0.0
+    current_string24: Union[EmptyStrToNone, float] = None  # String current 24, e.g. 0.0
+    current_string25: Union[EmptyStrToNone, float] = None  # String current 25, e.g. 0.0
+    current_string26: Union[EmptyStrToNone, float] = None  # String current 26, e.g. 0.0
+    current_string27: Union[EmptyStrToNone, float] = None  # String current 27, e.g. 0.0
+    current_string28: Union[EmptyStrToNone, float] = None  # String current 28, e.g. 0.0
+    current_string29: Union[EmptyStrToNone, float] = None  # String current 29, e.g. 0.0
+    current_string30: Union[EmptyStrToNone, float] = None  # String current 30, e.g. 0.0
+    current_string31: Union[EmptyStrToNone, float] = None  # String current 31, e.g. 0.0
+    current_string32: Union[EmptyStrToNone, float] = None  # String current 32, e.g. 0.0
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # e.g. 'BLE4BEQ0BW'
+    day: Union[EmptyStrToNone, str] = None  # Time - Day, e.g. None
+    debug1: Union[EmptyStrToNone, str] = None  # e.g. '160, 0, 0, 0, 324, 0, 0, 0'
+    debug2: Union[EmptyStrToNone, str] = None  # e.g. '0,0,0,0,0,0,0,0'
+    debug3: Union[EmptyStrToNone, str] = None  # e.g. '0,0,0,0,0,0,0,0'
+    derating_mode: Union[EmptyStrToNone, int] = None  # Derating mode, e.g. 0
+    dw_string_warning_value1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    eac_today: Union[EmptyStrToNone, float] = None  # Energy generated today, e.g. 21.600000381469727
+    e_rac_today: Union[EmptyStrToNone, float] = None  # Reactive energy today (kWh / kVarh), e.g. 0
+    e_rac_total: Union[EmptyStrToNone, float] = None  # Total reactive energy (kWh / kVarh), e.g. 0
+    eac_total: Union[EmptyStrToNone, float] = None  # Total energy generated, e.g. 1859.5
+    epv1_today: Union[EmptyStrToNone, float] = None  # PV1 energy generated today, e.g. 13.199999809265137
+    epv1_total: Union[EmptyStrToNone, float] = None  # Total PV1 energy generated, e.g. 926.6
+    epv2_today: Union[EmptyStrToNone, float] = None  # PV2 energy generated today, e.g. 8.199999809265137
+    epv2_total: Union[EmptyStrToNone, float] = None  # Total PV2 energy generated, e.g. 906.4
+    epv3_today: Union[EmptyStrToNone, float] = None  # PV3 energy generated today, e.g. 0
+    epv3_total: Union[EmptyStrToNone, float] = None  # Total PV3 energy generated, e.g. 0
+    epv4_today: Union[EmptyStrToNone, float] = None  # PV4 energy generated today, e.g. 0
+    epv4_total: Union[EmptyStrToNone, float] = None  # Total PV4 energy generated, e.g. 0
+    epv5_today: Union[EmptyStrToNone, float] = None  # PV5 energy generated today, e.g. 0
+    epv5_total: Union[EmptyStrToNone, float] = None  # Total PV5 energy generated, e.g. 0
+    epv6_today: Union[EmptyStrToNone, float] = None  # PV6 energy generated today, e.g. 0
+    epv6_total: Union[EmptyStrToNone, float] = None  # Total PV6 energy generated, e.g. 0
+    epv7_today: Union[EmptyStrToNone, float] = None  # PV7 energy generated today, e.g. 0
+    epv7_total: Union[EmptyStrToNone, float] = None  # Total PV7 energy generated, e.g. 0
+    epv8_today: Union[EmptyStrToNone, float] = None  # PV8 energy generated today, e.g. 0
+    epv8_total: Union[EmptyStrToNone, float] = None  # Total PV8 energy generated, e.g. 0
+    epv9_today: Union[EmptyStrToNone, float] = None  # PV9 energy generated today, e.g. 0
+    epv9_total: Union[EmptyStrToNone, float] = None  # Total PV9 energy generated, e.g. 0
+    epv10_today: Union[EmptyStrToNone, float] = None  # PV10 energy generated today, e.g. 0
+    epv10_total: Union[EmptyStrToNone, float] = None  # Total PV10 energy generated, e.g. 0
+    epv11_today: Union[EmptyStrToNone, float] = None  # PV11 energy generated today, e.g. 0
+    epv11_total: Union[EmptyStrToNone, float] = None  # Total PV11 energy generated, e.g. 0
+    epv12_today: Union[EmptyStrToNone, float] = None  # PV12 energy generated today, e.g. 0
+    epv12_total: Union[EmptyStrToNone, float] = None  # Total PV12 energy generated, e.g. 0
+    epv13_today: Union[EmptyStrToNone, float] = None  # PV13 energy generated today, e.g. 0
+    epv13_total: Union[EmptyStrToNone, float] = None  # Total PV13 energy generated, e.g. 0
+    epv14_today: Union[EmptyStrToNone, float] = None  # PV14 energy generated today, e.g. 0
+    epv14_total: Union[EmptyStrToNone, float] = None  # Total PV14 energy generated, e.g. 0
+    epv15_today: Union[EmptyStrToNone, float] = None  # PV15 energy generated today, e.g. 0
+    epv15_total: Union[EmptyStrToNone, float] = None  # Total PV15 energy generated, e.g. 0
+    epv16_today: Union[EmptyStrToNone, float] = None  # PV16 energy generated today, e.g. 0
+    epv16_total: Union[EmptyStrToNone, float] = None  # Total PV16 energy generated, e.g. 0
+    epv_total: Union[EmptyStrToNone, float] = None  # Total PV energy generated, e.g. 115372.9
+    fac: Union[EmptyStrToNone, float] = None  # grid frequency, e.g. 49.98
+    fault_code1: Union[EmptyStrToNone, int] = None  # Fault code, e.g. 2
+    fault_code2: Union[EmptyStrToNone, int] = None  # Fault code, e.g. 0
+    fault_type: Union[EmptyStrToNone, int] = None  # Fault code, e.g. 0
+    fault_value: Union[EmptyStrToNone, int] = None  # Fault value, e.g. 3
+    gfci: Union[EmptyStrToNone, float] = None  # Leakage current, e.g. 166
+    i_pid_pvape: Union[EmptyStrToNone, float] = None  # pid current 1 (A), e.g. 0.0
+    i_pid_pvbpe: Union[EmptyStrToNone, float] = None  # pid current 2 (A), e.g. 0.0
+    i_pid_pvcpe: Union[EmptyStrToNone, float] = None  # pid current 3 (A), e.g. 0.0
+    i_pid_pvdpe: Union[EmptyStrToNone, float] = None  # pid current 4 (A), e.g. 0.0
+    i_pid_pvepe: Union[EmptyStrToNone, float] = None  # pid current 5 (A), e.g. 0.0
+    i_pid_pvfpe: Union[EmptyStrToNone, float] = None  # pid current 6 (A), e.g. 0.0
+    i_pid_pvgpe: Union[EmptyStrToNone, float] = None  # pid current 7 (A), e.g. 0.0
+    i_pid_pvhpe: Union[EmptyStrToNone, float] = None  # pid current 8 (A), e.g. 0.0
+    i_pid_pvpe9: Union[EmptyStrToNone, float] = None  # pid current 9 (A), e.g. 0.0
+    i_pid_pvpe10: Union[EmptyStrToNone, float] = None  # pid current 10 (A), e.g. 0.0
+    i_pid_pvpe11: Union[EmptyStrToNone, float] = None  # pid current 11 (A), e.g. 0.0
+    i_pid_pvpe12: Union[EmptyStrToNone, float] = None  # pid current 12 (A), e.g. 0.0
+    i_pid_pvpe13: Union[EmptyStrToNone, float] = None  # pid current 13 (A), e.g. 0.0
+    i_pid_pvpe14: Union[EmptyStrToNone, float] = None  # pid current 14 (A), e.g. 0.0
+    i_pid_pvpe15: Union[EmptyStrToNone, float] = None  # pid current 15 (A), e.g. 0.0
+    i_pid_pvpe16: Union[EmptyStrToNone, float] = None  # pid current 16 (A), e.g. 0.0
+    iacr: Union[EmptyStrToNone, float] = None  # R-phase current (A), e.g. 3.1000001
+    iacs: Union[EmptyStrToNone, float] = None  # S-phase current (A), e.g. 3.2
+    iact: Union[EmptyStrToNone, float] = None  # T-phase current (A), e.g. 3.2
+    id: Union[EmptyStrToNone, int] = None  # e.g. 0
+    ipm_temperature: Union[EmptyStrToNone, float] = None  # IPM temperature, e.g. 0.0
+    ipv1: Union[EmptyStrToNone, float] = None  # PV1 current (A), e.g. 0.7
+    ipv2: Union[EmptyStrToNone, float] = None  # PV2 current (A), e.g. 2.4
+    ipv3: Union[EmptyStrToNone, float] = None  # PV3 current (A), e.g. 0.0
+    ipv4: Union[EmptyStrToNone, float] = None  # PV4 current (A), e.g. 0.0
+    ipv5: Union[EmptyStrToNone, float] = None  # PV5 current (A), e.g. 0.0
+    ipv6: Union[EmptyStrToNone, float] = None  # PV6 current (A), e.g. 0.0
+    ipv7: Union[EmptyStrToNone, float] = None  # PV7 current (A), e.g. 0.0
+    ipv8: Union[EmptyStrToNone, float] = None  # PV8 current (A), e.g. 0.0
+    ipv9: Union[EmptyStrToNone, float] = None  # PV9 current (A), e.g. 0.0
+    ipv10: Union[EmptyStrToNone, float] = None  # PV10 current (A), e.g. 0.0
+    ipv11: Union[EmptyStrToNone, float] = None  # PV11 current (A), e.g. 0.0
+    ipv12: Union[EmptyStrToNone, float] = None  # PV12 current (A), e.g. 0.0
+    ipv13: Union[EmptyStrToNone, float] = None  # PV13 current (A), e.g. 0.0
+    ipv14: Union[EmptyStrToNone, float] = None  # PV14 current (A), e.g. 0.0
+    ipv15: Union[EmptyStrToNone, float] = None  # PV15 current (A), e.g. 0.0
+    ipv16: Union[EmptyStrToNone, float] = None  # PV16 current (A), e.g. 0.0
+    lost: Union[EmptyStrToNone, bool] = None  # e.g. True
+    max_bean: Union[EmptyStrToNone, Any] = None
+    n_bus_voltage: Union[EmptyStrToNone, float] = None  # N Bus voltage, e.g. 334.9
+    op_fullwatt: Union[EmptyStrToNone, float] = None  # e.g. 27500.0
+    p_bus_voltage: Union[EmptyStrToNone, float] = None  # P Bus voltage, e.g. 332.6
+    pac: Union[EmptyStrToNone, float] = None  # Output power (W), e.g. 2038.9
+    pacr: Union[EmptyStrToNone, float] = None  # R-phase output power (W), e.g. 740.9
+    pacs: Union[EmptyStrToNone, float] = None  # S-phase output power (W), e.g. 749.1
+    pact: Union[EmptyStrToNone, float] = None  # T-phase output power (W), e.g. 782.1
+    pf: Union[EmptyStrToNone, float] = None  # pf value, e.g. 1.0
+    pid_bus: Union[EmptyStrToNone, float] = None  # PID BUS voltage, e.g. 0.0
+    pid_fault_code: Union[EmptyStrToNone, int] = None  # pid fault code, e.g. 0
+    pid_status: Union[EmptyStrToNone, int] = None  # pid status, e.g. 0
+    pid_status_text: Union[EmptyStrToNone, str] = None  # e.g. 'Lost'
+    power_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    power_total: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ppv: Union[EmptyStrToNone, float] = None  # Total PV input power (W), e.g. 2069.9
+    ppv1: Union[EmptyStrToNone, float] = None  # PV1 power (W), e.g. 410.4
+    ppv2: Union[EmptyStrToNone, float] = None  # PV2 power (W), e.g. 1551.6
+    ppv3: Union[EmptyStrToNone, float] = None  # PV3 power (W), e.g. 0.0
+    ppv4: Union[EmptyStrToNone, float] = None  # PV4 power (W), e.g. 0.0
+    ppv5: Union[EmptyStrToNone, float] = None  # PV5 power (W), e.g. 0.0
+    ppv6: Union[EmptyStrToNone, float] = None  # PV6 power (W), e.g. 0.0
+    ppv7: Union[EmptyStrToNone, float] = None  # PV7 power (W), e.g. 0.0
+    ppv8: Union[EmptyStrToNone, float] = None  # PV8 power (W), e.g. 0.0
+    ppv9: Union[EmptyStrToNone, float] = None  # PV9 power (W)r, e.g. 0.0
+    ppv10: Union[EmptyStrToNone, float] = None  # PV10 power (W), e.g. 0.0
+    ppv11: Union[EmptyStrToNone, float] = None  # PV11 power (W), e.g. 0.0
+    ppv12: Union[EmptyStrToNone, float] = None  # PV12 power (W), e.g. 0.0
+    ppv13: Union[EmptyStrToNone, float] = None  # PV13 power (W), e.g. 0.0
+    ppv14: Union[EmptyStrToNone, float] = None  # PV14 power (W), e.g. 0.0
+    ppv15: Union[EmptyStrToNone, float] = None  # PV15 power (W), e.g. 0.0
+    ppv16: Union[EmptyStrToNone, float] = None  # PV16 power (W), e.g. 0.0
+    pv_iso: Union[EmptyStrToNone, float] = None  # Insulation resistance, e.g. 3004
+    r_dci: Union[EmptyStrToNone, float] = None  # R-phase DC component, e.g. 0.2
+    rac: Union[EmptyStrToNone, float] = None  # Reactive power (W / Var), e.g. 0.0
+    react_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    react_power_max: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    react_power_total: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    real_op_percent: Union[EmptyStrToNone, float] = None  # e.g. 50
+    s_dci: Union[EmptyStrToNone, float] = None  # S-phase DC component, e.g. 0.7
+    device_sn: Union[EmptyStrToNone, str] = None  # Max device SN, e.g. 'HPJ0BF20FU'
+    status: Union[EmptyStrToNone, int] = None  # Max status (0: Standby, 1: , 2: Discharge, 3: Fault, 4: Flash), e.g. 1
+    status_text: Union[EmptyStrToNone, str] = None  # e.g. 'Normal'
+    str_break: Union[EmptyStrToNone, int] = None  # String not connected, e.g. 0
+    str_fault: Union[EmptyStrToNone, int] = None  # String error, e.g. 0
+    str_unbalance: Union[EmptyStrToNone, int] = None  # String current imbalance, e.g. 0
+    str_unmatch: Union[EmptyStrToNone, int] = None  # String mismatch, e.g. 0
+    t_dci: Union[EmptyStrToNone, float] = None  # T-phase DC component, e.g. 6552.7
+    temperature: Union[EmptyStrToNone, float] = None  # AMTemp1(°C), e.g. 52.5
+    temperature2: Union[EmptyStrToNone, float] = None  # INVTemp(°C), e.g. 41.4
+    temperature3: Union[EmptyStrToNone, float] = None  # BTTemp(°C), e.g. 39.100002
+    temperature4: Union[EmptyStrToNone, float] = None  # OUTTemp(°C), e.g. 0.0
+    temperature5: Union[EmptyStrToNone, float] = None  # AMTemp2(°C), e.g. 35.8
+    time: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2024-05-25 14:34:23'
+    time_calendar: Union[EmptyStrToNone, int] = None  # e.g. 1716618863392
+    time_total: Union[EmptyStrToNone, float] = None  # Total run time, e.g. 44968542.0
+    v_pid_pvape: Union[EmptyStrToNone, float] = None  # pid voltage 1 (V), e.g. 239.5
+    v_pid_pvbpe: Union[EmptyStrToNone, float] = None  # pid voltage 2 (V), e.g. 0.0
+    v_pid_pvcpe: Union[EmptyStrToNone, float] = None  # pid voltage 3 (V), e.g. 0.0
+    v_pid_pvdpe: Union[EmptyStrToNone, float] = None  # pid voltage 4 (V), e.g. 0.0
+    v_pid_pvepe: Union[EmptyStrToNone, float] = None  # pid voltage 5 (V), e.g. 0.0
+    v_pid_pvfpe: Union[EmptyStrToNone, float] = None  # pid voltage 6 (V), e.g. 0.0
+    v_pid_pvgpe: Union[EmptyStrToNone, float] = None  # pid voltage 7 (V), e.g. 0.0
+    v_pid_pvhpe: Union[EmptyStrToNone, float] = None  # pid voltage 8 (V), e.g. 0.0
+    v_pid_pvpe9: Union[EmptyStrToNone, float] = None  # pid voltage 9 (V), e.g. 0.0
+    v_pid_pvpe10: Union[EmptyStrToNone, float] = None  # pid voltage 10 (V), e.g. 0.0
+    v_pid_pvpe11: Union[EmptyStrToNone, float] = None  # pid voltage 11 (V), e.g. 0.0
+    v_pid_pvpe12: Union[EmptyStrToNone, float] = None  # pid voltage 12 (V), e.g. 0.0
+    v_pid_pvpe13: Union[EmptyStrToNone, float] = None  # pid voltage 13 (V), e.g. 0.0
+    v_pid_pvpe14: Union[EmptyStrToNone, float] = None  # pid voltage 14 (V), e.g. 0.0
+    v_pid_pvpe15: Union[EmptyStrToNone, float] = None  # pid voltage 15 (V), e.g. 0.0
+    v_pid_pvpe16: Union[EmptyStrToNone, float] = None  # pid voltage 16 (V), e.g. 0.0
+    v_string1: Union[EmptyStrToNone, float] = None  # String voltage 1, e.g. 0.0
+    v_string2: Union[EmptyStrToNone, float] = None  # String voltage 2, e.g. 0.0
+    v_string3: Union[EmptyStrToNone, float] = None  # String voltage 3, e.g. e.g. 0.0
+    v_string4: Union[EmptyStrToNone, float] = None  # String voltage 4, e.g. e.g. 0.0
+    v_string5: Union[EmptyStrToNone, float] = None  # String voltage 5, e.g. e.g. 0.0
+    v_string6: Union[EmptyStrToNone, float] = None  # String voltage 6, e.g. e.g. 0.0
+    v_string7: Union[EmptyStrToNone, float] = None  # String voltage 7, e.g. e.g. 0.0
+    v_string8: Union[EmptyStrToNone, float] = None  # String voltage 8, e.g. e.g. 0.0
+    v_string9: Union[EmptyStrToNone, float] = None  # String voltage 9, e.g. e.g. 0.0
+    v_string10: Union[EmptyStrToNone, float] = None  # String voltage 10, e.g. e.g. 0.0
+    v_string11: Union[EmptyStrToNone, float] = None  # String voltage 11, e.g. 0.0
+    v_string12: Union[EmptyStrToNone, float] = None  # String voltage 12, e.g. 0.0
+    v_string13: Union[EmptyStrToNone, float] = None  # String voltage 13, e.g. 0.0
+    v_string14: Union[EmptyStrToNone, float] = None  # String voltage 14, e.g. 0.0
+    v_string15: Union[EmptyStrToNone, float] = None  # String voltage 15, e.g. 0.0
+    v_string16: Union[EmptyStrToNone, float] = None  # String voltage 16, e.g. 0.0
+    v_string17: Union[EmptyStrToNone, float] = None  # String voltage 17, e.g. 0.0
+    v_string18: Union[EmptyStrToNone, float] = None  # String voltage 18, e.g. 0.0
+    v_string19: Union[EmptyStrToNone, float] = None  # String voltage 19, e.g. 0.0
+    v_string20: Union[EmptyStrToNone, float] = None  # String voltage 20, e.g. 0.0
+    v_string21: Union[EmptyStrToNone, float] = None  # String voltage 21, e.g. 0.0
+    v_string22: Union[EmptyStrToNone, float] = None  # String voltage 22, e.g. 0.0
+    v_string23: Union[EmptyStrToNone, float] = None  # String voltage 23, e.g. 0.0
+    v_string24: Union[EmptyStrToNone, float] = None  # String voltage 24, e.g. 0.0
+    v_string25: Union[EmptyStrToNone, float] = None  # String voltage 25, e.g. 0.0
+    v_string26: Union[EmptyStrToNone, float] = None  # String voltage 26, e.g. 0.0
+    v_string27: Union[EmptyStrToNone, float] = None  # String voltage 27, e.g. 0.0
+    v_string28: Union[EmptyStrToNone, float] = None  # String voltage 28, e.g. 0.0
+    v_string29: Union[EmptyStrToNone, float] = None  # String voltage 29, e.g. 0.0
+    v_string30: Union[EmptyStrToNone, float] = None  # String voltage 30, e.g. 0.0
+    v_string31: Union[EmptyStrToNone, float] = None  # String voltage 31, e.g. 0.0
+    v_string32: Union[EmptyStrToNone, float] = None  # String voltage 32, e.g. 0.0
+    vac_rs: Union[EmptyStrToNone, float] = None  # RS line voltage (V), e.g. 414.30002
+    vac_st: Union[EmptyStrToNone, float] = None  # ST line voltage (V), e.g. 407.2
+    vac_tr: Union[EmptyStrToNone, float] = None  # TR line voltage (V), e.g. 407.2
+    vacr: Union[EmptyStrToNone, float] = None  # R-phase voltage (V), e.g. 239.0
+    vacs: Union[EmptyStrToNone, float] = None  # S-phase voltage (V), e.g. 234.1
+    vact: Union[EmptyStrToNone, float] = None  # T-phase voltage (V), e.g. 237.0
+    vpv1: Union[EmptyStrToNone, float] = None  # PV1 voltage (V), e.g. 586.4
+    vpv2: Union[EmptyStrToNone, float] = None  # PV2 voltage (V), e.g. 646.5
+    vpv3: Union[EmptyStrToNone, float] = None  # PV3 voltage (V), e.g. 0.0
+    vpv4: Union[EmptyStrToNone, float] = None  # PV4 voltage (V), e.g. 0.0
+    vpv5: Union[EmptyStrToNone, float] = None  # PV5 voltage (V), e.g. 0.0
+    vpv6: Union[EmptyStrToNone, float] = None  # PV6 voltage (V), e.g. 0.0
+    vpv7: Union[EmptyStrToNone, float] = None  # PV7 voltage (V), e.g. 0.0
+    vpv8: Union[EmptyStrToNone, float] = None  # PV8 voltage (V), e.g. 0.0
+    vpv9: Union[EmptyStrToNone, float] = None  # PV9 voltage (V), e.g. 0.0
+    vpv10: Union[EmptyStrToNone, float] = None  # PV10 voltage (V), e.g. 0.0
+    vpv11: Union[EmptyStrToNone, float] = None  # PV11 voltage (V), e.g. 0.0
+    vpv12: Union[EmptyStrToNone, float] = None  # PV12 voltage (V), e.g. 0.0
+    vpv13: Union[EmptyStrToNone, float] = None  # PV13 voltage (V), e.g. 0.0
+    vpv14: Union[EmptyStrToNone, float] = None  # PV14 voltage (V), e.g. 0.0
+    vpv15: Union[EmptyStrToNone, float] = None  # PV15 voltage (V), e.g. 0.0
+    vpv16: Union[EmptyStrToNone, float] = None  # PV16 voltage (V), e.g. 0.0
+    w_pid_fault_value: Union[EmptyStrToNone, int] = None  # e.g. 0
+    w_string_status_value: Union[EmptyStrToNone, int] = None  # e.g. 0
+    warn_bit: Union[EmptyStrToNone, int] = None  # Fault bit, e.g. 0
+    warn_code: Union[EmptyStrToNone, int] = None  # Warning code, e.g. 220
+    warning_value1: Union[EmptyStrToNone, int] = None  # Warning value 1, e.g. 0
+    warning_value2: Union[EmptyStrToNone, int] = None  # Warning value 2, e.g. 0
+    warning_value3: Union[EmptyStrToNone, int] = None  # Warning value 3, e.g. 0
+    with_time: Union[EmptyStrToNone, bool] = None  # Whether the data sent has its own time, e.g. False
+
+
+class MaxEnergyOverviewDataV4(ApiModel):
+    max: List[MaxEnergyDataV4] = None
+
+
 class MaxEnergyV4(NewApiResponse):
-    data: Union[EmptyStrToNone, Any] = None
+    data: Union[EmptyStrToNone, MaxEnergyOverviewDataV4] = None
 
 
 # ------------------------------------------------------------------------------------------------

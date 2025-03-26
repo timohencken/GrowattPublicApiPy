@@ -15,11 +15,7 @@ from pydantic.alias_generators import to_camel
 
 
 def _empty_str_to_none(v: str | None) -> None:
-    if v is None:
-        return None
-    if v == "":
-        return None
-    if v == "null":
+    if v is None or v in ["", "null", "None"]:
         return None
     raise ValueError(
         "IGNORE (not a string - checking next type)"

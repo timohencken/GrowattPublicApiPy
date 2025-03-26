@@ -77,7 +77,7 @@ device_sn_sphs = [d for d in devices if d.device_type == "sph-s"][0].device_sn
 
 # _v4_energy_inv_ = ga.v4.energy(device_sn=device_sn_inv, device_type="inv")
 # _v4_energy_sto_ = ga.v4.energy(device_sn=device_sn_storage, device_type="storage")
-_v4_energy_max_ = ga.v4.energy(device_sn=device_sn_max, device_type="max")
+# _v4_energy_max_ = ga.v4.energy(device_sn=device_sn_max, device_type="max")
 _v4_energy_sph_ = ga.v4.energy(device_sn=device_sn_sph, device_type="sph")
 _v4_energy_spa_ = ga.v4.energy(device_sn=device_sn_spa, device_type="spa")
 # _v4_energy_min_ = ga.v4.energy(device_sn=None, device_type="min")

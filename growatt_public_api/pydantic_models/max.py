@@ -170,6 +170,7 @@ def _max_energy_overview_data_to_camel(snake: str) -> str:
         "ct_qt": "ctqt",
         "datalogger_sn": "dataLogSn",
         "real_op_percent": "realOPPercent",
+        "device_sn": "serialNum",  # align with other endpoints using "deviceSn" instead
         "str_unbalance": "strUnblance",
         "w_pid_fault_value": "wPIDFaultValue",
     }
@@ -192,21 +193,21 @@ class MaxEnergyOverviewData(ApiModel):
     apf_status: Union[EmptyStrToNone, float] = None  # APF/SVG status, e.g. 0
     apf_status_text: Union[EmptyStrToNone, str] = None  # e.g. 'None'
     calendar: Union[EmptyStrToNone, GrowattTimeCalendar] = None
-    comp_har_ir: Union[EmptyStrToNone, int] = None  # R phase compensation harmonic content, e.g. 0
-    comp_har_is: Union[EmptyStrToNone, int] = None  # S phase compensation harmonic content, e.g. 0
-    comp_har_it: Union[EmptyStrToNone, int] = None  # T phase compensation harmonic content, e.g. 0
-    comp_qr: Union[EmptyStrToNone, int] = None  # R phase compensation reactive power, e.g. 0
-    comp_qs: Union[EmptyStrToNone, int] = None  # S phase compensation reactive power, e.g. 0
-    comp_qt: Union[EmptyStrToNone, int] = None  # T phase compensation reactive power, e.g. 0
-    ct_har_ir: Union[EmptyStrToNone, int] = None  # R phase CT side harmonic content, e.g. 0
-    ct_har_is: Union[EmptyStrToNone, int] = None  # S phase CT side harmonic content, e.g. 0
-    ct_har_it: Union[EmptyStrToNone, int] = None  # T phase CT side harmonic content, e.g. 0
-    ct_ir: Union[EmptyStrToNone, int] = None  # R phase CT side current, e.g. 0
-    ct_is: Union[EmptyStrToNone, int] = None  # S phase CT side current, e.g. 0
-    ct_it: Union[EmptyStrToNone, int] = None  # T phase CT side current, e.g. 0
-    ct_qr: Union[EmptyStrToNone, int] = None  # R phase CT side reactive power, e.g. 0
-    ct_qs: Union[EmptyStrToNone, int] = None  # S phase CT side reactive power, e.g. 0
-    ct_qt: Union[EmptyStrToNone, int] = None  # T phase CT side electric power, e.g. 0
+    comp_har_ir: Union[EmptyStrToNone, float] = None  # R phase compensation harmonic content, e.g. 0
+    comp_har_is: Union[EmptyStrToNone, float] = None  # S phase compensation harmonic content, e.g. 0
+    comp_har_it: Union[EmptyStrToNone, float] = None  # T phase compensation harmonic content, e.g. 0
+    comp_qr: Union[EmptyStrToNone, float] = None  # R phase compensation reactive power, e.g. 0
+    comp_qs: Union[EmptyStrToNone, float] = None  # S phase compensation reactive power, e.g. 0
+    comp_qt: Union[EmptyStrToNone, float] = None  # T phase compensation reactive power, e.g. 0
+    ct_har_ir: Union[EmptyStrToNone, float] = None  # R phase CT side harmonic content, e.g. 0
+    ct_har_is: Union[EmptyStrToNone, float] = None  # S phase CT side harmonic content, e.g. 0
+    ct_har_it: Union[EmptyStrToNone, float] = None  # T phase CT side harmonic content, e.g. 0
+    ct_ir: Union[EmptyStrToNone, float] = None  # R phase CT side current, e.g. 0
+    ct_is: Union[EmptyStrToNone, float] = None  # S phase CT side current, e.g. 0
+    ct_it: Union[EmptyStrToNone, float] = None  # T phase CT side current, e.g. 0
+    ct_qr: Union[EmptyStrToNone, float] = None  # R phase CT side reactive power, e.g. 0
+    ct_qs: Union[EmptyStrToNone, float] = None  # S phase CT side reactive power, e.g. 0
+    ct_qt: Union[EmptyStrToNone, float] = None  # T phase CT side electric power, e.g. 0
     current_string1: Union[EmptyStrToNone, float] = None  # String current 1, e.g. 0
     current_string2: Union[EmptyStrToNone, float] = None  # String current 2, e.g. 0
     current_string3: Union[EmptyStrToNone, float] = None  # String current 3, e.g. 0
@@ -226,6 +227,7 @@ class MaxEnergyOverviewData(ApiModel):
     current_string17: Union[EmptyStrToNone, float] = None  # String current n
     current_string18: Union[EmptyStrToNone, float] = None  # String current n
     current_string19: Union[EmptyStrToNone, float] = None  # String current n
+    current_string20: Union[EmptyStrToNone, float] = None  # String current n
     current_string21: Union[EmptyStrToNone, float] = None  # String current n
     current_string22: Union[EmptyStrToNone, float] = None  # String current n
     current_string23: Union[EmptyStrToNone, float] = None  # String current n
@@ -335,7 +337,7 @@ class MaxEnergyOverviewData(ApiModel):
     pact: Union[EmptyStrToNone, float] = None  # e.g. 0
     p_bus_voltage: Union[EmptyStrToNone, float] = None  # e.g. 367
     pf: Union[EmptyStrToNone, float] = None  # e.g. 0.08100000023841858
-    pid_bus: Union[EmptyStrToNone, int] = None
+    pid_bus: Union[EmptyStrToNone, float] = None
     pid_fault_code: Union[EmptyStrToNone, int] = None
     pid_status: Union[EmptyStrToNone, int] = None
     pid_status_text: Union[EmptyStrToNone, str] = None
@@ -366,11 +368,11 @@ class MaxEnergyOverviewData(ApiModel):
     react_power_total: Union[EmptyStrToNone, float] = None
     real_op_percent: Union[EmptyStrToNone, float] = None  # e.g. 50
     s_dci: Union[EmptyStrToNone, float] = None  # S-phase DC component
-    serial_num: Union[EmptyStrToNone, str] = None  # e.g. 'BNE9A5100D'
-    status: Union[EmptyStrToNone, int] = None  # Min Status (0: waiting, 1: normal, 2: fault), e.g. 1
+    device_sn: Union[EmptyStrToNone, str] = None  # e.g. 'BNE9A5100D'
+    status: Union[EmptyStrToNone, int] = None  # Max status (0: Standby, 1: , 2: Discharge, 3: Fault, 4: Flash), e.g. 1
     status_text: Union[EmptyStrToNone, str] = None  # e.g. 'Normal'
-    str_Break: Union[EmptyStrToNone, int] = None  # The string is not connected
-    str_Fault: Union[EmptyStrToNone, int] = None  # String error
+    str_break: Union[EmptyStrToNone, int] = None  # The string is not connected
+    str_fault: Union[EmptyStrToNone, int] = None  # String error
     str_unbalance: Union[EmptyStrToNone, int] = None  # Uneven string flow
     str_unmatch: Union[EmptyStrToNone, int] = None  # The string does not match
     t_dci: Union[EmptyStrToNone, float] = None  # T-phase DC component, e.g. 0
