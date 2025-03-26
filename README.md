@@ -190,7 +190,7 @@ This package aims to
     * Max
     * Sph (MIX)
     * Spa
-    * Min   ***Not*** implemented yet
+    * Min
     * Wit   ***Not*** implemented yet
     * Sph-s (SPH)   ***Not*** implemented yet
     * Noah   ***Not*** implemented yet
