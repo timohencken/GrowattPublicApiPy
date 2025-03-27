@@ -185,15 +185,7 @@ This package aims to
   * read device data `v4.details()`
 * device metrics
   * current `v4.energy()`
-    * Inv
-    * Storage
-    * Max
-    * Sph (MIX)
-    * Spa
-    * Min
-    * Wit
-    * Sph-s (SPH)
-    * Noah   ***Not*** implemented yet
+    * Note for NOAH: API docs are incomplete. I would be happy if you dump NOAHs output and create a github issue.
   * historical data `v4.energy_history()`   ***Not*** implemented yet
     * Inv   ***Not*** implemented yet
     * Storage   ***Not*** implemented yet
@@ -310,7 +302,7 @@ To the best of our knowledge only the settings functions perform modifications t
   * APIv4 endpoints
     * `v4.list()`
     * `v4.details()`
-    * TODO: `v4.energy()`
+    * `v4.energy()`
     * TODO: `v4.energy_history()`
 * 2025.03.11 (pre-alpha)
   * all API v1 endpoints implemented

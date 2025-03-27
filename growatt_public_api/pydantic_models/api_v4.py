@@ -3941,8 +3941,131 @@ class SphsEnergyV4(NewApiResponse):
 # ------------------------------------------------------------------------------------------------
 
 
+def _noah_energy_to_camel(snake: str) -> str:
+    override = {
+        # TODO
+        "datalogger_sn": "dataLogSn",
+        # "bms_soc": "bmsSOC",
+        # "bms_soh": "bmsSOH",
+        # "e_charge1_today": "echarge1Today",
+        # "e_charge1_total": "echarge1Total",
+        # "e_discharge1_today": "edischargeToday",
+        # "e_discharge1_total": "edischargeTotal",
+        # "e_local_load_hour": "elocalLoadHour",
+        # "e_local_load_month": "elocalLoadMonth",
+        # "e_local_load_today": "elocalLoadToday",
+        # "e_local_load_total": "elocalLoadTotal",
+        # "e_local_load_year": "elocalLoadYear",
+        # "e_self_hour": "eselfHour",
+        # "e_self_month": "eselfMonth",
+        # "e_self_year": "eselfYear",
+        # "e_self_today": "eselftoday",
+        # "e_self_total": "eselftotal",
+        # "e_system_today": "esystemtoday",
+        # "e_system_total": "esystemtotal",
+        # "e_system_hour": "esystemHour",
+        # "e_system_month": "esystemMonth",
+        # "e_system_year": "esystemYear",
+        # "e_to_grid_today": "etoGridToday",
+        # "e_to_grid_total": "etoGridTotal",
+        # "e_to_user_today": "etoUserToday",
+        # "e_to_user_total": "etoUserTotal",
+        # "p_self": "pself",
+        # "p_system": "psystem",
+        # "device_sn": "serialNum",  # align with other endpoints using "deviceSn" instead
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
+class NoahEnergyDataV4(ApiModel):
+    """
+    Note: NOAH documentation is VERY incomplete (json shows SPH-S instead).
+          see https://www.showdoc.com.cn/2540838290984246/11315141402697236
+    Therefore, attributes listed here are possible not complete.
+    A real NOAH device would be required to find the correct attributes
+    """
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_noah_energy_to_camel,
+    )
+
+    # no sample response in API docs - just parameter descriptions
+    battery_package_quantity: Union[EmptyStrToNone, int] = None  # Number of parallel battery packs
+    battery1_protect_status: Union[EmptyStrToNone, int] = (
+        None  # Battery pack 1 protection status, BIT0: Low voltage protection, BIT1: High voltage protection, BIT2: Low charging temperature protection, BIT3: High charging temperature protection, BIT4: Low discharging temperature protection, BIT5: High discharging temperature protection, BIT6: Charging overcurrent protection, BIT7: Discharging overcurrent protection, BIT8: Battery error, BIT9: NTC disconnection, BIT10: Voltage sampling line disconnection, BIT11~BIT15: Reserved
+    )
+    battery1_serial_num: Union[EmptyStrToNone, str] = None  # Battery pack 1—SN
+    battery1_soc: Union[EmptyStrToNone, int] = None  # Battery pack 1_SOC
+    battery1_temp: Union[EmptyStrToNone, float] = None  # Battery pack 1 temperature
+    battery1_warn_status: Union[EmptyStrToNone, int] = (
+        None  # Battery pack 1 warning status, BIT0: Low voltage warning, BIT1: High voltage warning, BIT2: Low charging temperature warning, BIT3: High charging temperature warning, BIT4: Low discharging temperature warning, BIT5: High discharging temperature warning, BIT6: Charging overcurrent warning, BIT7: Discharging overcurrent warning, BIT8~BIT15: Reserved
+    )
+    battery2_protect_status: Union[EmptyStrToNone, int] = (
+        None  # Battery pack 2 protection status, BIT0: Low voltage protection, BIT1: High voltage protection, BIT2: Low charging temperature protection, BIT3: High charging temperature protection, BIT4: Low discharging temperature protection, BIT5: High discharging temperature protection, BIT6: Charging overcurrent protection, BIT7: Discharging overcurrent protection, BIT8: Battery error, BIT9: NTC disconnection, BIT10: Voltage sampling line disconnection, BIT11~BIT15: Reserved
+    )
+    battery2_serial_num: Union[EmptyStrToNone, str] = None  # Battery pack 2—SN
+    battery2_soc: Union[EmptyStrToNone, int] = None  # Battery pack 2_SOC
+    battery2_temp: Union[EmptyStrToNone, float] = None  # Battery pack 2 temperature
+    battery2_warn_status: Union[EmptyStrToNone, int] = (
+        None  # Battery pack 2 warning status, BIT0: Low voltage warning, BIT1: High voltage warning, BIT2: Low charging temperature warning, BIT3: High charging temperature warning, BIT4: Low discharging temperature warning, BIT5: High discharging temperature warning, BIT6: Charging overcurrent warning, BIT7: Discharging overcurrent warning, BIT8~BIT15: Reserved
+    )
+    battery3_protect_status: Union[EmptyStrToNone, int] = (
+        None  # Battery pack 3 protection status, BIT0: Low voltage protection, BIT1: High voltage protection, BIT2: Low charging temperature protection, BIT3: High charging temperature protection, BIT4: Low discharging temperature protection, BIT5: High discharging temperature protection, BIT6: Charging overcurrent protection, BIT7: Discharging overcurrent protection, BIT8: Battery error, BIT9: NTC disconnection, BIT10: Voltage sampling line disconnection, BIT11~BIT15: Reserved
+    )
+    battery3_serial_num: Union[EmptyStrToNone, str] = None  # Battery pack 3—SN
+    battery3_soc: Union[EmptyStrToNone, int] = None  # Battery pack 3_SOC
+    battery3_temp: Union[EmptyStrToNone, float] = None  # Battery pack 3 temperature
+    battery3_warn_status: Union[EmptyStrToNone, int] = (
+        None  # Battery pack 3 warning status, BIT0: Low voltage warning, BIT1: High voltage warning, BIT2: Low charging temperature warning, BIT3: High charging temperature warning, BIT4: Low discharging temperature warning, BIT5: High discharging temperature warning, BIT6: Charging overcurrent warning, BIT7: Discharging overcurrent warning, BIT8~BIT15: Reserved
+    )
+    battery4_protect_status: Union[EmptyStrToNone, int] = (
+        None  # Battery pack 4 protection status, BIT0: Low voltage protection, BIT1: High voltage protection, BIT2: Low charging temperature protection, BIT3: High charging temperature protection, BIT4: Low discharging temperature protection, BIT5: High discharging temperature protection, BIT6: Charging overcurrent protection, BIT7: Discharging overcurrent protection, BIT8: Battery error, BIT9: NTC disconnection, BIT10: Voltage sampling line disconnection, BIT11~BIT15: Reserved
+    )
+    battery4_serial_num: Union[EmptyStrToNone, str] = None  # Battery pack 4—SN
+    battery4_soc: Union[EmptyStrToNone, int] = None  # Battery pack 4_SOC
+    battery4_temp: Union[EmptyStrToNone, float] = None  # Battery pack 4 temperature
+    battery4_warn_status: Union[EmptyStrToNone, int] = (
+        None  # Battery pack 4 warning status, BIT0: Low voltage warning, BIT1: High voltage warning, BIT2: Low charging temperature warning, BIT3: High charging temperature warning, BIT4: Low discharging temperature warning, BIT5: High discharging temperature warning, BIT6: Charging overcurrent warning, BIT7: Discharging overcurrent warning, BIT8~BIT15: Reserved
+    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # Data logger serial number
+    device_sn: Union[EmptyStrToNone, str] = None  # Device number
+    eac_month: Union[EmptyStrToNone, float] = None  # Monthly power generation
+    eac_today: Union[EmptyStrToNone, float] = None  # Daily power generation
+    eac_total: Union[EmptyStrToNone, float] = None  # Total power generation
+    eac_year: Union[EmptyStrToNone, float] = None  # Annual power generation
+    fault_status: Union[EmptyStrToNone, int] = (
+        None  # Fault status, BIT0: Battery pack 1 fault, BIT1: Battery pack 2 fault, BIT2: Battery pack 3 fault, BIT3: Battery pack 4 fault
+    )
+    heating_status: Union[EmptyStrToNone, int] = (
+        None  # Heating status, BIT0: Battery pack 1 is heating, BIT1: Battery pack 2 is heating, BIT2: Battery pack 3 is heating, BIT3: Battery pack 4 is heating
+    )
+    is_Again: Union[EmptyStrToNone, bool] = None  # Whether it is retransmitted data
+    mppt_protect_status: Union[EmptyStrToNone, int] = (
+        None  # BIT0: PV1 overvoltage protection, BIT1: PV1 overcurrent protection, BIT2: PV1 overtemperature protection, BIT3: Reserved, BIT4: PV2 overvoltage protection, BIT5: PV2 overcurrent protection
+    )
+    pac: Union[EmptyStrToNone, float] = None  # BUCK output power
+    pd_warn_status: Union[EmptyStrToNone, int] = (
+        None  # BIT0: Communication with BMS failed, BIT1: Communication with MPPT failed
+    )
+    ppv: Union[EmptyStrToNone, float] = None  # Photovoltaic power (W)
+    status: Union[EmptyStrToNone, int] = None  # 1: Normal, 4: Fault, 5: Heating
+    time: Union[EmptyStrToNone, datetime.datetime] = None  # Time
+    total_battery_pack_charging_power: Union[EmptyStrToNone, int] = None  # Total battery charging/discharging power
+    total_battery_pack_charging_status: Union[EmptyStrToNone, int] = (
+        None  # BIT0: Charging, BIT1: Discharging, if neither, display standby
+    )
+    total_battery_pack_soc: Union[EmptyStrToNone, int] = None  # Total battery pack SOC (State of Charge) percentage
+    work_mode: Union[EmptyStrToNone, int] = None  # Current time period working mode
+
+
+class NoahEnergyOverviewDataV4(ApiModel):
+    noah: List[NoahEnergyDataV4] = None
+
+
 class NoahEnergyV4(NewApiResponse):
-    data: Union[EmptyStrToNone, Any] = None
+    data: Union[EmptyStrToNone, NoahEnergyOverviewDataV4] = None
 
 
 # ------------------------------------------------------------------------------------------------

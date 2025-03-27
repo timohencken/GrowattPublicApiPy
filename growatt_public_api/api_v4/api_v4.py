@@ -1,6 +1,7 @@
 from typing import Optional, Literal, List, Union
 
 import truststore
+from loguru import logger
 
 from pydantic_models.api_v4 import (
     DeviceListV4,
@@ -3197,8 +3198,52 @@ class ApiV4:
             {'data': {'sph': None}, 'error_code': 0, 'error_msg': 'SUCCESSFUL_OPERATION'}
 
             NoahEnergyV4
-            <TBA>
-
+            Note: NOAH documentation is VERY incomplete
+                  (see https://www.showdoc.com.cn/2540838290984246/11315141402697236 - json shows SPH-S instead).
+                  Therefore, attributes listed here are possible not complete.
+                  A real NOAH device would be required to find the correct attributes
+            {   'data': {   'noah': [   {   'battery1_protect_status': None,
+                                            'battery1_serial_num': None,
+                                            'battery1_soc': None,
+                                            'battery1_temp': None,
+                                            'battery1_warn_status': None,
+                                            'battery2_protect_status': None,
+                                            'battery2_serial_num': None,
+                                            'battery2_soc': None,
+                                            'battery2_temp': None,
+                                            'battery2_warn_status': None,
+                                            'battery3_protect_status': None,
+                                            'battery3_serial_num': None,
+                                            'battery3_soc': None,
+                                            'battery3_temp': None,
+                                            'battery3_warn_status': None,
+                                            'battery4_protect_status': None,
+                                            'battery4_serial_num': None,
+                                            'battery4_soc': None,
+                                            'battery4_temp': None,
+                                            'battery4_warn_status': None,
+                                            'battery_package_quantity': None,
+                                            'datalogger_sn': None,
+                                            'device_sn': None,
+                                            'eac_month': None,
+                                            'eac_today': None,
+                                            'eac_total': None,
+                                            'eac_year': None,
+                                            'fault_status': None,
+                                            'heating_status': None,
+                                            'is_Again': None,
+                                            'mppt_protect_status': None,
+                                            'pac': None,
+                                            'pd_warn_status': None,
+                                            'ppv': None,
+                                            'status': None,
+                                            'time': None,
+                                            'total_battery_pack_charging_power': None,
+                                            'total_battery_pack_charging_status': None,
+                                            'total_battery_pack_soc': None,
+                                            'work_mode': None}]},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
         if isinstance(device_sn, list):
@@ -3212,181 +3257,6 @@ class ApiV4:
                 "deviceType": device_type,
             },
         )
-
-        # FIXME DEBUG
-        sample_data = """{
-    "code": 0,
-    "data": {
-        "sph-s": [
-            {
-                "serialNum": "EFP0N1J023",
-                "dataLogSn": "VC41010123438079",
-                "calendar": 1716965431997,
-                "withTime": false,
-                "status": 6,
-                "lost": true,
-                "ppv": 948.0,
-                "ppv1": 0.0,
-                "ppv2": 0.0,
-                "ppv3": 948.0,
-                "vpv1": 0.0,
-                "vpv2": 0.0,
-                "vpv3": 349.5,
-                "ipv1": 0.0,
-                "ipv2": 0.0,
-                "ipv3": 2.7,
-                "pac": 888.0,
-                "fac": 49.98,
-                "vac1": 230.3,
-                "iac1": 1.3,
-                "pac1": 0.0,
-                "vac2": 0.0,
-                "iac2": 0.0,
-                "pac2": 0.0,
-                "eacToday": 8.1,
-                "eacTotal": 410.1,
-                "timeTotal": 0.0,
-                "epv1Today": 0.0,
-                "epv1Total": 0.0,
-                "epv2Today": 0.0,
-                "epv2Total": 0.0,
-                "epv3Today": 14.0,
-                "epv3Total": 0.0,
-                "epvToday": 14.0,
-                "epvTotal": 494.0,
-                "pf": -1.0,
-                "faultCode": 0,
-                "faultBitCode": 0,
-                "systemFault": 0,
-                "systemWarn": 0,
-                "warnCode1": 0,
-                "warnCode": 0,
-                "priorityChoose": 0,
-                "deviceType": 0,
-                "uwSysWorkMode": 6,
-                "sysFaultWord": 12337,
-                "sysFaultWord1": 12851,
-                "sysFaultWord2": 13365,
-                "sysFaultWord3": 13879,
-                "sysFaultWord4": 14393,
-                "sysFaultWord5": 16706,
-                "sysFaultWord6": 17220,
-                "sysFaultWord7": 17734,
-                "pdischarge1": 0.0,
-                "pcharge1": 0.0,
-                "vbat": 53.4,
-                "soc": 100,
-                "pacToUserR": 0.0,
-                "pacToUserTotal": 0.0,
-                "pacToGridR": 0.0,
-                "pacToGridS": 0.0,
-                "pacToGridTotal": 0.0,
-                "plocalLoadR": 0.0,
-                "plocalLoadS": 0.0,
-                "plocalLoadTotal": 888.0,
-                "spStatus": 1,
-                "etoUserToday": 1.0,
-                "etoUserTotal": 535.8,
-                "etoGridToday": 0.0,
-                "etoGridTotal": 6.4,
-                "edischarge1Today": 4.2,
-                "edischarge1Total": 172.7,
-                "echarge1Today": 9.5,
-                "echarge1Total": 177.9,
-                "elocalLoadToday": 9.7,
-                "elocalLoadTotal": 1018.2,
-                "upsFac": 50.0,
-                "upsVac1": 229.5,
-                "epsIac1": 3.8,
-                "upsPac1": 888.0,
-                "epsVac2": 0.0,
-                "epsIac2": 0.0,
-                "upsPac2": 0.0,
-                "bmsSOC": 100,
-                "bmsBatteryVolt": 5.34,
-                "bmsBatteryCurr": 0.0,
-                "bmsBatteryTemp": 35.3,
-                "bmsSOH": 0,
-                "bmsConstantVolt": 5.68,
-                "bmsUsingCap": 2000,
-                "pex": 888.0,
-                "esystemtoday": 18.200000762939453,
-                "esystemtotal": 666.7000122070312,
-                "eselftoday": 18.200000762939453,
-                "eselftotal": 660.2999877929688,
-                "psystem": 942.0,
-                "pself": 942.0,
-                "sysStatus": 3,
-                "dcTemp": 56.7,
-                "invTemp": 47.4,
-                "gridStatus": 0,
-                "genPower": 0.0,
-                "genVol": 0.0,
-                "genCurr": 0.0,
-                "genFreq": 0.0,
-                "genEnergy": 0.0,
-                "rLocalEnergy": 904.3,
-                "sLocalEnergy": 0.0,
-                "chipType": 0,
-                "genEnergyToday": 0.0,
-                "loadPower1": 760.0,
-                "loadPower2": 0.0,
-                "rLoadVol": 229.8,
-                "sLoadVol": 0.0,
-                "esystemHour": 0.7,
-                "esystemMonth": 328.9,
-                "esystemYear": 666.7,
-                "eselfHour": 0.7,
-                "eselfMonth": 323.2,
-                "eselfYear": 660.3,
-                "eToGridHour": 0.0,
-                "eToGridMonth": 5.7,
-                "eToGridYear": 6.4,
-                "eToUserHour": 0.0,
-                "eToUserMonth": 186.5,
-                "eToUserYear": 535.8,
-                "elocalLoadHour": 0.7,
-                "elocalLoadMonth": 509.7,
-                "elocalLoadYear": 1071.6,
-                "epvHour": 0.7,
-                "epvMonth": 256.6,
-                "epvYear": 494.0,
-                "batPower": 0.0,
-                "vbat1": 53.3,
-                "ibat": 0.0,
-                "m1Version": null,
-                "m2Version": null,
-                "hmiVersion": null,
-                "sphBean": null,
-                "dayMap": null,
-                "time": "2024-05-29 14:50:31",
-                "warnText": "Unknown",
-                "errorText": "Unknown",
-                "statusText": "Fault",
-                "again": false,
-                "ppvText": "948.0 W",
-                "socText": "100%"
-            }
-        ]
-    },
-    "message": "SUCCESSFUL_OPERATION"
-}"""
-        import json
-        import pprint
-
-        j = json.loads(sample_data)
-        pprint.pprint(j, indent=4, width=500)
-        k = SphsEnergyV4.model_validate(j)  # <-----------------------------
-        pprint.pprint(k.model_dump(), indent=4, width=500)
-        # FIXME DEBUG
-
-        # FIXME DEBUG
-        import pprint
-
-        pprint.pprint(response, indent=4, width=500)
-        k2 = SphsEnergyV4.model_validate(response)  # <-----------------------------
-        pprint.pprint(k2.model_dump(), indent=4, width=500)
-        # FIXME DEBUG
 
         device_type = device_type.lower()
         if device_type == "inv":
@@ -3405,7 +3275,12 @@ class ApiV4:
             return WitEnergyV4.model_validate(response)
         elif device_type == "sph-s":
             return SphsEnergyV4.model_validate(response)
-        elif device_type == "noah":  # TODO ongoing
+        elif device_type == "noah":
+            logger.warning(
+                "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
+            )
+            logger.warning("please send following output to a developer:")
+            logger.warning(f"NOAH energy dump:\n{response}")
             return NoahEnergyV4.model_validate(response)
         else:
             raise ValueError(f"Unknown device type: {device_type}")
