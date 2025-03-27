@@ -191,8 +191,8 @@ This package aims to
     * Sph (MIX)
     * Spa
     * Min
-    * Wit   ***Not*** implemented yet
-    * Sph-s (SPH)   ***Not*** implemented yet
+    * Wit
+    * Sph-s (SPH)
     * Noah   ***Not*** implemented yet
   * historical data `v4.energy_history()`   ***Not*** implemented yet
     * Inv   ***Not*** implemented yet

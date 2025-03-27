@@ -300,6 +300,12 @@ def _sph_energy_overview_data_to_camel(snake: str) -> str:
         "bms_mcu_version": "bmsMCUVersion",
         "bms_soc": "bmsSOC",
         "bms_soh": "bmsSOH",
+        "e_charge1_today": "echarge1Today",
+        "e_charge1_total": "echarge1Total",
+        "e_discharge1_today": "edischargeToday",
+        "e_discharge1_total": "edischargeTotal",
+        "e_local_load_today": "elocalLoadToday",
+        "e_local_load_total": "elocalLoadTotal",
         "e_to_grid_today": "etoGridToday",
         "e_to_user_today": "etoUserToday",
         "e_to_user_total": "etoUserTotal",
@@ -373,12 +379,12 @@ class SphEnergyOverviewData(ApiModel):
     day_map: Union[EmptyStrToNone, Any] = None  # , e.g. None
     eac_today: Union[EmptyStrToNone, float] = None  # e.g. 21.600000381469727
     eac_total: Union[EmptyStrToNone, float] = None  # e.g. 1859.5
-    echarge1_today: Union[EmptyStrToNone, float] = None  # Daily battery charge, e.g. 0.2
-    echarge1_total: Union[EmptyStrToNone, float] = None  # Total battery charge, e.g. 6113.2
-    edischarge1_today: Union[EmptyStrToNone, float] = None  # Daily battery discharge, e.g. 0.4
-    edischarge1_total: Union[EmptyStrToNone, float] = None  # Total battery discharge, e.g. 5540.6
-    elocal_load_today: Union[EmptyStrToNone, float] = None  # Daily power consumption of local load, e.g. 0
-    elocal_load_total: Union[EmptyStrToNone, float] = None  # Total local load power consumption, e.g. 26980.8
+    e_charge1_today: Union[EmptyStrToNone, float] = None  # Daily battery charge, e.g. 0.2
+    e_charge1_total: Union[EmptyStrToNone, float] = None  # Total battery charge, e.g. 6113.2
+    e_discharge1_today: Union[EmptyStrToNone, float] = None  # Daily battery discharge, e.g. 0.4
+    e_discharge1_total: Union[EmptyStrToNone, float] = None  # Total battery discharge, e.g. 5540.6
+    e_local_load_today: Union[EmptyStrToNone, float] = None  # Daily power consumption of local load, e.g. 0
+    e_local_load_total: Union[EmptyStrToNone, float] = None  # Total local load power consumption, e.g. 26980.8
     eps_vac2: Union[EmptyStrToNone, float] = None  # S-phase voltage on off-grid side, e.g.  0
     eps_vac3: Union[EmptyStrToNone, float] = None  # T-phase voltage on off-grid side, e.g. 0
     epv1_today: Union[EmptyStrToNone, float] = None  # e.g. 13.199999809265137

@@ -2465,6 +2465,12 @@ def _sph_energy_to_camel(snake: str) -> str:
         "bms_mcu_version": "bmsMCUVersion",
         "bms_soc": "bmsSOC",
         "bms_soh": "bmsSOH",
+        "e_charge1_today": "echarge1Today",
+        "e_charge1_total": "echarge1Total",
+        "e_discharge1_today": "edischargeToday",
+        "e_discharge1_total": "edischargeTotal",
+        "e_local_load_today": "elocalLoadToday",
+        "e_local_load_total": "elocalLoadTotal",
         "epv_today": "epvtoday",
         "e_self_today": "eselftoday",
         "e_self_total": "eselftotal",
@@ -2477,6 +2483,8 @@ def _sph_energy_to_camel(snake: str) -> str:
         "first_batt_fault_sn": "firstBattFaultS",
         "max_soc": "maxSOC",
         "min_soc": "minSOC",
+        "p_self": "pself",
+        "p_system": "psystem",
         "device_sn": "serialNum",  # align with other endpoints using "deviceSn" instead
         "ups_load_percent": "upsLoadpercent",
         "ups_pf": "upsPF",
@@ -2575,14 +2583,14 @@ class SphEnergyDataV4(ApiModel):
     dsgip_start_date_time: Union[EmptyStrToNone, int] = None  # e.g. None
     eac_today: Union[EmptyStrToNone, float] = None  # Inverter daily output energy, e.g. 21.600000381469727
     eac_total: Union[EmptyStrToNone, float] = None  # Inverter total output energy, e.g. 1859.5
-    echarge1_today: Union[EmptyStrToNone, float] = None  # Battery daily charge energy, e.g. 0.2
-    echarge1_total: Union[EmptyStrToNone, float] = None  # Total battery charge energy, e.g. 6113.2
-    edischarge1_today: Union[EmptyStrToNone, float] = None  # Battery daily discharge energy, e.g. 0.4
-    edischarge1_total: Union[EmptyStrToNone, float] = None  # Total battery discharge energy, e.g. 5540.6
+    e_charge1_today: Union[EmptyStrToNone, float] = None  # Battery daily charge energy, e.g. 0.2
+    e_charge1_total: Union[EmptyStrToNone, float] = None  # Total battery charge energy, e.g. 6113.2
+    e_discharge1_today: Union[EmptyStrToNone, float] = None  # Battery daily discharge energy, e.g. 0.4
+    e_discharge1_total: Union[EmptyStrToNone, float] = None  # Total battery discharge energy, e.g. 5540.6
     eex_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     eex_total: Union[EmptyStrToNone, float] = None  # e.g. 0.0
-    elocal_load_today: Union[EmptyStrToNone, float] = None  # Local load daily consumption energy, e.g. 0
-    elocal_load_total: Union[EmptyStrToNone, float] = None  # Total local load consumption energy, e.g. 26980.8
+    e_local_load_today: Union[EmptyStrToNone, float] = None  # Local load daily consumption energy, e.g. 0
+    e_local_load_total: Union[EmptyStrToNone, float] = None  # Total local load consumption energy, e.g. 26980.8
     eps_vac2: Union[EmptyStrToNone, float] = None  # Off-grid side S phase voltage, e.g.  0
     eps_vac3: Union[EmptyStrToNone, float] = None  # Off-grid side T phase voltage, e.g. 0
     epv1_today: Union[EmptyStrToNone, float] = None  # PV1 daily generated energy, e.g. 13.199999809265137
@@ -2652,8 +2660,8 @@ class SphEnergyDataV4(ApiModel):
     ppv_text: Union[EmptyStrToNone, str] = None  # e.g. '3.9 W'
     priority_choose: Union[EmptyStrToNone, float] = None  # e.g. 0
     protect_pack_id: Union[EmptyStrToNone, int] = None  # e.g. -1
-    pself: Union[EmptyStrToNone, float] = None  # e.g. -0.10000000149011612
-    psystem: Union[EmptyStrToNone, float] = None  # e.g. -0.10000000149011612
+    p_self: Union[EmptyStrToNone, float] = None  # e.g. -0.10000000149011612
+    p_system: Union[EmptyStrToNone, float] = None  # e.g. -0.10000000149011612
     second_batt_fault_sn: Union[EmptyStrToNone, int] = None  # e.g. -1
     device_sn: Union[EmptyStrToNone, str] = None  # Serial Number, e.g. 'BNE9A5100D'
     sgip_cycl_cnt: Union[EmptyStrToNone, int] = None  # e.g. 0
@@ -2744,6 +2752,12 @@ def _spa_energy_to_camel(snake: str) -> str:
         "bms_mcu_version": "bmsMCUVersion",
         "bms_soc": "bmsSOC",
         "bms_soh": "bmsSOH",
+        "e_charge1_today": "echarge1Today",
+        "e_charge1_total": "echarge1Total",
+        "e_discharge1_today": "edischargeToday",
+        "e_discharge1_total": "edischargeTotal",
+        "e_local_load_today": "elocalLoadToday",
+        "e_local_load_total": "elocalLoadTotal",
         "e_self_today": "eselftoday",
         "e_self_total": "eselftotal",
         "e_system_today": "esystemtoday",
@@ -2754,6 +2768,8 @@ def _spa_energy_to_camel(snake: str) -> str:
         "e_to_grid_total": "etogridTotal",
         "max_soc": "maxSOC",
         "min_soc": "minSOC",
+        "p_self": "pself",
+        "p_system": "psystem",
         "device_sn": "serialNum",  # align with other endpoints using "deviceSn" instead
         "ups_load_percent": "upsLoadpercent",
         "ups_pf": "upsPF",
@@ -2843,12 +2859,12 @@ class SpaEnergyDataV4(ApiModel):
     day_map: Union[EmptyStrToNone, Any] = None  # , e.g. None
     eac_today: Union[EmptyStrToNone, float] = None  # Inverter daily output energy, e.g. 21.600000381469727
     eac_total: Union[EmptyStrToNone, float] = None  # Inverter total output energy, e.g. 1859.5
-    echarge1_today: Union[EmptyStrToNone, float] = None  # Battery daily charge energy, e.g. 0.2
-    echarge1_total: Union[EmptyStrToNone, float] = None  # Battery total charge energy, e.g. 6113.2
-    edischarge1_today: Union[EmptyStrToNone, float] = None  # Battery daily discharge energy, e.g. 0.4
-    edischarge1_total: Union[EmptyStrToNone, float] = None  # Battery total discharge energy, e.g. 5540.6
-    elocal_load_today: Union[EmptyStrToNone, float] = None  # Local load daily energy consumption, e.g. 0
-    elocal_load_total: Union[EmptyStrToNone, float] = None  # Local total load energy consumption, e.g. 26980.8
+    e_charge1_today: Union[EmptyStrToNone, float] = None  # Battery daily charge energy, e.g. 0.2
+    e_charge1_total: Union[EmptyStrToNone, float] = None  # Battery total charge energy, e.g. 6113.2
+    e_discharge1_today: Union[EmptyStrToNone, float] = None  # Battery daily discharge energy, e.g. 0.4
+    e_discharge1_total: Union[EmptyStrToNone, float] = None  # Battery total discharge energy, e.g. 5540.6
+    e_local_load_today: Union[EmptyStrToNone, float] = None  # Local load daily energy consumption, e.g. 0
+    e_local_load_total: Union[EmptyStrToNone, float] = None  # Local total load energy consumption, e.g. 26980.8
     epv_inverter_today: Union[EmptyStrToNone, float] = None  # PV inverter daily energy generation, e.g. 0.6
     epv_inverter_total: Union[EmptyStrToNone, float] = None  # PV inverter total energy generation, e.g. 0.6
     error_code: Union[EmptyStrToNone, int] = None  # error code, e.g. 0
@@ -2897,8 +2913,8 @@ class SpaEnergyDataV4(ApiModel):
     ppv_inverter: Union[EmptyStrToNone, float] = None  # PV inverter power generation, e.g. 6.8
     priority_choose: Union[EmptyStrToNone, float] = None  # e.g. 2
     protect_pack_id: Union[EmptyStrToNone, int] = None  # e.g. 0
-    pself: Union[EmptyStrToNone, float] = None  # e.g. 0.0
-    psystem: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    p_self: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    p_system: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     second_batt_fault_sn: Union[EmptyStrToNone, int] = None  # e.g. 0
     device_sn: Union[EmptyStrToNone, str] = None  # Serial Number, e.g. 'MTN0H6800E'
     soc: Union[EmptyStrToNone, float] = None  # Battery state of charge, e.g. 100
@@ -3237,153 +3253,6 @@ class MinEnergyDataV4(ApiModel):
     with_time: Union[EmptyStrToNone, bool] = None  # Whether the incoming data includes time, e.g. False
 
 
-"""
-bdc2_charge_total	BDC2 total charging energy,
-bdc2_discharge_power
-bdc2_discharge_total
-bdc2_fault_type
-bdc2_ibat
-bdc2_ibb
-bdc2_illc
-bdc2_mode
-bdc2_soc
-bdc2_status
-bdc2_temp1
-bdc2_temp2
-bdc2_vbat
-bdc2_vbus1
-bdc2_vbus2
-bdc2_warn_code
-bdc_bus_ref
-bdc_derate_reason
-bdc_fault_sub_code
-bdc_status
-bdc_vbus2_neg
-bdc_warn_sub_code
-bms_communication_type
-bms_cv_volt
-bms_error2
-bms_error3
-bms_error4
-bms_fault_type
-bms_fw_version
-bms_ibat
-bms_icycle
-bms_info
-bms_ios_status
-bms_max_curr
-bms_mcu_version
-bms_pack_info
-bms_soc
-bms_soh
-bms_status
-bms_temp1_bat
-bms_using_cap
-bms_vbat
-bms_vdelta
-bms_warn2
-bms_warn_code
-calendar
-dc_voltage
-dci_r
-dci_s
-dci_t
-debug1
-debug2
-derating_mode
-dry_contact_status
-eac_charge_today
-eac_charge_total
-eac_today
-eac_total
-e_charge_today
-e_charge_total
-e_discharge_today
-e_discharge_total
-eex1_today
-eex1_total
-eex2_today
-eex2_total
-e_local_load_today
-e_local_load_total
-eps_fac
-eps_iac1
-eps_iac2
-eps_iac3
-eps_pac
-eps_pac1
-eps_pac2
-eps_pac3
-eps_pf
-eps_vac1
-eps_vac2
-eps_vac3
-epv1_today
-epv1_total
-epv2_today
-epv2_total
-epv3_today
-epv3_total
-epv4_today
-epv4_total
-epv_total
-e_self_today
-e_self_total
-e_system_today
-e_system_total
-e_to_grid_today
-e_to_grid_total
-e_to_user_today
-e_to_user_total
-fault_type
-gfci
-iac1
-iac2
-iac3
-inv_delay_time
-is_again
-iso
-load_percent
-n_bus_voltage
-op_fullwatt
-operating_mode
-p_bus_voltage
-pac1
-pac2
-pac3
-pac_to_grid_total
-pac_to_user_total
-pex1
-pex2
-pf
-ppv
-ppv4
-p_self
-p_system
-real_op_percent	R,
-status	Min Status 0: waiting, 1: normal, 2: fault,
-sys_fault_word	Register 1001,
-sys_fault_word1	Register 1002,
-sys_fault_word2	Register 1003,
-sys_fault_word3	1004,
-sys_fault_word4	1005,
-sys_fault_word5	1006,
-sys_fault_word6	1007,
-sys_fault_word7	1008,
-temp1	Temperature 1,
-temp2	Temperature 2,
-temp3	Temperature 3,
-temp4	Temperature 4,
-temp5	Temperature 5,
-time_total	Total run time,
-uw_sys_work_mode	System work mode 1000,
-vacrs	RS line voltage,
-warn_code	Warning code,
-with_time	Whether the incoming data includes time,
-
-"""
-
-
 class MinEnergyOverviewDataV4(ApiModel):
     min: List[MinEnergyDataV4] = None
 
@@ -3393,17 +3262,680 @@ class MinEnergyV4(NewApiResponse):
 
 
 # ------------------------------------------------------------------------------------------------
+# WIT: TODO: what's the matching v1 device_type for WIT???
+
+
+def _wit_energy_to_camel(snake: str) -> str:
+    override = {
+        "datalogger_sn": "dataLogSn",
+        "e_charge1_today": "echarge1Today",
+        "e_charge1_total": "echarge1Total",
+        "e_charge2_today": "echarge2Today",
+        "e_charge2_total": "echarge2Total",
+        "e_charge3_today": "echarge3Today",
+        "e_charge3_total": "echarge3Total",
+        "e_discharge1_today": "edischargeToday",
+        "e_discharge1_total": "edischargeTotal",
+        "e_discharge2_today": "edischarge2Today",
+        "e_discharge2_total": "edischarge2Total",
+        "e_discharge3_today": "edischarge3Today",
+        "e_discharge3_total": "edischarge3Total",
+        "e_local_load_today": "elocalLoadToday",
+        "e_local_load_total": "elocalLoadTotal",
+        "e_self_today": "eselftoday",
+        "e_self_total": "eselftotal",
+        "e_system_today": "esystemtoday",
+        "e_system_total": "esystemtotal",
+        "e_to_grid_today": "etoGridToday",
+        "e_to_user_today": "etoUserToday",
+        "e_to_user_total": "etoUserTotal",
+        "e_to_grid_total": "etogridTotal",
+        "off_grid_status": "offgridStatus",
+        "p_self": "pself",
+        "p_system": "psystem",
+        "real_op_percent": "realOPPercent",
+        "device_sn": "serialNum",  # align with other endpoints using "deviceSn" instead
+        "str_unbalance": "strUnblance",
+        "str_unbalance2": "strUnblance2",
+        "str_warning_value1": "strWaringvalue1",
+        "str_warning_value2": "strWaringvalue2",
+        "ud_op_rst_watt_first": "udOpRSTWattFirst",
+        "ud_op_rst_watt_sec": "udOpRSTWattSec",
+        "ud_fault_bit_high": "udfaultBitHigh",
+        "ud_fault_bit_low": "udfaultBitLow",
+        "usb_aging_test_ok_flag": "usbagingTestOkFlag",
+        "uw_op_line_rs_first": "uwOpLineRSFirst",
+        "uw_op_line_rs_sec": "uwOpLineRSSec",
+        "uw_op_line_st_first": "uwOpLineSTFirst",
+        "uw_op_line_st_sec": "uwOpLineSTSec",
+        "uw_op_line_tr_first": "uwOpLineTRFirst",
+        "uw_op_line_tr_sec": "uwOpLineTRSec",
+        "uw_rdci_curr_first": "uwRDCICurrFirst",
+        "uw_rdci_curr_sec": "uwRDCICurrSec",
+        "uw_sdci_curr_first": "uwSDCICurrFirst",
+        "uw_sdci_curr_sec": "uwSDCICurrSec",
+        "uw_tdci_curr_first": "uwTDCICurrFirst",
+        "uw_tdci_curr_sec": "uwTDCICurrSec",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
+class WitEnergyDataV4(ApiModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_wit_energy_to_camel,
+    )
+
+    ac_charge_energy_today: Union[EmptyStrToNone, float] = None  # AC daily charge energy, e.g. 0.0
+    ac_charge_energy_total: Union[EmptyStrToNone, float] = None  # AC total charge energy, e.g. 0.0,
+    again: Union[EmptyStrToNone, bool] = None  # e.g. False
+    b_afci_status: Union[EmptyStrToNone, int] = None  # e.g. 0
+    b_alarm_sub_code: Union[EmptyStrToNone, int] = None  # e.g. 0
+    b_bat_bus_target: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    b_bms_sta: Union[EmptyStrToNone, int] = None  # e.g. 0
+    b_cluster_cnt: Union[EmptyStrToNone, int] = None  # e.g. 0
+    b_fault_sub_code: Union[EmptyStrToNone, int] = None  # e.g. 0
+    b_flag_chg_dis: Union[EmptyStrToNone, int] = None  # e.g. 0
+    b_packs_cnt: Union[EmptyStrToNone, int] = None  # e.g. 0
+    b_sig_mode_cell_cnt: Union[EmptyStrToNone, int] = None  # e.g. 0
+    b_sig_pack_mode_cnt: Union[EmptyStrToNone, int] = None  # e.g. 0
+    b_soc: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    b_soh: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    b_status_first: Union[EmptyStrToNone, int] = None  # e.g. 0
+    b_status_sec: Union[EmptyStrToNone, int] = None  # e.g. 0
+    b_sys_avg_soc: Union[EmptyStrToNone, float] = None  # e.g. 0
+    b_sys_max_soc: Union[EmptyStrToNone, float] = None  # e.g. 0
+    b_sys_max_soc_pack_num: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    b_sys_min_soc: Union[EmptyStrToNone, float] = None  # e.g. 0
+    b_sys_min_soc_pack_num: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bat_curr_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bat_curr_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bat_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bat_power2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bat_power3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bat_type: Union[EmptyStrToNone, float] = None  # e.g. 0
+    bat_volt_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bat_volt_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    battery_type: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bms_bat_vol2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_bat_vol3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_battery_volt: Union[EmptyStrToNone, float] = None  # e.g. 48.0
+    bms_max_temp2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_max_temp3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_min_temp2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_min_temp3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_sell_max_vol2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_sell_max_vol3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_sell_min_vol2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_sell_min_vol3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bus_cap_using: Union[EmptyStrToNone, float] = None  # e.g. 0
+    calendar: Union[EmptyStrToNone, int] = None  # Time, e.g. 1716965658551
+    cbat: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    cbat2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    cbat3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    current_string1: Union[EmptyStrToNone, float] = None  # String current 1, e.g. 0.0
+    current_string2: Union[EmptyStrToNone, float] = None  # String current 2, e.g. 0.0
+    current_string3: Union[EmptyStrToNone, float] = None  # String current 3, e.g. 0.0
+    current_string4: Union[EmptyStrToNone, float] = None  # String current 4, e.g. 0.0
+    current_string5: Union[EmptyStrToNone, float] = None  # String current 5, e.g. 0.0
+    current_string6: Union[EmptyStrToNone, float] = None  # String current 6, e.g. 0.0
+    current_string7: Union[EmptyStrToNone, float] = None  # String current 7, e.g. 0.0
+    current_string8: Union[EmptyStrToNone, float] = None  # String current 8, e.g. 0.0
+    current_string9: Union[EmptyStrToNone, float] = None  # String current 9, e.g. 0.0
+    current_string10: Union[EmptyStrToNone, float] = None  # String current 10, e.g. 0.0
+    current_string11: Union[EmptyStrToNone, float] = None  # String current 11, e.g. 0.0
+    current_string12: Union[EmptyStrToNone, float] = None  # String current 12, e.g. 0.0
+    current_string13: Union[EmptyStrToNone, float] = None  # String current 13, e.g. 0.0
+    current_string14: Union[EmptyStrToNone, float] = None  # String current 14, e.g. 0.0
+    current_string15: Union[EmptyStrToNone, float] = None  # String current 15, e.g. 0.0
+    current_string16: Union[EmptyStrToNone, float] = None  # String current 16, e.g. 0.0
+    current_string17: Union[EmptyStrToNone, float] = None  # String current 17, e.g. 0.0
+    current_string18: Union[EmptyStrToNone, float] = None  # String current 18, e.g. 0.0
+    current_string19: Union[EmptyStrToNone, float] = None  # String current 19, e.g. 0.0
+    current_string20: Union[EmptyStrToNone, float] = None  # String current 20, e.g. 0.0
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # e.g. 'XGD6E452V7'
+    day_map: Union[EmptyStrToNone, Any] = None  # , e.g. None
+    delay_time: Union[EmptyStrToNone, float] = None  # e.g. 0
+    derating_mode: Union[EmptyStrToNone, int] = None  # Derating mode, e.g. 0
+    eac_today: Union[EmptyStrToNone, float] = None  # Inverter daily output energy, e.g. 21.600000381469727
+    eac_total: Union[EmptyStrToNone, float] = None  # Inverter total output energy, e.g. 1859.5
+    e_charge1_today: Union[EmptyStrToNone, float] = None  # Battery daily charge energy, e.g. 0.0
+    e_charge1_total: Union[EmptyStrToNone, float] = None  # Total battery charge energy, e.g. 0.0
+    e_charge2_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    e_charge2_total: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    e_charge3_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    e_charge3_total: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    e_discharge1_today: Union[EmptyStrToNone, float] = None  # Battery daily discharge energy, e.g. 0.4
+    e_discharge1_total: Union[EmptyStrToNone, float] = None  # Total battery discharge energy, e.g. 5540.6
+    e_discharge2_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    e_discharge2_total: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    e_discharge3_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    e_discharge3_total: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    eex_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    eex_total: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    e_local_load_today: Union[EmptyStrToNone, float] = None  # Daily energy consumption of user load, e.g. 0
+    e_local_load_total: Union[EmptyStrToNone, float] = None  # Total energy consumption of user load, e.g. 26980.8
+    epv1_today: Union[EmptyStrToNone, float] = None  # PV1 daily generation, e.g. 13.199999809265137
+    epv1_total: Union[EmptyStrToNone, float] = None  # PV1 total generation, e.g. 926.6
+    epv2_today: Union[EmptyStrToNone, float] = None  # PV2 daily generation, e.g. 8.199999809265137
+    epv2_total: Union[EmptyStrToNone, float] = None  # PV2 total generation, e.g. 906.4
+    epv3_today: Union[EmptyStrToNone, float] = None  # PV3 daily generation, e.g. 0
+    epv3_total: Union[EmptyStrToNone, float] = None  # PV3 total generation, e.g. 0
+    epv4_today: Union[EmptyStrToNone, float] = None  # PV4 energy generated today, e.g. 0
+    epv4_total: Union[EmptyStrToNone, float] = None  # Total PV4 energy generated, e.g. 0
+    epv5_today: Union[EmptyStrToNone, float] = None  # PV5 energy generated today, e.g. 0
+    epv5_total: Union[EmptyStrToNone, float] = None  # Total PV5 energy generated, e.g. 0
+    epv6_today: Union[EmptyStrToNone, float] = None  # PV6 energy generated today, e.g. 0
+    epv6_total: Union[EmptyStrToNone, float] = None  # Total PV6 energy generated, e.g. 0
+    epv7_today: Union[EmptyStrToNone, float] = None  # PV7 energy generated today, e.g. 0
+    epv7_total: Union[EmptyStrToNone, float] = None  # Total PV7 energy generated, e.g. 0
+    epv8_today: Union[EmptyStrToNone, float] = None  # PV8 energy generated today, e.g. 0
+    epv8_total: Union[EmptyStrToNone, float] = None  # Total PV8 energy generated, e.g. 0
+    epv9_today: Union[EmptyStrToNone, float] = None  # PV9 energy generated today, e.g. 0
+    epv9_total: Union[EmptyStrToNone, float] = None  # Total PV9 energy generated, e.g. 0
+    epv10_today: Union[EmptyStrToNone, float] = None  # PV10 energy generated today, e.g. 0
+    epv10_total: Union[EmptyStrToNone, float] = None  # Total PV10 energy generated, e.g. 0
+    epv_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    epv_total: Union[EmptyStrToNone, float] = None  # Total PV generation, e.g. 115372.9
+    error_code: Union[EmptyStrToNone, int] = None  # error code, e.g. 0
+    error_text: Union[EmptyStrToNone, str] = None  # e.g. 'Unknown'
+    e_self_today: Union[EmptyStrToNone, float] = None  # e.g. -0.10000000149011612
+    e_self_total: Union[EmptyStrToNone, float] = None  # e.g. -0.10000000149011612
+    e_system_today: Union[EmptyStrToNone, float] = None  # e.g. -0.10000000149011612
+    e_system_total: Union[EmptyStrToNone, float] = None  # e.g. -0.10000000149011612
+    e_to_grid_today: Union[EmptyStrToNone, float] = None  # Grid daily input energy, e.g. 0.3
+    e_to_grid_total: Union[EmptyStrToNone, float] = None  # Grid total input energy, e.g. 2293
+    e_to_user_today: Union[EmptyStrToNone, float] = None  # Grid daily output energy, e.g. 0
+    e_to_user_total: Union[EmptyStrToNone, float] = None  # Grid total output energy, e.g. 11991.1
+    fac: Union[EmptyStrToNone, float] = None  # grid frequency, e.g. 49.98
+    fan_fault_bit: Union[EmptyStrToNone, float] = None  # e.g. 0
+    fault_bit_code: Union[EmptyStrToNone, int] = None  # Inverter fault bit code, e.g. 0
+    fault_code: Union[EmptyStrToNone, int] = None  # Inverter fault code, e.g. 0
+    fault_value: Union[EmptyStrToNone, int] = None  # Fault value, e.g. 3
+    flash_erase_aging_ok_flag: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    gen_port1_volt: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    gen_port2_volt: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    gen_port3_volt: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    gen_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    gfci: Union[EmptyStrToNone, float] = None  # Grid leakage current, e.g. 166
+    hcpc_low_volt_num: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    hcpc_max_volt_num: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    hcpc_single_low_temp_num: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    hcpc_single_low_volt_num: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    hcpc_single_max_temp_num: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    hcpc_single_max_volt_num: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    hcpc_temp_num: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    hcpc_temp_num1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    iac1: Union[EmptyStrToNone, float] = None  # Grid current 1, e.g. 5.0
+    iac2: Union[EmptyStrToNone, float] = None  # Grid current 2, e.g. 5.5
+    iac3: Union[EmptyStrToNone, float] = None  # Grid current 3, e.g. 0.0
+    iac_load: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    iacs_load: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    iact_load: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    inv_r_volt_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    inv_r_volt_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    inv_s_volt_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    inv_s_volt_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    inv_t_volt_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    inv_t_volt_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ipv1: Union[EmptyStrToNone, float] = None  # PV1 input current, e.g. 0.7
+    ipv2: Union[EmptyStrToNone, float] = None  # PV2 input current, e.g. 2.4
+    ipv3: Union[EmptyStrToNone, float] = None  # PV3 input current, e.g. 0.0
+    ipv4: Union[EmptyStrToNone, float] = None  # PV4 current (A), e.g. 0.0
+    ipv5: Union[EmptyStrToNone, float] = None  # PV5 current (A), e.g. 0.0
+    ipv6: Union[EmptyStrToNone, float] = None  # PV6 current (A), e.g. 0.0
+    ipv7: Union[EmptyStrToNone, float] = None  # PV7 current (A), e.g. 0.0
+    ipv8: Union[EmptyStrToNone, float] = None  # PV8 current (A), e.g. 0.0
+    ipv9: Union[EmptyStrToNone, float] = None  # PV9 current (A), e.g. 0.0
+    ipv10: Union[EmptyStrToNone, float] = None  # PV10 current (A), e.g. 0.0
+    off_grid_status: Union[EmptyStrToNone, int] = None  # e.g. 0
+    on_off_grid_state: Union[EmptyStrToNone, int] = None  # e.g. 0
+    on_off_grid_state_first: Union[EmptyStrToNone, int] = None  # e.g. 0
+    on_off_grid_state_sec: Union[EmptyStrToNone, int] = None  # e.g. 0
+    op_fullwatt: Union[EmptyStrToNone, float] = None  # Output power limit, e.g. 0.0
+    pac: Union[EmptyStrToNone, float] = None  # Inverter output power, e.g. 2038.9
+    pac1: Union[EmptyStrToNone, float] = None  # Inverter apparent power 1, e.g. 1119.5
+    pac2: Union[EmptyStrToNone, float] = None  # Inverter apparent power 2, e.g. 0.0
+    pac3: Union[EmptyStrToNone, float] = None  # Inverter apparent power 3, e.g. 0.0
+    pac_to_grid_total: Union[EmptyStrToNone, float] = None  # Total power to grid (reverse), e.g. 38.6
+    pac_to_user_total: Union[EmptyStrToNone, float] = None  # Total power to grid (forward), e.g. 0
+    pex: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    pf: Union[EmptyStrToNone, float] = None  # Power factor value, e.g. 1.0
+    pid_bus: Union[EmptyStrToNone, float] = None  # PID BUS voltage, e.g. 0.0
+    pid_fault_code: Union[EmptyStrToNone, int] = None  # pid fault code, e.g. 0
+    pid_status: Union[EmptyStrToNone, int] = None  # pid status, e.g. 0
+    plocal_load_total: Union[EmptyStrToNone, float] = None  # Total local load consumption power, e.g. 0
+    pm_derate: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ppv: Union[EmptyStrToNone, float] = None  # Total PV input power, e.g. 2069.9
+    ppv1: Union[EmptyStrToNone, float] = None  # PV1 input power (W), e.g. 410.4
+    ppv2: Union[EmptyStrToNone, float] = None  # PV2 input power (W), e.g. 1551.6
+    ppv3: Union[EmptyStrToNone, float] = None  # PV3 input power (W), e.g. 0.0
+    ppv4: Union[EmptyStrToNone, float] = None  # PV4 input power (W), e.g. 0.0
+    ppv5: Union[EmptyStrToNone, float] = None  # PV5 input power (W), e.g. 0.0
+    ppv6: Union[EmptyStrToNone, float] = None  # PV6 input power (W), e.g. 0.0
+    ppv7: Union[EmptyStrToNone, float] = None  # PV7 input power (W), e.g. 0.0
+    ppv8: Union[EmptyStrToNone, float] = None  # PV8 input power (W), e.g. 0.0
+    ppv9: Union[EmptyStrToNone, float] = None  # PV9 input power (W)r, e.g. 0.0
+    ppv10: Union[EmptyStrToNone, float] = None  # PV10 input power (W), e.g. 0.0
+    priority_choose: Union[EmptyStrToNone, float] = None  # e.g. 0
+    p_self: Union[EmptyStrToNone, float] = None  # e.g. -0.10000000149011612
+    p_system: Union[EmptyStrToNone, float] = None  # e.g. -0.10000000149011612
+    pv_iso: Union[EmptyStrToNone, float] = None  # Insulation resistance, e.g. 3004
+    r_dci: Union[EmptyStrToNone, float] = None  # R-phase DC component, e.g. 0.2
+    react_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    react_power_max: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    react_power_total: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    reactive_power_real_value_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    reactive_power_real_value_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    real_op_percent: Union[EmptyStrToNone, float] = None  # Real output percentage, e.g. 50
+    real_power: Union[EmptyStrToNone, float] = None  # e.g. 0
+    reverse_curr1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    reverse_curr2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    reverse_curr3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    run_time: Union[EmptyStrToNone, float] = None  # e.g. 0
+    s_dci: Union[EmptyStrToNone, float] = None  # S-phase DC component, e.g. 0.7
+    sac: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    device_sn: Union[EmptyStrToNone, str] = None  # Max device SN, e.g. 'QWL0DC3002'
+    soc: Union[EmptyStrToNone, float] = None  # Battery state of charge, e.g. 100
+    soc2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    soc3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    soh: Union[EmptyStrToNone, float] = None  # e.g. 0
+    soh2: Union[EmptyStrToNone, float] = None  # e.g. 0
+    soh3: Union[EmptyStrToNone, float] = None  # e.g. 0
+    status: Union[EmptyStrToNone, int] = None  # Min Status (0:waiting, 1:normal, 2:fault), e.g. 1
+    status_text: Union[EmptyStrToNone, str] = None  # e.g. 'Operating'
+    str_break: Union[EmptyStrToNone, int] = None  # String not connected, e.g. 0
+    str_break2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    str_unbalance: Union[EmptyStrToNone, int] = None  # String current imbalance, e.g. 0
+    str_unbalance2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    str_unmatch: Union[EmptyStrToNone, int] = None  # String mismatch, e.g. 0
+    str_unmatch2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    str_warning_value1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    str_warning_value2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    string_prompt: Union[EmptyStrToNone, int] = None  # e.g. 0
+    sys_on_pack_cnt: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    t_dci: Union[EmptyStrToNone, float] = None  # T-phase DC component, e.g. 6552.7
+    temp1: Union[EmptyStrToNone, float] = None  # Temperature 1, e.g. 34
+    temp2: Union[EmptyStrToNone, float] = None  # Temperature 2, e.g. 33.099998474121094
+    temp3: Union[EmptyStrToNone, float] = None  # Temperature 3, e.g. 33.099998474121094
+    time: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2024-05-29 14:54:18'
+    time_total: Union[EmptyStrToNone, float] = None  # Total runtime, e.g. 44968542.0
+    u_ac_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    u_bat_chg_p: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    u_bat_dsg_p: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ud_acc_chg_soe: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ud_acc_dis_soe: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ud_calib_apparent_power_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ud_calib_apparent_power_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ud_op_rst_watt_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ud_op_rst_watt_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ud_op_r_watt_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ud_op_r_watt_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ud_op_s_watt_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ud_op_s_watt_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ud_op_t_watt_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ud_op_t_watt_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    ud_fault_bit_high: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    ud_fault_bit_low: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    usb_aging_test_ok_flag: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    uw_alarm_code: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_ambient_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_ambient_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_bat_enable1: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    uw_bat_enable2: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    uw_bat_enable3: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    uw_cell_max_v_chg: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_cell_min_v_dis: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_cell_tavg_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_cell_tmax_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_cell_tmin_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_cell_uavg_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_cell_umax_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_cell_umin_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_charge_max_vol: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_fault_code: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_freq_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_freq_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_full_charge_capacity: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_gen_port_dev_type: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_inv_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_inv_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_inv_warn_value: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_load_per_first: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_load_per_sec: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_main_code_first: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_main_code_sec: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_main_warn_first: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_main_warn_sec: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_mod_max_bla_temp_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_mod_max_vol_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_mod_min_bla_temp_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_mode_avg_vol_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_mode_min_vol_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_mode_rated_cap: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_mode_rated_vol: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_n_bus_volt_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_n_bus_volt_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_line_rs_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_line_rs_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_line_st_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_line_st_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_line_tr_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_line_tr_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_phase_r_curr_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_phase_r_curr_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_phase_r_volt_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_phase_r_volt_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_phase_s_curr_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_phase_s_curr_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_phase_s_volt_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_phase_s_volt_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_phase_t_curr_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_phase_t_curr_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_phase_t_volt_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_op_phase_t_volt_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_output_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_output_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_p_bus_volt_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_p_bus_volt_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_rdci_curr_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_rdci_curr_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_rated_battery_capacity: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_rated_battery_power_energy: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_sdci_curr_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_sdci_curr_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_sub_code_first: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_sub_code_sec: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_sub_warn_first: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_sub_warn_sec: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_sys_load_vol_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_sys_max_allow_ichg: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_sys_max_allow_idis: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_sys_max_vtotalchg: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_sys_min_vtotaldis: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_sys_tota_vol_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_sys_total_i_value: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_tdci_curr_first: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_tdci_curr_sec: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uw_upack_rated: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    v_bat_dsp: Union[EmptyStrToNone, float] = None  # DSP collected battery voltage, e.g. 0
+    v_bus_n: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    v_bus_p: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    v_string1: Union[EmptyStrToNone, float] = None  # String voltage 1, e.g. 0.0
+    v_string2: Union[EmptyStrToNone, float] = None  # String voltage 2, e.g. 0.0
+    v_string3: Union[EmptyStrToNone, float] = None  # String voltage 3, e.g. e.g. 0.0
+    v_string4: Union[EmptyStrToNone, float] = None  # String voltage 4, e.g. e.g. 0.0
+    v_string5: Union[EmptyStrToNone, float] = None  # String voltage 5, e.g. e.g. 0.0
+    v_string6: Union[EmptyStrToNone, float] = None  # String voltage 6, e.g. e.g. 0.0
+    v_string7: Union[EmptyStrToNone, float] = None  # String voltage 7, e.g. e.g. 0.0
+    v_string8: Union[EmptyStrToNone, float] = None  # String voltage 8, e.g. e.g. 0.0
+    v_string9: Union[EmptyStrToNone, float] = None  # String voltage 9, e.g. e.g. 0.0
+    v_string10: Union[EmptyStrToNone, float] = None  # String voltage 10, e.g. e.g. 0.0
+    v_string11: Union[EmptyStrToNone, float] = None  # String voltage 11, e.g. 0.0
+    v_string12: Union[EmptyStrToNone, float] = None  # String voltage 12, e.g. 0.0
+    v_string13: Union[EmptyStrToNone, float] = None  # String voltage 13, e.g. 0.0
+    v_string14: Union[EmptyStrToNone, float] = None  # String voltage 14, e.g. 0.0
+    v_string15: Union[EmptyStrToNone, float] = None  # String voltage 15, e.g. 0.0
+    v_string16: Union[EmptyStrToNone, float] = None  # String voltage 16, e.g. 0.0
+    v_string17: Union[EmptyStrToNone, float] = None  # String voltage 17, e.g. 0.0
+    v_string18: Union[EmptyStrToNone, float] = None  # String voltage 18, e.g. 0.0
+    v_string19: Union[EmptyStrToNone, float] = None  # String voltage 19, e.g. 0.0
+    v_string20: Union[EmptyStrToNone, float] = None  # String voltage 20, e.g. 0.0
+    vac: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    vac1: Union[EmptyStrToNone, float] = None  # Grid voltage 1, e.g. 222.8
+    vac2: Union[EmptyStrToNone, float] = None  # Grid voltage 2, e.g. 223.1
+    vac3: Union[EmptyStrToNone, float] = None  # Grid voltage 3, e.g. 0.0
+    vac_rs: Union[EmptyStrToNone, float] = None  # RS line voltage (V), e.g. 414.30002
+    vac_rs1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    vac_st: Union[EmptyStrToNone, float] = None  # ST line voltage (V), e.g. 407.2
+    vac_st1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    vac_tr: Union[EmptyStrToNone, float] = None  # TR line voltage (V), e.g. 407.2
+    vac_tr1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    vacs: Union[EmptyStrToNone, float] = None  # S-phase voltage (V), e.g. 234.1
+    vact: Union[EmptyStrToNone, float] = None  # T-phase voltage (V), e.g. 237.0
+    vbat: Union[EmptyStrToNone, float] = None  # battery voltage, e.g. 0.0
+    vbat2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    vbat3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    vpp_work_status: Union[EmptyStrToNone, int] = None  # e.g. 0
+    vpv1: Union[EmptyStrToNone, float] = None  # PV1 voltage (V), e.g. 586.4
+    vpv2: Union[EmptyStrToNone, float] = None  # PV2 voltage (V), e.g. 646.5
+    vpv3: Union[EmptyStrToNone, float] = None  # PV3 voltage (V), e.g. 0.0
+    vpv4: Union[EmptyStrToNone, float] = None  # PV4 voltage (V), e.g. 0.0
+    vpv5: Union[EmptyStrToNone, float] = None  # PV5 voltage (V), e.g. 0.0
+    vpv6: Union[EmptyStrToNone, float] = None  # PV6 voltage (V), e.g. 0.0
+    vpv7: Union[EmptyStrToNone, float] = None  # PV7 voltage (V), e.g. 0.0
+    vpv8: Union[EmptyStrToNone, float] = None  # PV8 voltage (V), e.g. 0.0
+    vpv9: Union[EmptyStrToNone, float] = None  # PV9 voltage (V), e.g. 0.0
+    vpv10: Union[EmptyStrToNone, float] = None  # PV10 voltage (V), e.g. 0.0
+    warn_code: Union[EmptyStrToNone, int] = None  # Warning code, e.g. 220
+    warn_code1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    warn_text: Union[EmptyStrToNone, str] = None  # e.g. 'Unknown'
+    warning_value1: Union[EmptyStrToNone, int] = None  # Warning value 1, e.g. 0
+    warning_value2: Union[EmptyStrToNone, int] = None  # Warning value 2, e.g. 0
+    warning_value3: Union[EmptyStrToNone, int] = None  # Warning value 3, e.g. 0
+    wit_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
+    with_time: Union[EmptyStrToNone, bool] = None  # Whether the incoming data includes time, e.g. False
+
+
+class WitEnergyOverviewDataV4(ApiModel):
+    wit: List[WitEnergyDataV4] = None
 
 
 class WitEnergyV4(NewApiResponse):
-    data: Union[EmptyStrToNone, Any] = None
+    data: Union[EmptyStrToNone, WitEnergyOverviewDataV4] = None
 
 
 # ------------------------------------------------------------------------------------------------
 
 
+def _sphs_energy_to_camel(snake: str) -> str:
+    override = {
+        "bms_soc": "bmsSOC",
+        "bms_soh": "bmsSOH",
+        "e_charge1_today": "echarge1Today",
+        "e_charge1_total": "echarge1Total",
+        "e_discharge1_today": "edischargeToday",
+        "e_discharge1_total": "edischargeTotal",
+        "e_local_load_hour": "elocalLoadHour",
+        "e_local_load_month": "elocalLoadMonth",
+        "e_local_load_today": "elocalLoadToday",
+        "e_local_load_total": "elocalLoadTotal",
+        "e_local_load_year": "elocalLoadYear",
+        "e_self_hour": "eselfHour",
+        "e_self_month": "eselfMonth",
+        "e_self_year": "eselfYear",
+        "e_self_today": "eselftoday",
+        "e_self_total": "eselftotal",
+        "e_system_today": "esystemtoday",
+        "e_system_total": "esystemtotal",
+        "e_system_hour": "esystemHour",
+        "e_system_month": "esystemMonth",
+        "e_system_year": "esystemYear",
+        "e_to_grid_today": "etoGridToday",
+        "e_to_grid_total": "etoGridTotal",
+        "e_to_user_today": "etoUserToday",
+        "e_to_user_total": "etoUserTotal",
+        "p_self": "pself",
+        "p_system": "psystem",
+        "device_sn": "serialNum",  # align with other endpoints using "deviceSn" instead
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
+class SphsEnergyDataV4(ApiModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_sphs_energy_to_camel,
+    )
+
+    again: Union[EmptyStrToNone, bool] = None  # e.g. False
+    bat_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_battery_curr: Union[EmptyStrToNone, float] = None  # Battery current, e.g. 0.0
+    bms_battery_temp: Union[EmptyStrToNone, float] = None  # Battery temperature, e.g. 35.3
+    bms_battery_volt: Union[EmptyStrToNone, float] = None  # Battery voltage, e.g. 5.34
+    bms_constant_volt: Union[EmptyStrToNone, float] = None  # Battery constant voltage point, e.g. 5.68
+    bms_soc: Union[EmptyStrToNone, int] = None  # BDC2 battery capacity, e.g. 100
+    bms_soh: Union[EmptyStrToNone, int] = None  # BMS battery health index, e.g. 0
+    bms_using_cap: Union[EmptyStrToNone, float] = None  # BMS battery capacity, e.g. 2000
+    calendar: Union[EmptyStrToNone, int] = None  # Time, e.g. 1716965431997
+    chip_type: Union[EmptyStrToNone, int] = None  # e.g. 0
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # e.g. 'VC41010123438079'
+    day_map: Union[EmptyStrToNone, Any] = None  # , e.g. None
+    dc_temp: Union[EmptyStrToNone, float] = None  # e.g. 56.7
+    device_type: Union[EmptyStrToNone, int] = None  # e.g. 0
+    e_to_grid_hour: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    e_to_grid_month: Union[EmptyStrToNone, float] = None  # e.g. 5.7
+    e_to_grid_year: Union[EmptyStrToNone, float] = None  # e.g. 6.4
+    e_to_user_hour: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    e_to_user_month: Union[EmptyStrToNone, float] = None  # e.g. 186.5
+    e_to_user_year: Union[EmptyStrToNone, float] = None  # e.g. 535.8
+    e_charge1_today: Union[EmptyStrToNone, float] = None  # Battery daily charge energy, e.g. 9.5
+    e_charge1_total: Union[EmptyStrToNone, float] = None  # Total battery charge energy, e.g. 177.9
+    e_discharge1_today: Union[EmptyStrToNone, float] = None  # Battery daily discharge energy, e.g. 4.2
+    e_discharge1_total: Union[EmptyStrToNone, float] = None  # Total battery discharge energy, e.g. 172.7
+    e_local_load_hour: Union[EmptyStrToNone, float] = None  # e.g. 0.7
+    e_local_load_month: Union[EmptyStrToNone, float] = None  # e.g. 509.7
+    e_local_load_today: Union[EmptyStrToNone, float] = None  # User load daily consumption, e.g. 1018.2
+    e_local_load_total: Union[EmptyStrToNone, float] = None  # User load total consumption, e.g. 1071.6
+    e_local_load_year: Union[EmptyStrToNone, float] = None  # e.g. 1071.6
+    eps_iac1: Union[EmptyStrToNone, float] = None  # Off-grid R current, e.g. 3.8
+    eps_iac2: Union[EmptyStrToNone, float] = None  # Off-grid S current, e.g. 0.0
+    eps_vac2: Union[EmptyStrToNone, float] = None  # Off-grid S voltage, e.g.  0.0
+    epv1_today: Union[EmptyStrToNone, float] = None  # PV1 daily generated energy, e.g. 13.199999809265137
+    epv1_total: Union[EmptyStrToNone, float] = None  # PV1 total generated energy, e.g. 0.0
+    epv2_today: Union[EmptyStrToNone, float] = None  # PV2 daily generated energy, e.g. 0.0
+    epv2_total: Union[EmptyStrToNone, float] = None  # PV2 total generated energy, e.g. 0.0
+    epv3_today: Union[EmptyStrToNone, float] = None  # PV3 daily generated energy, e.g. 14.0
+    epv3_total: Union[EmptyStrToNone, float] = None  # PV3 total generated energy, e.g. 0.0
+    epv_hour: Union[EmptyStrToNone, float] = None  # e.g. 0.7
+    epv_month: Union[EmptyStrToNone, float] = None  # e.g. 256.6
+    epv_today: Union[EmptyStrToNone, float] = None  # e.g. 14.0
+    epv_total: Union[EmptyStrToNone, float] = None  # Total PV generated energy, e.g. 494.0
+    epv_year: Union[EmptyStrToNone, float] = None  # e.g. 494.0
+    error_text: Union[EmptyStrToNone, str] = None  # e.g. 'Unknown'
+    e_self_hour: Union[EmptyStrToNone, float] = None  # e.g. 0.7
+    e_self_month: Union[EmptyStrToNone, float] = None  # e.g. 323.2
+    e_self_year: Union[EmptyStrToNone, float] = None  # e.g. 660.3
+    e_self_today: Union[EmptyStrToNone, float] = None  # e.g. 18.200000762939453
+    e_self_total: Union[EmptyStrToNone, float] = None  # e.g. 660.2999877929688
+    e_system_hour: Union[EmptyStrToNone, float] = None  # e.g. 0.7
+    e_system_month: Union[EmptyStrToNone, float] = None  # e.g. 328.9
+    e_system_year: Union[EmptyStrToNone, float] = None  # e.g. 666.7
+    e_system_today: Union[EmptyStrToNone, float] = None  # e.g. 18.200000762939453
+    e_system_total: Union[EmptyStrToNone, float] = None  # e.g. 666.7000122070312
+    e_to_grid_today: Union[EmptyStrToNone, float] = None  # Grid daily input energy, e.g. 0.0
+    e_to_grid_total: Union[EmptyStrToNone, float] = None  # Grid total input energy, e.g. 6.4
+    e_to_user_today: Union[EmptyStrToNone, float] = None  # Grid daily output energy, e.g. 1.0
+    e_to_user_total: Union[EmptyStrToNone, float] = None  # Grid total output energy, e.g. 535.8
+    fac: Union[EmptyStrToNone, float] = None  # grid frequency, e.g. 49.98
+    fault_bit_code: Union[EmptyStrToNone, int] = None  # Inverter fault bit code, e.g. 0
+    fault_code: Union[EmptyStrToNone, int] = None  # Inverter fault code, e.g. 0
+    gen_curr: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    gen_energy: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    gen_energy_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    gen_freq: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    gen_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    gen_vol: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    grid_status: Union[EmptyStrToNone, int] = None  # e.g. 0
+    hmi_version: Union[EmptyStrToNone, Any] = None  # e.g. None
+    iac1: Union[EmptyStrToNone, float] = None  # Grid current 1, e.g. 1.3
+    iac2: Union[EmptyStrToNone, float] = None  # Grid current 2, e.g. 0.0
+    ibat: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    inv_Temp: Union[EmptyStrToNone, float] = None  # e.g. 47.4
+    ipv1: Union[EmptyStrToNone, float] = None  # PV1 input current, e.g. 0.0
+    ipv2: Union[EmptyStrToNone, float] = None  # PV2 input current, e.g. 0.0
+    ipv3: Union[EmptyStrToNone, float] = None  # PV3 input current, e.g. 2.7
+    load_power1: Union[EmptyStrToNone, float] = None  # e.g. 760.0
+    load_power2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    lost: Union[EmptyStrToNone, bool] = None  # e.g. True
+    m1_version: Union[EmptyStrToNone, Any] = None  # e.g. None
+    m2_version: Union[EmptyStrToNone, Any] = None  # e.g. None
+    pac: Union[EmptyStrToNone, float] = None  # Inverter output power, e.g. 888.0
+    pac1: Union[EmptyStrToNone, float] = None  # Inverter apparent power 1, e.g. 0.0
+    pac2: Union[EmptyStrToNone, float] = None  # Inverter apparent power 2, e.g. 0.0
+    pac_to_grid_r: Union[EmptyStrToNone, float] = None  # Grid reverse power, e.g. 0.0
+    pac_to_grid_s: Union[EmptyStrToNone, float] = None  # Grid reverse power, e.g. 0.0
+    pac_to_grid_total: Union[EmptyStrToNone, float] = None  # Total power flowing back from the grid, e.g. 0.0
+    pac_to_user_r: Union[EmptyStrToNone, float] = None  # Grid forward power, e.g. 0.0
+    pac_to_user_total: Union[EmptyStrToNone, float] = None  # Total power flowing to the grid, e.g. 0.0
+    pcharge1: Union[EmptyStrToNone, float] = None  # Battery charge power, e.g. 0.0
+    pdischarge1: Union[EmptyStrToNone, float] = None  # Battery discharge power, e.g. 0.0
+    pex: Union[EmptyStrToNone, float] = None  # e.g. 888.0
+    pf: Union[EmptyStrToNone, float] = None  # pf value, e.g. -1.0
+    plocal_load_r: Union[EmptyStrToNone, float] = None  # Local load consumption power, e.g. 0.0
+    plocal_load_s: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    plocal_load_total: Union[EmptyStrToNone, float] = None  # Total local load consumption power, e.g. 888.0
+    ppv: Union[EmptyStrToNone, float] = None  # Total PV input power, e.g. 948.0
+    ppv1: Union[EmptyStrToNone, float] = None  # PV1 input power, e.g. 0.0
+    ppv2: Union[EmptyStrToNone, float] = None  # PV2 input power, e.g. 0.0
+    ppv3: Union[EmptyStrToNone, float] = None  # PV3 input power, e.g. 948.0
+    ppv_text: Union[EmptyStrToNone, str] = None  # e.g. '948.0 W'
+    priority_choose: Union[EmptyStrToNone, float] = None  # e.g. 0
+    p_self: Union[EmptyStrToNone, float] = None  # e.g. 942.0
+    p_system: Union[EmptyStrToNone, float] = None  # e.g. 942.0
+    r_load_vol: Union[EmptyStrToNone, float] = None  # e.g. 229.8
+    r_local_energy: Union[EmptyStrToNone, float] = None  # e.g. 904.3
+    s_load_vol: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    s_local_energy: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    device_sn: Union[EmptyStrToNone, str] = None  # Serial Number, e.g. 'EFP0N1J023'
+    soc: Union[EmptyStrToNone, float] = None  # Battery state of charge, e.g. 100
+    soc_text: Union[EmptyStrToNone, str] = None  # e.g. '100%'
+    sp_status: Union[EmptyStrToNone, int] = None  # e.g. 1
+    sph_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
+    status: Union[EmptyStrToNone, int] = None  # Min Status 0: waiting, 1: normal, 2: fault, e.g. 6
+    status_text: Union[EmptyStrToNone, str] = None  # e.g. 'Fault'
+    sys_fault_word: Union[EmptyStrToNone, int] = None  # e.g. 12337
+    sys_fault_word1: Union[EmptyStrToNone, int] = None  # e.g. 12851
+    sys_fault_word2: Union[EmptyStrToNone, int] = None  # e.g. 13365
+    sys_fault_word3: Union[EmptyStrToNone, int] = None  # e.g. 13879
+    sys_fault_word4: Union[EmptyStrToNone, int] = None  # e.g. 14393
+    sys_fault_word5: Union[EmptyStrToNone, int] = None  # e.g. 16706
+    sys_fault_word6: Union[EmptyStrToNone, int] = None  # e.g. 17220
+    sys_fault_word7: Union[EmptyStrToNone, int] = None  # e.g. 17734
+    sys_status: Union[EmptyStrToNone, int] = None  # e.g. 3
+    system_fault: Union[EmptyStrToNone, int] = None  # e.g. 0
+    system_warn: Union[EmptyStrToNone, int] = None  # e.g. 0
+    time: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2024-05-29 14:50:31'
+    time_total: Union[EmptyStrToNone, float] = None  # Total operating time, e.g. 0.0.5
+    ups_fac: Union[EmptyStrToNone, float] = None  # Emergency power frequency, e.g. 50.0
+    ups_pac1: Union[EmptyStrToNone, float] = None  # Emergency apparent output power, e.g. 888.0
+    ups_pac2: Union[EmptyStrToNone, float] = None  # Off-grid side power, e.g. 0.0
+    ups_vac1: Union[EmptyStrToNone, float] = None  # Emergency voltage, e.g. 229.5
+    uw_sys_work_mode: Union[EmptyStrToNone, int] = None  # System working mode, e.g. 6
+    vac1: Union[EmptyStrToNone, float] = None  # Grid voltage 1, e.g. 230.3
+    vac2: Union[EmptyStrToNone, float] = None  # Grid voltage 2, e.g. 0.0
+    vbat: Union[EmptyStrToNone, float] = None  # battery voltage, e.g. 53.4
+    vbat1: Union[EmptyStrToNone, float] = None  # e.g. 53.3
+    vpv1: Union[EmptyStrToNone, float] = None  # PV1 input voltage, e.g. 0.0
+    vpv2: Union[EmptyStrToNone, float] = None  # PV2 input voltage, e.g. 0.0
+    vpv3: Union[EmptyStrToNone, float] = None  # PV3 input voltage, e.g. 349.5
+    warn_code: Union[EmptyStrToNone, int] = None  # Warning code, e.g. 0
+    warn_code1: Union[EmptyStrToNone, int] = None  # Warning code, e.g. 0
+    warn_text: Union[EmptyStrToNone, str] = None  # e.g. 'Unknown'
+    with_time: Union[EmptyStrToNone, bool] = None  # Whether the incoming data includes time, e.g. False
+
+
+def _sphs_energy_overview_data_to_camel(snake: str) -> str:
+    override = {
+        "sphs": "sph-s",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
+class SphsEnergyOverviewDataV4(ApiModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_sphs_energy_overview_data_to_camel,
+    )
+
+    sph: List[SphsEnergyDataV4] = None
+
+
 class SphsEnergyV4(NewApiResponse):
-    data: Union[EmptyStrToNone, Any] = None
+    data: Union[EmptyStrToNone, SphsEnergyOverviewDataV4] = None
 
 
 # ------------------------------------------------------------------------------------------------
