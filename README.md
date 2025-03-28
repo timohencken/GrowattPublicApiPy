@@ -7,7 +7,32 @@ There are already other libraries accessing Growatt's APIs, they all use reverse
 * for example, see the faboulous work of [indykoning](https://github.com/indykoning) at [PyPi_GrowattServer](https://github.com/indykoning/PyPi_GrowattServer) used e.g. in HomeAssistant
 
 This package aims to
-* use Growatt's public API documented [here (v1)](https://www.showdoc.com.cn/262556420217021/0) and [here (v4)](https://www.showdoc.com.cn/2540838290984246/0) and [here (v1/v4 mixed)](https://www.showdoc.com.cn/2598832417617967/0)
+* use Growatt's public API documented
+  * [here (v1)](https://www.showdoc.com.cn/262556420217021/0)
+    * /v1/ endpoints
+    * user/plant management
+    * metrics
+    * settings read/write
+    * inv/storage/max/sph/spa/min/pcs/hps/pbd/smart_meter/env_sensor/vpp/groboost (no wit/sph-s/noah)
+  * [here (v4)](https://www.showdoc.com.cn/2540838290984246/0)
+    * /v4/new-api endpoints
+    * no user/plant management
+    * new endpoints for metrics
+    * settings write only on/off and NOAH time periods
+    * inv/storage/sph/max/spa/min/wit/sph-s/noah (no pcs/hps/pbd/smart_meter/env_sensor/vpp/groboost)
+  * [here (v1/v4 mixed)](https://www.showdoc.com.cn/2598832417617967/0)
+    * mixed documentation - different sorting, no new content
+    * user/plant management: copy of v1 docs, different sorting
+    * metrics: /v1/ endpoints not documented here
+    * settings: /v1/ endpoints not documented here
+    * metrics: copy of /v4/ docs
+    * settings: copy of /v4/ docs
+    * vpp settings (in addition to other /v4/ docs):
+      * /v4/new-api/readVppParameter https://www.showdoc.com.cn/2598832417617967/11558629942271434
+      * /v4/new-api/setVppParameter https://www.showdoc.com.cn/2598832417617967/11558385202215329
+      * VPP Setting Parameters Description
+        * https://www.showdoc.com.cn/2598832417617967/11558385130027995
+        * https://www.showdoc.com.cn/p/fc84c86facd79b3692f585fbd7a6e33b
 * use type-aware pydantic objects as return values
 
 
@@ -210,11 +235,11 @@ This package aims to
     * Note: only for NOAH devices
 
 * ***Not*** implemented yet
+  * TODO implement v4 VPP settings endpoints from v1/v4-mixed docs
   * TODO refactor other "multiple" endpoints to use dict-like response
   * TODO: check if we can use /v4/ for /v1/ endpoints (seems to work)
   * TODO: refactor to integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
   * TODO: check postman collection at https://www.postman.com/gold-water-163355/growatt-public/collection/fw8cldm/shineserver-public
-  * TODO: check docs at https://www.showdoc.com.cn/2598832417617967/0
 
 
 # Usage
@@ -227,7 +252,7 @@ The API requires token authentication. The token can be retrieved via
   * login
   * click your username in the upper right corner
   * go to "Account Management" -> "API Token"
-  * copy your token or request an new one
+  * copy your token or request a new one
 
 Pass the token when creating the API object
 ```python
