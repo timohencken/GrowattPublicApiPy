@@ -156,7 +156,7 @@ class PbdDetailData(ApiModel):
     status_lang: Union[EmptyStrToNone, str] = None  # 'Lost'
     status_text: Union[EmptyStrToNone, str] = None  # e.g. 'hps.status.los'
     tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. '47.107.154.111'
-    timezone: Union[EmptyStrToNone, int] = None  # e.g. 8
+    timezone: Union[EmptyStrToNone, float] = None  # e.g. 8
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_FDCJQ00003'
     tree_name: Union[EmptyStrToNone, str] = None  # e.g. 'FDCJQ00003'
     type: Union[EmptyStrToNone, int] = None  # 1

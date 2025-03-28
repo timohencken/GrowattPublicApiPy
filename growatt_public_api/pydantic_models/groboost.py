@@ -315,7 +315,7 @@ class GroboostDetailData(ApiModel):
     raillog: Union[EmptyStrToNone, bool] = None  # Is it ShineLink (0: Yes 1: No), e.g. 0
     spct_data: Union[EmptyStrToNone, SpctData] = None  # e.g. {'activeEnergy': 0,...}
     tcp_server_ip: Union[EmptyStrToNone, str] = None  # TCP server IP address, e.g. '47.107.154.111'
-    timezone: Union[EmptyStrToNone, int] = None  # Time zone, e.g. 0
+    timezone: Union[EmptyStrToNone, float] = None  # Time zone, e.g. 0
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'OD_NACTEST128_69_addr84'
     tree_name: Union[EmptyStrToNone, str] = None  # Device name + device address, e.g. 'GRO_BOOST#84
 

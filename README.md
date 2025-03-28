@@ -212,7 +212,7 @@ This package aims to
 * ***Not*** implemented yet
   * TODO refactor other "multiple" endpoints to use dict-like response
   * TODO: check if we can use /v4/ for /v1/ endpoints (seems to work)
-  * TODO: 'timezone' is float diff to UTC (MEZ results in "1.0")
+  * TODO: refactor to integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
   * TODO: check postman collection at https://www.postman.com/gold-water-163355/growatt-public/collection/fw8cldm/shineserver-public
   * TODO: check docs at https://www.showdoc.com.cn/2598832417617967/0
 
