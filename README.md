@@ -186,8 +186,8 @@ This package aims to
 * device metrics
   * current `v4.energy()`
     * Note for NOAH: API docs are incomplete. I would be happy if you dump NOAHs output and create a github issue.
-  * historical data `v4.energy_history()`   ***Not*** implemented yet
-    * Inv   ***Not*** implemented yet
+  * historical data `v4.energy_history()`
+    * Inv
     * Storage   ***Not*** implemented yet
     * Max   ***Not*** implemented yet
     * Sph (MIX)   ***Not*** implemented yet
@@ -196,6 +196,17 @@ This package aims to
     * Wit   ***Not*** implemented yet
     * Sph-s (SPH)   ***Not*** implemented yet
     * Noah   ***Not*** implemented yet
+  * historical data `v4.energy_history_multiple()` (query multiple devices at once)
+    * Inv
+    * Storage   ***Not*** implemented yet
+    * Max   ***Not*** implemented yet
+    * Sph (MIX)   ***Not*** implemented yet
+    * Spa   ***Not*** implemented yet
+    * Min   ***Not*** implemented yet
+    * Wit   ***Not*** implemented yet
+    * Sph-s (SPH)   ***Not*** implemented yet
+    * Noah   ***Not*** implemented yet
+    * TODO refactor other "multiple" endpoints to use dict-like response
 * TODO: check if we can use /v4/ for /v1/ endpoints (seems to work)
 * ***Not*** implemented yet
 * TODO: 'timezone' is float diff to UTC (MEZ results in "1.0")

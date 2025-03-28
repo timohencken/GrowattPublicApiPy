@@ -1,4 +1,5 @@
 import pickle
+from datetime import date
 from pathlib import Path
 from loguru import logger
 from growatt_public_api import GrowattApi
@@ -80,9 +81,15 @@ device_sn_sphs = [d for d in devices if d.device_type == "sph-s"][0].device_sn
 # _v4_energy_max_ = ga.v4.energy(device_sn=device_sn_max, device_type="max")
 # _v4_energy_sph_ = ga.v4.energy(device_sn=device_sn_sph, device_type="sph")
 # _v4_energy_spa_ = ga.v4.energy(device_sn=device_sn_spa, device_type="spa")
-# _v4_energy_min_ = ga.v4.energy(device_sn=None, device_type="min")
+# _v4_energy_min_ = ga.v4.energy(device_sn="AFE494403F", device_type="min")
 # _v4_energy_wit_ = ga.v4.energy(device_sn=device_sn_wit, device_type="wit")
 # _v4_energy_sphs_ = ga.v4.energy(device_sn=device_sn_sphs, device_type="sph-s")
-_v4_energy_noah_ = ga.v4.energy(device_sn=None, device_type="noah")
+# _v4_energy_noah_ = ga.v4.energy(device_sn='EFP0N1J023', device_type="noah")
+
+# _inv_last_date = _v4_details_inv_.data.inv[0].last_update_time_text.date()
+_inv_last_date = date(2024, 11, 13)
+_v4_energy_hist_inv_ = ga.v4.energy_history(device_sn=device_sn_inv, device_type="inv", date_=_inv_last_date)
+_v4_energy_hist2_inv_ = ga.v4.energy_history_multiple(device_sn=device_sn_inv, device_type="inv", date_=_inv_last_date)
+
 
 logger.success("DONE")

@@ -1,5 +1,5 @@
 import datetime
-from typing import List, Union, Any, Optional, Annotated, TypeAlias
+from typing import List, Union, Any, Optional, Annotated, TypeAlias, Dict
 
 from pydantic import ConfigDict, BeforeValidator
 from pydantic.alias_generators import to_camel
@@ -3931,7 +3931,7 @@ class SphsEnergyOverviewDataV4(ApiModel):
         alias_generator=_sphs_energy_overview_data_to_camel,
     )
 
-    sph: List[SphsEnergyDataV4] = None
+    sphs: List[SphsEnergyDataV4] = None
 
 
 class SphsEnergyV4(NewApiResponse):
@@ -3943,36 +3943,7 @@ class SphsEnergyV4(NewApiResponse):
 
 def _noah_energy_to_camel(snake: str) -> str:
     override = {
-        # TODO
         "datalogger_sn": "dataLogSn",
-        # "bms_soc": "bmsSOC",
-        # "bms_soh": "bmsSOH",
-        # "e_charge1_today": "echarge1Today",
-        # "e_charge1_total": "echarge1Total",
-        # "e_discharge1_today": "edischargeToday",
-        # "e_discharge1_total": "edischargeTotal",
-        # "e_local_load_hour": "elocalLoadHour",
-        # "e_local_load_month": "elocalLoadMonth",
-        # "e_local_load_today": "elocalLoadToday",
-        # "e_local_load_total": "elocalLoadTotal",
-        # "e_local_load_year": "elocalLoadYear",
-        # "e_self_hour": "eselfHour",
-        # "e_self_month": "eselfMonth",
-        # "e_self_year": "eselfYear",
-        # "e_self_today": "eselftoday",
-        # "e_self_total": "eselftotal",
-        # "e_system_today": "esystemtoday",
-        # "e_system_total": "esystemtotal",
-        # "e_system_hour": "esystemHour",
-        # "e_system_month": "esystemMonth",
-        # "e_system_year": "esystemYear",
-        # "e_to_grid_today": "etoGridToday",
-        # "e_to_grid_total": "etoGridTotal",
-        # "e_to_user_today": "etoUserToday",
-        # "e_to_user_total": "etoUserTotal",
-        # "p_self": "pself",
-        # "p_system": "psystem",
-        # "device_sn": "serialNum",  # align with other endpoints using "deviceSn" instead
     }
     return override.get(snake, to_camel(snake=snake))
 
@@ -4066,6 +4037,196 @@ class NoahEnergyOverviewDataV4(ApiModel):
 
 class NoahEnergyV4(NewApiResponse):
     data: Union[EmptyStrToNone, NoahEnergyOverviewDataV4] = None
+
+
+# #####################################################################################################################
+# Device energy #######################################################################################################
+
+
+class InverterEnergyHistoryDataItemV4(InverterEnergyDataV4):
+    inverter_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
+
+
+class InverterEnergyHistoryDataV4(ApiModel):
+    datas: List[InverterEnergyHistoryDataItemV4] = []
+    have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
+    start: Union[EmptyStrToNone, int] = None  # e.g. False
+
+
+class InverterEnergyHistoryV4(NewApiResponse):
+    data: Union[EmptyStrToNone, InverterEnergyHistoryDataV4] = None
+
+
+class InverterEnergyHistoryMultipleV4(NewApiResponse):
+    data: Union[EmptyStrToNone, Dict[str, List[InverterEnergyHistoryDataItemV4]]] = None
+
+
+# ------------------------------------------------------------------------------------------------
+
+
+class StorageEnergyHistoryDataItemV4(StorageEnergyDataV4):
+    pass  # TODO
+
+
+class StorageEnergyHistoryDataV4(ApiModel):
+    datas: List[StorageEnergyHistoryDataItemV4] = []
+    have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
+    start: Union[EmptyStrToNone, int] = None  # e.g. False
+
+
+class StorageEnergyHistoryV4(NewApiResponse):
+    data: Union[EmptyStrToNone, StorageEnergyHistoryDataV4] = None
+
+
+class StorageEnergyHistoryMultipleV4(NewApiResponse):
+    data: Union[EmptyStrToNone, Dict[str, List[StorageEnergyHistoryDataItemV4]]] = None
+
+
+# ------------------------------------------------------------------------------------------------
+
+
+class SphEnergyHistoryDataItemV4(SphEnergyDataV4):
+    pass  # TODO
+
+
+class SphEnergyHistoryDataV4(ApiModel):
+    datas: List[SphEnergyHistoryDataItemV4] = []
+    have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
+    start: Union[EmptyStrToNone, int] = None  # e.g. False
+
+
+class SphEnergyHistoryV4(NewApiResponse):
+    data: Union[EmptyStrToNone, SphEnergyHistoryDataV4] = None
+
+
+class SphEnergyHistoryMultipleV4(NewApiResponse):
+    data: Union[EmptyStrToNone, Dict[str, List[SphEnergyHistoryDataItemV4]]] = None
+
+
+# ------------------------------------------------------------------------------------------------
+
+
+class MaxEnergyHistoryDataItemV4(MaxEnergyDataV4):
+    pass  # TODO
+
+
+class MaxEnergyHistoryDataV4(ApiModel):
+    datas: List[MaxEnergyHistoryDataItemV4] = []
+    have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
+    start: Union[EmptyStrToNone, int] = None  # e.g. False
+
+
+class MaxEnergyHistoryV4(NewApiResponse):
+    data: Union[EmptyStrToNone, MaxEnergyHistoryDataV4] = None
+
+
+class MaxEnergyHistoryMultipleV4(NewApiResponse):
+    data: Union[EmptyStrToNone, Dict[str, List[MaxEnergyHistoryDataItemV4]]] = None
+
+
+# ------------------------------------------------------------------------------------------------
+
+
+class SpaEnergyHistoryDataItemV4(SpaEnergyDataV4):
+    pass  # TODO
+
+
+class SpaEnergyHistoryDataV4(ApiModel):
+    datas: List[SpaEnergyHistoryDataItemV4] = []
+    have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
+    start: Union[EmptyStrToNone, int] = None  # e.g. False
+
+
+class SpaEnergyHistoryV4(NewApiResponse):
+    data: Union[EmptyStrToNone, SpaEnergyHistoryDataV4] = None
+
+
+class SpaEnergyHistoryMultipleV4(NewApiResponse):
+    data: Union[EmptyStrToNone, Dict[str, List[SpaEnergyHistoryDataItemV4]]] = None
+
+
+# ------------------------------------------------------------------------------------------------
+
+
+class MinEnergyHistoryDataItemV4(MinEnergyDataV4):
+    pass  # TODO
+
+
+class MinEnergyHistoryDataV4(ApiModel):
+    datas: List[MinEnergyHistoryDataItemV4] = []
+    have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
+    start: Union[EmptyStrToNone, int] = None  # e.g. False
+
+
+class MinEnergyHistoryV4(NewApiResponse):
+    data: Union[EmptyStrToNone, MinEnergyHistoryDataV4] = None
+
+
+class MinEnergyHistoryMultipleV4(NewApiResponse):
+    data: Union[EmptyStrToNone, Dict[str, List[MinEnergyHistoryDataItemV4]]] = None
+
+
+# ------------------------------------------------------------------------------------------------
+
+
+class WitEnergyHistoryDataItemV4(WitEnergyDataV4):
+    pass  # TODO
+
+
+class WitEnergyHistoryDataV4(ApiModel):
+    datas: List[WitEnergyHistoryDataItemV4] = []
+    have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
+    start: Union[EmptyStrToNone, int] = None  # e.g. False
+
+
+class WitEnergyHistoryV4(NewApiResponse):
+    data: Union[EmptyStrToNone, WitEnergyHistoryDataV4] = None
+
+
+class WitEnergyHistoryMultipleV4(NewApiResponse):
+    data: Union[EmptyStrToNone, Dict[str, List[WitEnergyHistoryDataItemV4]]] = None
+
+
+# ------------------------------------------------------------------------------------------------
+
+
+class SphsEnergyHistoryDataItemV4(SphsEnergyDataV4):
+    pass  # TODO
+
+
+class SphsEnergyHistoryDataV4(ApiModel):
+    datas: List[SphsEnergyHistoryDataItemV4] = []
+    have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
+    start: Union[EmptyStrToNone, int] = None  # e.g. False
+
+
+class SphsEnergyHistoryV4(NewApiResponse):
+    data: Union[EmptyStrToNone, SphsEnergyHistoryDataV4] = None
+
+
+class SphsEnergyHistoryMultipleV4(NewApiResponse):
+    data: Union[EmptyStrToNone, Dict[str, List[SphsEnergyHistoryDataItemV4]]] = None
+
+
+# ------------------------------------------------------------------------------------------------
+
+
+class NoahEnergyHistoryDataItemV4(NoahEnergyDataV4):
+    pass  # TODO
+
+
+class NoahEnergyHistoryDataV4(ApiModel):
+    datas: List[NoahEnergyHistoryDataItemV4] = []
+    have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
+    start: Union[EmptyStrToNone, int] = None  # e.g. False
+
+
+class NoahEnergyHistoryV4(NewApiResponse):
+    data: Union[EmptyStrToNone, NoahEnergyHistoryDataV4] = None
+
+
+class NoahEnergyHistoryMultipleV4(NewApiResponse):
+    data: Union[EmptyStrToNone, Dict[str, List[NoahEnergyHistoryDataItemV4]]] = None
 
 
 # ------------------------------------------------------------------------------------------------
