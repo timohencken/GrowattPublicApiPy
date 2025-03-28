@@ -43,9 +43,7 @@ class PlantDelete(ApiResponse):
 class PlantData(ApiModel):
     city: str  # 'Günzburg'
     country: str  # country name, e.g. 'Germany'
-    create_date: Union[
-        EmptyStrToNone, datetime.date
-    ]  # Website creation date, e.g. '2024-11-01'
+    create_date: Union[EmptyStrToNone, datetime.date]  # Website creation date, e.g. '2024-11-01'
     current_power: Union[EmptyStrToNone, float] = None  # Current power (W), e.g. '91.8'
     image_url: Union[EmptyStrToNone, str] = None  # Picture url
     installer: Union[EmptyStrToNone, str]  # Installer name, e.g. '0'
@@ -59,9 +57,7 @@ class PlantData(ApiModel):
     peak_power: float  # Peak power (kWp), e.g. 0.8
     plant_id: int  # Plant ID
     status: int  # 1
-    total_energy: Union[EmptyStrToNone, float] = (
-        None  # Cumulative power generation (kWh), e.g. '45'
-    )
+    total_energy: Union[EmptyStrToNone, float] = None  # Cumulative power generation (kWh), e.g. '45'
     user_id: int  # User ID to which the power station belongs
 
 
@@ -105,14 +101,10 @@ class PlantDetailMax(ApiModel):
 class PlantDetailData(ApiModel):
     address1: Union[EmptyStrToNone, str] = None  # Plant address
     address2: Union[EmptyStrToNone, str] = None
-    arrays: List[PlantDetailModule] = (
-        []
-    )  # e.g. [{'module_man': 'Growatt', 'module_md': '', 'num_modules': 0}]
+    arrays: List[PlantDetailModule] = []  # e.g. [{'module_man': 'Growatt', 'module_md': '', 'num_modules': 0}]
     city: Union[EmptyStrToNone, str] = None  # e.g. 'Günzburg'
     country: Union[EmptyStrToNone, str] = None  # country name, e.g. 'Germany'
-    create_date: Union[EmptyStrToNone, datetime.date] = (
-        None  # Building date, e.g. '2024-11-29'
-    )
+    create_date: Union[EmptyStrToNone, datetime.date] = None  # Building date, e.g. '2024-11-29'
     currency: Union[EmptyStrToNone, str] = None  # currency unit, e.g. 'EUR'
     dataloggers: List[PlantDetailDatalogger] = (
         []
@@ -141,9 +133,7 @@ class PlantDetailData(ApiModel):
     latitude: Union[EmptyStrToNone, float] = None  # Latitude, e.g. '48.424232364163'
     locale: Union[EmptyStrToNone, str] = None  # , e.g. 'en_US'
     longitude: Union[EmptyStrToNone, float] = None  # Longitude, e.g. '10.298493652343'
-    maxs: List[PlantDetailMax] = (
-        []
-    )  # e.g. [{'max_man': 'Growatt', 'max_md': '', 'max_num': 0}]
+    maxs: List[PlantDetailMax] = []  # e.g. [{'max_man': 'Growatt', 'max_md': '', 'max_num': 0}]
     name: Union[EmptyStrToNone, str] = None  # power station name, e.g. 'Balkondach'
     notes: Union[EmptyStrToNone, str] = None
     offtakercontact: Union[EmptyStrToNone, str] = None
@@ -161,9 +151,7 @@ class PlantDetailData(ApiModel):
     status: Union[EmptyStrToNone, str] = None
     timezone: Union[EmptyStrToNone, str] = None  # Time Zone, e.g. 'GMT+1'
     tracker_type: Union[EmptyStrToNone, str] = None
-    user_id: Union[EmptyStrToNone, int] = (
-        None  # User ID to which the plant belongs, e.g. 3127501
-    )
+    user_id: Union[EmptyStrToNone, int] = None  # User ID to which the plant belongs, e.g. 3127501
     weather_type: Union[EmptyStrToNone, str] = None
     weathersensor_man: Union[EmptyStrToNone, str] = None
     weathersensor_md: Union[EmptyStrToNone, str] = None
@@ -181,23 +169,13 @@ class PlantDetails(ApiResponse):
 class PlantEnergyOverviewData(ApiModel):
     current_power: Union[EmptyStrToNone, float] = None  # current power (kW), 0
     today_energy: Union[EmptyStrToNone, float] = None  # Power Generation (kWh), '0.2'
-    monthly_energy: Union[EmptyStrToNone, float] = (
-        None  # Power Generation in the Month (kWh), '17.8'
-    )
-    yearly_energy: Union[EmptyStrToNone, float] = (
-        None  # Power generation in the current year (kWh), '36'
-    )
-    total_energy: Union[EmptyStrToNone, float] = (
-        None  # Cumulative power generation (kWh), '45.1'
-    )
+    monthly_energy: Union[EmptyStrToNone, float] = None  # Power Generation in the Month (kWh), '17.8'
+    yearly_energy: Union[EmptyStrToNone, float] = None  # Power generation in the current year (kWh), '36'
+    total_energy: Union[EmptyStrToNone, float] = None  # Cumulative power generation (kWh), '45.1'
     peak_power_actual: Union[EmptyStrToNone, float] = None  # Actual Peak Power (kW), 1
     efficiency: Union[EmptyStrToNone, float] = None
-    carbon_offset: Union[EmptyStrToNone, float] = (
-        None  # Equivalent reduction of CO2 emissions, '7.1'
-    )
-    last_update_time: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # Last received data, '2025-02-24 15:34:56'
-    )
+    carbon_offset: Union[EmptyStrToNone, float] = None  # Equivalent reduction of CO2 emissions, '7.1'
+    last_update_time: Union[EmptyStrToNone, datetime.datetime] = None  # Last received data, '2025-02-24 15:34:56'
     timezone: Union[EmptyStrToNone, str] = None  # Time Zone, 'GMT+1'
 
 

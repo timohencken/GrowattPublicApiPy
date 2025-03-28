@@ -105,14 +105,10 @@ class Vpp:
         """
 
         time_int_min = time_.hour * 24 + time_.minute
-        assert (
-            time_int_min <= 1440
-        ), f"Time range must not exceed 24 hours. You specified {time_}"
+        assert time_int_min <= 1440, f"Time range must not exceed 24 hours. You specified {time_}"
 
         percentage = int(round(percentage, 0))
-        assert (
-            -100 <= percentage <= 100
-        ), f"Percentage must be between -100 and 100. You specified {percentage}"
+        assert -100 <= percentage <= 100, f"Percentage must be between -100 and 100. You specified {percentage}"
 
         response = self.session.post(
             endpoint="vppRemoteSetNew",
@@ -125,9 +121,7 @@ class Vpp:
 
         return VppWrite.model_validate(response)
 
-    def write_multiple(
-        self, device_sn: str, time_percent: List[Tuple[int, time, time]]
-    ) -> VppWrite:
+    def write_multiple(self, device_sn: str, time_percent: List[Tuple[int, time, time]]) -> VppWrite:
         """
         Read and set VPP time period parameters (VPP)
         Read and set VPP time period parameter interface (only support MIN SPA SPH model)
@@ -170,14 +164,10 @@ class Vpp:
         time_periods_parsed = []
         for percentage, start_time, end_time in time_percent:
             percentage = int(round(percentage, 0))
-            assert (
-                -100 <= percentage <= 100
-            ), f"Percentage must be between -100 and 100. You specified {percentage}"
+            assert -100 <= percentage <= 100, f"Percentage must be between -100 and 100. You specified {percentage}"
             start_min = start_time.hour * 60 + start_time.minute
             end_min = end_time.hour * 60 + end_time.minute
-            assert (
-                end_min > start_min
-            ), f"End time must be after start time. You specified {start_time} ~ {end_time}"
+            assert end_min > start_min, f"End time must be after start time. You specified {start_time} ~ {end_time}"
             time_periods_parsed.append(
                 {
                     "percentage": percentage,

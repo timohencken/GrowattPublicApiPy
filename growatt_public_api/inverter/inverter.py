@@ -73,9 +73,7 @@ class Inverter:
         if parameter_id is None and start_address is None:
             raise ValueError("specify either parameter_id or start_address/end_address")
         elif parameter_id is not None and start_address is not None:
-            raise ValueError(
-                "specify either parameter_id or start_address/end_address - not both."
-            )
+            raise ValueError("specify either parameter_id or start_address/end_address - not both.")
         elif parameter_id is not None:
             # named parameter
             start_address = 0
@@ -100,9 +98,7 @@ class Inverter:
 
         inv_setting_response = InverterSettingRead.model_validate(response)
         if inv_setting_response.error_code == 10002:
-            inv_setting_response.error_msg += (
-                " (or type != 1 - check with device.list())"
-            )
+            inv_setting_response.error_msg += " (or type != 1 - check with device.list())"
 
         return inv_setting_response
 
@@ -222,9 +218,7 @@ class Inverter:
 
         inv_setting_response = InverterSettingWrite.model_validate(response)
         if inv_setting_response.error_code == 10012:
-            inv_setting_response.error_msg += (
-                " (or type != 1 - check with device.list())"
-            )
+            inv_setting_response.error_msg += " (or type != 1 - check with device.list())"
 
         return inv_setting_response
 
@@ -811,12 +805,8 @@ class Inverter:
         devices = [
             InverterEnergyOverviewMultipleItem(
                 device_sn=inverter_sn,
-                datalogger_sn=response.get("data", {})
-                .get(inverter_sn, {})
-                .get("dataloggerSn", None),
-                data=response.get("data", {})
-                .get(inverter_sn, {})
-                .get(inverter_sn, None),
+                datalogger_sn=response.get("data", {}).get(inverter_sn, {}).get("dataloggerSn", None),
+                data=response.get("data", {}).get(inverter_sn, {}).get(inverter_sn, None),
             )
             for inverter_sn in response.get("inverters", [])
         ]

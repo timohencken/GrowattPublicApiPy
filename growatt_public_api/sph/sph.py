@@ -84,9 +84,7 @@ class Sph:
         if parameter_id is None and start_address is None:
             raise ValueError("specify either parameter_id or start_address/end_address")
         elif parameter_id is not None and start_address is not None:
-            raise ValueError(
-                "specify either parameter_id or start_address/end_address - not both."
-            )
+            raise ValueError("specify either parameter_id or start_address/end_address - not both.")
         elif parameter_id is not None:
             # named parameter
             start_address = 0
@@ -274,16 +272,17 @@ class Sph:
                 "error_msg": ""
             }
         """
+
         # put parameters to a dict to make handling easier
-        parameters = {i: eval(f"parameter_value_{i}") for i in range(1, 19)}
+        parameters = {}
+        for i in range(1, 19):
+            parameters[i] = eval(f"parameter_value_{i}")
 
         if parameter_id == "set_any_reg":
             assert parameters[1] is not None, "register address must be provided"
             assert parameters[2] is not None, "new value must be provided"
             for i in range(3, 19):
-                assert (
-                    parameters[i] is None
-                ), f"parameter {i} must not be used for set_any_reg"
+                assert parameters[i] is None, f"parameter {i} must not be used for set_any_reg"
         else:
             assert parameters[1] is not None, "new value must be provided"
 
@@ -859,12 +858,8 @@ class Sph:
         devices = [
             SphEnergyOverviewMultipleItem(
                 device_sn=inverter_sn,
-                datalogger_sn=response.get("data", {})
-                .get(inverter_sn, {})
-                .get("dataloggerSn", None),
-                data=response.get("data", {})
-                .get(inverter_sn, {})
-                .get(inverter_sn, None),
+                datalogger_sn=response.get("data", {}).get(inverter_sn, {}).get("dataloggerSn", None),
+                data=response.get("data", {}).get(inverter_sn, {}).get(inverter_sn, None),
             )
             for inverter_sn in response.get("mixs", [])
         ]
