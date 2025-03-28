@@ -3338,113 +3338,13 @@ class ApiV4:
         Returns:
             Union[InverterEnergyHistoryV4, StorageEnergyHistoryV4, SphEnergyHistoryV4, MaxEnergyHistoryV4, SpaEnergyHistoryV4, MinEnergyHistoryV4, WitEnergyHistoryV4, SphsEnergyHistoryV4, NoahEnergyHistoryV4]
 
-            InverterEnergyHistoryV4
-            {   'data': {   'datas': [   {   'again': False,
-                                             'big_device': False,
-                                             'current_string1': 0.0,
-                                             'current_string2': 0.0,
-                                             'current_string3': 0.0,
-                                             'current_string4': 0.0,
-                                             'current_string5': 0.0,
-                                             'current_string6': 0.0,
-                                             'current_string7': 0.0,
-                                             'current_string8': 0.0,
-                                             'device_sn': 'NHB691514F',
-                                             'dw_string_warning_value1': 0,
-                                             'e_rac_today': 0.0,
-                                             'e_rac_total': 308.0,
-                                             'epv1_today': 0.0,
-                                             'epv1_total': 120.8,
-                                             'epv2_today': 0.0,
-                                             'epv2_total': 0.0,
-                                             'epv_total': 120.8,
-                                             'fac': 0.0,
-                                             'fault_type': 30,
-                                             'i_pid_pvape': 0.0,
-                                             'i_pid_pvbpe': 0.0,
-                                             'iacr': 0.0,
-                                             'iacs': 0.0,
-                                             'iact': 0.0,
-                                             'id': 304,
-                                             'inverter_bean': None,
-                                             'ipm_temperature': 28.7,
-                                             'ipv1': 0.0,
-                                             'ipv2': 0.0,
-                                             'ipv3': 0.0,
-                                             'n_bus_voltage': 149.2,
-                                             'op_fullwatt': 0.0,
-                                             'p_bus_voltage': 151.2,
-                                             'pac': 0.0,
-                                             'pacr': 0.0,
-                                             'pacs': 0.0,
-                                             'pact': 0.0,
-                                             'pf': 1.0,
-                                             'pid_status': 0,
-                                             'power_today': 0.0,
-                                             'power_total': 115.7,
-                                             'ppv': 0.0,
-                                             'ppv1': 0.0,
-                                             'ppv2': 0.0,
-                                             'ppv3': 0.0,
-                                             'rac': 0.0,
-                                             'real_op_percent': 0.0,
-                                             'status': 3,
-                                             'status_text': 'Fault',
-                                             'str_fault': 0.0,
-                                             'temperature': 27.9,
-                                             'time': datetime.datetime(2024, 11, 13, 11, 4, 59),
-                                             'time_calendar': 1731467099000,
-                                             'time_total': 244.66666666666666,
-                                             'time_total_text': '244.7',
-                                             'v_pid_pvape': 0.0,
-                                             'v_pid_pvbpe': 0.0,
-                                             'v_string1': 0.0,
-                                             'v_string2': 0.0,
-                                             'v_string3': 0.0,
-                                             'v_string4': 0.0,
-                                             'v_string5': 0.0,
-                                             'v_string6': 0.0,
-                                             'v_string7': 0.0,
-                                             'v_string8': 0.0,
-                                             'vacr': 2.0,
-                                             'vacs': 3.5,
-                                             'vact': 1.4,
-                                             'vpv1': 299.5,
-                                             'vpv2': 21.6,
-                                             'vpv3': 0.0,
-                                             'w_pid_fault_value': 0,
-                                             'w_string_status_value': 0,
-                                             'warn_code': 0,
-                                             'warning_value1': 0,
-                                             'warning_value2': 0}],
+            {   'data': {   'datas': [   {
+                                             <see energy() for attributes>
+                                         }],
                             'have_next': False,
                             'start': 0},
                 'error_code': 0,
                 'error_msg': 'SUCCESSFUL_OPERATION'}
-
-            StorageEnergyHistoryV4
-            <TBA>
-
-            SphEnergyHistoryV4
-            <TBA>
-
-            MaxEnergyHistoryV4
-            <TBA>
-
-            SpaEnergyHistoryV4
-            <TBA>
-
-            MinEnergyHistoryV4
-            <TBA>
-
-            WitEnergyHistoryV4
-            <TBA>
-
-            SphsEnergyHistoryV4
-            <TBA>
-
-            NoahEnergyHistoryV4
-            <TBA>
 
         """
 
@@ -3459,128 +3359,29 @@ class ApiV4:
             },
         )
 
-        # FIXME DEBUG
-        sample_data = """{
-    "code": 0,
-    "data": {
-        "datas": [
-            {
-                "id": 0,
-                "inverterId": "HTB1708008",
-                "time": "2024-05-25 16:56:33",
-                "bigDevice": false,
-                "status": 1,
-                "vpv1": 741.3,
-                "ipv1": 1.5,
-                "ppv1": 1111.9,
-                "vpv2": 82.1,
-                "ipv2": 0.0,
-                "ppv2": 0.0,
-                "vpv3": 0.0,
-                "ipv3": 0.0,
-                "ppv3": 0.0,
-                "ppv": 1111.9,
-                "vacr": 481.6,
-                "vacs": 497.5,
-                "vact": 505.3,
-                "iacr": 1.0,
-                "iacs": 1.1,
-                "iact": 1.1,
-                "fac": 49.98,
-                "pac": 936.6,
-                "pacr": 277.4,
-                "pacs": 315.3,
-                "pact": 320.2,
-                "faultType": 0,
-                "temperature": 47.1,
-                "powerToday": 0.0,
-                "powerTotal": 0.0,
-                "timeTotal": 94.97958333333334,
-                "ipmTemperature": 40.7,
-                "pBusVoltage": 381.7,
-                "nBusVoltage": 382.2,
-                "pf": 1.0,
-                "epv1Today": 18.2,
-                "epv1Total": 139.3,
-                "epv2Today": 0.0,
-                "epv2Total": 0.0,
-                "epvTotal": 139.3,
-                "rac": 0.0,
-                "eRacToday": 0.0,
-                "eRacTotal": 0.0,
-                "warnCode": 0,
-                "realOPPercent": 0,
-                "opFullwatt": 0.0,
-                "warningValue2": 0,
-                "vString1": 0.0,
-                "currentString1": 0.0,
-                "vString2": 0.0,
-                "currentString2": 0.0,
-                "vString3": 0.0,
-                "currentString3": 0.0,
-                "vString4": 0.0,
-                "currentString4": 0.0,
-                "vString5": 0.0,
-                "currentString5": 0.0,
-                "vString6": 0.0,
-                "currentString6": 0.0,
-                "vString7": 0.0,
-                "currentString7": 0.0,
-                "vString8": 0.0,
-                "currentString8": 0.0,
-                "strFault": 0,
-                "dwStringWarningValue1": 0,
-                "wStringStatusValue": 0,
-                "wPIDFaultValue": 0,
-                "vPidPvape": 0.0,
-                "iPidPvape": 0.0,
-                "pidStatus": 0,
-                "vPidPvbpe": 0.0,
-                "iPidPvbpe": 0.0,
-                "inverterBean": null,
-                "timeTotalText": "95",
-                "timeCalendar": 1716627393000,
-                "again": false,
-                "statusText": "Normal",
-                "warningValue1": 0
-            }
-        ],
-        "start": 1,
-        "haveNext": false
-    },
-    "message": "SUCCESSFUL_OPERATION"
-}"""
-        import json
-        import pprint
-
-        j = json.loads(sample_data)
-        pprint.pprint(j, indent=4, width=500)
-        pprint.pprint(InverterEnergyHistoryV4.model_validate(j).model_dump(), indent=4, width=500)
-        # FIXME DEBUG
-
-        # FIXME DEBUG
-        pprint.pprint(response, indent=4, width=500)
-        pprint.pprint(InverterEnergyHistoryV4.model_validate(response).model_dump(), indent=4, width=500)
-        # FIXME DEBUG
-
         device_type = device_type.lower()
         if device_type == "inv":
             return InverterEnergyHistoryV4.model_validate(response)
-        elif device_type == "storage":  # TODO
+        elif device_type == "storage":
             return StorageEnergyHistoryV4.model_validate(response)
-        elif device_type == "max":  # TODO
+        elif device_type == "max":
             return MaxEnergyHistoryV4.model_validate(response)
-        elif device_type == "sph":  # TODO
+        elif device_type == "sph":
             return SphEnergyHistoryV4.model_validate(response)
-        elif device_type == "spa":  # TODO
+        elif device_type == "spa":
             return SpaEnergyHistoryV4.model_validate(response)
-        elif device_type == "min":  # TODO
+        elif device_type == "min":
             return MinEnergyHistoryV4.model_validate(response)
-        elif device_type == "wit":  # TODO
+        elif device_type == "wit":
             return WitEnergyHistoryV4.model_validate(response)
-        elif device_type == "sph-s":  # TODO
+        elif device_type == "sph-s":
             return SphsEnergyHistoryV4.model_validate(response)
-        elif device_type == "noah":  # TODO
+        elif device_type == "noah":
+            logger.warning(
+                "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
+            )
+            logger.warning("please send following output to a developer:")
+            logger.warning(f"NOAH energy history dump:\n{response}")
             return NoahEnergyHistoryV4.model_validate(response)
         else:
             raise ValueError(f"Unknown device type: {device_type}")
@@ -3619,111 +3420,11 @@ class ApiV4:
         Returns:
             Union[InverterEnergyHistoryMultipleV4, ...]
 
-            InverterEnergyHistoryMultipleV4
-            {   'data': {   'NHB691514F': [   {   'again': False,
-                                                  'big_device': False,
-                                                  'current_string1': 0.0,
-                                                  'current_string2': 0.0,
-                                                  'current_string3': 0.0,
-                                                  'current_string4': 0.0,
-                                                  'current_string5': 0.0,
-                                                  'current_string6': 0.0,
-                                                  'current_string7': 0.0,
-                                                  'current_string8': 0.0,
-                                                  'device_sn': 'NHB691514F',
-                                                  'dw_string_warning_value1': 0,
-                                                  'e_rac_today': 0.0,
-                                                  'e_rac_total': 308.0,
-                                                  'epv1_today': 0.0,
-                                                  'epv1_total': 120.8,
-                                                  'epv2_today': 0.0,
-                                                  'epv2_total': 0.0,
-                                                  'epv_total': 120.8,
-                                                  'fac': 0.0,
-                                                  'fault_type': 30,
-                                                  'i_pid_pvape': 0.0,
-                                                  'i_pid_pvbpe': 0.0,
-                                                  'iacr': 0.0,
-                                                  'iacs': 0.0,
-                                                  'iact': 0.0,
-                                                  'id': 304,
-                                                  'inverter_bean': None,
-                                                  'ipm_temperature': 28.7,
-                                                  'ipv1': 0.0,
-                                                  'ipv2': 0.0,
-                                                  'ipv3': 0.0,
-                                                  'n_bus_voltage': 149.2,
-                                                  'op_fullwatt': 0.0,
-                                                  'p_bus_voltage': 151.2,
-                                                  'pac': 0.0,
-                                                  'pacr': 0.0,
-                                                  'pacs': 0.0,
-                                                  'pact': 0.0,
-                                                  'pf': 1.0,
-                                                  'pid_status': 0,
-                                                  'power_today': 0.0,
-                                                  'power_total': 115.7,
-                                                  'ppv': 0.0,
-                                                  'ppv1': 0.0,
-                                                  'ppv2': 0.0,
-                                                  'ppv3': 0.0,
-                                                  'rac': 0.0,
-                                                  'real_op_percent': 0.0,
-                                                  'status': 3,
-                                                  'status_text': 'Fault',
-                                                  'str_fault': 0.0,
-                                                  'temperature': 27.9,
-                                                  'time': datetime.datetime(2024, 11, 13, 11, 4, 59),
-                                                  'time_calendar': 1731467099000,
-                                                  'time_total': 244.66666666666666,
-                                                  'time_total_text': '244.7',
-                                                  'v_pid_pvape': 0.0,
-                                                  'v_pid_pvbpe': 0.0,
-                                                  'v_string1': 0.0,
-                                                  'v_string2': 0.0,
-                                                  'v_string3': 0.0,
-                                                  'v_string4': 0.0,
-                                                  'v_string5': 0.0,
-                                                  'v_string6': 0.0,
-                                                  'v_string7': 0.0,
-                                                  'v_string8': 0.0,
-                                                  'vacr': 2.0,
-                                                  'vacs': 3.5,
-                                                  'vact': 1.4,
-                                                  'vpv1': 299.5,
-                                                  'vpv2': 21.6,
-                                                  'vpv3': 0.0,
-                                                  'w_pid_fault_value': 0,
-                                                  'w_string_status_value': 0,
-                                                  'warn_code': 0,
-                                                  'warning_value1': 0,
-                                                  'warning_value2': 0}]},
+            {   'data': {   'NHB691514F': [   {
+                                                  <see energy() for attributes>
+                                              }]},
                 'error_code': 0,
                 'error_msg': 'SUCCESSFUL_OPERATION'}
-
-            StorageEnergyHistoryMultipleV4
-            <TBA>
-
-            SphEnergyHistoryMultipleV4
-            <TBA>
-
-            MaxEnergyHistoryMultipleV4
-            <TBA>
-
-            SpaEnergyHistoryMultipleV4
-            <TBA>
-
-            MinEnergyHistoryMultipleV4
-            <TBA>
-
-            WitEnergyHistoryMultipleV4
-            <TBA>
-
-            SphsEnergyHistoryMultipleV4
-            <TBA>
-
-            NoahEnergyHistoryMultipleV4
-            <TBA>
 
         """
 
@@ -3742,31 +3443,29 @@ class ApiV4:
             },
         )
 
-        # FIXME DEBUG
-        import pprint
-
-        pprint.pprint(response, indent=4, width=500)
-        pprint.pprint(InverterEnergyHistoryMultipleV4.model_validate(response).model_dump(), indent=4, width=500)
-        # FIXME DEBUG
-
         device_type = device_type.lower()
         if device_type == "inv":
             return InverterEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "storage":  # TODO
+        elif device_type == "storage":
             return StorageEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "max":  # TODO
+        elif device_type == "max":
             return MaxEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "sph":  # TODO
+        elif device_type == "sph":
             return SphEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "spa":  # TODO
+        elif device_type == "spa":
             return SpaEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "min":  # TODO
+        elif device_type == "min":
             return MinEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "wit":  # TODO
+        elif device_type == "wit":
             return WitEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "sph-s":  # TODO
+        elif device_type == "sph-s":
             return SphsEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "noah":  # TODO
+        elif device_type == "noah":
+            logger.warning(
+                "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
+            )
+            logger.warning("please send following output to a developer:")
+            logger.warning(f"NOAH energy history dump:\n{response}")
             return NoahEnergyHistoryMultipleV4.model_validate(response)
         else:
             raise ValueError(f"Unknown device type: {device_type}")

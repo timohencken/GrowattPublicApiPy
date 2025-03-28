@@ -74,7 +74,7 @@ device_sn_sphs = [d for d in devices if d.device_type == "sph-s"][0].device_sn
 # _v4_details_min_ = ga.v4.details(device_sn=None, device_type="min")
 # _v4_details_wit_ = ga.v4.details(device_sn=device_sn_wit, device_type="wit")
 # _v4_details_sphs_ = ga.v4.details(device_sn=device_sn_sphs, device_type="sph-s")
-# _v4_details_noah_ = ga.v4.details(device_sn=device_sn_wit, device_type="noah")
+# _v4_details_noah_ = ga.v4.details(device_sn=None, device_type="noah")
 
 # _v4_energy_inv_ = ga.v4.energy(device_sn=device_sn_inv, device_type="inv")
 # _v4_energy_sto_ = ga.v4.energy(device_sn=device_sn_storage, device_type="storage")
@@ -86,10 +86,40 @@ device_sn_sphs = [d for d in devices if d.device_type == "sph-s"][0].device_sn
 # _v4_energy_sphs_ = ga.v4.energy(device_sn=device_sn_sphs, device_type="sph-s")
 # _v4_energy_noah_ = ga.v4.energy(device_sn='EFP0N1J023', device_type="noah")
 
-# _inv_last_date = _v4_details_inv_.data.inv[0].last_update_time_text.date()
-_inv_last_date = date(2024, 11, 13)
-_v4_energy_hist_inv_ = ga.v4.energy_history(device_sn=device_sn_inv, device_type="inv", date_=_inv_last_date)
-_v4_energy_hist2_inv_ = ga.v4.energy_history_multiple(device_sn=device_sn_inv, device_type="inv", date_=_inv_last_date)
+# _inv_last_date = date(2024, 11, 13)  # _v4_details_inv_.data.inv[0].last_update_time_text.date()
+# _v4_energy_hist_inv_ = ga.v4.energy_history(device_sn=device_sn_inv, device_type="inv", date_=_last_date)
+# _v4_energy_hist2_inv_ = ga.v4.energy_history_multiple(device_sn=device_sn_inv, device_type="inv", date_=_last_date)
 
+_last_date = date(2024, 6, 17)  # _v4_details_sto_.data.storage[0].last_update_time_text.date()
+_v4_energy_hist_sto_ = ga.v4.energy_history(device_sn=device_sn_storage, device_type="storage", date_=_last_date)
+_v4_energy_hist2_sto_ = ga.v4.energy_history_multiple(
+    device_sn=device_sn_storage, device_type="storage", date_=_last_date
+)
+
+_last_date = date(2025, 1, 9)  # _v4_details_sph_.data.sph[0].last_update_time_text.date()
+_v4_energy_hist_sph_ = ga.v4.energy_history(device_sn=device_sn_sph, device_type="sph", date_=_last_date)
+_v4_energy_hist2_sph_ = ga.v4.energy_history_multiple(device_sn=device_sn_sph, device_type="sph", date_=_last_date)
+
+_last_date = date(2024, 4, 26)  # _v4_details_max_.data.max[0].last_update_time_text.date()
+_v4_energy_hist_max_ = ga.v4.energy_history(device_sn=device_sn_max, device_type="max", date_=_last_date)
+_v4_energy_hist2_max_ = ga.v4.energy_history_multiple(device_sn=device_sn_max, device_type="max", date_=_last_date)
+
+_last_date = date(2019, 5, 21)  # _v4_details_spa_.data.spa[0].last_update_time_text.date()
+_v4_energy_hist_spa_ = ga.v4.energy_history(device_sn=device_sn_spa, device_type="spa", date_=_last_date)
+_v4_energy_hist2_spa_ = ga.v4.energy_history_multiple(device_sn=device_sn_spa, device_type="spa", date_=_last_date)
+
+_v4_energy_hist_min_ = ga.v4.energy_history(device_sn=None, device_type="min")
+_v4_energy_hist2_min_ = ga.v4.energy_history_multiple(device_sn=None, device_type="min")
+
+_last_date = date(2024, 10, 6)  # _v4_details_wit_.data.wit[0].last_update_time_text.date()
+_v4_energy_hist_wit_ = ga.v4.energy_history(device_sn=device_sn_wit, device_type="wit", date_=_last_date)
+_v4_energy_hist2_wit_ = ga.v4.energy_history_multiple(device_sn=device_sn_wit, device_type="wit", date_=_last_date)
+
+_last_date = date(2024, 7, 13)  # _v4_details_sphs_.data.sphs[0].last_update_time_text.date()
+_v4_energy_hist_sphs_ = ga.v4.energy_history(device_sn=device_sn_sphs, device_type="sph-s", date_=_last_date)
+_v4_energy_hist2_sphs_ = ga.v4.energy_history_multiple(device_sn=device_sn_sphs, device_type="sph-s", date_=_last_date)
+
+_v4_energy_hist_noah_ = ga.v4.energy_history(device_sn=None, device_type="noah")
+_v4_energy_hist2_noah_ = ga.v4.energy_history_multiple(device_sn=None, device_type="noah")
 
 logger.success("DONE")

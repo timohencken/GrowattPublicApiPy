@@ -145,7 +145,9 @@ class InverterDetailDataV4(ApiModel):
 
 
 class InverterDetailsDataV4(ApiModel):
-    inv: List[InverterDetailDataV4] = None
+    inv: List[InverterDetailDataV4] = (
+        None  # TODO actually, it's nasty to have proprietary attribute names here. maybe rename this to "device"? or remove one level?
+    )
 
 
 class InverterDetailsV4(NewApiResponse):
@@ -1669,6 +1671,7 @@ class InverterEnergyDataV4(ApiModel):
     iact: Union[EmptyStrToNone, float] = None  # Output current channel 3 (A), e.g. 1.1
     id: Union[EmptyStrToNone, int] = None  # e.g. 0
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "NHB691514F" (original: "inverterId")
+    inverter_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
     ipm_temperature: Union[EmptyStrToNone, float] = None  # IPM temperature, e.g. 40.7
     ipv1: Union[EmptyStrToNone, float] = None  # Input current channel 1 (A), e.g. 1.5
     ipv2: Union[EmptyStrToNone, float] = None  # Input current channel 2 (A), e.g. 0
@@ -4043,12 +4046,8 @@ class NoahEnergyV4(NewApiResponse):
 # Device energy #######################################################################################################
 
 
-class InverterEnergyHistoryDataItemV4(InverterEnergyDataV4):
-    inverter_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
-
-
 class InverterEnergyHistoryDataV4(ApiModel):
-    datas: List[InverterEnergyHistoryDataItemV4] = []
+    datas: List[InverterEnergyDataV4] = []
     have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
     start: Union[EmptyStrToNone, int] = None  # e.g. False
 
@@ -4058,18 +4057,14 @@ class InverterEnergyHistoryV4(NewApiResponse):
 
 
 class InverterEnergyHistoryMultipleV4(NewApiResponse):
-    data: Union[EmptyStrToNone, Dict[str, List[InverterEnergyHistoryDataItemV4]]] = None
+    data: Union[EmptyStrToNone, Dict[str, List[InverterEnergyDataV4]]] = None
 
 
 # ------------------------------------------------------------------------------------------------
 
 
-class StorageEnergyHistoryDataItemV4(StorageEnergyDataV4):
-    pass  # TODO
-
-
 class StorageEnergyHistoryDataV4(ApiModel):
-    datas: List[StorageEnergyHistoryDataItemV4] = []
+    datas: List[StorageEnergyDataV4] = []
     have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
     start: Union[EmptyStrToNone, int] = None  # e.g. False
 
@@ -4079,18 +4074,14 @@ class StorageEnergyHistoryV4(NewApiResponse):
 
 
 class StorageEnergyHistoryMultipleV4(NewApiResponse):
-    data: Union[EmptyStrToNone, Dict[str, List[StorageEnergyHistoryDataItemV4]]] = None
+    data: Union[EmptyStrToNone, Dict[str, List[StorageEnergyDataV4]]] = None
 
 
 # ------------------------------------------------------------------------------------------------
 
 
-class SphEnergyHistoryDataItemV4(SphEnergyDataV4):
-    pass  # TODO
-
-
 class SphEnergyHistoryDataV4(ApiModel):
-    datas: List[SphEnergyHistoryDataItemV4] = []
+    datas: List[SphEnergyDataV4] = []
     have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
     start: Union[EmptyStrToNone, int] = None  # e.g. False
 
@@ -4100,18 +4091,14 @@ class SphEnergyHistoryV4(NewApiResponse):
 
 
 class SphEnergyHistoryMultipleV4(NewApiResponse):
-    data: Union[EmptyStrToNone, Dict[str, List[SphEnergyHistoryDataItemV4]]] = None
+    data: Union[EmptyStrToNone, Dict[str, List[SphEnergyDataV4]]] = None
 
 
 # ------------------------------------------------------------------------------------------------
 
 
-class MaxEnergyHistoryDataItemV4(MaxEnergyDataV4):
-    pass  # TODO
-
-
 class MaxEnergyHistoryDataV4(ApiModel):
-    datas: List[MaxEnergyHistoryDataItemV4] = []
+    datas: List[MaxEnergyDataV4] = []
     have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
     start: Union[EmptyStrToNone, int] = None  # e.g. False
 
@@ -4121,18 +4108,14 @@ class MaxEnergyHistoryV4(NewApiResponse):
 
 
 class MaxEnergyHistoryMultipleV4(NewApiResponse):
-    data: Union[EmptyStrToNone, Dict[str, List[MaxEnergyHistoryDataItemV4]]] = None
+    data: Union[EmptyStrToNone, Dict[str, List[MaxEnergyDataV4]]] = None
 
 
 # ------------------------------------------------------------------------------------------------
 
 
-class SpaEnergyHistoryDataItemV4(SpaEnergyDataV4):
-    pass  # TODO
-
-
 class SpaEnergyHistoryDataV4(ApiModel):
-    datas: List[SpaEnergyHistoryDataItemV4] = []
+    datas: List[SpaEnergyDataV4] = []
     have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
     start: Union[EmptyStrToNone, int] = None  # e.g. False
 
@@ -4142,18 +4125,14 @@ class SpaEnergyHistoryV4(NewApiResponse):
 
 
 class SpaEnergyHistoryMultipleV4(NewApiResponse):
-    data: Union[EmptyStrToNone, Dict[str, List[SpaEnergyHistoryDataItemV4]]] = None
+    data: Union[EmptyStrToNone, Dict[str, List[SpaEnergyDataV4]]] = None
 
 
 # ------------------------------------------------------------------------------------------------
 
 
-class MinEnergyHistoryDataItemV4(MinEnergyDataV4):
-    pass  # TODO
-
-
 class MinEnergyHistoryDataV4(ApiModel):
-    datas: List[MinEnergyHistoryDataItemV4] = []
+    datas: List[MinEnergyDataV4] = []
     have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
     start: Union[EmptyStrToNone, int] = None  # e.g. False
 
@@ -4163,18 +4142,14 @@ class MinEnergyHistoryV4(NewApiResponse):
 
 
 class MinEnergyHistoryMultipleV4(NewApiResponse):
-    data: Union[EmptyStrToNone, Dict[str, List[MinEnergyHistoryDataItemV4]]] = None
+    data: Union[EmptyStrToNone, Dict[str, List[MinEnergyDataV4]]] = None
 
 
 # ------------------------------------------------------------------------------------------------
 
 
-class WitEnergyHistoryDataItemV4(WitEnergyDataV4):
-    pass  # TODO
-
-
 class WitEnergyHistoryDataV4(ApiModel):
-    datas: List[WitEnergyHistoryDataItemV4] = []
+    datas: List[WitEnergyDataV4] = []
     have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
     start: Union[EmptyStrToNone, int] = None  # e.g. False
 
@@ -4184,18 +4159,14 @@ class WitEnergyHistoryV4(NewApiResponse):
 
 
 class WitEnergyHistoryMultipleV4(NewApiResponse):
-    data: Union[EmptyStrToNone, Dict[str, List[WitEnergyHistoryDataItemV4]]] = None
+    data: Union[EmptyStrToNone, Dict[str, List[WitEnergyDataV4]]] = None
 
 
 # ------------------------------------------------------------------------------------------------
 
 
-class SphsEnergyHistoryDataItemV4(SphsEnergyDataV4):
-    pass  # TODO
-
-
 class SphsEnergyHistoryDataV4(ApiModel):
-    datas: List[SphsEnergyHistoryDataItemV4] = []
+    datas: List[SphsEnergyDataV4] = []
     have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
     start: Union[EmptyStrToNone, int] = None  # e.g. False
 
@@ -4205,18 +4176,14 @@ class SphsEnergyHistoryV4(NewApiResponse):
 
 
 class SphsEnergyHistoryMultipleV4(NewApiResponse):
-    data: Union[EmptyStrToNone, Dict[str, List[SphsEnergyHistoryDataItemV4]]] = None
+    data: Union[EmptyStrToNone, Dict[str, List[SphsEnergyDataV4]]] = None
 
 
 # ------------------------------------------------------------------------------------------------
 
 
-class NoahEnergyHistoryDataItemV4(NoahEnergyDataV4):
-    pass  # TODO
-
-
 class NoahEnergyHistoryDataV4(ApiModel):
-    datas: List[NoahEnergyHistoryDataItemV4] = []
+    datas: List[NoahEnergyDataV4] = []
     have_next: Union[EmptyStrToNone, bool] = None  # e.g. False
     start: Union[EmptyStrToNone, int] = None  # e.g. False
 
@@ -4226,7 +4193,7 @@ class NoahEnergyHistoryV4(NewApiResponse):
 
 
 class NoahEnergyHistoryMultipleV4(NewApiResponse):
-    data: Union[EmptyStrToNone, Dict[str, List[NoahEnergyHistoryDataItemV4]]] = None
+    data: Union[EmptyStrToNone, Dict[str, List[NoahEnergyDataV4]]] = None
 
 
 # ------------------------------------------------------------------------------------------------

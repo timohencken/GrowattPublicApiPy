@@ -74,6 +74,7 @@ This package aims to
     * current `inverter.energy()`
     * current for multiple inverters `inverter.energy_multiple()`
     * historical data `inverter.energy_history()`
+      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * Storage (*TYPE=2*)
   * general device data
     * read device data `storage.details()`
@@ -84,6 +85,7 @@ This package aims to
   * device power/energy metrics
     * current `storage.energy()`
     * historical data `storage.energy_history()`
+      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * Datalogger (*TYPE=3*)
   * ***Not*** implemented yet (TODO: refactor structure)
 * MAX (*TYPE=4* - MAX)
@@ -97,6 +99,7 @@ This package aims to
     * current `max.energy()`
     * current for multiple inverters `max.energy_multiple()`
     * historical data `max.energy_history()`
+      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * SPH (*TYPE=5* - SPH/MIX) (TODO: refactor rename to MIX?)
   * general device data
     * read device data `sph.details()`
@@ -108,6 +111,7 @@ This package aims to
     * current `sph.energy()`
     * current for multiple inverters `sph.energy_multiple()`
     * historical data `sph.energy_history()`
+      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * SPA (*TYPE=6* - SPA)
   * general device data
     * read device data `spa.details()`
@@ -119,6 +123,7 @@ This package aims to
     * current `spa.energy()`
     * current for multiple inverters `spa.energy_multiple()`
     * historical data `spa.energy_history()`
+      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * MIN (*TYPE=7* - MIN/MAC/MOD-XH/MID-XH/NEO)
   * general device data
     * read device data `min.details()`
@@ -131,6 +136,7 @@ This package aims to
     * current `min.energy()`
     * current for multiple inverters `min.energy_multiple()`
     * historical data `min.energy_history()`
+      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * PCS (*TYPE=8*)
   * general device data
     * read device data `pcs.details()`
@@ -138,6 +144,7 @@ This package aims to
   * device power/energy metrics
     * current `pcs.energy()`
     * historical data `pcs.energy_history()`
+      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * HPS (*TYPE=9*)
   * general device data
     * read device data `hps.details()`
@@ -152,18 +159,21 @@ This package aims to
   * device power/energy metrics
     * current `pbd.energy()`
     * historical data `pbd.energy_history()`
+      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * Smart meter (*TYPE=3* - SmartMeter/SDM/CHNT)
   * get meters attached to datalogger
     * `smart_meter.list()`
   * device power/energy metrics
     * current `smart_meter.energy()`
     * historical data `smart_meter.energy_history()`
+      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * Environmental sensor (*TYPE=3* - Temperature/Humidity/Wind/...)
   * get sensors attached to datalogger
     * `env_sensor.list()`
   * device metrics
     * current `env_sensor.metrics()`
     * historical data `env_sensor.metrics_history()`
+      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * VPP (*TYPE=3/5/6* MIN/SPH/SPA)
   * get current State-of-Charge (SOC) `vpp.soc()`
   * change time period settings
@@ -176,6 +186,7 @@ This package aims to
     * current `groboost.metrics()`
     * current for multiple devices `groboost.metrics_multiple()`
     * historical data `groboost.metrics_history()`
+      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 
 ### API v4 (a few additional endpoints)
 * get devices (inverters) assigned to current user
@@ -187,26 +198,10 @@ This package aims to
   * current `v4.energy()`
     * Note for NOAH: API docs are incomplete. I would be happy if you dump NOAHs output and create a github issue.
   * historical data `v4.energy_history()`
-    * Inv
-    * Storage   ***Not*** implemented yet
-    * Max   ***Not*** implemented yet
-    * Sph (MIX)   ***Not*** implemented yet
-    * Spa   ***Not*** implemented yet
-    * Min   ***Not*** implemented yet
-    * Wit   ***Not*** implemented yet
-    * Sph-s (SPH)   ***Not*** implemented yet
-    * Noah   ***Not*** implemented yet
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
   * historical data `v4.energy_history_multiple()` (query multiple devices at once)
-    * Inv
-    * Storage   ***Not*** implemented yet
-    * Max   ***Not*** implemented yet
-    * Sph (MIX)   ***Not*** implemented yet
-    * Spa   ***Not*** implemented yet
-    * Min   ***Not*** implemented yet
-    * Wit   ***Not*** implemented yet
-    * Sph-s (SPH)   ***Not*** implemented yet
-    * Noah   ***Not*** implemented yet
-    * TODO refactor other "multiple" endpoints to use dict-like response
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* TODO refactor other "multiple" endpoints to use dict-like response
 * TODO: check if we can use /v4/ for /v1/ endpoints (seems to work)
 * ***Not*** implemented yet
 * TODO: 'timezone' is float diff to UTC (MEZ results in "1.0")

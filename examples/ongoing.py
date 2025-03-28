@@ -47,7 +47,12 @@ if __name__ == "__main__":
     # pprint.pprint(k2.model_dump(), indent=4, width=500)
     # # FIXME DEBUG
 
-    # TODO API v4
+    # DEBUG
+    _min_energy_history_ = ga.min.energy_history(device_sn=INVERTER_SN)
+
+    # API v4
+    _v4_energy_hist_min_ = ga.v4.energy_history(device_sn=INVERTER_SN, device_type="min")
+    _v4_energy_hist2_min_ = ga.v4.energy_history_multiple(device_sn=INVERTER_SN, device_type="min")
     _v4_energy_min_ = ga.v4.energy(device_sn=INVERTER_SN, device_type="min")
     _v4_details_min_ = ga.v4.details(device_sn=INVERTER_SN, device_type="min")
     _v4_device_list_ = ga.v4.list(page=1)
