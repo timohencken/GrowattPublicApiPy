@@ -198,15 +198,23 @@ This package aims to
   * current `v4.energy()`
     * Note for NOAH: API docs are incomplete. I would be happy if you dump NOAHs output and create a github issue.
   * historical data `v4.energy_history()`
-    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
   * historical data `v4.energy_history_multiple()` (query multiple devices at once)
     * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* TODO refactor other "multiple" endpoints to use dict-like response
-* TODO: check if we can use /v4/ for /v1/ endpoints (seems to work)
+* device settings (***use with caution***)
+  * power on/off: `v4.setting_write_on_off()`
+  * configure active power percentage: `v4.setting_write_active_power()`
+    * Note: for NOAH devices, pass 0~800W instead of 0~100%
+  * configure SOC limits: `v4.setting_write_soc_upper_limit()` / `v4.setting_write_soc_lower_limit()`
+    * Note: only for NOAH devices
+  * configure time period `v4.setting_write_time_period()`
+    * Note: only for NOAH devices
+
 * ***Not*** implemented yet
-* TODO: 'timezone' is float diff to UTC (MEZ results in "1.0")
-* TODO: check postman collection at https://www.postman.com/gold-water-163355/growatt-public/collection/fw8cldm/shineserver-public
-* TODO: check docs at https://www.showdoc.com.cn/2598832417617967/0
+  * TODO refactor other "multiple" endpoints to use dict-like response
+  * TODO: check if we can use /v4/ for /v1/ endpoints (seems to work)
+  * TODO: 'timezone' is float diff to UTC (MEZ results in "1.0")
+  * TODO: check postman collection at https://www.postman.com/gold-water-163355/growatt-public/collection/fw8cldm/shineserver-public
+  * TODO: check docs at https://www.showdoc.com.cn/2598832417617967/0
 
 
 # Usage
@@ -304,11 +312,7 @@ To the best of our knowledge only the settings functions perform modifications t
 
 
 # Changelog
-* ONGOING (pre-alpha)
-  * APIv4 endpoints
-    * `v4.list()`
-    * `v4.details()`
-    * `v4.energy()`
-    * TODO: `v4.energy_history()`
+* 2025.03.28 (pre-alpha)
+  * v4/new-api endpoints implemented
 * 2025.03.11 (pre-alpha)
   * all API v1 endpoints implemented

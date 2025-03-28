@@ -4196,4 +4196,9 @@ class NoahEnergyHistoryMultipleV4(NewApiResponse):
     data: Union[EmptyStrToNone, Dict[str, List[NoahEnergyDataV4]]] = None
 
 
-# ------------------------------------------------------------------------------------------------
+# #####################################################################################################################
+# Setting write #######################################################################################################
+
+
+class SettingWriteV4(NewApiResponse):
+    data: Union[EmptyStrToNone, Any] = None

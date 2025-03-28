@@ -1,4 +1,4 @@
-from datetime import date
+import datetime
 from typing import Optional, Literal, List, Union
 
 import truststore
@@ -42,6 +42,7 @@ from pydantic_models.api_v4 import (
     WitEnergyHistoryMultipleV4,
     SphsEnergyHistoryMultipleV4,
     NoahEnergyHistoryMultipleV4,
+    SettingWriteV4,
 )
 
 truststore.inject_into_ssl()
@@ -3308,7 +3309,7 @@ class ApiV4:
         self,
         device_sn: str,
         device_type: DeviceType,
-        date_: Optional[date] = None,
+        date_: Optional[datetime.date] = None,
     ) -> Union[
         InverterEnergyHistoryV4,
         StorageEnergyHistoryV4,
@@ -3348,7 +3349,7 @@ class ApiV4:
 
         """
 
-        date_ = date_ or date.today()
+        date_ = date_ or datetime.date.today()
 
         response = self.session.post(
             endpoint="new-api/queryHistoricalData",
@@ -3390,7 +3391,7 @@ class ApiV4:
         self,
         device_sn: Union[str, List[str]],
         device_type: DeviceType,
-        date_: Optional[date] = None,
+        date_: Optional[datetime.date] = None,
     ) -> Union[
         InverterEnergyHistoryMultipleV4,
         StorageEnergyHistoryMultipleV4,
@@ -3428,7 +3429,7 @@ class ApiV4:
 
         """
 
-        date_ = date_ or date.today()
+        date_ = date_ or datetime.date.today()
 
         if isinstance(device_sn, list):
             assert len(device_sn) <= 100, "Max 100 devices per request"
@@ -3469,3 +3470,292 @@ class ApiV4:
             return NoahEnergyHistoryMultipleV4.model_validate(response)
         else:
             raise ValueError(f"Unknown device type: {device_type}")
+
+    def setting_write_on_off(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: str,
+        device_type: DeviceType,
+        power_on: bool,
+    ) -> SettingWriteV4:
+        """
+        Set the power on and off
+        Turn device on/off
+        The interface returns data only for devices that the secret token has permission to access.
+        Information for devices without permission will not be returned.
+        https://www.showdoc.com.cn/2540838290984246/11330750679726415
+
+        Note:
+        * Noah type devices do not support power on/off settings
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            device_type (DeviceType): Device type (as returned by list())
+            power_on (bool): True = Power On, False = Power Off
+
+        Returns:
+            SettingWriteV4
+
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        if device_type == "noah":
+            raise AttributeError("NOAH devices do not support power on/off setting")
+
+        if power_on:
+            value = 1
+            log_txt = "on"
+        else:
+            value = 0
+            log_txt = "off"
+
+        logger.info(f"Turning {device_type} device '{device_sn}' {log_txt}")
+        response = self.session.post(
+            endpoint="new-api/setOnOrOff",
+            params={
+                "deviceSn": device_sn,
+                "deviceType": device_type,
+                "value": value,
+            },
+        )
+
+        return SettingWriteV4.model_validate(response)
+
+    def setting_write_active_power(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: str,
+        device_type: DeviceType,
+        active_power: int,
+    ) -> SettingWriteV4:
+        """
+        Set the active power
+        Set the active power percentage of the device based on the device type and SN of the device.
+        The interface returns data only for devices that the secret token has permission to access.
+        Information for devices without permission will not be returned.
+        https://www.showdoc.com.cn/2540838290984246/11330751643769012
+
+        Note:
+        * most devices can be configured to 0 ~ 100 %
+        * NOAH devices can be configured to 0 ~ 800 W
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            device_type (DeviceType): Device type (as returned by list())
+            active_power (int): Percentage of active power, range 0-100 --- NOAH device is set to power (range 0-800W, unit W)
+
+        Returns:
+            SettingWriteV4
+
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        active_power = int(active_power)
+        if device_type == "noah":
+            assert 0 <= active_power <= 800, "NOAH devices can be configured to 0 ~ 800 W"
+            logger.info(f"Setting {device_type} device '{device_sn}' power to {active_power} W")
+        else:
+            assert 0 <= active_power <= 100, "active power must be in range 0 ~ 100 %"
+            logger.info(f"Setting {device_type} device '{device_sn}' active power to {active_power} %")
+
+        response = self.session.post(
+            endpoint="new-api/setPower",
+            params={
+                "deviceSn": device_sn,
+                "deviceType": device_type,
+                "value": active_power,
+            },
+        )
+
+        return SettingWriteV4.model_validate(response)
+
+    def setting_write_soc_upper_limit(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: str,
+        device_type: DeviceType,
+        soc_limit: int,
+    ) -> SettingWriteV4:
+        """
+        Set the upper limit of the discharge SOC
+        Set the upper limit of the discharge SOC of the device based on the device type noah and the SN of the device.
+        The interface returns data only for devices that the secret token has permission to access.
+        Information for devices without permission will not be returned.
+        https://www.showdoc.com.cn/2540838290984246/11330751904512654
+
+        Note:
+        * This API is only applicable to NOAH device type
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            device_type (DeviceType): Device type (as returned by list()) -- This API is only applicable to NOAH device type
+            soc_limit (int): discharge SOC upper limit, range 0-100, range 0-100 %
+
+        Returns:
+            SettingWriteV4
+
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        soc_limit = int(soc_limit)
+        if device_type != "noah":
+            raise AttributeError("This API is only applicable to NOAH device type")
+
+        logger.info(f"Setting {device_type} device '{device_sn}' SOC discharge upper limit to {soc_limit} %")
+
+        response = self.session.post(
+            endpoint="new-api/setHighLimitSoc",
+            params={
+                "deviceSn": device_sn,
+                "deviceType": device_type,
+                "value": soc_limit,
+            },
+        )
+
+        return SettingWriteV4.model_validate(response)
+
+    def setting_write_soc_lower_limit(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: str,
+        device_type: DeviceType,
+        soc_limit: int,
+    ) -> SettingWriteV4:
+        """
+        Set the lower discharge SOC limit
+        Set the lower discharge SOC limit of the device based on the device type noah and the SN of the device.
+        The interface returns data only for devices that the secret token has permission to access.
+        Information for devices without permission will not be returned.
+        https://www.showdoc.com.cn/2540838290984246/11330752473301776
+
+        Note:
+        * This API is only applicable to NOAH device type
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            device_type (DeviceType): Device type (as returned by list()) -- This API is only applicable to NOAH device type
+            soc_limit (int): discharge SOC lower limit, range 0-100, range 0-100 %
+
+        Returns:
+            SettingWriteV4
+
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        soc_limit = int(soc_limit)
+        if device_type != "noah":
+            raise AttributeError("This API is only applicable to NOAH device type")
+
+        logger.info(f"Setting {device_type} device '{device_sn}' SOC discharge lower limit to {soc_limit} %")
+
+        response = self.session.post(
+            endpoint="new-api/setLowLimitSoc",
+            params={
+                "deviceSn": device_sn,
+                "deviceType": device_type,
+                "value": soc_limit,
+            },
+        )
+
+        return SettingWriteV4.model_validate(response)
+
+    def setting_write_time_period(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: str,
+        device_type: DeviceType,
+        time_period_nr: int,
+        start_time: datetime.time,
+        end_time: datetime.time,
+        load_priority: bool,
+        power_watt: int,
+        enabled: bool,
+    ) -> SettingWriteV4:
+        """
+        Set the time period and mode
+        Set the time period and machine mode of the device based on the device type noah and the SN of the device.
+        The interface returns data only for devices that the secret token has permission to access.
+        Information for devices without permission will not be returned.
+        https://www.showdoc.com.cn/2540838290984246/11330752683972660
+
+        Note:
+        * This API is only applicable to NOAH device type
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            device_type (DeviceType): Device type (as returned by list()) -- This API is only applicable to NOAH device type
+            time_period_nr (int): time period number - range 1 ~ 9
+            start_time (datetime.time): period start time
+            end_time (datetime.time): period end time
+            load_priority (bool): priority setting - True = load priority, False = battery priority
+            power_watt (int): output power - range 0 ~ 800 W
+            enabled (bool): time period switch - True = on, False = off
+
+        Returns:
+            SettingWriteV4
+
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        if device_type != "noah":
+            raise AttributeError("This API is only applicable to NOAH device type")
+
+        time_period_nr = int(time_period_nr)
+        assert 1 <= time_period_nr <= 9, "Time period number must be in range 1 ~ 9"
+        assert start_time <= end_time, "Start time must be before end time"
+        assert 0 <= power_watt <= 800, "Output power must be in range 0 ~ 800 W"
+
+        if enabled:
+            enable = 1
+            log_txt = "Enabling"
+        else:
+            enable = 0
+            log_txt = "Disabling"
+        log_txt += f" {device_type} device '{device_sn}' time period {time_period_nr} from {start_time} to {end_time} with {power_watt} W"
+        if load_priority:
+            mode = 1
+            log_txt += " (load priority)"
+        else:
+            mode = 0
+            log_txt += " (battery priority)"
+
+        response = self.session.post(
+            endpoint="new-api/setTimeSegment",
+            params={
+                "deviceSn": device_sn,
+                "deviceType": device_type,
+                "type": time_period_nr,
+                "startTime": start_time.strftime("%H:%M"),
+                "endTime": end_time.strftime("%H:%M"),
+                "mode": mode,
+                "power": power_watt,
+                "enable": enable,
+            },
+        )
+
+        return SettingWriteV4.model_validate(response)
