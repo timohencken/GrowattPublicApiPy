@@ -7,6 +7,7 @@ There are already other libraries accessing Growatt's APIs, they all use reverse
 * for example, see the faboulous work of [indykoning](https://github.com/indykoning) at [PyPi_GrowattServer](https://github.com/indykoning/PyPi_GrowattServer) used e.g. in HomeAssistant
 
 This package aims to
+* use type-aware pydantic objects as return values
 * use Growatt's public API documented
   * [here (v1)](https://www.showdoc.com.cn/262556420217021/0)
     * /v1/ endpoints
@@ -21,23 +22,12 @@ This package aims to
     * settings write only on/off and NOAH time periods
     * inv/storage/sph/max/spa/min/wit/sph-s/noah (no pcs/hps/pbd/smart_meter/env_sensor/vpp/groboost)
   * [here (v1/v4 mixed)](https://www.showdoc.com.cn/2598832417617967/0)
-    * mixed documentation - different sorting, no new content
-    * user/plant management: copy of v1 docs, different sorting
-    * metrics: /v1/ endpoints not documented here
-    * settings: /v1/ endpoints not documented here
-    * metrics: copy of /v4/ docs
-    * settings: copy of /v4/ docs
-    * vpp settings (in addition to other /v4/ docs):
-      * /v4/new-api/readVppParameter https://www.showdoc.com.cn/2598832417617967/11558629942271434
-      * /v4/new-api/setVppParameter https://www.showdoc.com.cn/2598832417617967/11558385202215329
-      * VPP Setting Parameters Description
-        * https://www.showdoc.com.cn/2598832417617967/11558385130027995
-        * https://www.showdoc.com.cn/p/fc84c86facd79b3692f585fbd7a6e33b
-* use type-aware pydantic objects as return values
+    * mixed documentation - different sorting
+    * vpp settings (in addition to other /v4/ docs)
 
 
 # Implementation status
-***Alpha***: The library is in an early stage of development and is not yet feature complete.
+## ***Alpha***: The library is in an early stage of development and is not yet feature complete.
 
 ### API v1 (full featured API)
 * User
@@ -79,7 +69,7 @@ This package aims to
 * Generic - all inverter types
   * get inverters assigned to plant
     * `device.list()`
-    * *** use this to query your inverter's "*TYPE*" for selecting the correct submodule ***
+    * ***use this to query your inverter's*** "*TYPE*" ***for selecting the correct submodule***
   * get datalogger for inverter
     * `device.get_datalogger()`
   * get device creation date
@@ -216,7 +206,7 @@ This package aims to
 ### API v4 (a few additional endpoints)
 * get devices (inverters) assigned to current user
   * `v4.list()`
-    *** use this to query your inverter's "*TYPE*" required for subsequent requests ***
+    ***use this to query your inverter's*** "*TYPE*" ***required for subsequent requests***
 * general device data
   * read device data `v4.details()`
 * device metrics
@@ -233,9 +223,11 @@ This package aims to
     * Note: only for NOAH devices
   * configure time period `v4.setting_write_time_period()`
     * Note: only for NOAH devices
+  * configure VPP parameters: `v4.setting_write_vpp_param()` / `v4.setting_write_vpp_param()`
+    * Note: The current interface only supports sph, spa, min, wit device types.
+      The specific models are as follows: SPH 3000-6000TL BL, SPA 1000-3000TL BL, SPH 3000-6000TL BL US, SPH 4000-10000TL3 BH, SPA 4000-10000TL3 BH, MIN 2500-6000TL-XH US, MIN 2500-6000TL-XH, MOD-XH\MID-XH, WIT 100KTL3-H, WIS 215KTL3
 
 * ***Not*** implemented yet
-  * TODO implement v4 VPP settings endpoints from v1/v4-mixed docs
   * TODO refactor other "multiple" endpoints to use dict-like response
   * TODO: check if we can use /v4/ for /v1/ endpoints (seems to work)
   * TODO: refactor to integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)

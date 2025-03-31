@@ -1,5 +1,4 @@
 import pickle
-from datetime import time
 from pathlib import Path
 from loguru import logger
 from growatt_public_api import GrowattApi
@@ -116,15 +115,19 @@ device_sn_sphs = [d for d in devices if d.device_type == "sph-s"][0].device_sn
 # _v4_set_active_power_ = ga.v4.setting_write_active_power(device_sn=device_sn_inv, device_type="inv", active_power=100)
 # _v4_set_soc_upper_ = ga.v4.setting_write_soc_upper_limit(device_sn=device_sn_inv, device_type="noah", soc_limit=100)
 # _v4_set_soc_lower_ = ga.v4.setting_write_soc_lower_limit(device_sn=device_sn_inv, device_type="noah", soc_limit=0)
-_v4_set_period_ = ga.v4.setting_write_time_period(
-    device_sn=device_sn_inv,
-    device_type="noah",
-    time_period_nr=1,
-    start_time=time(9, 0),
-    end_time=time(12, 0),
-    load_priority=True,
-    power_watt=800,
-    enabled=False,
+# _v4_set_period_ = ga.v4.setting_write_time_period(
+#     device_sn=device_sn_inv,
+#     device_type="noah",
+#     time_period_nr=1,
+#     start_time=time(9, 0),
+#     end_time=time(12, 0),
+#     load_priority=True,
+#     power_watt=800,
+#     enabled=False,
+# )
+
+_vpp_setting_ = ga.v4.setting_read_vpp_param(
+    device_sn=device_sn_storage, device_type="noah", parameter_id="set_param_2"
 )
 
 logger.success("DONE")
