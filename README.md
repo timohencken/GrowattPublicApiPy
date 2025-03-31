@@ -24,6 +24,8 @@ This package aims to
   * [here (v1/v4 mixed)](https://www.showdoc.com.cn/2598832417617967/0)
     * mixed documentation - different sorting
     * vpp settings (in addition to other /v4/ docs)
+  * [here (/v1/v4 postman)](https://www.postman.com/gold-water-163355/growatt-public/collection/fw8cldm/shineserver-public)
+    * postman collection implementing some (known) endpoints
 
 
 # Implementation status
@@ -231,7 +233,7 @@ This package aims to
   * TODO refactor other "multiple" endpoints to use dict-like response
   * TODO: check if we can use /v4/ for /v1/ endpoints (seems to work)
   * TODO: refactor to integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
-  * TODO: check postman collection at https://www.postman.com/gold-water-163355/growatt-public/collection/fw8cldm/shineserver-public
+  * TODO: add tests to verify returned parameters are same as expected parameters
 
 
 # Usage
