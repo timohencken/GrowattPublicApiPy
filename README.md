@@ -7,12 +7,27 @@ There are already other libraries accessing Growatt's APIs, they all use reverse
 * for example, see the faboulous work of [indykoning](https://github.com/indykoning) at [PyPi_GrowattServer](https://github.com/indykoning/PyPi_GrowattServer) used e.g. in HomeAssistant
 
 This package aims to
-* use Growatt's public API documented [here (v1)](https://www.showdoc.com.cn/262556420217021/0) and [here (v4)](https://www.showdoc.com.cn/2540838290984246/0) and [here (v1/v4 mixed)](https://www.showdoc.com.cn/2598832417617967/0)
 * use type-aware pydantic objects as return values
+* use Growatt's public API documented
+  * [here (v1)](https://www.showdoc.com.cn/262556420217021/0)
+    * /v1/ endpoints
+    * user/plant management
+    * metrics
+    * settings read/write
+    * inv/storage/max/sph/spa/min/pcs/hps/pbd/smart_meter/env_sensor/vpp/groboost (no wit/sph-s/noah)
+  * [here (v4)](https://www.showdoc.com.cn/2540838290984246/0)
+    * /v4/new-api endpoints
+    * no user/plant management
+    * new endpoints for metrics
+    * settings write only on/off and NOAH time periods
+    * inv/storage/sph/max/spa/min/wit/sph-s/noah (no pcs/hps/pbd/smart_meter/env_sensor/vpp/groboost)
+  * [here (v1/v4 mixed)](https://www.showdoc.com.cn/2598832417617967/0)
+    * mixed documentation - different sorting
+    * vpp settings (in addition to other /v4/ docs)
 
 
 # Implementation status
-***Alpha***: The library is in an early stage of development and is not yet feature complete.
+## ***Alpha***: The library is in an early stage of development and is not yet feature complete.
 
 ### API v1 (full featured API)
 * User
@@ -54,7 +69,7 @@ This package aims to
 * Generic - all inverter types
   * get inverters assigned to plant
     * `device.list()`
-    * *** use this to query your inverter's "*TYPE*" for selecting the correct submodule ***
+    * ***use this to query your inverter's*** "*TYPE*" ***for selecting the correct submodule***
   * get datalogger for inverter
     * `device.get_datalogger()`
   * get device creation date
@@ -191,7 +206,7 @@ This package aims to
 ### API v4 (a few additional endpoints)
 * get devices (inverters) assigned to current user
   * `v4.list()`
-    *** use this to query your inverter's "*TYPE*" required for subsequent requests ***
+    ***use this to query your inverter's*** "*TYPE*" ***required for subsequent requests***
 * general device data
   * read device data `v4.details()`
 * device metrics
@@ -208,13 +223,15 @@ This package aims to
     * Note: only for NOAH devices
   * configure time period `v4.setting_write_time_period()`
     * Note: only for NOAH devices
+  * configure VPP parameters: `v4.setting_write_vpp_param()` / `v4.setting_write_vpp_param()`
+    * Note: The current interface only supports sph, spa, min, wit device types.
+      The specific models are as follows: SPH 3000-6000TL BL, SPA 1000-3000TL BL, SPH 3000-6000TL BL US, SPH 4000-10000TL3 BH, SPA 4000-10000TL3 BH, MIN 2500-6000TL-XH US, MIN 2500-6000TL-XH, MOD-XH\MID-XH, WIT 100KTL3-H, WIS 215KTL3
 
 * ***Not*** implemented yet
   * TODO refactor other "multiple" endpoints to use dict-like response
   * TODO: check if we can use /v4/ for /v1/ endpoints (seems to work)
   * TODO: refactor to integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
   * TODO: check postman collection at https://www.postman.com/gold-water-163355/growatt-public/collection/fw8cldm/shineserver-public
-  * TODO: check docs at https://www.showdoc.com.cn/2598832417617967/0
 
 
 # Usage
@@ -227,7 +244,7 @@ The API requires token authentication. The token can be retrieved via
   * login
   * click your username in the upper right corner
   * go to "Account Management" -> "API Token"
-  * copy your token or request an new one
+  * copy your token or request a new one
 
 Pass the token when creating the API object
 ```python
