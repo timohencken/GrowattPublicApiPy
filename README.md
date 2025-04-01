@@ -191,7 +191,7 @@ This package aims to
     * current `env_sensor.metrics()`
     * historical data `env_sensor.metrics_history()`
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* VPP (*TYPE=3/5/6* MIN/SPH/SPA)
+* VPP (VirtualPowerPlant *TYPE=3/5/6* - MIN/SPH/SPA)
   * get current State-of-Charge (SOC) `vpp.soc()`
   * change time period settings
     * set current (dis)charge power `vpp.write()` (***use with caution***)
@@ -228,12 +228,6 @@ This package aims to
   * configure VPP parameters: `v4.setting_write_vpp_param()` / `v4.setting_write_vpp_param()`
     * Note: The current interface only supports sph, spa, min, wit device types.
       The specific models are as follows: SPH 3000-6000TL BL, SPA 1000-3000TL BL, SPH 3000-6000TL BL US, SPH 4000-10000TL3 BH, SPA 4000-10000TL3 BH, MIN 2500-6000TL-XH US, MIN 2500-6000TL-XH, MOD-XH\MID-XH, WIT 100KTL3-H, WIS 215KTL3
-
-* ***Not*** implemented yet
-  * TODO refactor other "multiple" endpoints to use dict-like response
-  * TODO: check if we can use /v4/ for /v1/ endpoints (seems to work)
-  * TODO: refactor to integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
-  * TODO: add tests to verify returned parameters are same as expected parameters
 
 
 # Usage
@@ -329,6 +323,12 @@ To the best of our knowledge only the settings functions perform modifications t
 
 ***The library is used entirely at your own risk.***
 
+# TODOs
+* TODO: refactor to integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
+* TODO: add tests to verify returned parameters are same as expected parameters
+* TODO: add caching to 5-minute-interval endpoints
+* TODO: common device type
+* TODO: generate & publish docs
 
 # Changelog
 * 2025.03.28 (pre-alpha)

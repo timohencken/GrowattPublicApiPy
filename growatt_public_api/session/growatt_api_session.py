@@ -22,8 +22,10 @@ class GrowattApiSession:
         server_url: str,
     ) -> None:
         self.server_url = server_url
-        self.api_url = f"{self.server_url}/v1"  # API doccs specify v1
-        # self.api_url = f"{self.server_url}/v4"  # but v4 works just the same
+        # API docs specify /v1/ for some endpoints and /v4/ for other ("new-api") endpoints
+        # anyway, both (v1 and v4) work for all endpoints
+        # so we just use v4 for simplicity
+        self.api_url = f"{self.server_url}/v4"
         self.token = token
 
         assert self.token, "No token provided"
