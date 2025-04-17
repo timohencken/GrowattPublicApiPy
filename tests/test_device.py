@@ -38,7 +38,8 @@ class TestDevice(unittest.TestCase):
     datalogger_sn: str = None
     plant_id: int = None
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         # init API
         gas = GrowattApiSession(
             # several min devices seen on v1 test server
@@ -46,25 +47,23 @@ class TestDevice(unittest.TestCase):
             token="6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
         )
         # init DEVICE
-        if self.api is None:
-            self.api = Device(session=gas)
+        cls.api = Device(session=gas)
         # get a DEVICE device
-        if self.device_sn is None:
-            try:
-                apiv4 = ApiV4(session=gas)
-                _devices = apiv4.list()
-                sn_list = [x for x in _devices.data.data]  # select any type
-                self.device_sn = sn_list[0].device_sn
-                self.datalogger_sn = sn_list[0].device_sn
-                # get plant information
-                api_plant = Plant(session=gas)
-                _plant_info = api_plant.by_device(device_sn=self.device_sn)
-                self.plant_id = _plant_info.data.plant.plant_id
-            except AttributeError:
-                # getting "FREQUENTLY_ACCESS" easily # TODO caching would be nice
-                self.device_sn = "SASF819012"  # ['SASF819012', 'GRT0010086', 'RUK0CAE00J', 'TAG1234567', 'GRT1234001', 'GRT1235001', 'GRT1235002', 'GRT1235003', 'GRT1235004', 'GRT1235005', 'GRT1235006', 'GRT1235112', 'YYX1235112', 'YYX1235113', 'GRT1236601', 'GRT1236602', 'GRT1236603', 'GRT1236604', 'GRT1236605', 'EVK0BHX111']
-                self.datalogger_sn = "WLC082100F"
-                self.plant_id = 23
+        try:
+            apiv4 = ApiV4(session=gas)
+            _devices = apiv4.list()
+            sn_list = [x for x in _devices.data.data]  # select any type
+            cls.device_sn = sn_list[0].device_sn
+            cls.datalogger_sn = sn_list[0].datalogger_sn
+            # get plant information
+            api_plant = Plant(session=gas)
+            _plant_info = api_plant.by_device(device_sn=cls.device_sn)
+            cls.plant_id = _plant_info.data.plant.plant_id
+        except AttributeError:
+            # getting "FREQUENTLY_ACCESS" easily # TODO caching would be nice
+            cls.device_sn = "SASF819012"  # ['SASF819012', 'GRT0010086', 'RUK0CAE00J', 'TAG1234567', 'GRT1234001', 'GRT1235001', 'GRT1235002', 'GRT1235003', 'GRT1235004', 'GRT1235005', 'GRT1235006', 'GRT1235112', 'YYX1235112', 'YYX1235113', 'GRT1236601', 'GRT1236602', 'GRT1236603', 'GRT1236604', 'GRT1236605', 'EVK0BHX111']
+            cls.datalogger_sn = "WLC082100F"
+            cls.plant_id = 23
 
     @skip("Currently not testing endpoints writing data")
     def test_add(self):

@@ -27,7 +27,8 @@ class TestEnvSensor(unittest.TestCase):
     datalogger_sn: str = None
     sensor_address: int = None
 
-    def setUp(self):  # noqa: C901 'TestEnvSensor.setUp' is too complex (11)
+    @classmethod
+    def setUpClass(cls):  # noqa: C901 'TestEnvSensor.setUp' is too complex (11)
         # init API
         gas = GrowattApiSession(
             # several min devices seen on v1 test server
@@ -35,62 +36,56 @@ class TestEnvSensor(unittest.TestCase):
             token="6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
         )
         # init DEVICE
-        if self.api is None:
-            self.api = EnvSensor(session=gas)
+        cls.api = EnvSensor(session=gas)
         # get a DEVICE device
-        if self.datalogger_sn is None:
-            # ENV sensors are only available on the old API
-            # so we need to get all plants and then iterate its devices until we find an environmental sensor
-            api_plant = Plant(session=gas)
-            plant_ids = []
-            for page in range(1, 100):
-                plants = api_plant.list(limit=100, page=page)
-                plant_count = plants.data.count
-                # noinspection PyUnresolvedReferences
-                plant_ids.extend([x.plant_id for x in plants.data.plants])
-                print(f"retrieved {len(plant_ids)} plants")
-                if len(plant_ids) >= plant_count:
-                    break
-            # iterate plants, search for env (start with newest plant)
-            api_device = Device(session=gas)
-            print(f"searching plants for correct device")
-            plant_devices = {}
-            type_3_devices = []
-            for idx, plant_id in enumerate(reversed(plant_ids)):
-                print(f"\rscanning plant {idx+1}/{len(plant_ids)} with {plant_id=}", end="")
-                devices = api_device.list(plant_id=plant_id)
-                if devices.data.count == 0:
-                    continue
-                print(f"\nfound {devices.data.count} devices in {plant_id=}")
-                plant_devices[plant_id] = devices.data.devices
-                for device in devices.data.devices:
-                    if device.type == 3:
-                        datalogger_sn = device.datalogger_sn
-                        device_id = device.device_id
-                        device_sn = device.device_sn
-                        print(
-                            f"\ndetected device of type=3 with {device_id=} {device_sn=} {datalogger_sn=} {plant_id=}"
-                        )
-                        type_3_devices.append(
-                            {
-                                "plant_id": plant_id,
-                                "datalogger_sn": datalogger_sn,
-                                "device_id": device_id,
-                                "device_sn": device_sn,
-                            }
-                        )
-            print(f"\rscanned {len(plant_ids)} plants")
-            print(f"Found {len(type_3_devices)} devices with type='other' - assuming these are env sensors")
-            if len(type_3_devices) > 0:
-                # take the first one
-                self.datalogger_sn = type_3_devices[0]["datalogger_sn"]
-                self.sensor_address = type_3_devices[0]["device_id"]
-                print(f"using {self.datalogger_sn=} {self.sensor_address=}")
-            else:
-                print("Could not find any environmental sensor in devices")
-                print(plant_devices)
-                self.datalogger_sn = "NO DEVICE FOUND"
-        if self.datalogger_sn == "NO DEVICE FOUND":
+        # ENV sensors are only available on the old API
+        # so we need to get all plants and then iterate its devices until we find an environmental sensor
+        api_plant = Plant(session=gas)
+        plant_ids = []
+        for page in range(1, 100):
+            plants = api_plant.list(limit=100, page=page)
+            plant_count = plants.data.count
+            # noinspection PyUnresolvedReferences
+            plant_ids.extend([x.plant_id for x in plants.data.plants])
+            print(f"retrieved {len(plant_ids)} plants")
+            if len(plant_ids) >= plant_count:
+                break
+        # iterate plants, search for env (start with newest plant)
+        api_device = Device(session=gas)
+        print(f"searching plants for correct device")
+        plant_devices = {}
+        type_3_devices = []
+        for idx, plant_id in enumerate(reversed(plant_ids)):
+            print(f"\rscanning plant {idx+1}/{len(plant_ids)} with {plant_id=}", end="")
+            devices = api_device.list(plant_id=plant_id)
+            if devices.data.count == 0:
+                continue
+            print(f"\nfound {devices.data.count} devices in {plant_id=}")
+            plant_devices[plant_id] = devices.data.devices
+            for device in devices.data.devices:
+                if device.type == 3:
+                    datalogger_sn = device.datalogger_sn
+                    device_id = device.device_id
+                    device_sn = device.device_sn
+                    print(f"\ndetected device of type=3 with {device_id=} {device_sn=} {datalogger_sn=} {plant_id=}")
+                    type_3_devices.append(
+                        {
+                            "plant_id": plant_id,
+                            "datalogger_sn": datalogger_sn,
+                            "device_id": device_id,
+                            "device_sn": device_sn,
+                        }
+                    )
+        print(f"\rscanned {len(plant_ids)} plants")
+        print(f"Found {len(type_3_devices)} devices with type='other' - assuming these are env sensors")
+        if len(type_3_devices) > 0:
+            # take the first one
+            cls.datalogger_sn = type_3_devices[0]["datalogger_sn"]
+            cls.sensor_address = type_3_devices[0]["device_id"]
+            print(f"using {cls.datalogger_sn=} {cls.sensor_address=}")
+        else:
+            print("Could not find any environmental sensor in devices")
+            print(plant_devices)
             raise AttributeError("No environmental sensor found in test environment")
 
     @skip("Currently no env sensors on test environment")

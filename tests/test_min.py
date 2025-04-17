@@ -36,7 +36,8 @@ class TestMin(unittest.TestCase):
     api: Min = None
     device_sn: str = None
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         # init API
         gas = GrowattApiSession(
             # several min devices seen on v1 test server
@@ -44,20 +45,18 @@ class TestMin(unittest.TestCase):
             token="6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
         )
         # init MIN
-        if self.api is None:
-            self.api = Min(session=gas)
+        cls.api = Min(session=gas)
         # get a MIN device
-        if self.device_sn is None:
-            try:
-                apiv4 = ApiV4(session=gas)
-                _devices = apiv4.list()
-                sn_list = [x.device_sn for x in _devices.data.data if x.device_type == "min"]
-                self.device_sn = sn_list[0]
-            except AttributeError:
-                # getting "FREQUENTLY_ACCESS" easily # TODO caching would be nice
-                self.device_sn = (
-                    "RUK0CAE00J"  # 'RUK0CAE00J', 'EVK0BHX111', 'GRT0010086', 'TAG1234567', 'YYX1235113', 'GRT1235003'
-                )
+        try:
+            apiv4 = ApiV4(session=gas)
+            _devices = apiv4.list()
+            sn_list = [x.device_sn for x in _devices.data.data if x.device_type == "min"]
+            cls.device_sn = sn_list[0]
+        except AttributeError:
+            # getting "FREQUENTLY_ACCESS" easily # TODO caching would be nice
+            cls.device_sn = (
+                "RUK0CAE00J"  # 'RUK0CAE00J', 'EVK0BHX111', 'GRT0010086', 'TAG1234567', 'YYX1235113', 'GRT1235003'
+            )
 
     def test_details(self):
         with patch(f"{TEST_FILE}.MinDetails", wraps=MinDetails) as mock_pyd_model:
@@ -155,6 +154,7 @@ class TestMin(unittest.TestCase):
             MinEnergyOverviewData.model_fields.keys()
         )
         self.assertEqual(set(), set(raw_data["data"]["datas"][0].keys()).difference(pydantic_keys), "data_datas_0")
+        # FAILS often as api.details() is called too frequently
 
     def test_setting_read__by_name(self):
         with patch(f"{TEST_FILE}.MinSettingRead", wraps=MinSettingRead) as mock_pyd_model:
