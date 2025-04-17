@@ -14,7 +14,7 @@ from pydantic_models.env_sensor import (
     EnvSensorMetricsHistoryData,
 )
 
-TEST_FILE = "device.device"
+TEST_FILE = "env_sensor.env_sensor"
 
 
 class TestEnvSensor(unittest.TestCase):
