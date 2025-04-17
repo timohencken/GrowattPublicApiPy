@@ -1,4 +1,5 @@
 import unittest
+from datetime import timedelta
 from unittest.mock import patch
 
 from api_v4 import ApiV4
@@ -23,13 +24,16 @@ from pydantic_models.min import (
 )
 
 
+TEST_FILE = "min.min"
+
+
 class TestMin(unittest.TestCase):
     """
     retrieve from API
     compare to pydantic models
     """
 
-    api_min: Min = None
+    api: Min = None
     device_sn: str = None
 
     def setUp(self):
@@ -40,8 +44,8 @@ class TestMin(unittest.TestCase):
             token="6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
         )
         # init MIN
-        if self.api_min is None:
-            self.api_min = Min(session=gas)
+        if self.api is None:
+            self.api = Min(session=gas)
         # get a MIN device
         if self.device_sn is None:
             try:
@@ -56,8 +60,8 @@ class TestMin(unittest.TestCase):
                 )
 
     def test_details(self):
-        with patch("min.min.MinDetails", wraps=MinDetails) as mock_pyd_model:
-            self.api_min.details(device_sn=self.device_sn)
+        with patch(f"{TEST_FILE}.MinDetails", wraps=MinDetails) as mock_pyd_model:
+            self.api.details(device_sn=self.device_sn)
 
         raw_data = mock_pyd_model.model_validate.call_args.args[0]
 
@@ -79,8 +83,8 @@ class TestMin(unittest.TestCase):
         self.assertEqual(set(), set(raw_data["data"]["tlxSetbean"].keys()).difference(pydantic_keys), "tlxSetbean")
 
     def test_energy(self):
-        with patch("min.min.MinEnergyOverview", wraps=MinEnergyOverview) as mock_pyd_model:
-            self.api_min.energy(device_sn=self.device_sn)
+        with patch(f"{TEST_FILE}.MinEnergyOverview", wraps=MinEnergyOverview) as mock_pyd_model:
+            self.api.energy(device_sn=self.device_sn)
 
         raw_data = mock_pyd_model.model_validate.call_args.args[0]
 
@@ -98,12 +102,12 @@ class TestMin(unittest.TestCase):
 
     def test_energy_multiple(self):
         with (
-            patch("min.min.MinEnergyOverviewMultiple", wraps=MinEnergyOverviewMultiple) as mock_pyd_model,
+            patch(f"{TEST_FILE}.MinEnergyOverviewMultiple", wraps=MinEnergyOverviewMultiple) as mock_pyd_model,
             patch(
-                "min.min.MinEnergyOverviewMultipleItem", wraps=MinEnergyOverviewMultipleItem
+                f"{TEST_FILE}.MinEnergyOverviewMultipleItem", wraps=MinEnergyOverviewMultipleItem
             ) as mock_pyd_model_multiple,
         ):
-            self.api_min.energy_multiple(device_sn=self.device_sn)
+            self.api.energy_multiple(device_sn=self.device_sn)
 
         # check pre-parsed "multiple" data
         multiple_kwargs = mock_pyd_model_multiple.call_args.kwargs
@@ -127,11 +131,11 @@ class TestMin(unittest.TestCase):
 
     def test_energy_history(self):
         # get date with data
-        _details = self.api_min.details(device_sn=self.device_sn)
+        _details = self.api.details(device_sn=self.device_sn)
         _last_ts = _details.data.last_update_time_text
 
-        with patch("min.min.MinEnergyHistory", wraps=MinEnergyHistory) as mock_pyd_model:
-            self.api_min.energy_history(device_sn=self.device_sn, start_date=_last_ts.date())
+        with patch(f"{TEST_FILE}.MinEnergyHistory", wraps=MinEnergyHistory) as mock_pyd_model:
+            self.api.energy_history(device_sn=self.device_sn, start_date=_last_ts.date() - timedelta(days=1))
 
         raw_data = mock_pyd_model.model_validate.call_args.args[0]
 
@@ -153,8 +157,8 @@ class TestMin(unittest.TestCase):
         self.assertEqual(set(), set(raw_data["data"]["datas"][0].keys()).difference(pydantic_keys), "data_datas_0")
 
     def test_setting_read__by_name(self):
-        with patch("min.min.MinSettingRead", wraps=MinSettingRead) as mock_pyd_model:
-            self.api_min.setting_read(device_sn=self.device_sn, parameter_id="tlx_on_off")
+        with patch(f"{TEST_FILE}.MinSettingRead", wraps=MinSettingRead) as mock_pyd_model:
+            self.api.setting_read(device_sn=self.device_sn, parameter_id="tlx_on_off")
 
         raw_data = mock_pyd_model.model_validate.call_args.args[0]
 
@@ -172,8 +176,8 @@ class TestMin(unittest.TestCase):
             self.assertNotEqual("", raw_data["data"])
 
     def test_setting_read__by_register(self):
-        with patch("min.min.MinSettingRead", wraps=MinSettingRead) as mock_pyd_model:
-            self.api_min.setting_read(device_sn=self.device_sn, start_address=0, end_address=0)
+        with patch(f"{TEST_FILE}.MinSettingRead", wraps=MinSettingRead) as mock_pyd_model:
+            self.api.setting_read(device_sn=self.device_sn, start_address=0, end_address=0)
 
         raw_data = mock_pyd_model.model_validate.call_args.args[0]
 
@@ -191,8 +195,8 @@ class TestMin(unittest.TestCase):
             self.assertNotEqual("", raw_data["data"])
 
     def test_setting_write__by_name(self):
-        with patch("min.min.MinSettingWrite", wraps=MinSettingWrite) as mock_pyd_model:
-            self.api_min.setting_write(device_sn=self.device_sn, parameter_id="tlx_on_off", parameter_value_1=1)
+        with patch(f"{TEST_FILE}.MinSettingWrite", wraps=MinSettingWrite) as mock_pyd_model:
+            self.api.setting_write(device_sn=self.device_sn, parameter_id="tlx_on_off", parameter_value_1=1)
 
         raw_data = mock_pyd_model.model_validate.call_args.args[0]
 
@@ -210,8 +214,8 @@ class TestMin(unittest.TestCase):
             self.assertIsNotNone(raw_data["data"])
 
     def test_setting_write__by_register(self):
-        with patch("min.min.MinSettingWrite", wraps=MinSettingWrite) as mock_pyd_model:
-            self.api_min.setting_write(
+        with patch(f"{TEST_FILE}.MinSettingWrite", wraps=MinSettingWrite) as mock_pyd_model:
+            self.api.setting_write(
                 device_sn=self.device_sn, parameter_id="set_any_reg", parameter_value_1=0, parameter_value_2=1
             )
 
@@ -231,8 +235,8 @@ class TestMin(unittest.TestCase):
             self.assertIsNotNone(raw_data["data"])
 
     def test_settings(self):
-        with patch("min.min.MinSettings", wraps=MinSettings) as mock_pyd_model:
-            self.api_min.settings(device_sn=self.device_sn)
+        with patch(f"{TEST_FILE}.MinSettings", wraps=MinSettings) as mock_pyd_model:
+            self.api.settings(device_sn=self.device_sn)
 
         raw_data = mock_pyd_model.model_validate.call_args.args[0]
 
@@ -249,8 +253,8 @@ class TestMin(unittest.TestCase):
         self.assertEqual(set(), set(raw_data["data"].keys()).difference(pydantic_keys), "data")
 
     def test_alarms(self):
-        with patch("min.min.MinAlarms", wraps=MinAlarms) as mock_pyd_model:
-            self.api_min.alarms(device_sn=self.device_sn)
+        with patch(f"{TEST_FILE}.MinAlarms", wraps=MinAlarms) as mock_pyd_model:
+            self.api.alarms(device_sn=self.device_sn)
 
         raw_data = mock_pyd_model.model_validate.call_args.args[0]
 
