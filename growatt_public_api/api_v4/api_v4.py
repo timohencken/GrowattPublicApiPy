@@ -88,7 +88,6 @@ class ApiV4:
 
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
-        self.session.api_url = f"{self.session.server_url}/v4"  # FIXME - is this a good idea? or does it change the session object for v1 modules, too?
 
     def list(
         self,

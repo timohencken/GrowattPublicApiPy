@@ -48,32 +48,32 @@ if __name__ == "__main__":
     # # FIXME DEBUG
 
     # API v4
-    _v4_set_power_on_ = ga.v4.setting_write_on_off(device_sn=INVERTER_SN, device_type="min", power_on=True)
-    _v4_energy_hist_min_ = ga.v4.energy_history(device_sn=INVERTER_SN, device_type="min")
-    _v4_energy_hist2_min_ = ga.v4.energy_history_multiple(device_sn=INVERTER_SN, device_type="min")
-    _v4_energy_min_ = ga.v4.energy(device_sn=INVERTER_SN, device_type="min")
-    _v4_details_min_ = ga.v4.details(device_sn=INVERTER_SN, device_type="min")
-    _v4_device_list_ = ga.v4.list(page=1)
+    # _v4_set_power_on_ = ga.v4.setting_write_on_off(device_sn=INVERTER_SN, device_type="min", power_on=True)
+    # _v4_energy_hist_min_ = ga.v4.energy_history(device_sn=INVERTER_SN, device_type="min")
+    # _v4_energy_hist2_min_ = ga.v4.energy_history_multiple(device_sn=INVERTER_SN, device_type="min")
+    # _v4_energy_min_ = ga.v4.energy(device_sn=INVERTER_SN, device_type="min")
+    # _v4_details_min_ = ga.v4.details(device_sn=INVERTER_SN, device_type="min")
+    # _v4_device_list_ = ga.v4.list(page=1)
 
     # user
-    _user_list_ = ga.user.list()
-    _user_available_ = ga.user.check_username(username="DummyTestUser1")
-    # from user.user import GrowattCountry
-    # _user_register_ = ga.user.register(
-    #     username="DummyTestUser1",
-    #     password="DummyTestUser1pw",
-    #     email="DummyTestUser1@example.com",
-    #     country=GrowattCountry.JAPAN,
-    #     user_type=1,
-    #     installer_code="GWATT",
-    #     phone_number="01234567890",
-    #     time_zone="GMT+09:00",
-    # )
-    # _user_modify_ = ga.user.modify(
-    #     user_id=601,
-    #     phone_number="01234567890123",
-    #     installer_code="GWATT",
-    # )
+    # _user_list_ = ga.user.list()
+    # _user_available_ = ga.user.check_username(username="DummyTestUser1")
+    # # from user.user import GrowattCountry
+    # # _user_register_ = ga.user.register(
+    # #     username="DummyTestUser1",
+    # #     password="DummyTestUser1pw",
+    # #     email="DummyTestUser1@example.com",
+    # #     country=GrowattCountry.JAPAN,
+    # #     user_type=1,
+    # #     installer_code="GWATT",
+    # #     phone_number="01234567890",
+    # #     time_zone="GMT+09:00",
+    # # )
+    # # _user_modify_ = ga.user.modify(
+    # #     user_id=601,
+    # #     phone_number="01234567890123",
+    # #     installer_code="GWATT",
+    # # )
 
     # groBoost
     _groboost_metrics_multiple_ = ga.groboost.metrics_multiple(device_sn=INVERTER_SN)

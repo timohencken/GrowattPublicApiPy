@@ -31,7 +31,7 @@ class Device:
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
 
-    def datalogger_add(
+    def datalogger_add(  # TODO this should be in the "plant" module
         self,
         user_id: int,
         plant_id: int,
@@ -76,7 +76,7 @@ class Device:
 
         return DataloggerAdd.model_validate(response)
 
-    def datalogger_delete(
+    def datalogger_delete(  # TODO this should be in the "plant" module
         self,
         plant_id: int,
         datalogger_sn: str,
@@ -117,7 +117,7 @@ class Device:
 
         return DataloggerDelete.model_validate(response)
 
-    def list(
+    def list(  # TODO this should be in the "plant" module
         self,
         plant_id: int,
         page: Optional[int] = None,
@@ -191,7 +191,7 @@ class Device:
 
         return DeviceList.model_validate(response)
 
-    def datalogger_list(
+    def datalogger_list(  # TODO this should be in the "plant" module
         self,
         plant_id: int,
         page: Optional[int] = None,
@@ -430,7 +430,7 @@ class Device:
             validation_code (Union[int, str]): Verification Code
 
         Returns:
-            DataloggerValidationResult
+            DataloggerValidation
 
         """
 
@@ -584,7 +584,7 @@ class Device:
 
         return DeviceCreateDate.model_validate(response)
 
-    def add(
+    def add(  # TODO this should be in the "plant" module
         self,
         plant_id: int,
         device_sn: str,
