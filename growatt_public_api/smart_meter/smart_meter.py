@@ -506,7 +506,7 @@ class SmartMeter:
             end_date = start_date
 
         # check interval validity
-        if end_date - start_date > timedelta(days=7):
+        if end_date - start_date >= timedelta(days=7):
             raise ValueError("date interval must not exceed 7 days")
 
         response = self.session.get(

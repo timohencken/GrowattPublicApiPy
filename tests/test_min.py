@@ -27,6 +27,7 @@ from pydantic_models.min import (
 TEST_FILE = "min.min"
 
 
+# noinspection DuplicatedCode
 class TestMin(unittest.TestCase):
     """
     retrieve from API
@@ -53,7 +54,6 @@ class TestMin(unittest.TestCase):
             sn_list = [x.device_sn for x in _devices.data.data if x.device_type == "min"]
             cls.device_sn = sn_list[0]
         except AttributeError:
-            # getting "FREQUENTLY_ACCESS" easily # TODO caching would be nice
             cls.device_sn = (
                 "RUK0CAE00J"  # 'RUK0CAE00J', 'EVK0BHX111', 'GRT0010086', 'TAG1234567', 'YYX1235113', 'GRT1235003'
             )
@@ -134,7 +134,9 @@ class TestMin(unittest.TestCase):
         _last_ts = _details.data.last_update_time_text
 
         with patch(f"{TEST_FILE}.MinEnergyHistory", wraps=MinEnergyHistory) as mock_pyd_model:
-            self.api.energy_history(device_sn=self.device_sn, start_date=_last_ts.date() - timedelta(days=1))
+            self.api.energy_history(
+                device_sn=self.device_sn, start_date=_last_ts.date() - timedelta(days=6), end_date=_last_ts.date()
+            )
 
         raw_data = mock_pyd_model.model_validate.call_args.args[0]
 

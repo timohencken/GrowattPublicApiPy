@@ -572,7 +572,7 @@ class Plant:
             if end_date.year - start_date.year > 1:
                 raise ValueError("start date must be within same or previous year in 'month' mode")
         else:
-            if end_date - start_date > timedelta(days=7):
+            if end_date - start_date >= timedelta(days=7):
                 raise ValueError("date interval must not exceed 7 days in 'day' mode")
 
         response = self.session.get(
