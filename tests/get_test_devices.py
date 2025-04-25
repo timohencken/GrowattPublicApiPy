@@ -1,6 +1,36 @@
 """
 not a test
 just enumerate available devices from test environment(s)
+
+ device_type_v4 device_type_v1_txt device_type_txt       msg   obj_txt   device_sn                 server_url                     model     datalogger_sn  plant_id  device_type  obj  device_type_v1
+            inv                NaN        Inverter  inverter  Inverter  NHB691514F  http://183.62.216.35:8081          Growatt 25000 UE        YYP0E3R00H       NaN           16    1             NaN
+            max           Inverter             MAX  inverter  Inverter  SASF819012   https://test.growatt.com         Growatt 6000MTL-S        WLC082100F      23             18    1             1
+            max                MAX             MAX  inverter  Inverter  SASF819012   https://test.growatt.com         Growatt 6000MTL-S        WLC082100F      23             18    1             4
+            max                NaN             MAX     other     Other  QXHLD7F0C9  http://183.62.216.35:8081              MOD 10KTL3-X        BLE4BL40GS       NaN           18    4             NaN
+            min                MIN             MIN     other     Other  GRT0010086   https://test.growatt.com                   default  VC51010223332257      29             22    4             7
+            min                MIN             MIN     other     Other  RUK0CAE00J   https://test.growatt.com         MIN 10000TL-XH-US  VC50010621200118      29             22    4             7
+            min                MIN             MIN     other     Other  TAG1234567   https://test.growatt.com         MIN 7600 TL-XH US  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  GRT1234001   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  GRT1235001   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  GRT1235002   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  GRT1235003   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  GRT1235004   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  GRT1235005   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  GRT1235006   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  GRT1235112   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  YYX1235112   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  YYX1235113   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  GRT1236601   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  GRT1236602   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  GRT1236603   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  GRT1236604   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  GRT1236605   https://test.growatt.com                   default  VC51010223062195      29             22    4             7
+            min                MIN             MIN     other     Other  EVK0BHX111   https://test.growatt.com         MIN 11400TL-XH-US  VC51010223062195      29             22    4             7
+            spa                NaN             SPA  inverter  Inverter  CHENYINSHU  http://183.62.216.35:8081             Growatt1000-S        BQC0733006       NaN           19    1             NaN
+            sph                NaN             SPH   storage   Storage  AQM1234567  http://183.62.216.35:8081          SPH 5000TL BL-UP        XGD6E9K06M       NaN           17    2             NaN
+          sph-s                NaN            None   storage   Storage  EFP0N1J023  http://183.62.216.35:8081                S10000H-48  VC41010123438079       NaN          260    2             NaN
+        storage                NaN         Storage   storage   Storage  KHMOCM5688  http://183.62.216.35:8081  Growatt SPF 6000 ES PLUS        EAP0D9M006       NaN           96    2             NaN
+            wit                NaN            None   storage   Storage  QWL0DC3002  http://183.62.216.35:8081            WIT 100K- HE L        XGD6E7C4S2       NaN          218    2             NaN
 """
 
 import pandas as pd
