@@ -36,6 +36,7 @@ def _inverter_detail_data_to_camel(snake: str) -> str:
     override = {
         "datalogger_sn": "dataLogSn",
         "group_id": "groupID",
+        "optimizer_list": "optimezerList",
         "parent_id": "parentID",
         "plant_name": "plantname",
         "tree_id": "treeID",
@@ -56,8 +57,10 @@ class InverterDetailData(ApiModel):
     alias: Union[EmptyStrToNone, str] = None  # alias, e.g. "ZT00100001"
     big_device: Union[EmptyStrToNone, bool] = None  # e.g. false
     children: Union[EmptyStrToNone, List[Any]] = None  # e.g. []
+    communication_version: Union[EmptyStrToNone, str] = None  # Communication version number, e.g. ''
     create_date: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. null
     datalogger_sn: Union[EmptyStrToNone, str] = None  # The serial number of the collector, e.g. "CRAZT00001"
+    device_type: Union[EmptyStrToNone, int] = None  # e.g. 0
     energy_day: Union[EmptyStrToNone, float] = None  # e.g. 0
     energy_day_map: Union[EmptyStrToNone, dict] = None  # e.g. {}
     energy_month: Union[EmptyStrToNone, float] = None  # e.g. 0
@@ -69,6 +72,7 @@ class InverterDetailData(ApiModel):
     id: Union[EmptyStrToNone, int] = None  # e.g. 116
     img_path: Union[EmptyStrToNone, str] = None  # e.g. "./css/img/status_green.gif"
     inner_version: Union[EmptyStrToNone, str] = None  # e.g. "1.2.3.4."
+    inv_set_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
     inverter_info_status_css: Union[EmptyStrToNone, str] = None  # e.g. "vsts_table_green"
     ipm_temperature: Union[EmptyStrToNone, float] = None  # e.g. 0
     last_update_time: Union[EmptyStrToNone, GrowattTime] = None  # Last update time, e.g. {"time": 1547000577000, ...}
@@ -82,6 +86,7 @@ class InverterDetailData(ApiModel):
     model: Union[EmptyStrToNone, int] = None  # e.g. 61748
     model_text: Union[EmptyStrToNone, str] = None  # e.g. "A0B0D0T0PFU1M3S4"
     nominal_power: Union[EmptyStrToNone, int] = None  # nominal power, e.g. 20000
+    optimizer_list: Union[EmptyStrToNone, Any] = None  # e.g. None
     parent_id: Union[EmptyStrToNone, str] = None  # e.g. "LIST_CRAZT00001_0"
     plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
     plant_name: Union[EmptyStrToNone, str] = None  # e.g. ""
@@ -96,6 +101,7 @@ class InverterDetailData(ApiModel):
     status_text: Union[EmptyStrToNone, str] = None  # e.g. "inverter.status.normal"
     tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. "127.0.0.1"
     temperature: Union[EmptyStrToNone, float] = None  # e.g. 0
+    timezone: Union[EmptyStrToNone, float] = None  # e.g. 8.0
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. "ZT00100001"
     tree_name: Union[EmptyStrToNone, str] = None  # e.g. "ZT00100001"
     update_exist: Union[EmptyStrToNone, bool] = None  # e.g. false
@@ -226,6 +232,10 @@ class InverterEnergyOverviewData(ApiModel):
     epv7_total: Union[EmptyStrToNone, float] = None  # e.g. 0
     epv8_today: Union[EmptyStrToNone, float] = None  # e.g. 0
     epv8_total: Union[EmptyStrToNone, float] = None  # e.g. 0
+    epv9_today: Union[EmptyStrToNone, float] = None  # e.g. 0
+    epv9_total: Union[EmptyStrToNone, float] = None  # e.g. 0
+    epv10_today: Union[EmptyStrToNone, float] = None  # e.g. 0
+    epv10_total: Union[EmptyStrToNone, float] = None  # e.g. 0
     epv_total: Union[EmptyStrToNone, float] = None  # e.g. 120
     e_rac_today: Union[EmptyStrToNone, float] = None  # e.g. 11
     e_rac_total: Union[EmptyStrToNone, float] = None  # e.g. 110
@@ -257,6 +267,8 @@ class InverterEnergyOverviewData(ApiModel):
     ipv6: Union[EmptyStrToNone, float] = None  # e.g. 0
     ipv7: Union[EmptyStrToNone, float] = None  # e.g. 0
     ipv8: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ipv9: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ipv10: Union[EmptyStrToNone, float] = None  # e.g. 0
     n_bus_voltage: Union[EmptyStrToNone, float] = None  # e.g. 0
     op_fullwatt: Union[EmptyStrToNone, float] = None  # e.g. 0
     pac: Union[EmptyStrToNone, float] = None  # e.g. 8912.400390625
@@ -279,6 +291,8 @@ class InverterEnergyOverviewData(ApiModel):
     ppv6: Union[EmptyStrToNone, float] = None  # e.g. 0
     ppv7: Union[EmptyStrToNone, float] = None  # e.g. 0
     ppv8: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ppv9: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ppv10: Union[EmptyStrToNone, float] = None  # e.g. 0
     pv_iso: Union[EmptyStrToNone, float] = None  # e.g. 0
     rac: Union[EmptyStrToNone, float] = None  # e.g. 6553.5
     r_dci: Union[EmptyStrToNone, float] = None  # e.g. 0
@@ -322,6 +336,8 @@ class InverterEnergyOverviewData(ApiModel):
     vpv6: Union[EmptyStrToNone, float] = None  # e.g. 0
     vpv7: Union[EmptyStrToNone, float] = None  # e.g. 0
     vpv8: Union[EmptyStrToNone, float] = None  # e.g. 0
+    vpv9: Union[EmptyStrToNone, float] = None  # e.g. 0
+    vpv10: Union[EmptyStrToNone, float] = None  # e.g. 0
     v_string1: Union[EmptyStrToNone, float] = None  # e.g. 0
     v_string2: Union[EmptyStrToNone, float] = None  # e.g. 0
     v_string3: Union[EmptyStrToNone, float] = None  # e.g. 0
@@ -373,7 +389,22 @@ class InverterEnergyOverviewMultiple(ApiResponse):
 
 
 class InverterEnergyHistoryDataItem(ApiModel):
-    time: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. "2018-12-13 11:03:52"
+    current_string1: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string2: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string3: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string4: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string5: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string6: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string7: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string8: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string9: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string10: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string11: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string12: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string13: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string14: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string15: Union[EmptyStrToNone, float] = None  # e.g. 0
+    current_string16: Union[EmptyStrToNone, float] = None  # e.g. 0
     fac: Union[EmptyStrToNone, float] = None  # Frequency (Hz), e.g. 50
     iac1: Union[EmptyStrToNone, float] = None  # Output current 1 (A), e.g. 12
     iac2: Union[EmptyStrToNone, float] = None  # Output current 2 (A), e.g. 12
@@ -381,9 +412,29 @@ class InverterEnergyHistoryDataItem(ApiModel):
     ipv1: Union[EmptyStrToNone, float] = None  # Input current 1 (A), e.g. 0
     ipv2: Union[EmptyStrToNone, float] = None  # Input current 2 (A), e.g. 0
     ipv3: Union[EmptyStrToNone, float] = None  # Input current 3 (A), e.g. 0
+    ipv4: Union[EmptyStrToNone, float] = None  # Input current 3 (A), e.g. 0
+    ipv5: Union[EmptyStrToNone, float] = None  # Input current 3 (A), e.g. 0
+    ipv6: Union[EmptyStrToNone, float] = None  # Input current 3 (A), e.g. 0
+    ipv7: Union[EmptyStrToNone, float] = None  # Input current 3 (A), e.g. 0
+    ipv8: Union[EmptyStrToNone, float] = None  # Input current 3 (A), e.g. 0
+    ipv9: Union[EmptyStrToNone, float] = None  # Input current 3 (A), e.g. 0
+    ipv10: Union[EmptyStrToNone, float] = None  # Input current 3 (A), e.g. 0
     power: Union[EmptyStrToNone, float] = None  # Output power (W), e.g. 8912.400390625
     power_factor: Union[EmptyStrToNone, float] = None  # Power factor, e.g. -1
+    ppv: Union[EmptyStrToNone, float] = None  # e.g. 9981.7998046875
+    ppv1: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ppv2: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ppv3: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ppv4: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ppv5: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ppv6: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ppv7: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ppv8: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ppv9: Union[EmptyStrToNone, float] = None  # e.g. 0
+    ppv10: Union[EmptyStrToNone, float] = None  # e.g. 0
+    status: Union[EmptyStrToNone, int] = None  # e.g. 1
     temperature: Union[EmptyStrToNone, float] = None  # temperature (°C), e.g. 75
+    time: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. "2018-12-13 11:03:52"
     today_energy: Union[EmptyStrToNone, float] = None  # Today's power generation (kWh), e.g. "7.6"
     total_energy: Union[EmptyStrToNone, float] = None  # Total power generation (kWh), e.g. "7.6"
     vac1: Union[EmptyStrToNone, float] = None  # Output voltage 1 (V), e.g. 220
@@ -392,6 +443,29 @@ class InverterEnergyHistoryDataItem(ApiModel):
     vpv1: Union[EmptyStrToNone, float] = None  # Input voltage 1 (V), e.g. 248
     vpv2: Union[EmptyStrToNone, float] = None  # Input voltage 2 (V), e.g. 0
     vpv3: Union[EmptyStrToNone, float] = None  # Input voltage 3 (V), e.g. 0
+    vpv4: Union[EmptyStrToNone, float] = None  # Input voltage 3 (V), e.g. 0
+    vpv5: Union[EmptyStrToNone, float] = None  # Input voltage 3 (V), e.g. 0
+    vpv6: Union[EmptyStrToNone, float] = None  # Input voltage 3 (V), e.g. 0
+    vpv7: Union[EmptyStrToNone, float] = None  # Input voltage 3 (V), e.g. 0
+    vpv8: Union[EmptyStrToNone, float] = None  # Input voltage 3 (V), e.g. 0
+    vpv9: Union[EmptyStrToNone, float] = None  # Input voltage 3 (V), e.g. 0
+    vpv10: Union[EmptyStrToNone, float] = None  # Input voltage 3 (V), e.g. 0
+    v_string1: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string2: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string3: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string4: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string5: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string6: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string7: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string8: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string9: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string10: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string11: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string12: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string13: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string14: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string15: Union[EmptyStrToNone, float] = None  # e.g. 0
+    v_string16: Union[EmptyStrToNone, float] = None  # e.g. 0
 
 
 def _inverter_energy_history_data_to_camel(snake: str) -> str:

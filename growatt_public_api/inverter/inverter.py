@@ -106,8 +106,8 @@ class Inverter:
         self,
         device_sn: str,
         parameter_id: str,
-        parameter_value_1: str,
-        parameter_value_2: Optional[str] = None,
+        parameter_value_1: Union[str, int],
+        parameter_value_2: Optional[Union[str, int]] = None,
     ) -> InverterSettingWrite:
         """
         Inverter parameter setting
@@ -187,8 +187,8 @@ class Inverter:
         Args:
             device_sn (str): Inverter serial number
             parameter_id (str): parameter ID - pass "set_any_reg" to write register address
-            parameter_value_1 (str): parameter value 1
-            parameter_value_2 (Optional[str]): parameter value 2
+            parameter_value_1 (Union[str, int]): parameter value 1
+            parameter_value_2 (Optional[Union[str, int]]): parameter value 2
 
         Returns:
             InverterSetting
