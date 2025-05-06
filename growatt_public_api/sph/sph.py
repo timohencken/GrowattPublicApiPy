@@ -114,24 +114,24 @@ class Sph:
         self,
         device_sn: str,
         parameter_id: str,
-        parameter_value_1: str,
-        parameter_value_2: Optional[str] = None,
-        parameter_value_3: Optional[str] = None,
-        parameter_value_4: Optional[str] = None,
-        parameter_value_5: Optional[str] = None,
-        parameter_value_6: Optional[str] = None,
-        parameter_value_7: Optional[str] = None,
-        parameter_value_8: Optional[str] = None,
-        parameter_value_9: Optional[str] = None,
-        parameter_value_10: Optional[str] = None,
-        parameter_value_11: Optional[str] = None,
-        parameter_value_12: Optional[str] = None,
-        parameter_value_13: Optional[str] = None,
-        parameter_value_14: Optional[str] = None,
-        parameter_value_15: Optional[str] = None,
-        parameter_value_16: Optional[str] = None,
-        parameter_value_17: Optional[str] = None,
-        parameter_value_18: Optional[str] = None,
+        parameter_value_1: Union[str, int],
+        parameter_value_2: Optional[Union[str, int]] = None,
+        parameter_value_3: Optional[Union[str, int]] = None,
+        parameter_value_4: Optional[Union[str, int]] = None,
+        parameter_value_5: Optional[Union[str, int]] = None,
+        parameter_value_6: Optional[Union[str, int]] = None,
+        parameter_value_7: Optional[Union[str, int]] = None,
+        parameter_value_8: Optional[Union[str, int]] = None,
+        parameter_value_9: Optional[Union[str, int]] = None,
+        parameter_value_10: Optional[Union[str, int]] = None,
+        parameter_value_11: Optional[Union[str, int]] = None,
+        parameter_value_12: Optional[Union[str, int]] = None,
+        parameter_value_13: Optional[Union[str, int]] = None,
+        parameter_value_14: Optional[Union[str, int]] = None,
+        parameter_value_15: Optional[Union[str, int]] = None,
+        parameter_value_16: Optional[Union[str, int]] = None,
+        parameter_value_17: Optional[Union[str, int]] = None,
+        parameter_value_18: Optional[Union[str, int]] = None,
     ) -> SphSettingWrite:
         """
         SPH parameter settings
@@ -244,24 +244,24 @@ class Sph:
         Args:
             device_sn (str): energy storage machine SN
             parameter_id (str): parameter ID - pass "set_any_reg" to write register address
-            parameter_value_1 (str): parameter value 1
-            parameter_value_2 (Optional[str]): parameter value 2
-            parameter_value_3 (Optional[str]): parameter value 3
-            parameter_value_4 (Optional[str]): parameter value 4
-            parameter_value_5 (Optional[str]): parameter value 5
-            parameter_value_6 (Optional[str]): parameter value 6
-            parameter_value_7 (Optional[str]): parameter value 7
-            parameter_value_8 (Optional[str]): parameter value 8
-            parameter_value_9 (Optional[str]): parameter value 9
-            parameter_value_10 (Optional[str]): parameter value 10
-            parameter_value_11 (Optional[str]): parameter value 11
-            parameter_value_12 (Optional[str]): parameter value 12
-            parameter_value_13 (Optional[str]): parameter value 13
-            parameter_value_14 (Optional[str]): parameter value 14
-            parameter_value_15 (Optional[str]): parameter value 15
-            parameter_value_16 (Optional[str]): parameter value 16
-            parameter_value_17 (Optional[str]): parameter value 17
-            parameter_value_18 (Optional[str]): parameter value 18
+            parameter_value_1 (Union[str, int]): parameter value 1
+            parameter_value_2 (Optional[Union[str, int]]): parameter value 2
+            parameter_value_3 (Optional[Union[str, int]]): parameter value 3
+            parameter_value_4 (Optional[Union[str, int]]): parameter value 4
+            parameter_value_5 (Optional[Union[str, int]]): parameter value 5
+            parameter_value_6 (Optional[Union[str, int]]): parameter value 6
+            parameter_value_7 (Optional[Union[str, int]]): parameter value 7
+            parameter_value_8 (Optional[Union[str, int]]): parameter value 8
+            parameter_value_9 (Optional[Union[str, int]]): parameter value 9
+            parameter_value_10 (Optional[Union[str, int]]): parameter value 10
+            parameter_value_11 (Optional[Union[str, int]]): parameter value 11
+            parameter_value_12 (Optional[Union[str, int]]): parameter value 12
+            parameter_value_13 (Optional[Union[str, int]]): parameter value 13
+            parameter_value_14 (Optional[Union[str, int]]): parameter value 14
+            parameter_value_15 (Optional[Union[str, int]]): parameter value 15
+            parameter_value_16 (Optional[Union[str, int]]): parameter value 16
+            parameter_value_17 (Optional[Union[str, int]]): parameter value 17
+            parameter_value_18 (Optional[Union[str, int]]): parameter value 18
 
         Returns:
             MinSettingWrite
