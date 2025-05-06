@@ -45,9 +45,9 @@ class TestMin(unittest.TestCase):
             server_url="https://test.growatt.com",
             token="6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
         )
-        # init MIN
+        # init
         cls.api = Min(session=gas)
-        # get a MIN device
+        # get a device
         try:
             apiv4 = ApiV4(session=gas)
             _devices = apiv4.list()
@@ -156,7 +156,6 @@ class TestMin(unittest.TestCase):
             MinEnergyOverviewData.model_fields.keys()
         )
         self.assertEqual(set(), set(raw_data["data"]["datas"][0].keys()).difference(pydantic_keys), "data_datas_0")
-        # FAILS often as api.details() is called too frequently
 
     def test_setting_read__by_name(self):
         with patch(f"{TEST_FILE}.MinSettingRead", wraps=MinSettingRead) as mock_pyd_model:

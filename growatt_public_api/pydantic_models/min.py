@@ -108,7 +108,7 @@ class MinTlxSettingsData(ApiModel):
     eps_freq_set: Union[EmptyStrToNone, float] = None  # Emergency power frequency (0=50Hz, 1=60Hz), e.g. 0
     eps_fun_en: Union[EmptyStrToNone, bool] = None  # Emergency power enable (0=disable 1=enable), e.g. 1
     eps_volt_set: Union[EmptyStrToNone, int] = None  # emergency power supply voltage (0=230, 1=208, 2=240), e.g. 2
-    export_limit: Union[EmptyStrToNone, float] = None  # Anti-backflow enable, e.g. 0
+    export_limit: Union[EmptyStrToNone, int] = None  # Anti-backflow enable, e.g. 0
     export_limit_power_rate: Union[EmptyStrToNone, float] = None  # Backflow Prevention, e.g. 0
     export_limit_power_rate_str: Union[EmptyStrToNone, str] = None  # e.g. ''
     exter_comm_off_grid_en: Union[EmptyStrToNone, bool] = None  # Manual off-grid enable, e.g. 0
@@ -500,7 +500,7 @@ class MinDetailData(ApiModel):
     )
     status_text: Union[EmptyStrToNone, str] = None  # e.g. 'tlx.status.operating'
     str_num: Union[EmptyStrToNone, int] = None  # e.g. 0
-    sys_time: Union[EmptyStrToNone, str] = None  # System time, e.g. ''
+    sys_time: Union[EmptyStrToNone, datetime.datetime] = None  # System time, e.g. ''
     tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. '47.107.154.111'
     timezone: Union[EmptyStrToNone, float] = None  # e.g. 8.0 / 1.0
     tlx_set_bean: Union[EmptyStrToNone, MinTlxSettingsData] = None

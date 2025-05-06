@@ -82,7 +82,7 @@ class SphDetailData(ApiModel):
     )
 
     ac_charge_enable: Union[EmptyStrToNone, bool] = None  # AC charging enable, e.g. 1
-    active_rate: Union[EmptyStrToNone, int] = None  # Active power, e.g. 1
+    active_rate: Union[EmptyStrToNone, float] = None  # Active power, e.g. 1
     address: Union[EmptyStrToNone, int] = None  # Inverter address, e.g. 1
     alias: Union[EmptyStrToNone, str] = None  # alias, e.g. 'FDCJQ00003'
     backflow_setting: Union[EmptyStrToNone, str] = None  # Backflow prevention setting, e.g. ''
@@ -202,7 +202,7 @@ class SphDetailData(ApiModel):
     pv_power_factor: Union[EmptyStrToNone, float] = None  # Set PF value, e.g. ''
     pv_reactive_p_rate: Union[EmptyStrToNone, float] = None  # Set reactive power, e.g. ''
     pv_reactive_p_rate_two: Union[EmptyStrToNone, float] = None  # No power capacity/inductive, e.g. ''
-    reactive_rate: Union[EmptyStrToNone, int] = None  # Reactive power, e.g. 100
+    reactive_rate: Union[EmptyStrToNone, float] = None  # Reactive power, e.g. 100
     record: Union[EmptyStrToNone, Any] = None  # e.g. None
     serial_num: Union[EmptyStrToNone, str] = None  # Device SN, e.g. 'FDCJQ00003'
     status: Union[EmptyStrToNone, int] = (
