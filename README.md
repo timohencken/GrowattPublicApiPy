@@ -325,6 +325,7 @@ To the best of our knowledge only the settings functions perform modifications t
 
 # TODOs
 * TODO: refactor to integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
+* TODO: refactor to integrate VPP into MIN,SPA,SPH
 * TODO: add caching to 5-minute-interval endpoints
   * ongoing - still some TODOs
 * TODO: common device type

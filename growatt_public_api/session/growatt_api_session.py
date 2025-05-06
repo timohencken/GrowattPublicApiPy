@@ -134,7 +134,7 @@ class GrowattApiSession:
             error_code_new = json_data.get("code")
             if use_cache:
                 # create hash from request params
-                args_ = {"endpoint": endpoint, "method": method, "params": params, "data": data}
+                args_ = {"base_url": url, "endpoint": endpoint, "method": method, "params": params, "data": data}
                 hash_ = hashlib.md5(json.dumps(args_).encode()).hexdigest()
                 # TODO use pickle dir in tmp/from settings
                 # TODO add min time (directly use cache without doing request)
