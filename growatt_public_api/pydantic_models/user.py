@@ -1,6 +1,9 @@
 import datetime
 from typing import Union, List
 
+from pydantic import ConfigDict
+from pydantic.alias_generators import to_camel
+
 from pydantic_models.api_model import (
     ApiResponse,
     ApiModel,
@@ -41,17 +44,46 @@ class UsernameAvailabilityCheck(ApiResponse):
 # User list ###########################################################################################################
 
 
+def _user_info_to_camel(snake: str) -> str:
+    override = {
+        "id": "c_user_id",
+        "name": "c_user_name",
+        "email": "c_user_email",
+        "phone_number": "c_user_tel",
+        "registration_date": "c_user_regtime",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class UserInfo(ApiModel):
-    c_user_id: Union[EmptyStrToNone, int] = None  # e.g. 1
-    c_user_name: Union[EmptyStrToNone, str] = None  # e.g. "admin"
-    c_user_email: Union[EmptyStrToNone, str] = None  # e.g. "imluobao@163.com"
-    c_user_tel: Union[EmptyStrToNone, str] = None  # e.g. ""
-    c_user_regtime: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. "2018-02-04 09:46:50"
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_user_info_to_camel,
+    )
+
+    id: Union[EmptyStrToNone, int] = None  # e.g. 1
+    name: Union[EmptyStrToNone, str] = None  # e.g. "admin"
+    email: Union[EmptyStrToNone, str] = None  # e.g. "imluobao@163.com"
+    phone_number: Union[EmptyStrToNone, str] = None  # e.g. ""
+    registration_date: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. "2018-02-04 09:46:50"
+
+
+def _user_list_data_to_camel(snake: str) -> str:
+    override = {
+        "users": "c_user",
+    }
+    return override.get(snake, to_camel(snake=snake))
 
 
 class UserListData(ApiModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_user_list_data_to_camel,
+    )
     count: Union[EmptyStrToNone, int] = None  # e.g. 2
-    c_user: List[UserInfo]
+    users: List[UserInfo]
 
 
 class UserList(ApiResponse):
