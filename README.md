@@ -304,10 +304,8 @@ Your options include
      ```
 
 # Contribution ideas
-* add missing endpoints
-  * I'm still working on adding endpoints, but any help is appreciated
 * run code for different inverter types
-  * I have a NEO (=MIN) inverter for testing, so I can't test the code for other inverter types.
+  * I have a NEO (=MIN) inverter for testing, and I found some devices on the test environments, but some device types remain untested.
   * just try to run the code for your inverter model and check the pydantic models are valid
 * refactoring
   * while I like the idea of using single files for each inverter type, I think there might be a better way to do this ;)
@@ -332,7 +330,7 @@ To the best of our knowledge only the settings functions perform modifications t
 * TODO: generate & publish docs
 
 # Changelog
-* ONGOING (pre-alpha)
+* 2025.05.12 (pre-alpha)
   * add tests to verify returned parameters are same as expected parameters
 * 2025.03.28 (pre-alpha)
   * v4/new-api endpoints implemented
