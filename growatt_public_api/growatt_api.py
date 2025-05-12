@@ -21,12 +21,13 @@ from hps import Hps  # noqa: E402
 from pbd import Pbd  # noqa: E402
 from smart_meter import SmartMeter  # noqa: E402
 from env_sensor import EnvSensor  # noqa: E402
+from groboost import Groboost  # noqa: E402
 
 
 class GrowattDeviceType(IntEnum):
     inverter = 1  # (including MAX)
     storage = 2
-    other = 3  # smart meter / environmental tester / vpp / groBoost
+    other = 3  # smart meter / environmental tester / vpp
     max = 4
     sph = 5
     spa = 6  # MIX
@@ -34,7 +35,7 @@ class GrowattDeviceType(IntEnum):
     pcs = 8
     hps = 9
     pbd = 10
-    gro_boost = 11
+    groboost = 11
     # vpp: supported by min, spa, sph
 
 
@@ -55,6 +56,7 @@ class GrowattApi:
     pbd: Pbd
     smart_meter: SmartMeter
     env_sensor: EnvSensor
+    groboost: Groboost
 
     """
     API documents:
@@ -87,3 +89,4 @@ class GrowattApi:
         self.pbd = Pbd(self.session)
         self.smart_meter = SmartMeter(self.session)
         self.env_sensor = EnvSensor(self.session)
+        self.groboost = Groboost(self.session)

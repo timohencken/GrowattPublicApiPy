@@ -78,6 +78,7 @@ class Device:
              8: pcs
              9: hps
             10: pbd
+            11: groboost
 
         Args:
             plant_id (int): Power Station ID
