@@ -39,9 +39,9 @@ class Plant:
         country: Optional[Union[GrowattCountry, str]] = None,
         installer_code: Optional[str] = None,
         currency: Optional[str] = None,
-        longitude: Optional[float] = None,
         latitude: Optional[float] = None,
-        timezone_id: Optional[int] = None,
+        longitude: Optional[float] = None,
+        timezone: Optional[float] = None,
         plant_type: Optional[Union[PlantType, int]] = None,
         create_date: Optional[date] = None,
         price_per_kwh: Optional[float] = None,
@@ -73,7 +73,7 @@ class Plant:
             currency (Optional[str]): currency unit, e.g. "$"
             longitude (Optional[float]): longitude, e.g. 30
             latitude (Optional[float]): latitude, e.g. 20
-            timezone_id (Optional[int]): The time zone code of the data display, e.g. 8
+            timezone (Optional[float]): time zone as hours from UTC (e.g. 9 for GMT+9)
             plant_type (Optional[Union[PlantType, int]]): Power station type: 0: Residential, 1: Commercial, 2: Ground-Mounted
             create_date (Optional[date]): Created time, e.g. "2022-10-13"
             price_per_kwh (Optional[float]): Electricity price, e.g. 1.4
@@ -105,7 +105,7 @@ class Plant:
                 "currency": currency,
                 "longitude": longitude,
                 "latitude": latitude,
-                "timezone_id": timezone_id,
+                "timezone_id": timezone,
                 "plant_type": plant_type,
                 "createDate": create_date,
                 "formulaMoney": price_per_kwh,
@@ -125,9 +125,9 @@ class Plant:
         country: Optional[Union[GrowattCountry, str]] = None,
         installer_code: Optional[str] = None,
         currency: Optional[str] = None,
-        longitude: Optional[float] = None,
         latitude: Optional[float] = None,
-        timezone_id: Optional[int] = None,
+        longitude: Optional[float] = None,
+        timezone: Optional[float] = None,
         plant_type: Optional[Union[PlantType, int]] = None,
     ) -> PlantModify:
         """
@@ -157,7 +157,7 @@ class Plant:
             currency (Optional[str]): currency unit, e.g. "$"
             longitude (Optional[float]): longitude, e.g. 30
             latitude (Optional[float]): latitude, e.g. 20
-            timezone_id (Optional[int]): The time zone code of the data display, e.g. 8
+            timezone (Optional[float]): time zone as hours from UTC (e.g. 9 for GMT+9)
             plant_type (Optional[Union[PlantType, int]]): Power station type: 0: Residential, 1: Commercial, 2: Ground-Mounted
 
         Returns:
@@ -182,7 +182,7 @@ class Plant:
                 "currency": currency,
                 "longitude": longitude,
                 "latitude": latitude,
-                "timezone_id": timezone_id,
+                "timezone_id": timezone,
                 "plant_type": plant_type,
             },
         )
@@ -566,13 +566,13 @@ class Plant:
         # check interval validity
         if date_interval == "year":
             # max 20 years allowed
-            if end_date.year - start_date.year > 20:
+            if end_date.year - start_date.year >= 20:
                 raise ValueError("date interval must not exceed 20 years in 'year' mode")
         elif date_interval == "month":
             if end_date.year - start_date.year > 1:
                 raise ValueError("start date must be within same or previous year in 'month' mode")
         else:
-            if end_date - start_date > timedelta(days=7):
+            if end_date - start_date >= timedelta(days=7):
                 raise ValueError("date interval must not exceed 7 days in 'day' mode")
 
         response = self.session.get(
