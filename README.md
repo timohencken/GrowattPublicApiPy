@@ -107,7 +107,16 @@ This package aims to
     * current for multiple inverters `sph.energy_multiple()`
     * historical data `sph.energy_history()`
 * SPA (*TYPE=6* - SPA)
-  * ***Not*** implemented yet
+  * general device data
+    * read device data `spa.details()`
+    * read alarms/notification `spa.alarms()`
+  * device settings
+    * read settings value `spa.setting_read()`
+    * write settings value `spa.setting_write()` (***use with caution***)
+  * device power/energy metrics
+    * current `spa.energy()`
+    * current for multiple inverters `spa.energy_multiple()`              ***Not*** implemented yet
+    * historical data `spa.energy_history()`              ***Not*** implemented yet
 * MIN (*TYPE=7* - MIN/MAC/MOD-XH/MID-XH/NEO)
   * general device data
     * read device data `min.details()`
@@ -237,6 +246,9 @@ To the best of our knowledge only the settings functions perform modifications t
 
 
 # Changelog
+* TBA (pre-alpha)
+  * endpoints implemented:
+    * SPA
 * 2025.03.05 (pre-alpha)
   * endpoints implemented:
     * MAX
