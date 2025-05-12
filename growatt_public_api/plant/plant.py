@@ -567,14 +567,10 @@ class Plant:
         if date_interval == "year":
             # max 20 years allowed
             if end_date.year - start_date.year > 20:
-                raise ValueError(
-                    "date interval must not exceed 20 years in 'year' mode"
-                )
+                raise ValueError("date interval must not exceed 20 years in 'year' mode")
         elif date_interval == "month":
             if end_date.year - start_date.year > 1:
-                raise ValueError(
-                    "start date must be within same or previous year in 'month' mode"
-                )
+                raise ValueError("start date must be within same or previous year in 'month' mode")
         else:
             if end_date - start_date > timedelta(days=7):
                 raise ValueError("date interval must not exceed 7 days in 'day' mode")
@@ -595,13 +591,9 @@ class Plant:
         if "data" in response and "energys" in response["data"]:
             for date_energy in response["data"]["energys"]:
                 if date_interval == "month":
-                    date_energy["date"] = date.fromisoformat(
-                        f'{date_energy["date"]}-01'
-                    )
+                    date_energy["date"] = date.fromisoformat(f'{date_energy["date"]}-01')
                 elif date_interval == "year":
-                    date_energy["date"] = date.fromisoformat(
-                        f'{date_energy["date"]}-01-01'
-                    )
+                    date_energy["date"] = date.fromisoformat(f'{date_energy["date"]}-01-01')
 
         return PlantEnergyHistory.model_validate(response)
 

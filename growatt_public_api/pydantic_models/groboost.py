@@ -31,9 +31,7 @@ def parse_forced_time(value: Optional[str] = None):
         return None
 
 
-ForcedTime: TypeAlias = Annotated[
-    Union[datetime.time, None], BeforeValidator(parse_forced_time)
-]
+ForcedTime: TypeAlias = Annotated[Union[datetime.time, None], BeforeValidator(parse_forced_time)]
 
 
 def _growatt_time_calendar_timezone_to_camel(snake: str) -> str:
@@ -140,12 +138,8 @@ class BoostData(ApiModel):
     a_freq: Union[EmptyStrToNone, float] = None  # Phase A frequency, e.g. 0
     a_ipv: Union[EmptyStrToNone, float] = None  # A phase current, e.g. 0
     a_jobs_model: Union[EmptyStrToNone, int] = None  # A job mode, e.g. 0
-    a_load_normal_power: Union[EmptyStrToNone, float] = (
-        None  # A load rated power, e.g. 0
-    )
-    a_max_temp: Union[EmptyStrToNone, float] = (
-        None  # Maximum temperature of channel A, e.g. 0
-    )
+    a_load_normal_power: Union[EmptyStrToNone, float] = None  # A load rated power, e.g. 0
+    a_max_temp: Union[EmptyStrToNone, float] = None  # Maximum temperature of channel A, e.g. 0
     a_min_temp: Union[EmptyStrToNone, float] = None  # A minimum temperature, e.g. 0
     a_on_off: Union[EmptyStrToNone, bool] = None  # A time switch, e.g. 0
     a_ppv: Union[EmptyStrToNone, float] = None  # A phase power, e.g. 0
@@ -157,15 +151,9 @@ class BoostData(ApiModel):
     a_vpv: Union[EmptyStrToNone, float] = None  # Phase A voltage, e.g. 0
     b_freq: Union[EmptyStrToNone, float] = None  # Phase B frequency, e.g. 0
     b_ipv: Union[EmptyStrToNone, float] = None  # Phase B current, e.g. 0
-    b_load_normal_power: Union[EmptyStrToNone, float] = (
-        None  # B load rated power, e.g. 0
-    )
-    b_max_temp: Union[EmptyStrToNone, float] = (
-        None  # B path temperature maximum, e.g. 0
-    )
-    b_min_temp: Union[EmptyStrToNone, float] = (
-        None  # Minimum temperature of channel B, e.g. 0
-    )
+    b_load_normal_power: Union[EmptyStrToNone, float] = None  # B load rated power, e.g. 0
+    b_max_temp: Union[EmptyStrToNone, float] = None  # B path temperature maximum, e.g. 0
+    b_min_temp: Union[EmptyStrToNone, float] = None  # Minimum temperature of channel B, e.g. 0
     b_on_off: Union[EmptyStrToNone, bool] = None  # B road timer switch, e.g. 0
     b_ppv: Union[EmptyStrToNone, float] = None  # B-phase power, e.g. 0
     b_start_power: Union[EmptyStrToNone, float] = None  # B start power, e.g. 0
@@ -173,20 +161,12 @@ class BoostData(ApiModel):
     b_time: Union[EmptyStrToNone, str] = None  # B road timing time, e.g. ''
     b_total_energy: Union[EmptyStrToNone, float] = None  # B-phase total energy, e.g. 0
     b_vpv: Union[EmptyStrToNone, float] = None  # Phase B voltage, e.g. 0
-    calendar: Union[EmptyStrToNone, GrowattTimeCalendar] = (
-        None  # e.g. {'firstDayOfWeek: 1,...}
-    )
+    calendar: Union[EmptyStrToNone, GrowattTimeCalendar] = None  # e.g. {'firstDayOfWeek: 1,...}
     c_freq: Union[EmptyStrToNone, float] = None  # C phase frequency, e.g. 0
     c_ipv: Union[EmptyStrToNone, float] = None  # C phase current, e.g. 0
-    c_load_normal_power: Union[EmptyStrToNone, float] = (
-        None  # C load rated power, e.g. 0
-    )
-    c_max_temp: Union[EmptyStrToNone, float] = (
-        None  # Maximum temperature of C road, e.g. 0
-    )
-    c_min_temp: Union[EmptyStrToNone, float] = (
-        None  # C road temperature minimum, e.g. 0
-    )
+    c_load_normal_power: Union[EmptyStrToNone, float] = None  # C load rated power, e.g. 0
+    c_max_temp: Union[EmptyStrToNone, float] = None  # Maximum temperature of C road, e.g. 0
+    c_min_temp: Union[EmptyStrToNone, float] = None  # C road temperature minimum, e.g. 0
     c_on_off: Union[EmptyStrToNone, bool] = None  # C time switch, e.g. 0
     c_ppv: Union[EmptyStrToNone, float] = None  # C phase power, e.g. 0
     c_start_power: Union[EmptyStrToNone, float] = None  # C start power, e.g. 0
@@ -195,20 +175,14 @@ class BoostData(ApiModel):
     c_total_energy: Union[EmptyStrToNone, float] = None  # C-phase total energy, e.g. 0
     current: Union[EmptyStrToNone, float] = None  # current, e.g. 0
     c_vpv: Union[EmptyStrToNone, float] = None  # C phase voltage, e.g. 0
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The serial number of the collector, e.g. 'NACTEST128'
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The serial number of the collector, e.g. 'NACTEST128'
     device_type: Union[EmptyStrToNone, str] = None  # Device type, e.g. ''
     d_power: Union[EmptyStrToNone, float] = (
         None  # The total power of phase A under three-phase + single-phase type, e.g. 0
     )
-    dry_contact_on_off: Union[EmptyStrToNone, bool] = (
-        None  # Dry contact time switch, e.g. 0
-    )
+    dry_contact_on_off: Union[EmptyStrToNone, bool] = None  # Dry contact time switch, e.g. 0
     dry_contact_status: Union[EmptyStrToNone, int] = None  # dry contact status, e.g. 0
-    dry_contact_time: Union[EmptyStrToNone, str] = (
-        None  # Dry contact timing time, e.g. ''
-    )
+    dry_contact_time: Union[EmptyStrToNone, str] = None  # Dry contact timing time, e.g. ''
     d_total_energy: Union[EmptyStrToNone, float] = (
         None  # Total energy of phase A under three-phase + single-phase type, e.g. 0
     )
@@ -229,28 +203,18 @@ class BoostData(ApiModel):
     serial_num: Union[EmptyStrToNone, str] = None  # Serial Number, e.g. ''
     status: Union[EmptyStrToNone, int] = None  # ABC phase relay status, e.g. 0
     sys_time: Union[EmptyStrToNone, str] = None  # Time, e.g. ''
-    target_power: Union[EmptyStrToNone, float] = (
-        None  # Adjust the target power, e.g. 3600
-    )
+    target_power: Union[EmptyStrToNone, float] = None  # Adjust the target power, e.g. 3600
     temp: Union[EmptyStrToNone, float] = None  # SCR temperature, e.g. 0
-    temp_enable: Union[EmptyStrToNone, float] = (
-        None  # ABC temperature enable switch, e.g. 0
-    )
+    temp_enable: Union[EmptyStrToNone, float] = None  # ABC temperature enable switch, e.g. 0
     temperature: Union[EmptyStrToNone, float] = None  # temperature, e.g. 0
-    time_text: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # time, e.g. '2021-05-11 15:39:48'
-    )
+    time_text: Union[EmptyStrToNone, datetime.datetime] = None  # time, e.g. '2021-05-11 15:39:48'
     total_energy: Union[EmptyStrToNone, float] = None  # Total power consumption, e.g. 0
-    total_number: Union[EmptyStrToNone, int] = (
-        None  # The power adjustment ratio, e.g. 0
-    )
+    total_number: Union[EmptyStrToNone, int] = None  # The power adjustment ratio, e.g. 0
     tuning_state: Union[EmptyStrToNone, int] = None  # Power adjustment state, e.g. 0
     v9420_status: Union[EmptyStrToNone, int] = None  # V9420 working status, e.g. 0
     version: Union[EmptyStrToNone, str] = None  # Software version, e.g. '9.1.0.2'
     voltage: Union[EmptyStrToNone, float] = None  # voltage, e.g. 0
-    water_heater_power: Union[EmptyStrToNone, float] = (
-        None  # Water heater rated power, e.g. 0
-    )
+    water_heater_power: Union[EmptyStrToNone, float] = None  # Water heater rated power, e.g. 0
     water_state: Union[EmptyStrToNone, int] = None  # Water heater working state, e.g. 0
     with_time: Union[EmptyStrToNone, bool] = None  # Whether to bring time, e.g. False
 
@@ -315,22 +279,16 @@ class GroboostDetailData(ApiModel):
     )
 
     address: Union[EmptyStrToNone, int] = None  # e.g. 84
-    ammeter_data: Union[EmptyStrToNone, SmartMeterEnergyOverviewData] = (
-        None  # e.g. {'aActivePower': 0,...}
-    )
+    ammeter_data: Union[EmptyStrToNone, SmartMeterEnergyOverviewData] = None  # e.g. {'aActivePower': 0,...}
     boost_data: Union[EmptyStrToNone, BoostData] = None  # e.g. {'addr': 0,...}
     box_data: Union[EmptyStrToNone, Any] = None  # e.g. None
     children: List[Any]  # e.g. []
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # Collector serial number, e.g. 'NACTEST128'
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # Collector serial number, e.g. 'NACTEST128'
     device_name: Union[EmptyStrToNone, str] = None  # Device name, e.g. 'GRO_BOOST'
     device_sn: Union[EmptyStrToNone, str] = None  # Serial Number, e.g. 'GRO2020102'
     device_type: Union[EmptyStrToNone, str] = None  # Device type, e.g. 'WIFI_METER'
     device_type_int: Union[EmptyStrToNone, int] = None  # Meter type, e.g. 69
-    env_data: Union[EmptyStrToNone, EnvSensorMetricsOverviewData] = (
-        None  # e.g. {'addr': 0,...}
-    )
+    env_data: Union[EmptyStrToNone, EnvSensorMetricsOverviewData] = None  # e.g. {'addr': 0,...}
     img_path: Union[EmptyStrToNone, str] = None  # e.g. './css/img/status_green.gif'
     irradiantion: Union[EmptyStrToNone, float] = None  # Insolation, e.g. 0
     jdameter_data: Union[EmptyStrToNone, Any] = None  # e.g. None
@@ -345,12 +303,8 @@ class GroboostDetailData(ApiModel):
     )
     level: Union[EmptyStrToNone, int] = None  # e.g. 4
     location: Union[EmptyStrToNone, str] = None  # location, e.g. ''
-    lost: Union[EmptyStrToNone, bool] = (
-        None  # Whether communication is lost, e.g. False
-    )
-    meter_ct: Union[EmptyStrToNone, int] = (
-        None  # CT value of electric meter, dedicated for 645 electric meter, e.g. 0
-    )
+    lost: Union[EmptyStrToNone, bool] = None  # Whether communication is lost, e.g. False
+    meter_ct: Union[EmptyStrToNone, int] = None  # CT value of electric meter, dedicated for 645 electric meter, e.g. 0
     parent_id: Union[EmptyStrToNone, str] = (
         None  # Collector serial number + device type value, e.g. 'LIST_NACTEST128_69'
     )
@@ -358,25 +312,17 @@ class GroboostDetailData(ApiModel):
     pid_data: Union[EmptyStrToNone, Any] = None  # e.g. None
     plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
     pr_month: Union[EmptyStrToNone, float] = None  # Monthly Pr value, e.g. 0
-    raillog: Union[EmptyStrToNone, bool] = (
-        None  # Is it ShineLink (0: Yes 1: No), e.g. 0
-    )
+    raillog: Union[EmptyStrToNone, bool] = None  # Is it ShineLink (0: Yes 1: No), e.g. 0
     spct_data: Union[EmptyStrToNone, SpctData] = None  # e.g. {'activeEnergy': 0,...}
-    tcp_server_ip: Union[EmptyStrToNone, str] = (
-        None  # TCP server IP address, e.g. '47.107.154.111'
-    )
-    timezone: Union[EmptyStrToNone, int] = None  # Time zone, e.g. 0
+    tcp_server_ip: Union[EmptyStrToNone, str] = None  # TCP server IP address, e.g. '47.107.154.111'
+    timezone: Union[EmptyStrToNone, float] = None  # Time zone, e.g. 0
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'OD_NACTEST128_69_addr84'
-    tree_name: Union[EmptyStrToNone, str] = (
-        None  # Device name + device address, e.g. 'GRO_BOOST#84
-    )
+    tree_name: Union[EmptyStrToNone, str] = None  # Device name + device address, e.g. 'GRO_BOOST#84
 
 
 class GroboostDetails(ApiResponse):
     data: Union[EmptyStrToNone, GroboostDetailData] = None
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # Collector serial number, e.g. "NACTEST128"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # Collector serial number, e.g. "NACTEST128"
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "GRO2020102"
 
 
@@ -399,9 +345,7 @@ class GroboostMetricsOverview(ApiResponse):
     )
 
     data: Union[EmptyStrToNone, BoostData] = None
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN, e.g. "NACTEST128"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN, e.g. "NACTEST128"
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "GRO2020102"
 
 
@@ -411,9 +355,7 @@ class GroboostMetricsOverview(ApiResponse):
 
 class GroboostMetricsOverviewMultipleItem(ApiModel):
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "ZT00100001"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "ZT00100001"
     data: Union[EmptyStrToNone, BoostData] = None
 
 
@@ -446,9 +388,7 @@ class GroboostMetricsHistoryData(ApiModel):
     count: int  # Total Records
     next_page_start_id: Union[EmptyStrToNone, int] = None  # 21
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "GRO2020102"
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "NACTEST128"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "NACTEST128"
     datas: List[BoostData]
 
 

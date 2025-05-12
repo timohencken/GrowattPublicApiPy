@@ -652,12 +652,8 @@ class Groboost:
         devices = [
             GroboostMetricsOverviewMultipleItem(
                 device_sn=inverter_sn,
-                datalogger_sn=response.get("data", {})
-                .get(inverter_sn, {})
-                .get("dataloggerSn", None),
-                data=response.get("data", {})
-                .get(inverter_sn, {})
-                .get(inverter_sn, None),
+                datalogger_sn=response.get("data", {}).get(inverter_sn, {}).get("dataloggerSn", None),
+                data=response.get("data", {}).get(inverter_sn, {}).get(inverter_sn, None),
             )
             for inverter_sn in response.get("boosts", [])
         ]

@@ -46,9 +46,7 @@ class UserInfo(ApiModel):
     c_user_name: Union[EmptyStrToNone, str] = None  # e.g. "admin"
     c_user_email: Union[EmptyStrToNone, str] = None  # e.g. "imluobao@163.com"
     c_user_tel: Union[EmptyStrToNone, str] = None  # e.g. ""
-    c_user_regtime: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # e.g. "2018-02-04 09:46:50"
-    )
+    c_user_regtime: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. "2018-02-04 09:46:50"
 
 
 class UserListData(ApiModel):

@@ -22,7 +22,8 @@ class GrowattApiSession:
         server_url: str,
     ) -> None:
         self.server_url = server_url
-        self.api_url = f"{self.server_url}/v1"
+        self.api_url = f"{self.server_url}/v1"  # API doccs specify v1
+        # self.api_url = f"{self.server_url}/v4"  # but v4 works just the same
         self.token = token
 
         assert self.token, "No token provided"
@@ -34,12 +35,38 @@ class GrowattApiSession:
     @staticmethod
     def generic_error_message(code: int):
         error_codes = {
+            # common error codes from v1 API
             0: "Normal",  # Success
             10011: "No privilege access",
             10012: "API rate limit exceeded (same request only once every 5 minutes)",
             10013: "The number per page cannot be greater than 100",
             10014: "The number of pages cannot be greater than 250 pages",
             -1: "Please use the new domain name to access",
+        }
+        error_message = error_codes.get(code, "")
+        return error_message
+
+    @staticmethod
+    def generic_response_message(code: int):
+        error_codes = {
+            # common error codes from v4/new-api API
+            0: "Normal",
+            1: "System Error",
+            2: "Invalid Secret Token",
+            3: "Device Permission Verification Failed",
+            4: "Device Not Found",
+            5: "Device Offline",
+            6: "Failed to Set Parameters",
+            7: "Device Type Error",
+            8: "Device SN is Empty",
+            9: "Date Cannot Be Empty",
+            10: "Page Number Cannot Be Empty",
+            11: "Device SN Exceeds Quantity Limit",
+            12: "No Permission to Access Device",
+            100: "API Access Interval",
+            101: "No Permission to Access",
+            102: "Access Frequency Limit, Different Interfaces Have Different Time Limits (most allow 5 minute intervals)",
+            -1: "Please Use the New Domain for Access",
         }
         error_message = error_codes.get(code, "")
         return error_message
@@ -68,7 +95,7 @@ class GrowattApiSession:
             data=data,
         )
 
-    def request(
+    def request(  # noqa: C901 'GrowattApiSession.request' is too complex (12)
         self,
         endpoint: Optional[str] = None,
         method: Literal["GET", "POST"] = "GET",
@@ -90,10 +117,7 @@ class GrowattApiSession:
 
         if '<html data-name="login">' in response.text:
             logger.error("Login page shown")
-        elif (
-            "Note: Dear user, you have not login to the system, skip login page login.."
-            in response.text
-        ):
+        elif "Note: Dear user, you have not login to the system, skip login page login.." in response.text:
             logger.error("Forwarded to login page")
 
         try:
@@ -103,10 +127,23 @@ class GrowattApiSession:
             if error_code:
                 error_msg = json_data.get("error_msg")
                 generic_error_msg = self.generic_error_message(error_code)
+                if not error_msg:
+                    json_data["error_msg"] = generic_error_msg
                 error_log = f"request failed with error code {error_code}: {error_msg}"
                 if generic_error_msg:
                     error_log += f" ({generic_error_msg})"
                 logger.warning(error_log)
+            error_code_new = json_data.get("code")
+            if error_code_new:
+                error_msg = json_data.get("message")
+                generic_error_msg = self.generic_response_message(error_code_new)
+                if not error_msg:
+                    json_data["message"] = generic_error_msg
+                error_log = f"request failed with error code {error_code_new}: {error_msg}"
+                if generic_error_msg:
+                    error_log += f" ({generic_error_msg})"
+                logger.warning(error_log)
+
             return json_data
         except Exception as e:
             logger.error(f"JSON conversion failed: {e}\nResponse was:\n{response.text}")

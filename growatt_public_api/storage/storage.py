@@ -77,9 +77,7 @@ class Storage:
         if parameter_id is None and start_address is None:
             raise ValueError("specify either parameter_id or start_address/end_address")
         elif parameter_id is not None and start_address is not None:
-            raise ValueError(
-                "specify either parameter_id or start_address/end_address - not both."
-            )
+            raise ValueError("specify either parameter_id or start_address/end_address - not both.")
         elif parameter_id is not None:
             # named parameter
             start_address = 0
@@ -104,9 +102,7 @@ class Storage:
 
         inv_setting_response = StorageSettingRead.model_validate(response)
         if inv_setting_response.error_code == 10002:
-            inv_setting_response.error_msg += (
-                " (or type != 2 - check with device.list())"
-            )
+            inv_setting_response.error_msg += " (or type != 2 - check with device.list())"
 
         return inv_setting_response
 
@@ -204,12 +200,8 @@ class Storage:
         if parameter_id == "set_any_reg":
             assert parameter_value_1 is not None, "register address must be provided"
             assert parameter_value_2 is not None, "new value must be provided"
-            assert (
-                parameter_value_3 is None
-            ), "parameter 3 must not be used for set_any_reg"
-            assert (
-                parameter_value_4 is None
-            ), "parameter 4 must not be used for set_any_reg"
+            assert parameter_value_3 is None, "parameter 3 must not be used for set_any_reg"
+            assert parameter_value_4 is None, "parameter 4 must not be used for set_any_reg"
         else:
             assert parameter_value_1 is not None, "new value must be provided"
 
@@ -241,9 +233,7 @@ class Storage:
 
         inv_setting_response = StorageSettingWrite.model_validate(response)
         if inv_setting_response.error_code == 10012:
-            inv_setting_response.error_msg += (
-                " (or type != 2 - check with device.list())"
-            )
+            inv_setting_response.error_msg += " (or type != 2 - check with device.list())"
 
         return inv_setting_response
 

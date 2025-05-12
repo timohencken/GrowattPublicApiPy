@@ -21,6 +21,7 @@ from pbd import Pbd  # noqa: E402
 from smart_meter import SmartMeter  # noqa: E402
 from env_sensor import EnvSensor  # noqa: E402
 from groboost import Groboost  # noqa: E402
+from api_v4 import ApiV4  # noqa: E402
 
 
 class GrowattApi:
@@ -41,6 +42,7 @@ class GrowattApi:
     smart_meter: SmartMeter
     env_sensor: EnvSensor
     groboost: Groboost
+    v4: ApiV4
 
     """
     API documents:
@@ -55,9 +57,7 @@ class GrowattApi:
         token: str = None,
         server_url: Optional[str] = None,
     ) -> None:
-        self.session = GrowattApiSession(
-            token=token, server_url=server_url or "https://openapi.growatt.com"
-        )
+        self.session = GrowattApiSession(token=token, server_url=server_url or "https://openapi.growatt.com")
         self.user = User(self.session)
         self.plant = Plant(self.session)
         self.device = Device(self.session)
@@ -74,3 +74,4 @@ class GrowattApi:
         self.smart_meter = SmartMeter(self.session)
         self.env_sensor = EnvSensor(self.session)
         self.groboost = Groboost(self.session)
+        self.v4 = ApiV4(self.session)

@@ -60,44 +60,28 @@ class MaxDetailData(ApiModel):
     alias: Union[EmptyStrToNone, str] = None  # alias, e.g. 'FDCJQ00003'
     big_device: Union[EmptyStrToNone, bool] = None  # alias, e.g. False
     children: List[Any]  # e.g. []
-    communication_version: Union[EmptyStrToNone, str] = (
-        None  # Communication version number, e.g. 'GJAA-0003'
-    )
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The serial number of the collector, e.g. 'VC51030322020001'
-    )
-    e_today: Union[EmptyStrToNone, float] = (
-        None  # Today’s power generation, e.g. 0  # DEPRECATED
-    )
-    e_total: Union[EmptyStrToNone, float] = (
-        None  # Total Power Generation, e.g. 0  # DEPRECATED
-    )
+    communication_version: Union[EmptyStrToNone, str] = None  # Communication version number, e.g. 'GJAA-0003'
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The serial number of the collector, e.g. 'VC51030322020001'
+    e_today: Union[EmptyStrToNone, float] = None  # Today’s power generation, e.g. 0  # DEPRECATED
+    e_total: Union[EmptyStrToNone, float] = None  # Total Power Generation, e.g. 0  # DEPRECATED
     energy_month: Union[EmptyStrToNone, float] = None  # e.g. 0
     fw_version: Union[EmptyStrToNone, str] = None  # Inverter version, e.g. 'GJ1.0'
     group_id: Union[EmptyStrToNone, int] = None  # e.g. -1
     id: Union[EmptyStrToNone, int] = None  # e.g. 0
     img_path: Union[EmptyStrToNone, str] = None  # e.g. './css/img/status_gray.gif'
-    inner_version: Union[EmptyStrToNone, str] = (
-        None  # Internal version number, e.g. 'GJAA03xx'
-    )
+    inner_version: Union[EmptyStrToNone, str] = None  # Internal version number, e.g. 'GJAA03xx'
     last_update_time: Union[EmptyStrToNone, GrowattTime] = (
         None  # Last update time, e.g. {'date': 12, 'day': 2, 'hours': 16, 'minutes': 46, 'month': 3, 'seconds': 22, 'time': 1649753182000, 'timezoneOffset': -480, 'year': 122}
     )
-    last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # e.g. '2022-04-12 16:46:22'
-    )
+    last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2022-04-12 16:46:22'
     level: Union[EmptyStrToNone, int] = None  # e.g. 4
     location: Union[EmptyStrToNone, str] = None  # address, e.g. ''
-    lost: Union[EmptyStrToNone, bool] = (
-        None  # Device online status (0: online, 1: disconnected), e.g. True
-    )
+    lost: Union[EmptyStrToNone, bool] = None  # Device online status (0: online, 1: disconnected), e.g. True
     model: Union[EmptyStrToNone, int] = None  # model, e.g. 2666130979655057522
-    model_text: Union[EmptyStrToNone, str] = (
-        None  # model, e.g. 'S25B00D00T00P0FU01M0072'
-    )
+    model_text: Union[EmptyStrToNone, str] = None  # model, e.g. 'S25B00D00T00P0FU01M0072'
     parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_VC51030322020001_22'
     plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
-    plantname: Union[EmptyStrToNone, str] = None  # e.g. ''
+    plant_name: Union[EmptyStrToNone, str] = None  # e.g. ''
     port_name: Union[EmptyStrToNone, str] = None  # e.g. 'port_name'
     power: Union[EmptyStrToNone, float] = None  # Current power, e.g. 0
     record: Union[EmptyStrToNone, Any] = None  # e.g. None
@@ -106,9 +90,7 @@ class MaxDetailData(ApiModel):
         None  # Device status (0: waiting, 1: self-check, 3: failure, 4: upgrade, 5, 6, 7, 8: normal mode), e.g. 0
     )
     status_text: Union[EmptyStrToNone, str] = None  # e.g. 'tlx.status.operating'
-    tcp_server_ip: Union[EmptyStrToNone, str] = (
-        None  # Server address, e.g. '47.107.154.111'
-    )
+    tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. '47.107.154.111'
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_FDCJQ00003'
     tree_name: Union[EmptyStrToNone, str] = None  # e.g. 'FDCJQ00003'
     updating: Union[EmptyStrToNone, bool] = None  # e.g. False
@@ -188,6 +170,7 @@ def _max_energy_overview_data_to_camel(snake: str) -> str:
         "ct_qt": "ctqt",
         "datalogger_sn": "dataLogSn",
         "real_op_percent": "realOPPercent",
+        "device_sn": "serialNum",  # align with other endpoints using "deviceSn" instead
         "str_unbalance": "strUnblance",
         "w_pid_fault_value": "wPIDFaultValue",
     }
@@ -210,39 +193,21 @@ class MaxEnergyOverviewData(ApiModel):
     apf_status: Union[EmptyStrToNone, float] = None  # APF/SVG status, e.g. 0
     apf_status_text: Union[EmptyStrToNone, str] = None  # e.g. 'None'
     calendar: Union[EmptyStrToNone, GrowattTimeCalendar] = None
-    comp_har_ir: Union[EmptyStrToNone, int] = (
-        None  # R phase compensation harmonic content, e.g. 0
-    )
-    comp_har_is: Union[EmptyStrToNone, int] = (
-        None  # S phase compensation harmonic content, e.g. 0
-    )
-    comp_har_it: Union[EmptyStrToNone, int] = (
-        None  # T phase compensation harmonic content, e.g. 0
-    )
-    comp_qr: Union[EmptyStrToNone, int] = (
-        None  # R phase compensation reactive power, e.g. 0
-    )
-    comp_qs: Union[EmptyStrToNone, int] = (
-        None  # S phase compensation reactive power, e.g. 0
-    )
-    comp_qt: Union[EmptyStrToNone, int] = (
-        None  # T phase compensation reactive power, e.g. 0
-    )
-    ct_har_ir: Union[EmptyStrToNone, int] = (
-        None  # R phase CT side harmonic content, e.g. 0
-    )
-    ct_har_is: Union[EmptyStrToNone, int] = (
-        None  # S phase CT side harmonic content, e.g. 0
-    )
-    ct_har_it: Union[EmptyStrToNone, int] = (
-        None  # T phase CT side harmonic content, e.g. 0
-    )
-    ct_ir: Union[EmptyStrToNone, int] = None  # R phase CT side current, e.g. 0
-    ct_is: Union[EmptyStrToNone, int] = None  # S phase CT side current, e.g. 0
-    ct_it: Union[EmptyStrToNone, int] = None  # T phase CT side current, e.g. 0
-    ct_qr: Union[EmptyStrToNone, int] = None  # R phase CT side reactive power, e.g. 0
-    ct_qs: Union[EmptyStrToNone, int] = None  # S phase CT side reactive power, e.g. 0
-    ct_qt: Union[EmptyStrToNone, int] = None  # T phase CT side electric power, e.g. 0
+    comp_har_ir: Union[EmptyStrToNone, float] = None  # R phase compensation harmonic content, e.g. 0
+    comp_har_is: Union[EmptyStrToNone, float] = None  # S phase compensation harmonic content, e.g. 0
+    comp_har_it: Union[EmptyStrToNone, float] = None  # T phase compensation harmonic content, e.g. 0
+    comp_qr: Union[EmptyStrToNone, float] = None  # R phase compensation reactive power, e.g. 0
+    comp_qs: Union[EmptyStrToNone, float] = None  # S phase compensation reactive power, e.g. 0
+    comp_qt: Union[EmptyStrToNone, float] = None  # T phase compensation reactive power, e.g. 0
+    ct_har_ir: Union[EmptyStrToNone, float] = None  # R phase CT side harmonic content, e.g. 0
+    ct_har_is: Union[EmptyStrToNone, float] = None  # S phase CT side harmonic content, e.g. 0
+    ct_har_it: Union[EmptyStrToNone, float] = None  # T phase CT side harmonic content, e.g. 0
+    ct_ir: Union[EmptyStrToNone, float] = None  # R phase CT side current, e.g. 0
+    ct_is: Union[EmptyStrToNone, float] = None  # S phase CT side current, e.g. 0
+    ct_it: Union[EmptyStrToNone, float] = None  # T phase CT side current, e.g. 0
+    ct_qr: Union[EmptyStrToNone, float] = None  # R phase CT side reactive power, e.g. 0
+    ct_qs: Union[EmptyStrToNone, float] = None  # S phase CT side reactive power, e.g. 0
+    ct_qt: Union[EmptyStrToNone, float] = None  # T phase CT side electric power, e.g. 0
     current_string1: Union[EmptyStrToNone, float] = None  # String current 1, e.g. 0
     current_string2: Union[EmptyStrToNone, float] = None  # String current 2, e.g. 0
     current_string3: Union[EmptyStrToNone, float] = None  # String current 3, e.g. 0
@@ -262,6 +227,7 @@ class MaxEnergyOverviewData(ApiModel):
     current_string17: Union[EmptyStrToNone, float] = None  # String current n
     current_string18: Union[EmptyStrToNone, float] = None  # String current n
     current_string19: Union[EmptyStrToNone, float] = None  # String current n
+    current_string20: Union[EmptyStrToNone, float] = None  # String current n
     current_string21: Union[EmptyStrToNone, float] = None  # String current n
     current_string22: Union[EmptyStrToNone, float] = None  # String current n
     current_string23: Union[EmptyStrToNone, float] = None  # String current n
@@ -316,9 +282,7 @@ class MaxEnergyOverviewData(ApiModel):
     epv16_today: Union[EmptyStrToNone, float] = None  # e.g. 0
     epv16_total: Union[EmptyStrToNone, float] = None  # e.g. 0
     epv_total: Union[EmptyStrToNone, float] = None  # e.g. 0
-    e_rac_today: Union[EmptyStrToNone, float] = (
-        None  # Reactive power of the day kWh, e.g. 0
-    )
+    e_rac_today: Union[EmptyStrToNone, float] = None  # Reactive power of the day kWh, e.g. 0
     e_rac_total: Union[EmptyStrToNone, float] = None  # Total reactive power kWh, e.g. 0
     fac: Union[EmptyStrToNone, float] = None  # grid frequency, e.g. 50.0099983215332
     fault_code1: Union[EmptyStrToNone, int] = None  # e.g. 2
@@ -347,12 +311,8 @@ class MaxEnergyOverviewData(ApiModel):
     i_pid_pvpe15: Union[EmptyStrToNone, float] = None  # pid current 15 (A), e.g. 0
     i_pid_pvpe16: Union[EmptyStrToNone, float] = None  # pid current 16 (A), e.g. 0
     ipm_temperature: Union[EmptyStrToNone, float] = None  # e.g. 0
-    ipv1: Union[EmptyStrToNone, float] = (
-        None  # PV1 input current, e.g. 5.800000190734863
-    )
-    ipv2: Union[EmptyStrToNone, float] = (
-        None  # PV2 input current, e.g. 6.099999904632568
-    )
+    ipv1: Union[EmptyStrToNone, float] = None  # PV1 input current, e.g. 5.800000190734863
+    ipv2: Union[EmptyStrToNone, float] = None  # PV2 input current, e.g. 6.099999904632568
     ipv3: Union[EmptyStrToNone, float] = None  # PV3 input current, e.g. 0
     ipv4: Union[EmptyStrToNone, float] = None
     ipv5: Union[EmptyStrToNone, float] = None
@@ -377,7 +337,7 @@ class MaxEnergyOverviewData(ApiModel):
     pact: Union[EmptyStrToNone, float] = None  # e.g. 0
     p_bus_voltage: Union[EmptyStrToNone, float] = None  # e.g. 367
     pf: Union[EmptyStrToNone, float] = None  # e.g. 0.08100000023841858
-    pid_bus: Union[EmptyStrToNone, int] = None
+    pid_bus: Union[EmptyStrToNone, float] = None
     pid_fault_code: Union[EmptyStrToNone, int] = None
     pid_status: Union[EmptyStrToNone, int] = None
     pid_status_text: Union[EmptyStrToNone, str] = None
@@ -408,30 +368,22 @@ class MaxEnergyOverviewData(ApiModel):
     react_power_total: Union[EmptyStrToNone, float] = None
     real_op_percent: Union[EmptyStrToNone, float] = None  # e.g. 50
     s_dci: Union[EmptyStrToNone, float] = None  # S-phase DC component
-    serial_num: Union[EmptyStrToNone, str] = None  # e.g. 'BNE9A5100D'
-    status: Union[EmptyStrToNone, int] = (
-        None  # Min Status (0: waiting, 1: normal, 2: fault), e.g. 1
-    )
+    device_sn: Union[EmptyStrToNone, str] = None  # e.g. 'BNE9A5100D'
+    status: Union[EmptyStrToNone, int] = None  # Max status (0: Standby, 1: , 2: Discharge, 3: Fault, 4: Flash), e.g. 1
     status_text: Union[EmptyStrToNone, str] = None  # e.g. 'Normal'
-    str_Break: Union[EmptyStrToNone, int] = None  # The string is not connected
-    str_Fault: Union[EmptyStrToNone, int] = None  # String error
+    str_break: Union[EmptyStrToNone, int] = None  # The string is not connected
+    str_fault: Union[EmptyStrToNone, int] = None  # String error
     str_unbalance: Union[EmptyStrToNone, int] = None  # Uneven string flow
     str_unmatch: Union[EmptyStrToNone, int] = None  # The string does not match
     t_dci: Union[EmptyStrToNone, float] = None  # T-phase DC component, e.g. 0
-    temperature: Union[EmptyStrToNone, float] = (
-        None  # AMTemp1(°C), e.g. 47.79999923706055
-    )
+    temperature: Union[EmptyStrToNone, float] = None  # AMTemp1(°C), e.g. 47.79999923706055
     temperature2: Union[EmptyStrToNone, float] = None  # INVTemp(°C), e.g. 0
     temperature3: Union[EmptyStrToNone, float] = None  # BTTemp(°C), e.g. 0
     temperature4: Union[EmptyStrToNone, float] = None  # OUTTemp(°C), e.g. 0
-    temperature5: Union[EmptyStrToNone, float] = (
-        None  # AMTemp2(°C), e.g. 51.70000076293945
-    )
+    temperature5: Union[EmptyStrToNone, float] = None  # AMTemp2(°C), e.g. 51.70000076293945
     time: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2022-04-09 14:52:39'
     time_calendar: Union[EmptyStrToNone, GrowattTimeCalendar] = None
-    time_total: Union[EmptyStrToNone, float] = (
-        None  # Total running time, e.g. 1625146.9
-    )
+    time_total: Union[EmptyStrToNone, float] = None  # Total running time, e.g. 1625146.9
     vacr: Union[EmptyStrToNone, float] = None  # R phase voltage (V), e.g. 239.5
     vac_rs: Union[EmptyStrToNone, float] = None  # RS line voltage, e.g. 239.5
     vacs: Union[EmptyStrToNone, float] = None  # S phase voltage (V), e.g. 239.5
@@ -507,9 +459,7 @@ class MaxEnergyOverviewData(ApiModel):
     warning_value1: Union[EmptyStrToNone, int] = None
     warning_value2: Union[EmptyStrToNone, int] = None
     warning_value3: Union[EmptyStrToNone, int] = None
-    with_time: Union[EmptyStrToNone, bool] = (
-        None  # Whether the data sent has its own time, e.g. False
-    )
+    with_time: Union[EmptyStrToNone, bool] = None  # Whether the data sent has its own time, e.g. False
     w_pid_fault_value: Union[EmptyStrToNone, int] = None
     w_string_status_value: Union[EmptyStrToNone, int] = None
 
@@ -529,9 +479,7 @@ class MaxEnergyOverview(ApiResponse):
     )
 
     data: Union[EmptyStrToNone, MaxEnergyOverviewData] = None
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "ZT00100001"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "ZT00100001"
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
 
 
@@ -541,9 +489,7 @@ class MaxEnergyOverview(ApiResponse):
 
 class MaxEnergyOverviewMultipleItem(ApiModel):
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. "ZT00100001"
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "ZT00100001"
     data: Union[EmptyStrToNone, MaxEnergyOverviewData] = None
 
 
@@ -574,9 +520,7 @@ class MaxEnergyHistoryData(ApiModel):
     )
 
     count: int  # Total Records
-    datalogger_sn: Union[EmptyStrToNone, str] = (
-        None  # The collector SN of the inverter, e.g. ""SATA818009""
-    )
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. ""SATA818009""
     datas: List[MaxEnergyOverviewData]
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. ""TLMAX00B01""
     next_page_start_id: Union[EmptyStrToNone, int] = None  # 21
@@ -593,15 +537,9 @@ class MaxEnergyHistory(ApiResponse):
 class MaxAlarm(ApiModel):
     alarm_code: Union[EmptyStrToNone, int] = None  # alarm code, e.g. 25
     status: Union[EmptyStrToNone, int] = None  # e.g. 1
-    end_time: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # Alarm start time, e.g. "2019-03-09 09:55:55.0"
-    )
-    start_time: Union[EmptyStrToNone, datetime.datetime] = (
-        None  # Alarm end time, e.g. "2019-03-09 09:55:55.0"
-    )
-    alarm_message: Union[EmptyStrToNone, str] = (
-        None  # alarm information, e.g. "No utility."
-    )
+    end_time: Union[EmptyStrToNone, datetime.datetime] = None  # Alarm start time, e.g. "2019-03-09 09:55:55.0"
+    start_time: Union[EmptyStrToNone, datetime.datetime] = None  # Alarm end time, e.g. "2019-03-09 09:55:55.0"
+    alarm_message: Union[EmptyStrToNone, str] = None  # alarm information, e.g. "No utility."
 
 
 def _max_alarms_data_to_camel(snake: str) -> str:
