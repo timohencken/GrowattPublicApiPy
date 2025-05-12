@@ -48,9 +48,9 @@ if __name__ == "__main__":
     # pprint.pprint(k2.model_dump(), indent=4, width=500)
     # # FIXME DEBUG
 
+    # TODO API v4
     # TODO user
 
-    # TODO spa
     # TODO pcs
     # TODO hps
     # TODO pbd
@@ -58,7 +58,11 @@ if __name__ == "__main__":
     # TODO Environmental tester
     # TODO groBoost
 
-    # TODO spa
+    # TODO pcs
+
+    # spa
+    _spa_energy_multiple_ = ga.spa.energy_multiple(device_sn=INVERTER_SN)
+    _spa_energy_history_ = ga.spa.energy_history(device_sn=INVERTER_SN)
     _spa_energy_ = ga.spa.energy(device_sn=INVERTER_SN)
     _spa_details_ = ga.spa.details(device_sn=INVERTER_SN)
     _spa_setting_read_by_name_ = ga.spa.setting_read(
