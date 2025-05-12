@@ -70,7 +70,7 @@ class Device:
             returned "device_type" mappings:
              1: inverter (including MAX)
              2: storage
-             3: other
+             3: other (datalogger, smart meter, environmental sensor, ...)
              4: max (single MAX)
              5: sph
              6: spa
