@@ -4,12 +4,27 @@ from typing import List, Union, Any, Dict
 from pydantic import ConfigDict
 from pydantic.alias_generators import to_camel
 
-from growatt_public_api.pydantic_models.api_model import (
+from pydantic_models.api_model import (
     ApiResponse,
     ApiModel,
     EmptyStrToNone,
     GrowattTime,
 )
+
+# #####################################################################################################################
+# Add datalogger ######################################################################################################
+
+
+class DataloggerAdd(ApiResponse):
+    data: Union[EmptyStrToNone, str] = None
+
+
+# #####################################################################################################################
+# Delete datalogger ###################################################################################################
+
+
+class DataloggerDelete(ApiResponse):
+    data: Union[EmptyStrToNone, str] = None
 
 
 # #####################################################################################################################
@@ -203,23 +218,41 @@ class PlantTwo(ApiModel):
     timezone_text: Union[EmptyStrToNone, str] = None  # 'GMT 1'
     tree_id: Union[EmptyStrToNone, str] = None  # 'PLANT_0000000'
     tree_name: Union[EmptyStrToNone, str] = None  # 'Balkondach'
-    unit_map: Any  # None
+    unit_map: Union[EmptyStrToNone, Any] = None  # None
     user_account: Union[EmptyStrToNone, str] = None  # username
-    user_bean: Any  # None
+    user_bean: Union[EmptyStrToNone, Any] = None  # None
     valley_period_price: Union[EmptyStrToNone, float] = None  # 0
     wind_angle: Union[EmptyStrToNone, float] = None  # 0
     wind_speed: Union[EmptyStrToNone, float] = None  # 0
 
 
+def _datalogger_data_to_camel(snake: str) -> str:
+    override = {
+        "datalogger_sn": "sn",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class DataloggerData(ApiModel):
-    last_update_time: GrowattTime  # Last data received time, e.g. {'date': 25, 'day': 2, 'hours': 0, 'minutes': 32, 'month': 1, 'seconds': 1, 'time': 1740414721500, 'timezoneOffset': -480, 'year': 125}
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_datalogger_data_to_camel,
+        protected_namespaces=(),  # allow model_* keywords
+    )
+
+    last_update_time: Union[EmptyStrToNone, GrowattTime] = (
+        None  # Last data received time, e.g. {'date': 25, 'day': 2, 'hours': 0, 'minutes': 32, 'month': 1, 'seconds': 1, 'time': 1740414721500, 'timezoneOffset': -480, 'year': 125}
+    )
     lost: Union[EmptyStrToNone, bool] = None  # True
     manufacturer: Union[EmptyStrToNone, str] = (
         None  # collector manufacturer, e.g. 'Growatt'
     )
     model: Union[EmptyStrToNone, str] = None  # 'ShineWeFi'
     netmode: Union[EmptyStrToNone, str] = None  # NONE | WIFI | 4G | LAN, e.g. 'NONE'
-    sn: Union[EmptyStrToNone, str] = None  # Collector SN, e.g. 'QMN000BZP0000000'
+    datalogger_sn: Union[EmptyStrToNone, str] = (
+        None  # Collector SN, e.g. 'QMN000BZP0000000'
+    )
     type: Union[EmptyStrToNone, int] = None  # Collector type, e.g. 0
 
 

@@ -3,7 +3,7 @@ from typing import Optional, Union, List
 
 import truststore
 
-from growatt_public_api.pydantic_models.min import (
+from pydantic_models.min import (
     MinSettingRead,
     MinSettingWrite,
     MinDetails,
@@ -16,7 +16,7 @@ from growatt_public_api.pydantic_models.min import (
 )
 
 truststore.inject_into_ssl()
-from growatt_public_api.session import GrowattApiSession  # noqa: E402
+from session import GrowattApiSession  # noqa: E402
 
 
 class Min:

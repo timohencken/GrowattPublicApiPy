@@ -1,4 +1,3 @@
-from enum import IntEnum
 from typing import Optional
 
 import truststore
@@ -22,21 +21,6 @@ from pbd import Pbd  # noqa: E402
 from smart_meter import SmartMeter  # noqa: E402
 from env_sensor import EnvSensor  # noqa: E402
 from groboost import Groboost  # noqa: E402
-
-
-class GrowattDeviceType(IntEnum):
-    inverter = 1  # (including MAX)
-    storage = 2
-    other = 3  # smart meter / environmental tester / vpp
-    max = 4
-    sph = 5
-    spa = 6  # MIX
-    min = 7  # MIN / MAC / MOD-XH / MID-XH / NEO
-    pcs = 8
-    hps = 9
-    pbd = 10
-    groboost = 11
-    # vpp: supported by min, spa, sph
 
 
 class GrowattApi:

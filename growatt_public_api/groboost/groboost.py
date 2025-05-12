@@ -3,7 +3,7 @@ from typing import Optional, Union, List
 
 import truststore
 
-from growatt_public_api.pydantic_models.groboost import (
+from pydantic_models.groboost import (
     GroboostDetails,
     GroboostMetricsOverview,
     GroboostMetricsHistory,
@@ -12,7 +12,7 @@ from growatt_public_api.pydantic_models.groboost import (
 )
 
 truststore.inject_into_ssl()
-from growatt_public_api.session import GrowattApiSession  # noqa: E402
+from session import GrowattApiSession  # noqa: E402
 
 
 class Groboost:

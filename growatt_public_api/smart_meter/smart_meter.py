@@ -3,14 +3,14 @@ from typing import Optional
 
 import truststore
 
-from growatt_public_api.pydantic_models.smart_meter import (
+from pydantic_models.smart_meter import (
     SmartMeterList,
     SmartMeterEnergyOverview,
     SmartMeterEnergyHistory,
 )
 
 truststore.inject_into_ssl()
-from growatt_public_api.session import GrowattApiSession  # noqa: E402
+from session import GrowattApiSession  # noqa: E402
 
 
 class SmartMeter:

@@ -4,7 +4,7 @@ from typing import Union, Any, List
 from pydantic import ConfigDict
 from pydantic.alias_generators import to_camel
 
-from growatt_public_api.pydantic_models.api_model import (
+from pydantic_models.api_model import (
     ApiResponse,
     EmptyStrToNone,
     GrowattTime,
