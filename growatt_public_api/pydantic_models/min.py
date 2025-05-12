@@ -1,6 +1,7 @@
 import datetime
 from typing import Union, Any, List, Optional, TypeAlias
 
+from loguru import logger
 from pydantic import (
     ConfigDict,
     BeforeValidator,
@@ -29,6 +30,8 @@ def _min_tlx_settings_data_to_camel(snake: str) -> str:
         "backflow_single_ctrl": "backFlowSingleCtrl",
         "discharge_power_command": "disChargePowerCommand",
         "on_grid_discharge_stop_soc": "onGridDischargeStopSOC",
+        "tlx_lcd_language": "tlx_lcd_Language",
+        "tlx_exter_comm_off_grid_en": "tlx_exter_comm_Off_GridEn",
         "ub_ac_charging_stop_soc": "ubAcChargingStopSOC",
         "ub_peak_shaving_backup_soc": "ubPeakShavingBackupSOC",
         "uw_hf_rt2_ee": "uwHFRT2EE",
@@ -40,7 +43,7 @@ def _min_tlx_settings_data_to_camel(snake: str) -> str:
         "uw_lv_rt2_ee": "uwLVRT2EE",
         "uw_lv_rt_ee": "uwLVRTEE",
         "vbat_start_for_charge": "vbatStartforCharge",
-        "w_charge_soc_low_Limit": "wchargeSOCLowLimit",
+        "w_charge_soc_low_limit": "wchargeSOCLowLimit",
         "w_discharge_soc_low_limit": "wdisChargeSOCLowLimit",
         "win_mode_off_grid_discharge_stop_soc": "winModeOffGridDischargeStopSOC",
         "win_mode_on_grid_discharge_stop_soc": "winModeOnGridDischargeStopSOC",
@@ -51,10 +54,12 @@ def _min_tlx_settings_data_to_camel(snake: str) -> str:
 def parse_forced_time(value: Optional[str] = None):
     """support 0:0 for 00:00"""
     if value and value.strip():
+        # noinspection PyBroadException
         try:
             return datetime.datetime.strptime(value, "%H:%M").time()
-        except Exception as e:
-            raise ValueError(str(e))
+        except:  # noqa: E722 do not use bare 'except'
+            logger.warning(f'invalid time "{value}" set to None')
+            return None
     else:
         return None
 
@@ -103,7 +108,7 @@ class MinTlxSettingsData(ApiModel):
     eps_freq_set: Union[EmptyStrToNone, float] = None  # Emergency power frequency (0=50Hz, 1=60Hz), e.g. 0
     eps_fun_en: Union[EmptyStrToNone, bool] = None  # Emergency power enable (0=disable 1=enable), e.g. 1
     eps_volt_set: Union[EmptyStrToNone, int] = None  # emergency power supply voltage (0=230, 1=208, 2=240), e.g. 2
-    export_limit: Union[EmptyStrToNone, float] = None  # Anti-backflow enable, e.g. 0
+    export_limit: Union[EmptyStrToNone, int] = None  # Anti-backflow enable, e.g. 0
     export_limit_power_rate: Union[EmptyStrToNone, float] = None  # Backflow Prevention, e.g. 0
     export_limit_power_rate_str: Union[EmptyStrToNone, str] = None  # e.g. ''
     exter_comm_off_grid_en: Union[EmptyStrToNone, bool] = None  # Manual off-grid enable, e.g. 0
@@ -287,7 +292,7 @@ class MinTlxSettingsData(ApiModel):
     tlx_dry_contact_enable: Union[EmptyStrToNone, int] = None  # e.g. ''
     tlx_dry_contact_off_power: Union[EmptyStrToNone, float] = None  # e.g. ''
     tlx_dry_contact_power: Union[EmptyStrToNone, float] = None  # e.g. ''
-    tlx_exter_comm_off_griden: Union[EmptyStrToNone, str] = None  # e.g. ''
+    tlx_exter_comm_off_grid_en: Union[EmptyStrToNone, str] = None  # e.g. ''
     tlx_lcd_language: Union[EmptyStrToNone, int] = None  # e.g. ''
     tlx_limit_device: Union[EmptyStrToNone, float] = None  # e.g. ''
     tlx_off_grid_enable: Union[EmptyStrToNone, int] = None  # e.g. ''
@@ -363,7 +368,7 @@ class MinSettings(ApiResponse):
 
 
 class MinSettingRead(ApiResponse):
-    data: Union[EmptyStrToNone, str] = None  # current setting / register value
+    data: Union[EmptyStrToNone, Any] = None  # current setting / register value
 
 
 # #####################################################################################################################
@@ -406,6 +411,7 @@ class MinDetailData(ApiModel):
         protected_namespaces=(),  # allow model_* keywords
     )
 
+    afci_version: Union[EmptyStrToNone, str] = None  # e.g. ''
     address: Union[EmptyStrToNone, int] = None  # Inverter address, e.g. 1
     alias: Union[EmptyStrToNone, str] = None  # alias, e.g. 'FDCJQ00003'
     bat_aging_test_step: Union[EmptyStrToNone, int] = (
@@ -494,7 +500,7 @@ class MinDetailData(ApiModel):
     )
     status_text: Union[EmptyStrToNone, str] = None  # e.g. 'tlx.status.operating'
     str_num: Union[EmptyStrToNone, int] = None  # e.g. 0
-    sys_time: Union[EmptyStrToNone, str] = None  # System time, e.g. ''
+    sys_time: Union[EmptyStrToNone, datetime.datetime] = None  # System time, e.g. ''
     tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. '47.107.154.111'
     timezone: Union[EmptyStrToNone, float] = None  # e.g. 8.0 / 1.0
     tlx_set_bean: Union[EmptyStrToNone, MinTlxSettingsData] = None
@@ -596,7 +602,7 @@ def _min_energy_overview_data_to_camel(snake: str) -> str:
     return override.get(snake, to_camel(snake=snake))
 
 
-class MinEnergyOverviewBasic(ApiModel):
+class MinEnergyOverviewData(ApiModel):
     """
     energy() returns full set of parameters -> MinEnergyOverviewFull
     energy_history() returns reduced set of parameters -> MinEnergyOverviewBasic
@@ -608,7 +614,13 @@ class MinEnergyOverviewBasic(ApiModel):
         alias_generator=_min_energy_overview_data_to_camel,
     )
 
+    alias: Union[EmptyStrToNone, str] = None  # e.g. ''
+    again: Union[EmptyStrToNone, bool] = None  # e.g. False
+    address: Union[EmptyStrToNone, int] = None  # e.g. 0
+    b_merter_connect_flag: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    bat_sn: Union[EmptyStrToNone, str] = None  # e.g. ''
     battery_no: Union[EmptyStrToNone, int] = None  # e.g. 0
+    battery_sn: Union[EmptyStrToNone, str] = None  # e.g. ''
     bdc1_charge_power: Union[EmptyStrToNone, float] = None  # e.g. 0
     bdc1_charge_total: Union[EmptyStrToNone, float] = None  # e.g. 0
     bdc1_discharge_power: Union[EmptyStrToNone, float] = None  # e.g. 0
@@ -649,6 +661,7 @@ class MinEnergyOverviewBasic(ApiModel):
     bdc_status: Union[EmptyStrToNone, int] = None  # e.g. 0
     bdc_vbus2_neg: Union[EmptyStrToNone, float] = None  # e.g. 0
     bdc_warn_sub_code: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bgrid_type: Union[EmptyStrToNone, int] = None  # e.g. 0
     bms_communication_type: Union[EmptyStrToNone, int] = None  # e.g. 0
     bms_cv_volt: Union[EmptyStrToNone, float] = None  # e.g. 0
     bms_error2: Union[EmptyStrToNone, int] = None  # e.g. 0
@@ -672,7 +685,10 @@ class MinEnergyOverviewBasic(ApiModel):
     bms_vdelta: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     bms_warn2: Union[EmptyStrToNone, int] = None  # e.g. 0
     bms_warn_code: Union[EmptyStrToNone, float] = None  # e.g. 0
+    bsystem_work_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
     calendar: Union[EmptyStrToNone, GrowattTimeCalendar] = None
+    datalogger_sn: Union[EmptyStrToNone, str] = None  # e.g. 'QMN0000000000000'
+    day: Union[EmptyStrToNone, str] = None  # e.g. ''
     dc_voltage: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     dci_r: Union[EmptyStrToNone, float] = None  # e.g. 12.0
     dci_s: Union[EmptyStrToNone, float] = None  # e.g. 0.0
@@ -696,6 +712,8 @@ class MinEnergyOverviewBasic(ApiModel):
     e_local_load_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     e_local_load_total: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     eps_fac: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    eps_pac_split_phase1: Union[EmptyStrToNone, float] = None  # e.g. 0
+    eps_pac_split_phase2: Union[EmptyStrToNone, float] = None  # e.g. 0
     eps_iac1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     eps_iac2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     eps_iac3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
@@ -707,6 +725,8 @@ class MinEnergyOverviewBasic(ApiModel):
     eps_vac1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     eps_vac2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     eps_vac3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    eps_vac_split_phase1: Union[EmptyStrToNone, float] = None  # e.g. 0
+    eps_vac_split_phase2: Union[EmptyStrToNone, float] = None  # e.g. 0
     epv1_today: Union[EmptyStrToNone, float] = None  # e.g. 13.199999809265137
     epv1_total: Union[EmptyStrToNone, float] = None  # e.g. 926.6
     epv2_today: Union[EmptyStrToNone, float] = None  # e.g. 8.199999809265137
@@ -716,6 +736,7 @@ class MinEnergyOverviewBasic(ApiModel):
     epv4_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     epv4_total: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     epv_total: Union[EmptyStrToNone, float] = None  # e.g. 1833.0
+    error_text: Union[EmptyStrToNone, str] = None  # e.g. 'Unknown'
     e_self_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     e_self_total: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     e_system_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
@@ -731,6 +752,9 @@ class MinEnergyOverviewBasic(ApiModel):
     iac1: Union[EmptyStrToNone, float] = None  # Grid Current1, e.g. 10.699999809265137
     iac2: Union[EmptyStrToNone, float] = None  # Grid Current2, e.g. 0.0
     iac3: Union[EmptyStrToNone, float] = None  # Grid Current3, e.g. 0.0
+    iacr: Union[EmptyStrToNone, float] = None  # e.g. 0
+    iac_split_phase1: Union[EmptyStrToNone, float] = None  # e.g. 0
+    iac_split_phase2: Union[EmptyStrToNone, float] = None  # e.g. 0
     inv_delay_time: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     ipv1: Union[EmptyStrToNone, float] = None  # PV1 input current, e.g. 5.800000190734863
     ipv2: Union[EmptyStrToNone, float] = None  # PV2 input current, e.g. 6.099999904632568
@@ -739,6 +763,9 @@ class MinEnergyOverviewBasic(ApiModel):
     is_again: Union[EmptyStrToNone, bool] = None  # Is it a continuation, e.g. False
     iso: Union[EmptyStrToNone, float] = None  # e.g. 3135
     load_percent: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    lost: Union[EmptyStrToNone, bool] = None  # e.g. True
+    mtnc_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
+    mtnc_rqst: Union[EmptyStrToNone, float] = None  # e.g. 0
     n_bus_voltage: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     new_warn_code: Union[EmptyStrToNone, int] = None  # e.g. 0
     new_warn_sub_code: Union[EmptyStrToNone, int] = None  # e.g. 0
@@ -749,6 +776,7 @@ class MinEnergyOverviewBasic(ApiModel):
     pac1: Union[EmptyStrToNone, float] = None  # Inverter output apparent power 1, e.g. 2530.699951171875
     pac2: Union[EmptyStrToNone, float] = None  # Inverter output apparent power 2, e.g. 0.0
     pac3: Union[EmptyStrToNone, float] = None  # Inverter output apparent power 3, e.g. 0.0
+    pacr: Union[EmptyStrToNone, float] = None  # e.g. 0
     pac_to_grid_total: Union[EmptyStrToNone, float] = None  # Grid countercurrent total power, e.g. 0.0
     pac_to_local_load: Union[EmptyStrToNone, float] = None  # Total load power, e.g. 0.0
     pac_to_user_total: Union[EmptyStrToNone, float] = None  # Grid downstream total power, e.g. 0.0
@@ -764,7 +792,10 @@ class MinEnergyOverviewBasic(ApiModel):
     p_system: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     real_op_percent: Union[EmptyStrToNone, float] = None  # e.g. 50
     device_sn: Union[EmptyStrToNone, str] = None  # e.g. 'AFE494403F'
+    soc1: Union[EmptyStrToNone, float] = None  # e.g. 0
+    soc2: Union[EmptyStrToNone, float] = None  # e.g. 0
     status: Union[EmptyStrToNone, int] = None  # Min Status (0: waiting, 1: normal, 2: fault), e.g. 1
+    status_text: Union[EmptyStrToNone, str] = None  # e.g. 'Normal'
     sys_fault_word: Union[EmptyStrToNone, int] = None  # e.g. 0
     sys_fault_word1: Union[EmptyStrToNone, int] = None  # e.g. 0
     sys_fault_word2: Union[EmptyStrToNone, int] = None  # e.g. 0
@@ -778,13 +809,19 @@ class MinEnergyOverviewBasic(ApiModel):
     temp3: Union[EmptyStrToNone, float] = None  # e.g. 0
     temp4: Union[EmptyStrToNone, float] = None  # e.g. 0
     temp5: Union[EmptyStrToNone, float] = None  # e.g. 51.70000076293945
+    t_mtnc_strt: Union[EmptyStrToNone, str] = None  # e.g. ''
     time: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2022-04-09 14:52:39'
     time_total: Union[EmptyStrToNone, float] = None  # Total running time, e.g. 1625146.9
+    tlx_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
     total_working_time: Union[EmptyStrToNone, float] = None  # e.g. 0
+    t_win_end: Union[EmptyStrToNone, str] = None  # e.g. ''
+    t_win_start: Union[EmptyStrToNone, str] = None  # e.g. ''
     uw_sys_work_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
     vac1: Union[EmptyStrToNone, float] = None  # Grid voltage 1, e.g. 239.5
     vac2: Union[EmptyStrToNone, float] = None  # Grid voltage 2, e.g. 0
     vac3: Union[EmptyStrToNone, float] = None  # Grid voltage 3, e.g. 0
+    vacr: Union[EmptyStrToNone, float] = None  # e.g. 0
+    vacrs: Union[EmptyStrToNone, float] = None  # e.g. 0
     vac_rs: Union[EmptyStrToNone, float] = None  # RS line voltage, e.g. 239.5
     vac_st: Union[EmptyStrToNone, float] = None  # ST line voltage, e.g. 0
     vac_tr: Union[EmptyStrToNone, float] = None  # TR line voltage, e.g. 0
@@ -794,44 +831,6 @@ class MinEnergyOverviewBasic(ApiModel):
     vpv4: Union[EmptyStrToNone, float] = None  # PV4 input voltage, e.g. 0
     warn_code: Union[EmptyStrToNone, int] = None  # e.g. 220
     warn_code1: Union[EmptyStrToNone, int] = None  # e.g. 2
-
-
-class MinEnergyOverviewFull(MinEnergyOverviewBasic):
-    """
-    energy() returns full set of parameters -> MinEnergyOverviewFull
-    energy_history() returns reduced set of parameters -> MinEnergyOverviewBasic
-    """
-
-    model_config = ConfigDict(
-        from_attributes=True,
-        populate_by_name=True,
-        alias_generator=_min_energy_overview_data_to_camel,
-    )
-    address: Union[EmptyStrToNone, int] = None  # e.g. 0
-    again: Union[EmptyStrToNone, bool] = None  # e.g. False
-    alias: Union[EmptyStrToNone, str] = None  # e.g. ''
-    b_merter_connect_flag: Union[EmptyStrToNone, bool] = None  # e.g. 0
-    bat_sn: Union[EmptyStrToNone, str] = None  # e.g. ''
-    battery_sn: Union[EmptyStrToNone, str] = None  # e.g. ''
-    bgrid_type: Union[EmptyStrToNone, int] = None  # e.g. 0
-    bsystem_work_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
-    datalogger_sn: Union[EmptyStrToNone, str] = None  # e.g. 'QMN0000000000000'
-    day: Union[EmptyStrToNone, str] = None  # e.g. ''
-    error_text: Union[EmptyStrToNone, str] = None  # e.g. 'Unknown'
-    iacr: Union[EmptyStrToNone, float] = None  # e.g. 0
-    lost: Union[EmptyStrToNone, bool] = None  # e.g. True
-    mtnc_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
-    mtnc_rqst: Union[EmptyStrToNone, float] = None  # e.g. 0
-    pacr: Union[EmptyStrToNone, float] = None  # e.g. 0
-    soc1: Union[EmptyStrToNone, float] = None  # e.g. 0
-    soc2: Union[EmptyStrToNone, float] = None  # e.g. 0
-    status_text: Union[EmptyStrToNone, str] = None  # e.g. 'Normal'
-    t_mtnc_strt: Union[EmptyStrToNone, str] = None  # e.g. ''
-    t_win_end: Union[EmptyStrToNone, str] = None  # e.g. ''
-    t_win_start: Union[EmptyStrToNone, str] = None  # e.g. ''
-    tlx_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
-    vacr: Union[EmptyStrToNone, float] = None  # e.g. 0
-    vacrs: Union[EmptyStrToNone, float] = None  # e.g. 0
     warn_text: Union[EmptyStrToNone, str] = None  # e.g. 'Unknown'
     win_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
     win_off_grid_soc: Union[EmptyStrToNone, float] = None  # e.g. 0
@@ -854,7 +853,7 @@ class MinEnergyOverview(ApiResponse):
         alias_generator=_min_energy_overview_to_camel,
     )
 
-    data: Union[EmptyStrToNone, MinEnergyOverviewFull] = None
+    data: Union[EmptyStrToNone, MinEnergyOverviewData] = None
     datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "ZT00100001"
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
 
@@ -866,7 +865,7 @@ class MinEnergyOverview(ApiResponse):
 class MinEnergyOverviewMultipleItem(ApiModel):
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
     datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "ZT00100001"
-    data: Union[EmptyStrToNone, MinEnergyOverviewFull] = None
+    data: Union[EmptyStrToNone, MinEnergyOverviewData] = None
 
 
 class MinEnergyOverviewMultiple(ApiResponse):
@@ -899,7 +898,7 @@ class MinEnergyHistoryData(ApiModel):
     next_page_start_id: Union[EmptyStrToNone, int] = None  # 21
     device_sn: Union[EmptyStrToNone, str] = None  # Device SN, e.g. "CRAZT00001"
     datalogger_sn: Union[EmptyStrToNone, str] = None  # The collector SN of the inverter, e.g. "ZT00100001"
-    datas: List[MinEnergyOverviewBasic]
+    datas: List[MinEnergyOverviewData]
 
 
 class MinEnergyHistory(ApiResponse):

@@ -56,45 +56,87 @@ class MaxDetailData(ApiModel):
         protected_namespaces=(),  # allow model_* keywords
     )
 
+    active_rate: Union[EmptyStrToNone, float] = None  # e.g. 0
     address: Union[EmptyStrToNone, int] = None  # Inverter address, e.g. 1
     alias: Union[EmptyStrToNone, str] = None  # alias, e.g. 'FDCJQ00003'
+    backflow_default_power: Union[EmptyStrToNone, float] = None  # e.g. 0
     big_device: Union[EmptyStrToNone, bool] = None  # alias, e.g. False
     children: List[Any]  # e.g. []
     communication_version: Union[EmptyStrToNone, str] = None  # Communication version number, e.g. 'GJAA-0003'
     datalogger_sn: Union[EmptyStrToNone, str] = None  # The serial number of the collector, e.g. 'VC51030322020001'
+    device_type: Union[EmptyStrToNone, int] = None  # e.g. 0
+    dtc: Union[EmptyStrToNone, int] = None  # e.g. 5000
     e_today: Union[EmptyStrToNone, float] = None  # Today’s power generation, e.g. 0  # DEPRECATED
     e_total: Union[EmptyStrToNone, float] = None  # Total Power Generation, e.g. 0  # DEPRECATED
+    energy_day: Union[EmptyStrToNone, float] = None  # e.g. 0
+    energy_day_map: Union[EmptyStrToNone, dict] = None  # e.g. {}
+    energy_month_text: Union[EmptyStrToNone, str] = None  # e.g. '0'
     energy_month: Union[EmptyStrToNone, float] = None  # e.g. 0
+    export_limit: Union[EmptyStrToNone, int] = None  # e.g. 0
+    export_limit_power_rate: Union[EmptyStrToNone, float] = None  # e.g. 0
+    fac_high: Union[EmptyStrToNone, float] = None  # e.g. 0
+    fac_low: Union[EmptyStrToNone, float] = None  # e.g. 0
+    frequency_high_limit: Union[EmptyStrToNone, float] = None  # e.g. 0
+    frequency_low_limit: Union[EmptyStrToNone, float] = None  # e.g. 0
     fw_version: Union[EmptyStrToNone, str] = None  # Inverter version, e.g. 'GJ1.0'
     group_id: Union[EmptyStrToNone, int] = None  # e.g. -1
     id: Union[EmptyStrToNone, int] = None  # e.g. 0
     img_path: Union[EmptyStrToNone, str] = None  # e.g. './css/img/status_gray.gif'
     inner_version: Union[EmptyStrToNone, str] = None  # Internal version number, e.g. 'GJAA03xx'
+    is_authorize: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    is_timing_authorize: Union[EmptyStrToNone, bool] = None  # e.g. 0
     last_update_time: Union[EmptyStrToNone, GrowattTime] = (
         None  # Last update time, e.g. {'date': 12, 'day': 2, 'hours': 16, 'minutes': 46, 'month': 3, 'seconds': 22, 'time': 1649753182000, 'timezoneOffset': -480, 'year': 122}
     )
     last_update_time_text: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2022-04-12 16:46:22'
+    lcd_language: Union[EmptyStrToNone, int] = None  # e.g. 0
     level: Union[EmptyStrToNone, int] = None  # e.g. 4
     location: Union[EmptyStrToNone, str] = None  # address, e.g. ''
     lost: Union[EmptyStrToNone, bool] = None  # Device online status (0: online, 1: disconnected), e.g. True
+    max_set_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
     model: Union[EmptyStrToNone, int] = None  # model, e.g. 2666130979655057522
     model_text: Union[EmptyStrToNone, str] = None  # model, e.g. 'S25B00D00T00P0FU01M0072'
+    normal_power: Union[EmptyStrToNone, int] = None  # e.g. 80000
+    on_off: Union[EmptyStrToNone, bool] = None  # e.g. 0
     parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_VC51030322020001_22'
+    pf: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pflinep1_pf: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pflinep1_lp: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pflinep2_lp: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pflinep2_pf: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pflinep3_lp: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pflinep3_pf: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pflinep4_lp: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pflinep4_pf: Union[EmptyStrToNone, float] = None  # e.g. 0
+    pf_model: Union[EmptyStrToNone, int] = None  # e.g. 0
     plant_id: Union[EmptyStrToNone, int] = None  # e.g. 0
     plant_name: Union[EmptyStrToNone, str] = None  # e.g. ''
     port_name: Union[EmptyStrToNone, str] = None  # e.g. 'port_name'
     power: Union[EmptyStrToNone, float] = None  # Current power, e.g. 0
+    power_max: Union[EmptyStrToNone, float] = None  # e.g. ''
+    power_max_text: Union[EmptyStrToNone, str] = None  # e.g. ''
+    power_max_time: Union[EmptyStrToNone, str] = None  # e.g. ''
+    pv_pf_cmd_memory_state: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    reactive_rate: Union[EmptyStrToNone, float] = None  # e.g. 0
     record: Union[EmptyStrToNone, Any] = None  # e.g. None
+    remain_day: Union[EmptyStrToNone, float] = None  # e.g. 0
     serial_num: Union[EmptyStrToNone, str] = None  # Device SN, e.g. 'FDCJQ00003'
     status: Union[EmptyStrToNone, int] = (
         None  # Device status (0: waiting, 1: self-check, 3: failure, 4: upgrade, 5, 6, 7, 8: normal mode), e.g. 0
     )
     status_text: Union[EmptyStrToNone, str] = None  # e.g. 'tlx.status.operating'
+    str_num: Union[EmptyStrToNone, int] = None  # e.g. 0
+    sys_time: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. ''
     tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. '47.107.154.111'
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_FDCJQ00003'
     tree_name: Union[EmptyStrToNone, str] = None  # e.g. 'FDCJQ00003'
+    timezone: Union[EmptyStrToNone, float] = None  # e.g. 8
     updating: Union[EmptyStrToNone, bool] = None  # e.g. False
     user_name: Union[EmptyStrToNone, str] = None  # e.g. ''
+    vac_high: Union[EmptyStrToNone, float] = None  # e.g. 0
+    vac_low: Union[EmptyStrToNone, float] = None  # e.g. 0
+    voltage_high_limit: Union[EmptyStrToNone, float] = None  # e.g. 0
+    voltage_low_limit: Union[EmptyStrToNone, float] = None  # e.g. 0
 
 
 class MaxDetails(ApiResponse):
@@ -547,7 +589,7 @@ def _max_alarms_data_to_camel(snake: str) -> str:
     define own to_camel function to support weird API naming
     """
     override = {
-        "device_sn": "tlx_sn",
+        "device_sn": "max_sn",
     }
     return override.get(snake, to_camel(snake=snake))
 

@@ -352,7 +352,7 @@ class SphDetailDataV4(ApiModel):
     )
 
     ac_charge_enable: Union[EmptyStrToNone, bool] = None  # AC Charge Enable, e.g. 1
-    active_rate: Union[EmptyStrToNone, int] = None  # Active power, e.g. 100
+    active_rate: Union[EmptyStrToNone, float] = None  # Active power, e.g. 100
     address: Union[EmptyStrToNone, int] = None  # Inverter address, e.g. 1
     alias: Union[EmptyStrToNone, str] = None  # Alias, e.g. 'OZD0849010'
     back_up_en: Union[EmptyStrToNone, int] = None  # e.g. 0
@@ -506,7 +506,7 @@ class SphDetailDataV4(ApiModel):
     pv_reactive_p_rate_two: Union[EmptyStrToNone, float] = None  # Reactive Power (Capacitive/Inductive), e.g. ''
     reactive_delay: Union[EmptyStrToNone, float] = None  # e.g. 150.0
     reactive_power_limit: Union[EmptyStrToNone, float] = None  # e.g. 48.0
-    reactive_rate: Union[EmptyStrToNone, int] = None  # Reactive power, e.g. 100
+    reactive_rate: Union[EmptyStrToNone, float] = None  # Reactive power, e.g. 100
     record: Union[EmptyStrToNone, Any] = None  # e.g. None
     region: Union[EmptyStrToNone, int] = None  # e.g. -1
     rrcr_enable: Union[EmptyStrToNone, int] = None  # e.g. 1
@@ -620,7 +620,7 @@ class MaxDetailDataV4(ApiModel):
     energy_day_map: Union[EmptyStrToNone, Any] = None  # e.g. {}
     energy_month: Union[EmptyStrToNone, float] = None  # e.g. 0
     energy_month_text: Union[EmptyStrToNone, str] = None  # e.g. '0'
-    export_limit: Union[EmptyStrToNone, float] = None  # e.g. 0
+    export_limit: Union[EmptyStrToNone, int] = None  # e.g. 0
     export_limit_power_rate: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     fac_high: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     fac_low: Union[EmptyStrToNone, float] = None  # e.g. 0.0
@@ -642,7 +642,7 @@ class MaxDetailDataV4(ApiModel):
     max_set_bean: Union[EmptyStrToNone, Any] = None  # e.g. None
     model: Union[EmptyStrToNone, int] = None  # model, e.g. 720575940631003386
     model_text: Union[EmptyStrToNone, str] = None  # model, e.g. 'S0AB00D00T00P0FU01M00FA'
-    normal_power: Union[EmptyStrToNone, float] = None  # Rated power, e.g. 25000
+    normal_power: Union[EmptyStrToNone, int] = None  # Rated power, e.g. 25000
     on_off: Union[EmptyStrToNone, bool] = None  # e.g. 0
     open_authorize: Union[EmptyStrToNone, bool] = None  # e.g. 0
     parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_BLE4BEQ0BW_3'
@@ -665,7 +665,7 @@ class MaxDetailDataV4(ApiModel):
     power_max_text: Union[EmptyStrToNone, str] = None  # e.g. ''
     power_max_time: Union[EmptyStrToNone, str] = None  # e.g. None
     pv_num: Union[EmptyStrToNone, int] = None  # e.g. 0
-    pv_pf_cmd_memory_state: Union[EmptyStrToNone, int] = None  # e.g. 0
+    pv_pf_cmd_memory_state: Union[EmptyStrToNone, bool] = None  # e.g. 0
     reactive_rate: Union[EmptyStrToNone, float] = None  # e.g. 0
     record: Union[EmptyStrToNone, Any] = None  # e.g. None
     remain_day: Union[EmptyStrToNone, float] = None  # e.g. 0
@@ -784,7 +784,7 @@ class SpaDetailDataV4(ApiModel):
     eps_fun_en: Union[EmptyStrToNone, bool] = None  # Emergency Power Supply Enable, e.g. 0
     eps_volt_set: Union[EmptyStrToNone, int] = None  # Emergency Power Supply Voltage, e.g. 0
     equipment_type: Union[EmptyStrToNone, str] = None  # e.g. None
-    export_limit: Union[EmptyStrToNone, float] = None  # e.g. 0
+    export_limit: Union[EmptyStrToNone, int] = None  # e.g. 0
     export_limit_power_rate: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     failsafe: Union[EmptyStrToNone, int] = None  # e.g. 0
     float_charge_current_limit: Union[EmptyStrToNone, float] = None  # Float Charge Current Limit, e.g. 600.0
@@ -1048,7 +1048,7 @@ class MinDetailDataV4(ApiModel):
     )
     status_text: Union[EmptyStrToNone, str] = None  # e.g. 'tlx.status.operating'
     str_num: Union[EmptyStrToNone, int] = None  # e.g. 0
-    sys_time: Union[EmptyStrToNone, str] = None  # System time, e.g. ''
+    sys_time: Union[EmptyStrToNone, datetime.datetime] = None  # System time, e.g. ''
     tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. '47.119.160.91'
     timezone: Union[EmptyStrToNone, float] = None  # e.g. 8.0 / 1.0
     tlx_set_bean: Union[EmptyStrToNone, Any] = None  # FYI: in API v1, we see MinTlxSettingsData here
@@ -1292,7 +1292,7 @@ class WitDetailDataV4(ApiModel):
     str_num: Union[EmptyStrToNone, int] = None  # e.g. 0
     svg_function: Union[EmptyStrToNone, int] = None  # e.g. 0
     sys_optical_storage_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
-    sys_time: Union[EmptyStrToNone, str] = None  # System time, e.g. ''
+    sys_time: Union[EmptyStrToNone, datetime.datetime] = None  # System time, e.g. ''
     sys_time_text: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2024-05-29 14:00:25'
     tcp_server_ip: Union[EmptyStrToNone, str] = None  # Server address, e.g. '120.25.191.20'
     time1_mode: Union[EmptyStrToNone, int] = None  # e.g. 0
@@ -1427,7 +1427,7 @@ class SphsDetailDataV4(ApiModel):
         protected_namespaces=(),  # allow model_* keywords
     )
 
-    active_rate: Union[EmptyStrToNone, int] = None  # Active power, e.g. 100
+    active_rate: Union[EmptyStrToNone, float] = None  # Active power, e.g. 100
     address: Union[EmptyStrToNone, int] = None  # Inverter address, e.g. 1
     alias: Union[EmptyStrToNone, str] = None  # Alias, e.g. 'AGP0N1600D'
     children: Union[EmptyStrToNone, List[Any]] = None  # e.g. []
@@ -1476,7 +1476,7 @@ class SphsDetailDataV4(ApiModel):
     power_max_time: Union[EmptyStrToNone, str] = None  # e.g. None
     pv_pf_cmd_memory_state: Union[EmptyStrToNone, bool] = None  # Set Whether to Store the Following PF Commands, e.g. 0
     reactive_output_priority: Union[EmptyStrToNone, int] = None  # e.g. 1
-    reactive_rate: Union[EmptyStrToNone, int] = None  # Reactive power, e.g. 100
+    reactive_rate: Union[EmptyStrToNone, float] = None  # Reactive power, e.g. 100
     reactive_value: Union[EmptyStrToNone, float] = None  # e.g. 1000.0
     record: Union[EmptyStrToNone, Any] = None  # e.g. None
     serial_num: Union[EmptyStrToNone, str] = None  # Serial Number, e.g. 'AGP0N1600D'
@@ -1567,7 +1567,7 @@ class NoahDetailDataV4(ApiModel):
     port_name: Union[EmptyStrToNone, str] = None  # Communication Port Name, e.g. 'ShinePano-0PVPOXIEGENGHUI1'
     smart_socket_power: Union[EmptyStrToNone, float] = None  # Smart Socket Power, e.g. 0.0
     status: Union[EmptyStrToNone, int] = None  # Device Status (1: Normal; 4: Fault; 5: Heating), e.g. 0
-    sys_time: Union[EmptyStrToNone, int] = None  # System time, e.g. 1720660008000
+    sys_time: Union[EmptyStrToNone, datetime.datetime] = None  # System time, e.g. 1720660008000
     temp_type: Union[EmptyStrToNone, int] = None  # Temperature Type, e.g. 0
     time1_enable: Union[EmptyStrToNone, bool] = None  # Time Slot 1 Switch, e.g. 1
     time1_end: Union[EmptyStrToNone, ForcedTime] = None  # Time Slot 1 End, e.g. '23:59'

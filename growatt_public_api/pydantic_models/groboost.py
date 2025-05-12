@@ -202,7 +202,7 @@ class BoostData(ApiModel):
     rs485_baudrate: Union[EmptyStrToNone, int] = None  # 485 baud rate, e.g. 0
     serial_num: Union[EmptyStrToNone, str] = None  # Serial Number, e.g. ''
     status: Union[EmptyStrToNone, int] = None  # ABC phase relay status, e.g. 0
-    sys_time: Union[EmptyStrToNone, str] = None  # Time, e.g. ''
+    sys_time: Union[EmptyStrToNone, datetime.datetime] = None  # Time, e.g. ''
     target_power: Union[EmptyStrToNone, float] = None  # Adjust the target power, e.g. 3600
     temp: Union[EmptyStrToNone, float] = None  # SCR temperature, e.g. 0
     temp_enable: Union[EmptyStrToNone, float] = None  # ABC temperature enable switch, e.g. 0

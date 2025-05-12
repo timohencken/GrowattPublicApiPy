@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from typing import Optional
+from typing import Optional, Union
 
 import truststore
 
@@ -110,10 +110,10 @@ class Storage:
         self,
         device_sn: str,
         parameter_id: str,
-        parameter_value_1: str,
-        parameter_value_2: Optional[str] = None,
-        parameter_value_3: Optional[str] = None,
-        parameter_value_4: Optional[str] = None,
+        parameter_value_1: Union[str, int],
+        parameter_value_2: Optional[Union[str, int]] = None,
+        parameter_value_3: Optional[Union[str, int]] = None,
+        parameter_value_4: Optional[Union[str, int]] = None,
     ) -> StorageSettingWrite:
         """
         Energy storage machine parameter setting
@@ -183,10 +183,10 @@ class Storage:
         Args:
             device_sn (str): energy storage machine SN
             parameter_id (str): parameter ID - pass "set_any_reg" to write register address
-            parameter_value_1 (str): parameter value 1
-            parameter_value_2 (Optional[str]): parameter value 2
-            parameter_value_3 (Optional[str]): parameter value 3
-            parameter_value_4 (Optional[str]): parameter value 4
+            parameter_value_1 (Union[str, int]): parameter value 1
+            parameter_value_2 (Optional[Union[str, int]]): parameter value 2
+            parameter_value_3 (Optional[Union[str, int]]): parameter value 3
+            parameter_value_4 (Optional[Union[str, int]]): parameter value 4
 
         Returns:
             StorageSettingWrite
@@ -655,7 +655,7 @@ class Storage:
             end_date = start_date
 
         # check interval validity
-        if end_date - start_date > timedelta(days=7):
+        if end_date - start_date >= timedelta(days=7):
             raise ValueError("date interval must not exceed 7 days")
 
         response = self.session.post(

@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from typing import Optional, Union, List
+from typing import Optional, Union, List, Dict, Any
 
 import truststore
 
@@ -398,25 +398,25 @@ class Min:
         self,
         device_sn: str,
         parameter_id: str,
-        parameter_value_1: str,
-        parameter_value_2: Optional[str] = None,
-        parameter_value_3: Optional[str] = None,
-        parameter_value_4: Optional[str] = None,
-        parameter_value_5: Optional[str] = None,
-        parameter_value_6: Optional[str] = None,
-        parameter_value_7: Optional[str] = None,
-        parameter_value_8: Optional[str] = None,
-        parameter_value_9: Optional[str] = None,
-        parameter_value_10: Optional[str] = None,
-        parameter_value_11: Optional[str] = None,
-        parameter_value_12: Optional[str] = None,
-        parameter_value_13: Optional[str] = None,
-        parameter_value_14: Optional[str] = None,
-        parameter_value_15: Optional[str] = None,
-        parameter_value_16: Optional[str] = None,
-        parameter_value_17: Optional[str] = None,
-        parameter_value_18: Optional[str] = None,
-        parameter_value_19: Optional[str] = None,
+        parameter_value_1: Union[str, int],
+        parameter_value_2: Optional[Union[str, int]] = None,
+        parameter_value_3: Optional[Union[str, int]] = None,
+        parameter_value_4: Optional[Union[str, int]] = None,
+        parameter_value_5: Optional[Union[str, int]] = None,
+        parameter_value_6: Optional[Union[str, int]] = None,
+        parameter_value_7: Optional[Union[str, int]] = None,
+        parameter_value_8: Optional[Union[str, int]] = None,
+        parameter_value_9: Optional[Union[str, int]] = None,
+        parameter_value_10: Optional[Union[str, int]] = None,
+        parameter_value_11: Optional[Union[str, int]] = None,
+        parameter_value_12: Optional[Union[str, int]] = None,
+        parameter_value_13: Optional[Union[str, int]] = None,
+        parameter_value_14: Optional[Union[str, int]] = None,
+        parameter_value_15: Optional[Union[str, int]] = None,
+        parameter_value_16: Optional[Union[str, int]] = None,
+        parameter_value_17: Optional[Union[str, int]] = None,
+        parameter_value_18: Optional[Union[str, int]] = None,
+        parameter_value_19: Optional[Union[str, int]] = None,
     ) -> MinSettingWrite:
         """
         Min parameter setting
@@ -428,7 +428,13 @@ class Min:
 
         This method allows to set
         * predefined settings (see table below)
+          * use parameter_id=<string defined below>
+          * number of parameter_value_* maps to the setting number from the table below
         * any register value (see table below for most relevant settings, google for "Growatt Inverter Modbus RTU Protocol V1.20" for more)
+          * use parameter_id="set_any_reg"
+          * parameter_value_1 is the register number to set
+          * parameter_value_2 is the value to set (decimal)
+          * parameter_value_3~19 must not be set
 
         Predefined settings
         ========================+=======================================+===========================+============================================================================
@@ -481,8 +487,15 @@ class Min:
         ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
 
         Register settings
-        =================
-        google for "Growatt Inverter Modbus RTU Protocol V1.20" for more
+        ========================+=======================================+===========================+============================================================================
+        description             | parameter_id                          | parameter_value_[n]       | comment
+        ========================+=======================================+===========================+============================================================================
+        Remote On/Off           | set_any_reg                           | [1]: 0                    | [1]: register 1 is "OnOff"
+                                |                                       | [2]: 0 or 1               | [2]: 0 = Off, 1 = On
+        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
+        ...                     | set_any_reg                           | [1]: 1 ~ 5000             | [1]: register no - google for "Growatt Inverter Modbus RTU Protocol V1.20"
+                                |                                       | [2]: 0 ~ 65535            | [2]: allowed values are specific for each register setting
+        ------------------------+---------------------------------------+---------------------------+----------------------------------------------------------------------------
 
         Specific error codes:
         * 10001: system error
@@ -500,25 +513,25 @@ class Min:
         Args:
             device_sn (str): energy storage machine SN
             parameter_id (str): parameter ID - pass "set_any_reg" to write register address
-            parameter_value_1 (str): parameter value 1
-            parameter_value_2 (Optional[str]): parameter value 2
-            parameter_value_3 (Optional[str]): parameter value 3
-            parameter_value_4 (Optional[str]): parameter value 4
-            parameter_value_5 (Optional[str]): parameter value 5
-            parameter_value_6 (Optional[str]): parameter value 6
-            parameter_value_7 (Optional[str]): parameter value 7
-            parameter_value_8 (Optional[str]): parameter value 8
-            parameter_value_9 (Optional[str]): parameter value 9
-            parameter_value_10 (Optional[str]): parameter value 10
-            parameter_value_11 (Optional[str]): parameter value 11
-            parameter_value_12 (Optional[str]): parameter value 12
-            parameter_value_13 (Optional[str]): parameter value 13
-            parameter_value_14 (Optional[str]): parameter value 14
-            parameter_value_15 (Optional[str]): parameter value 15
-            parameter_value_16 (Optional[str]): parameter value 16
-            parameter_value_17 (Optional[str]): parameter value 17
-            parameter_value_18 (Optional[str]): parameter value 18
-            parameter_value_19 (Optional[str]): parameter value 19
+            parameter_value_1 (Union[str, int]): parameter value 1 // register number when using "set_any_reg"
+            parameter_value_2 (Optional[Union[str, int]]): parameter value 2 // register value to set when using "set_any_reg"
+            parameter_value_3 (Optional[Union[str, int]]): parameter value 3
+            parameter_value_4 (Optional[Union[str, int]]): parameter value 4
+            parameter_value_5 (Optional[Union[str, int]]): parameter value 5
+            parameter_value_6 (Optional[Union[str, int]]): parameter value 6
+            parameter_value_7 (Optional[Union[str, int]]): parameter value 7
+            parameter_value_8 (Optional[Union[str, int]]): parameter value 8
+            parameter_value_9 (Optional[Union[str, int]]): parameter value 9
+            parameter_value_10 (Optional[Union[str, int]]): parameter value 10
+            parameter_value_11 (Optional[Union[str, int]]): parameter value 11
+            parameter_value_12 (Optional[Union[str, int]]): parameter value 12
+            parameter_value_13 (Optional[Union[str, int]]): parameter value 13
+            parameter_value_14 (Optional[Union[str, int]]): parameter value 14
+            parameter_value_15 (Optional[Union[str, int]]): parameter value 15
+            parameter_value_16 (Optional[Union[str, int]]): parameter value 16
+            parameter_value_17 (Optional[Union[str, int]]): parameter value 17
+            parameter_value_18 (Optional[Union[str, int]]): parameter value 18
+            parameter_value_19 (Optional[Union[str, int]]): parameter value 19
 
         Returns:
             MinSettingWrite
@@ -530,7 +543,7 @@ class Min:
             }
         """
         # put parameters to a dict to make handling easier
-        parameters = {}
+        parameters: Dict[int, Any] = {}
         for i in range(1, 20):
             parameters[i] = eval(f"parameter_value_{i}")
 
@@ -1753,7 +1766,7 @@ class Min:
             end_date = start_date
 
         # check interval validity
-        if end_date - start_date > timedelta(days=7):
+        if end_date - start_date >= timedelta(days=7):
             raise ValueError("date interval must not exceed 7 days")
 
         response = self.session.post(
