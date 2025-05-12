@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "growatt_public_api"
-version = "2025.03.04"
+version = "2025.05.12"
 authors = [
   { name="Timo Hencken", email="github@hencken.de" },
 ]
