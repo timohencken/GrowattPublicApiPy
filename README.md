@@ -85,7 +85,16 @@ This package aims to
 * Datalogger (*TYPE=3*)
   * ***Not*** implemented yet (TODO: refactor structure)
 * MAX (*TYPE=4* - MAX)
-  * ***Not*** implemented yet
+  * general device data
+    * read device data `max.details()`
+    * read alarms/notification `max.alarms()`
+  * device settings
+    * read settings value `max.setting_read()`
+    * write settings value `max.setting_write()` (***use with caution***)
+  * device power/energy metrics
+    * current `max.energy()`
+    * current for multiple inverters `max.energy_multiple()`
+    * historical data `max.energy_history()`
 * SPH (*TYPE=5* - SPH)
   * ***Not*** implemented yet
 * SPA (*TYPE=6* - SPA)
@@ -219,6 +228,9 @@ To the best of our knowledge only the settings functions perform modifications t
 
 
 # Changelog
+* 2025.03.05 (pre-alpha)
+  * endpoints implemented:
+    * MAX
 * 2025.03.04 (pre-alpha)
   * initial release
   * endpoints implemented:

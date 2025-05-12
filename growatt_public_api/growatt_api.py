@@ -12,6 +12,7 @@ from device import Device  # noqa: E402
 from inverter import Inverter  # noqa: E402
 from storage import Storage  # noqa: E402
 from min import Min  # noqa: E402
+from max import Max  # noqa: E402
 from vpp import Vpp  # noqa: E402
 
 
@@ -38,6 +39,7 @@ class GrowattApi:
     inverter: Inverter
     storage: Storage
     min: Min
+    max: Max
     vpp: Vpp
 
     """
@@ -62,4 +64,5 @@ class GrowattApi:
         self.inverter = Inverter(self.session)
         self.storage = Storage(self.session)
         self.min = Min(self.session)
+        self.max = Max(self.session)
         self.vpp = Vpp(self.session)
