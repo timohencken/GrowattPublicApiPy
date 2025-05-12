@@ -18,6 +18,7 @@ from sph import Sph  # noqa: E402
 from spa import Spa  # noqa: E402
 from pcs import Pcs  # noqa: E402
 from hps import Hps  # noqa: E402
+from pbd import Pbd  # noqa: E402
 
 
 class GrowattDeviceType(IntEnum):
@@ -30,7 +31,7 @@ class GrowattDeviceType(IntEnum):
     min = 7  # MIN / MAC / MOD-XH / MID-XH / NEO
     pcs = 8
     hps = 9
-    pdb = 10
+    pbd = 10
     gro_boost = 11
     # vpp: supported by min, spa, sph
 
@@ -49,6 +50,7 @@ class GrowattApi:
     spa: Spa
     pcs: Pcs
     hps: Hps
+    pbd: Pbd
 
     """
     API documents:
@@ -78,3 +80,4 @@ class GrowattApi:
         self.spa = Spa(self.session)
         self.pcs = Pcs(self.session)
         self.hps = Hps(self.session)
+        self.pbd = Pbd(self.session)
