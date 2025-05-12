@@ -17,6 +17,7 @@ from vpp import Vpp  # noqa: E402
 from sph import Sph  # noqa: E402
 from spa import Spa  # noqa: E402
 from pcs import Pcs  # noqa: E402
+from hps import Hps  # noqa: E402
 
 
 class GrowattDeviceType(IntEnum):
@@ -47,6 +48,7 @@ class GrowattApi:
     sph: Sph
     spa: Spa
     pcs: Pcs
+    hps: Hps
 
     """
     API documents:
@@ -75,3 +77,4 @@ class GrowattApi:
         self.sph = Sph(self.session)
         self.spa = Spa(self.session)
         self.pcs = Pcs(self.session)
+        self.hps = Hps(self.session)
