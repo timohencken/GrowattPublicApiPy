@@ -43,6 +43,7 @@ from pydantic_models.api_v4 import (
     SphsEnergyHistoryMultipleV4,
     NoahEnergyHistoryMultipleV4,
     SettingWriteV4,
+    SettingReadVppV4,
 )
 
 truststore.inject_into_ssl()
@@ -3755,6 +3756,262 @@ class ApiV4:
                 "mode": mode,
                 "power": power_watt,
                 "enable": enable,
+            },
+        )
+
+        return SettingWriteV4.model_validate(response)
+
+    def setting_read_vpp_param(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: str,
+        device_type: DeviceType,
+        parameter_id: str,
+    ) -> SettingReadVppV4:
+        """
+        Read VPP parameters
+        Read the VPP related parameters of the device according to the SN of the device.
+        The interface returns data only for devices that the secret token has permission to access.
+        The device without permission will not be read and the results will not be returned.
+        https://www.showdoc.com.cn/2598832417617967/11558629942271434
+
+        Note:
+        * The current interface only supports sph, spa, min, wit device types.
+          The specific models are as follows:
+          * SPH 3000-6000TL BL
+          * SPA 1000-3000TL BL
+          * SPH 3000-6000TL BL US
+          * SPH 4000-10000TL3 BH
+          * SPA 4000-10000TL3 BH
+          * MIN 2500-6000TL-XH US
+          * MIN 2500-6000TL-XH
+          * MOD-XH/MID-XH
+          * WIT 100KTL3-H
+          * WIS 215KTL3
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Allowed/known values for vpp_param:
+          see self.setting_write_vpp_param()
+
+        Args:
+            device_sn (str): Inverter serial number
+            device_type (DeviceType): Device type (as returned by list()) -- This API is only applicable to NOAH device type
+            parameter_id (str): Set parameter enumeration, example: set_param_1
+
+
+        Returns:
+            SettingReadVppV4
+
+            {   'data': 0,
+                'error_code': 0,
+                'error_msg': 'success'}
+
+        """
+
+        assert parameter_id.startswith("set_param_"), "parameter_id must start with 'set_param_'"
+        assert parameter_id[10:].isdigit(), "parameter_id must be followed by a number"
+
+        response = self.session.post(
+            endpoint="new-api/readVppParameter",
+            params={
+                "deviceSn": device_sn,
+                "deviceType": device_type,
+                "setType": parameter_id,
+            },
+        )
+
+        return SettingReadVppV4.model_validate(response)
+
+    def setting_write_vpp_param(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: str,
+        device_type: DeviceType,
+        parameter_id: str,
+        value: Union[int, str],
+    ) -> SettingWriteV4:
+        """
+        Read VPP parameters
+        Read the VPP related parameters of the device according to the SN of the device.
+        The interface returns data only for devices that the secret token has permission to access.
+        The device without permission will not be read and the results will not be returned.
+        https://www.showdoc.com.cn/2598832417617967/11558629942271434
+
+        Note:
+        * The current interface only supports sph, spa, min, wit device types.
+          The specific models are as follows:
+          * SPH 3000-6000TL BL
+          * SPA 1000-3000TL BL
+          * SPH 3000-6000TL BL US
+          * SPH 4000-10000TL3 BH
+          * SPA 4000-10000TL3 BH
+          * MIN 2500-6000TL-XH US
+          * MIN 2500-6000TL-XH
+          * MOD-XH/MID-XH
+          * WIT 100KTL3-H
+          * WIS 215KTL3
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Allowed/known values for vpp_param:
+        ========================+===============+===========================+============================================================================
+        description             | parameter_id  | parameter_value           | comment
+        ========================+===============+===========================+============================================================================
+        Control authority       | set_param_1   | 0 ~ 1                     | 0 = disabled (default)
+                                |               |                           | 1 = enabled
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        On off command          | set_param_2   | 0 ~ 1                     | Not storage
+                                |               |                           | 0 = power off
+                                |               |                           | 1 = power on (default)
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        System time             | set_param_3   | yyyy-mm-dd HH:MM:SS       | Example: 2024-10-10 13:14:14
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        SYN enable              | set_param_4   | 0 ~ 1                     | Offline box enable
+                                |               |                           | 0: not enabled (default)
+                                |               |                           | 1: enable
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Active power            | set_param_5   | 0 ~ 100                   | Power limit percentage
+         percentage derating    |               |                           | default value = 100
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Static active power     | set_param_6   | 0 ~ 100                   | Power limit percent
+                                |               |                           | Actual active power is the less one between Active power percentage derating
+                                |               |                           |  and Static active power limitation - Not storage
+                                |               |                           | default value = 100
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        EPS offline enable      | set_param_7   | 0 ~ 1                     | 0 = disabled (default)
+                                |               |                           | 1 = enabled
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        EPS offline frequency   | set_param_8   | 0 ~ 1                     | 0 = 50 Hz (default)
+                                |               |                           | 1 = 60 Hz
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        EPS offline voltage(3)  | set_param_9   | 0 ~ 6                     | 0 = 230 V (default)
+                                |               |                           | 1 = 208V
+                                |               |                           | 2 = 240V
+                                |               |                           | 3 = 220V
+                                |               |                           | 4 = 127V
+                                |               |                           | 5 = 277V
+                                |               |                           | 6 = 254V
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Fix Q                   | set_param_10  | 0 ~ 60                    | Power limit percentage
+                                |               |                           | default value = 60
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Reactive power mode     | set_param_11  | 0 ~ 5                     | 0: PF=1 (default)
+                                |               |                           | 1: Pf value setting
+                                |               |                           | 2: Default pf curve(reserve)
+                                |               |                           | 3: User set pf curve(reserve)
+                                |               |                           | 4: Lagging reactive power (+)
+                                |               |                           | 5: Leading reactive power (-)
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Power factor            | set_param_12  | 0 ~ 20000                 | Actual power factor = (10000 - set_value) * 0.0001
+                                |               |                           | default value = 10000
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Dynamic export          | set_param_13  | 0 ~ 1                     | 0 = disabled (default)
+         limitation             |               |                           | 1 = single machine anti-back flow enable
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Export limitation power | set_param_14  | -100 ~ 100                | Positive value is backflow, negative value is fair current
+                                |               |                           | default value = 0
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Failure value of        | set_param_15  | 0 ~ 100                   | When the communication with meter failed (30204 is 1), use this register
+         anti-backflow limiting |               |                           |  to limit reactive power，for backflow control
+         power                  |               |                           | default value = 0
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Anti-back flow fail     | set_param_16  | 0 ~ 300                   | default value = 30
+         time/EMS communicating |               |                           |
+         fail time              |               |                           |
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        EMS communicating fail  | set_param_17  | 0 ~ 1                     | 0 = disabled (default)
+         enable                 |               |                           | 1 = enabled
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Super anti-backflow     | set_param_18  | 0 ~ 1                     | 0 = disabled (default)
+         enable                 |               |                           | 1 = enabled
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Anti-backflow feed      | set_param_19  | 0 ~ 20000                 | default value = 27
+         power change slope     |               |                           |
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Anti-backflow single    | set_param_20  | 0 ~ 1                     | 0 = disabled (default)
+         phase ctrl enable      |               |                           | 1 = enabled
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Anti-backflow           | set_param_21  | 0 ~ 1                     | 0 = Default mode (default)
+         protection mode（1）    |               |                           | 1 = software and hardware control mode
+                                |               |                           | 2 = software control mode
+                                |               |                           | 3 = hardware control mode
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Charging cut off SOC    | set_param_22  | 70 ~ 100                  | default value = 100
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Online discharge cut    | set_param_23  | 10 ~ 30                   | default value = 10
+         off SOC                |               |                           |
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Load priority discharge | set_param_24  | 10 ~ 20                   | default value = 10
+         cut off SOC (2)        |               |                           |
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Remote power control    | set_param_25  | 0 ~ 1                     | Not storage
+         enable                 |               |                           | 0 = disabled (default)
+                                |               |                           | 1 = enabled
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Remote power control    | set_param_26  | 0 ~ 1440                  | Not storage
+         charging time          |               |                           | 0: unlimited time (default)
+                                |               |                           | 1 ~ 1440 min: control the power duration according to the set time
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Remote charge and       | set_param_27  | -100 ~ 100                | Not storage
+         discharge power        |               |                           | negative value = discharge, positive value = charge
+                                |               |                           | default value = 0
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        AC charging enable      | set_param_28  | 0 ~ 1                     | 0 = disabled (default)
+                                |               |                           | 1 = enabled
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Offline discharge cut   | set_param_29  | 10 ~ 30                   | default value = 10
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Battery charge stop     | set_param_30  | 0 ~ 15000                 | Lead-acid battery used - Distinguished by voltage level
+         voltage                |               |                           |  3800 = 127 V
+                                |               |                           | 10000 = 227 V
+                                |               |                           |  8000 = Others
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Battery discharge stop  | set_param_31  | 0 ~ 15000                 | Lead-acid battery used - Distinguished by voltage level
+         voltage                |               |                           | 3800 = 127 V
+                                |               |                           | 7500 = 227 V
+                                |               |                           | 6500 = Others
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Battery max charge      | set_param_32  | 0 ~ 2000                  | Lead-acid battery used
+         current                |               |                           | default value = 1500
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Battery max discharge   | set_param_33  | 0 ~ 2000                  | Lead-acid battery used
+         current                |               |                           | default value = 1500
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Charging and discharging| set_param_34  | 0 ~ 2000                  | Set time period (json format: [{percentage: power, startTime: start time, endTime: end time}]
+         in different periods   |               |                           | time range: 0-1440
+          (20 sections)         |               |                           | e.g.: [{"percentage":95,"startTime":0,"endTime":300},{"percentage":-60,"startTime":301,"endTime":720}]
+        ========================+===============+===========================+============================================================================
+        see https://www.showdoc.com.cn/2598832417617967/11558385130027995 or https://www.showdoc.com.cn/p/fc84c86facd79b3692f585fbd7a6e33b
+        ========================+===============+===========================+============================================================================
+
+
+        Args:
+            device_sn (str): Inverter serial number
+            device_type (DeviceType): Device type (as returned by list()) -- This API is only applicable to NOAH device type
+            parameter_id (str): Set parameter enumeration, example: set_param_1
+            value (Union[int, str]): the parameter value set, example:value
+
+
+        Returns:
+            SettingWriteV4
+
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        assert parameter_id.startswith("set_param_"), "parameter_id must start with 'set_param_'"
+        assert parameter_id[10:].isdigit(), "parameter_id must be followed by a number"
+
+        response = self.session.post(
+            endpoint="new-api/setVppParameter",
+            params={
+                "deviceSn": device_sn,
+                "deviceType": device_type,
+                "setType": parameter_id,
+                "value": str(value),
             },
         )
 

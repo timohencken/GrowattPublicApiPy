@@ -4202,3 +4202,17 @@ class NoahEnergyHistoryMultipleV4(NewApiResponse):
 
 class SettingWriteV4(NewApiResponse):
     data: Union[EmptyStrToNone, Any] = None
+
+
+# #####################################################################################################################
+# Setting read VPP ####################################################################################################
+
+
+class VppTimePeriodV4(ApiModel):
+    percentage: Union[EmptyStrToNone, int] = None
+    start_time: Union[EmptyStrToNone, int] = None  # time in minutes
+    end_time: Union[EmptyStrToNone, int] = None  # time in minutes
+
+
+class SettingReadVppV4(NewApiResponse):
+    data: Union[EmptyStrToNone, int, float, List[VppTimePeriodV4]] = None
