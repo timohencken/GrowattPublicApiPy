@@ -8,7 +8,7 @@ from growatt_public_api.pydantic_models.spa import (
     SpaSettingWrite,
     SpaDetails,
     SpaEnergyOverview,
-    SphEnergyHistory,
+    SpaEnergyHistory,
     SpaAlarms,
     SpaEnergyOverviewMultiple,
     SpaEnergyOverviewMultipleItem,
@@ -720,7 +720,7 @@ class Spa:
         timezone: Optional[str] = None,
         page: Optional[int] = None,
         limit: Optional[int] = None,
-    ) -> SphEnergyHistory:
+    ) -> SpaEnergyHistory:
         """
         Get historical data of a SPH
         Interface to get historical data of a certain Mix
@@ -923,7 +923,7 @@ class Spa:
             },
         )
 
-        return SphEnergyHistory.model_validate(response)
+        return SpaEnergyHistory.model_validate(response)
 
     def alarms(
         self,
