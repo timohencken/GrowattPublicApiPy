@@ -19,7 +19,7 @@ class SmartMeter:
     https://www.showdoc.com.cn/262556420217021/6131333103798986
 
     Note:
-        Only applicable to devices with device type 3 (other) returned by device.list() - if device is a meter
+        Only applicable to devices with device type 3 (other) returned by plant.list_devices() - if device is a meter
     """
 
     session: GrowattApiSession
@@ -97,7 +97,7 @@ class SmartMeter:
         https://www.showdoc.com.cn/262556420217021/6131369504550249
 
         Note:
-            Only applicable to devices with device type 3 (other) returned by device.list() - if device is a meter
+            Only applicable to devices with device type 3 (other) returned by plant.list_devices() - if device is a meter
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -306,7 +306,7 @@ class SmartMeter:
         https://www.showdoc.com.cn/262556420217021/6131319527296946
 
         Note:
-            Only applicable to devices with device type 3 (other) returned by device.list() - if device is a meter
+            Only applicable to devices with device type 3 (other) returned by plant.list_devices() - if device is a meter
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes

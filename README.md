@@ -46,6 +46,9 @@ This package aims to
     * add new plant `plant.add()`
     * modify plant `plant.modify()`
     * delete plant `plant.delete()`
+    * add inverter to plant `plant.add_device()`
+    * add datalogger to plant `plant.add_datalogger()`
+    * remove datalogger from plant `plant.remove_datalogger()`
   * list plants
     * `plant.list()`
     * `plant.list_by_user()`
@@ -57,29 +60,24 @@ This package aims to
     * `plant.energy_history()`
   * power metrics by day
     * `plant.power()`
+  * list devices assigned to plant
+    * list dataloggers `device.list_dataloggers()`
+    * list inverters/storage `plant.list_devices()`
+      * ***use this to query your inverter's*** "*TYPE*" ***for selecting the correct submodule***
 * Datalogger
-  * datalogger management
-    * add datalogger to plant `device.datalogger_add()`
-    * remove datalogger from plant `device.datalogger_delete()`
-  * list dataloggers
-    * `device.datalogger_list()`
   * query device type
     * `device.type_info()`
     * *** this is NOT the same as the inverter type ***
   * verify datalogger's CC code
     * `device.datalogger_validate()`
 * Generic - all inverter types
-  * get inverters assigned to plant
-    * `device.list()`
-    * ***use this to query your inverter's*** "*TYPE*" ***for selecting the correct submodule***
-  * get datalogger for inverter
-    * `device.get_datalogger()`
   * get device creation date
     * `device.create_date()`
-  * add inverter to plant
-    * `device.add()`
   * device power/energy metrics
     * get energy (sum) for specific day `device.energy_day()`
+  * get device tree
+    * get plant by device_sn `device.get_plant()`
+    * get datalogger by device_sn `device.get_datalogger()`
 * Inverter (*TYPE=1* (including MAX))
   * general device data
     * read device data `inverter.details()`

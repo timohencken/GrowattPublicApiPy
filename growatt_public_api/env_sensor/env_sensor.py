@@ -19,7 +19,7 @@ class EnvSensor:
     https://www.showdoc.com.cn/262556420217021/6131376900470247
 
     Note:
-        Only applicable to devices with device type 3 (other) returned by device.list() - if device is an environmental sensor
+        Only applicable to devices with device type 3 (other) returned by plant.list_devices() - if device is an environmental sensor
     """
 
     session: GrowattApiSession
@@ -93,7 +93,7 @@ class EnvSensor:
         https://www.showdoc.com.cn/262556420217021/6131383465700984
 
         Note:
-            Only applicable to devices with device type 3 (other) returned by device.list() - if device is an environmental sensor
+            Only applicable to devices with device type 3 (other) returned by plant.list_devices() - if device is an environmental sensor
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -179,7 +179,7 @@ class EnvSensor:
         https://www.showdoc.com.cn/262556420217021/6131378411575311
 
         Note:
-            Only applicable to devices with device type 3 (other) returned by device.list() - if device is an environmental sensor
+            Only applicable to devices with device type 3 (other) returned by plant.list_devices() - if device is an environmental sensor
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes

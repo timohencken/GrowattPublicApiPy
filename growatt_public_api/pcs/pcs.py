@@ -20,7 +20,7 @@ class Pcs:
     https://www.showdoc.com.cn/262556420217021/6129831722860832
 
     Note:
-        Only applicable to devices with device type 8 (pcs) returned by device.list()
+        Only applicable to devices with device type 8 (pcs) returned by plant.list_devices()
     """
 
     session: GrowattApiSession
@@ -38,7 +38,7 @@ class Pcs:
         https://www.showdoc.com.cn/262556420217021/6129831722860832
 
         Note:
-            Only applicable to devices with device type 8 (pcs) returned by device.list()
+            Only applicable to devices with device type 8 (pcs) returned by plant.list_devices()
 
         Args:
             device_sn (str): PCS device SN
@@ -115,7 +115,7 @@ class Pcs:
         https://www.showdoc.com.cn/262556420217021/6131235037123575
 
         Note:
-            Only applicable to devices with device type 8 (pcs) returned by device.list()
+            Only applicable to devices with device type 8 (pcs) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -297,7 +297,7 @@ class Pcs:
         https://www.showdoc.com.cn/262556420217021/6131245575367488
 
         Note:
-            Only applicable to devices with device type 8 (pcs) returned by device.list()
+            Only applicable to devices with device type 8 (pcs) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -501,7 +501,7 @@ class Pcs:
         https://www.showdoc.com.cn/262556420217021/6131258854397548
 
         Note:
-            Only applicable to devices with device type 8 (pcs) returned by device.list()
+            Only applicable to devices with device type 8 (pcs) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes

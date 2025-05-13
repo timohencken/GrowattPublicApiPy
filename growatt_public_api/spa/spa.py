@@ -24,7 +24,7 @@ class Spa:
     https://www.showdoc.com.cn/262556420217021/6129790987434517
 
     Note:
-        Only applicable to devices with device type 6 (spa) returned by device.list()
+        Only applicable to devices with device type 6 (spa) returned by plant.list_devices()
     """
 
     session: GrowattApiSession
@@ -45,7 +45,7 @@ class Spa:
         https://www.showdoc.com.cn/262556420217021/6129809145198328
 
         Note:
-            Only applicable to devices with device type 6 (spa) returned by device.list()
+            Only applicable to devices with device type 6 (spa) returned by plant.list_devices()
 
         This method allows to read
         * predefined settings
@@ -139,7 +139,7 @@ class Spa:
         https://www.showdoc.com.cn/262556420217021/6129790987434517
 
         Note:
-            Only applicable to devices with device type 6 (spa) returned by device.list()
+            Only applicable to devices with device type 6 (spa) returned by plant.list_devices()
 
         This method allows to set
         * predefined settings (see table below)
@@ -321,7 +321,7 @@ class Spa:
         https://www.showdoc.com.cn/262556420217021/6129791904178555
 
         Note:
-            Only applicable to devices with device type 6 (spa) returned by device.list()
+            Only applicable to devices with device type 6 (spa) returned by plant.list_devices()
 
         Args:
             device_sn (str): SPA device SN
@@ -484,7 +484,7 @@ class Spa:
         https://www.showdoc.com.cn/262556420217021/6129794031492135
 
         Note:
-            Only applicable to devices with device type 6 (spa) returned by device.list()
+            Only applicable to devices with device type 6 (spa) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -521,7 +521,7 @@ class Spa:
         https://www.showdoc.com.cn/262556420217021/6138369063488649
 
         Note:
-            Only applicable to devices with device type 6 (spa) returned by device.list()
+            Only applicable to devices with device type 6 (spa) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -718,7 +718,7 @@ class Spa:
         https://www.showdoc.com.cn/262556420217021/6129802729032136
 
         Note:
-            Only applicable to devices with device type 6 (spa) returned by device.list()
+            Only applicable to devices with device type 6 (spa) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -912,7 +912,7 @@ class Spa:
         https://www.showdoc.com.cn/262556420217021/6129804467339594
 
         Note:
-            Only applicable to devices with device type 6 (spa) returned by device.list()
+            Only applicable to devices with device type 6 (spa) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds

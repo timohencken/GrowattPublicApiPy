@@ -4,24 +4,22 @@ from unittest import skip
 from unittest.mock import patch
 
 from api_v4 import ApiV4
-from growatt_public_api import GrowattApiSession, Device, Plant
+from growatt_public_api import (
+    GrowattApiSession,
+    Device,
+)
+from pydantic_models import PlantInfo
 from pydantic_models.device import (
     DeviceCreateDate,
     DeviceBasicData,
-    DataloggerList,
-    DataloggerListData,
-    DataloggerData,
     DataloggerValidation,
     DataloggerValidationData,
     DeviceEnergyDay,
     DeviceDatalogger,
     DeviceDataloggerData,
-    DeviceList,
-    DeviceListData,
-    DeviceData,
     DeviceTypeInfo,
 )
-
+from pydantic_models.plant import PlantInfoData
 
 TEST_FILE = "device.device"
 
@@ -36,7 +34,6 @@ class TestDevice(unittest.TestCase):
     api: Device = None
     device_sn: str = None
     datalogger_sn: str = None
-    plant_id: int = None
 
     @classmethod
     def setUpClass(cls):
@@ -48,26 +45,16 @@ class TestDevice(unittest.TestCase):
         )
         # init DEVICE
         cls.api = Device(session=gas)
-        # get a DEVICE device
+        # get a device
         try:
             apiv4 = ApiV4(session=gas)
             _devices = apiv4.list()
             sn_list = [x for x in _devices.data.data]  # select any type
             cls.device_sn = sn_list[0].device_sn
             cls.datalogger_sn = sn_list[0].datalogger_sn
-            # get plant information
-            api_plant = Plant(session=gas)
-            _plant_info = api_plant.by_device(device_sn=cls.device_sn)
-            cls.plant_id = _plant_info.data.plant.plant_id
         except AttributeError:
-            # getting "FREQUENTLY_ACCESS" easily # TODO caching would be nice
             cls.device_sn = "SASF819012"  # ['SASF819012', 'GRT0010086', 'RUK0CAE00J', 'TAG1234567', 'GRT1234001', 'GRT1235001', 'GRT1235002', 'GRT1235003', 'GRT1235004', 'GRT1235005', 'GRT1235006', 'GRT1235112', 'YYX1235112', 'YYX1235113', 'GRT1236601', 'GRT1236602', 'GRT1236603', 'GRT1236604', 'GRT1236605', 'EVK0BHX111']
             cls.datalogger_sn = "WLC082100F"
-            cls.plant_id = 23
-
-    @skip("Currently not testing endpoints writing data")
-    def test_add(self):
-        raise NotImplementedError
 
     def test_create_date(self):
         with patch(f"{TEST_FILE}.DeviceCreateDate", wraps=DeviceCreateDate) as mock_pyd_model:
@@ -87,39 +74,6 @@ class TestDevice(unittest.TestCase):
         )
         self.assertEqual(
             set(), set(raw_data["data"][self.device_sn].keys()).difference(pydantic_keys), f"data_{self.device_sn}"
-        )
-
-    @skip("Currently not testing endpoints writing data")
-    def test_datalogger_add(self):
-        raise NotImplementedError
-
-    @skip("Currently not testing endpoints writing data")
-    def test_datalogger_delete(self):
-        raise NotImplementedError
-
-    def test_datalogger_list(self):
-        with patch(f"{TEST_FILE}.DataloggerList", wraps=DataloggerList) as mock_pyd_model:
-            self.api.datalogger_list(plant_id=self.plant_id)
-
-        raw_data = mock_pyd_model.model_validate.call_args.args[0]
-
-        # check parameters are included in pydantic model
-        pydantic_keys = {v.alias for k, v in DataloggerList.model_fields.items()} | set(
-            DataloggerList.model_fields.keys()
-        )  # aliased and non-aliased params
-        for param in set(raw_data.keys()):
-            self.assertIn(param, pydantic_keys)
-        # check data
-        pydantic_keys = {v.alias for k, v in DataloggerListData.model_fields.items()} | set(
-            DataloggerListData.model_fields.keys()
-        )
-        self.assertEqual(set(), set(raw_data["data"].keys()).difference(pydantic_keys), f"data")
-        # check data item
-        pydantic_keys = {v.alias for k, v in DataloggerData.model_fields.items()} | set(
-            DataloggerData.model_fields.keys()
-        )
-        self.assertEqual(
-            set(), set(raw_data["data"]["dataloggers"][0].keys()).difference(pydantic_keys), f"data_dataloggers_0"
         )
 
     @skip("Cannot test without validation code")
@@ -175,28 +129,6 @@ class TestDevice(unittest.TestCase):
         # check correct data returned
         self.assertEqual(self.datalogger_sn, actual.data.datalogger_sn)
 
-    def test_list(self):
-        with patch(f"{TEST_FILE}.DeviceList", wraps=DeviceList) as mock_pyd_model:
-            self.api.list(plant_id=self.plant_id)
-
-        raw_data = mock_pyd_model.model_validate.call_args.args[0]
-
-        # check parameters are included in pydantic model
-        pydantic_keys = {v.alias for k, v in DeviceList.model_fields.items()} | set(
-            DeviceList.model_fields.keys()
-        )  # aliased and non-aliased params
-        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
-        # check data
-        pydantic_keys = {v.alias for k, v in DeviceListData.model_fields.items()} | set(
-            DeviceListData.model_fields.keys()
-        )
-        self.assertEqual(set(), set(raw_data["data"].keys()).difference(pydantic_keys), f"data")
-        # check data item
-        pydantic_keys = {v.alias for k, v in DeviceData.model_fields.items()} | set(DeviceData.model_fields.keys())
-        self.assertEqual(
-            set(), set(raw_data["data"]["devices"][0].keys()).difference(pydantic_keys), f"data_dataloggers_0"
-        )
-
     def test_type_info(self):
         with patch(f"{TEST_FILE}.DeviceTypeInfo", wraps=DeviceTypeInfo) as mock_pyd_model:
             self.api.type_info(device_sn=self.device_sn)
@@ -208,3 +140,20 @@ class TestDevice(unittest.TestCase):
             DeviceTypeInfo.model_fields.keys()
         )  # aliased and non-aliased params
         self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+    def test_get_plant(self):
+        with patch(f"{TEST_FILE}.PlantInfo", wraps=PlantInfo) as mock_pyd_model:
+            self.api.get_plant(device_sn=self.device_sn)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in PlantInfo.model_fields.items()} | set(
+            PlantInfo.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+        # check data
+        pydantic_keys = {v.alias for k, v in PlantInfoData.model_fields.items()} | set(
+            PlantInfoData.model_fields.keys()
+        )
+        self.assertEqual(set(), set(raw_data["data"].keys()).difference(pydantic_keys), "data")

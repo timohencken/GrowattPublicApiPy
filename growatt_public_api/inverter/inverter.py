@@ -41,7 +41,7 @@ class Inverter:
         https://www.showdoc.com.cn/262556420217021/6118532122241417
 
         Note:
-            Only applicable to devices with device type 1 (inverter) returned by device.list()
+            Only applicable to devices with device type 1 (inverter) returned by plant.list_devices()
 
         This method allows to read
         * predefined settings
@@ -98,7 +98,7 @@ class Inverter:
 
         inv_setting_response = InverterSettingRead.model_validate(response)
         if inv_setting_response.error_code == 10002:
-            inv_setting_response.error_msg += " (or type != 1 - check with device.list())"
+            inv_setting_response.error_msg += " (or type != 1 - check with plant.list_devices())"
 
         return inv_setting_response
 
@@ -115,7 +115,7 @@ class Inverter:
         https://www.showdoc.com.cn/262556420217021/6118532122241417
 
         Note:
-            Only applicable to devices with device type 1 (inverter) returned by device.list()
+            Only applicable to devices with device type 1 (inverter) returned by plant.list_devices()
 
         This method allows to set
         * predefined settings (see table below)
@@ -218,7 +218,7 @@ class Inverter:
 
         inv_setting_response = InverterSettingWrite.model_validate(response)
         if inv_setting_response.error_code == 10012:
-            inv_setting_response.error_msg += " (or type != 1 - check with device.list())"
+            inv_setting_response.error_msg += " (or type != 1 - check with plant.list_devices())"
 
         return inv_setting_response
 
@@ -232,7 +232,7 @@ class Inverter:
         https://www.showdoc.com.cn/262556420217021/6118559963559236
 
         Note:
-            Only applicable to devices with device type 1 (inverter) returned by device.list()
+            Only applicable to devices with device type 1 (inverter) returned by plant.list_devices()
 
         Rate limit(s):
         * The acquisition frequency is once every 5 minutes
@@ -323,7 +323,7 @@ class Inverter:
         https://www.showdoc.com.cn/262556420217021/6118571427302257
 
         Note:
-            Only applicable to devices with device type 1 (inverter) returned by device.list()
+            Only applicable to devices with device type 1 (inverter) returned by plant.list_devices()
 
         Rate limit(s):
         * The acquisition frequency is once every 5 minutes
@@ -563,7 +563,7 @@ class Inverter:
         https://www.showdoc.com.cn/262556420217021/6119373063246256
 
         Note:
-            Only applicable to devices with device type 1 (inverter) returned by device.list()
+            Only applicable to devices with device type 1 (inverter) returned by plant.list_devices()
 
         Rate limit(s):
         * The acquisition frequency is once every 5 minutes
@@ -830,7 +830,7 @@ class Inverter:
         https://www.showdoc.com.cn/262556420217021/6118823163304569
 
         Note:
-            Only applicable to devices with device type 1 (inverter) returned by device.list()
+            Only applicable to devices with device type 1 (inverter) returned by plant.list_devices()
 
         Rate limit(s):
         * The acquisition frequency is once every 5 minutes
@@ -925,7 +925,7 @@ class Inverter:
         https://www.showdoc.com.cn/262556420217021/6118823163304569
 
         Note:
-            Only applicable to devices with device type 1 (inverter) returned by device.list()
+            Only applicable to devices with device type 1 (inverter) returned by plant.list_devices()
 
         Rate limit(s):
         * The acquisition frequency is once every 5 minutes
