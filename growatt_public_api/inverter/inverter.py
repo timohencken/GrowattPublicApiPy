@@ -3,6 +3,14 @@ from typing import Optional, Union, List
 
 import truststore
 
+from growatt_public_api import DeviceType
+from pydantic_models.api_v4 import (
+    InverterDetailsV4,
+    InverterEnergyV4,
+    InverterEnergyHistoryV4,
+    InverterEnergyHistoryMultipleV4,
+    SettingWriteV4,
+)
 from pydantic_models.inverter import (
     InverterSettingWrite,
     InverterDetails,
@@ -16,6 +24,7 @@ from pydantic_models.inverter import (
 
 truststore.inject_into_ssl()
 from session import GrowattApiSession  # noqa: E402
+from api_v4.api_v4 import ApiV4  # noqa: E402
 
 
 class Inverter:
@@ -24,9 +33,11 @@ class Inverter:
     """
 
     session: GrowattApiSession
+    _api_v4: ApiV4
 
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
+        self._api_v4 = ApiV4(session)
 
     def setting_read(
         self,
@@ -222,6 +233,73 @@ class Inverter:
 
         return inv_setting_response
 
+    def setting_write_on_off(
+        self,
+        device_sn: str,
+        power_on: bool,
+    ) -> SettingWriteV4:
+        """
+        Set the power on and off using "new-api" endpoint
+        Turn device on/off
+        https://www.showdoc.com.cn/2540838290984246/11330750679726415
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            power_on (bool): True = Power On, False = Power Off
+
+        Returns:
+            SettingWriteV4
+            e.g.
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+        """
+
+        return self._api_v4.setting_write_on_off(
+            device_sn=device_sn,
+            device_type=DeviceType.INVERTER,
+            power_on=power_on,
+        )
+
+    def setting_write_active_power(
+        self,
+        device_sn: str,
+        active_power_percent: int,
+    ) -> SettingWriteV4:
+        """
+        Set the active power using "new-api" endpoint
+        Set the active power percentage of the device based on the device type and SN of the device.
+        https://www.showdoc.com.cn/2540838290984246/11330751643769012
+
+        Note:
+        * most devices can be configured to 0 ~ 100 %
+        * NOAH devices can be configured to 0 ~ 800 W
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            active_power_percent (int): Percentage of active power, range 0-100
+
+        Returns:
+            SettingWriteV4
+            e.g.
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        return self._api_v4.setting_write_active_power(
+            device_sn=device_sn,
+            device_type=DeviceType.INVERTER,
+            active_power=active_power_percent,
+        )
+
     def details(
         self,
         device_sn: str,
@@ -313,6 +391,85 @@ class Inverter:
         )
 
         return InverterDetails.model_validate(response)
+
+    def details_v4(
+        self,
+        device_sn: Union[str, List[str]],
+    ) -> InverterDetailsV4:
+        """
+        Batch device information using "new-api" endpoint
+        Retrieve basic information of devices in bulk based on device SN.
+        https://www.showdoc.com.cn/2540838290984246/11292915673945114
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 minutes.
+
+        Args:
+            device_sn (Union[str, List[str]]): Inverter serial number or list of (multiple) inverter serial numbers (max 100)
+
+        Returns:
+            InverterDetailsV4
+            e.g.
+            {   'data': {   'inv': [   {   'address': 1,
+                                           'alias': 'HPB3744071',
+                                           'big_device': False,
+                                           'children': None,
+                                           'communication_version': None,
+                                           'create_date': None,
+                                           'datalogger_sn': 'JPC2101182',
+                                           'device_type': 0,
+                                           'e_today': 0.0,
+                                           'e_total': 0.0,
+                                           'energy_day': 0.0,
+                                           'energy_day_map': {},
+                                           'energy_month': 0.0,
+                                           'energy_month_text': '0',
+                                           'fw_version': 'AH1.0',
+                                           'group_id': 0,
+                                           'id': 7,
+                                           'img_path': './css/img/status_gray.gif',
+                                           'inner_version': 'ahbb1916',
+                                           'inv_set_bean': None,
+                                           'inverter_info_status_css': 'vsts_table_ash',
+                                           'ipm_temperature': 0.0,
+                                           'last_update_time': 1613805596000,
+                                           'last_update_time_text': datetime.datetime(2021, 2, 20, 15, 19, 56),
+                                           'level': 4,
+                                           'load_text': '0%',
+                                           'location': '在这',
+                                           'lost': True,
+                                           'model': 269545841,
+                                           'model_text': 'A1B0D1T0PFU1M7S1',
+                                           'nominal_power': 6000,
+                                           'optimizer_list': None,
+                                           'parent_id': 'LIST_JPC2101182_0',
+                                           'plant_id': 0,
+                                           'plant_name': None,
+                                           'power': 0.0,
+                                           'power_max': None,
+                                           'power_max_text': None,
+                                           'power_max_time': None,
+                                           'record': None,
+                                           'rf_stick': None,
+                                           'serial_num': 'HPB3744071',
+                                           'status': -1,
+                                           'status_text': 'inverter.status.lost',
+                                           'tcp_server_ip': '192.168.3.35',
+                                           'temperature': 0.0,
+                                           'tree_id': 'HPB3744071',
+                                           'tree_name': 'HPB3744071',
+                                           'update_exist': False,
+                                           'updating': False,
+                                           'user_id': 0,
+                                           'user_name': None}]},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        return self._api_v4.details(
+            device_sn=device_sn,
+            device_type=DeviceType.INVERTER,
+        )
 
     def energy(
         self,
@@ -551,6 +708,107 @@ class Inverter:
         )
 
         return InverterEnergyOverview.model_validate(response)
+
+    def energy_v4(
+        self,
+        device_sn: Union[str, List[str]],
+    ) -> InverterEnergyV4:
+        """
+        Batch equipment data information using "new-api" endpoint
+        Retrieve the last detailed data for multiple devices based on their SN and device type.
+        https://www.showdoc.com.cn/2540838290984246/11292915898375566
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 minutes.
+
+        Args:
+            device_sn (Union[str, List[str]]): Inverter serial number or list of (multiple) inverter serial numbers (max 100)
+
+        Returns:
+            InverterEnergyV4
+            e.g.
+            {   'data': {   'inv': [   {   'again': False,
+                                           'big_device': False,
+                                           'current_string1': 0.0,
+                                           'current_string2': 0.0,
+                                           'current_string3': 0.0,
+                                           'current_string4': 0.0,
+                                           'current_string5': 0.0,
+                                           'current_string6': 0.0,
+                                           'current_string7': 0.0,
+                                           'current_string8': 0.0,
+                                           'device_sn': 'NHB691514F',
+                                           'dw_string_warning_value1': 0,
+                                           'e_rac_today': 0.0,
+                                           'e_rac_total': 308.0,
+                                           'epv1_today': 0.0,
+                                           'epv1_total': 120.8,
+                                           'epv2_today': 0.0,
+                                           'epv2_total': 0.0,
+                                           'epv_total': 120.8,
+                                           'fac': 0.0,
+                                           'fault_type': 30,
+                                           'i_pid_pvape': 0.0,
+                                           'i_pid_pvbpe': 0.0,
+                                           'iacr': 0.0,
+                                           'iacs': 0.0,
+                                           'iact': 0.0,
+                                           'id': 0,
+                                           'ipm_temperature': 28.7,
+                                           'ipv1': 0.0,
+                                           'ipv2': 0.0,
+                                           'ipv3': 0.0,
+                                           'n_bus_voltage': 149.2,
+                                           'op_fullwatt': 0.0,
+                                           'p_bus_voltage': 151.2,
+                                           'pac': 0.0,
+                                           'pacr': 0.0,
+                                           'pacs': 0.0,
+                                           'pact': 0.0,
+                                           'pf': 1.0,
+                                           'pid_status': 0,
+                                           'power_today': 0.0,
+                                           'power_total': 115.7,
+                                           'ppv': 0.0,
+                                           'ppv1': 0.0,
+                                           'ppv2': 0.0,
+                                           'ppv3': 0.0,
+                                           'rac': 0.0,
+                                           'real_op_percent': 0.0,
+                                           'status': 3,
+                                           'status_text': 'Fault',
+                                           'str_fault': 0.0,
+                                           'temperature': 27.9,
+                                           'time': datetime.datetime(2024, 11, 13, 11, 4, 59),
+                                           'time_calendar': 1731467099997,
+                                           'time_total': 244.66666666666666,
+                                           'time_total_text': '244.7',
+                                           'v_pid_pvape': 0.0,
+                                           'v_pid_pvbpe': 0.0,
+                                           'v_string1': 0.0,
+                                           'v_string2': 0.0,
+                                           'v_string3': 0.0,
+                                           'v_string4': 0.0,
+                                           'v_string5': 0.0,
+                                           'v_string6': 0.0,
+                                           'v_string7': 0.0,
+                                           'v_string8': 0.0,
+                                           'vacr': 2.0,
+                                           'vacs': 3.5,
+                                           'vact': 1.4,
+                                           'vpv1': 299.5,
+                                           'vpv2': 21.6,
+                                           'vpv3': 0.0,
+                                           'w_pid_fault_value': 0,
+                                           'w_string_status_value': 0,
+                                           'warn_code': 0,
+                                           'warning_value1': 0,
+                                           'warning_value2': 0}]},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        return self._api_v4.energy(device_sn=device_sn, device_type=DeviceType.INVERTER)
 
     def energy_multiple(
         self,
@@ -911,6 +1169,67 @@ class Inverter:
         )
 
         return InverterEnergyHistory.model_validate(response)
+
+    def energy_history_v4(
+        self,
+        device_sn: str,
+        date_: Optional[date] = None,
+    ) -> InverterEnergyHistoryV4:
+        """
+        One day data using "new-api" endpoint
+        Retrieves all detailed data for a specific device on a particular day based on the device SN, device type, and date.
+        https://www.showdoc.com.cn/2540838290984246/11292916022305414
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 minutes.
+
+        Args:
+            device_sn (str): Device unique serial number (SN)
+            date_ (Optional[date]): Start Date - defaults to today
+
+        Returns:
+            InverterEnergyHistoryV4
+            e.g.
+            {   'data': {   'datas': [   {
+                                             <see energy_v4() for attributes>
+                                         }],
+                            'have_next': False,
+                            'start': 0},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        return self._api_v4.energy_history(device_sn=device_sn, device_type=DeviceType.INVERTER, date_=date_)
+
+    def energy_history_multiple_v4(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: Union[str, List[str]],
+        date_: Optional[date] = None,
+    ) -> InverterEnergyHistoryMultipleV4:
+        """
+        One day data using "new-api" endpoint
+        Retrieves all detailed data for a specific device on a particular day based on the device SN, device type, and date.
+        https://www.showdoc.com.cn/2540838290984246/11292916022305414
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 minutes.
+
+        Args:
+            device_sn (Union[str, List[str]]): Inverter serial number or list of (multiple) inverter serial numbers (max 100)
+            date_ (Optional[date]): Start Date - defaults to today
+
+        Returns:
+            MinEnergyHistoryMultipleV4
+            e.g.
+            {   'data': {   'NHB691514F': [   {
+                                                  <see energy_v4() for attributes>
+                                              }]},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
+
+        """
+
+        return self._api_v4.energy_history_multiple(device_sn=device_sn, device_type=DeviceType.INVERTER, date_=date_)
 
     def alarms(
         self,

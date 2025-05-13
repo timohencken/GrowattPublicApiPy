@@ -63,7 +63,6 @@ This package aims to
   * list devices assigned to plant
     * list dataloggers `plant.list_dataloggers()`
     * list inverters/storage `plant.list_devices()`
-      * ***use this to query your inverter's*** "*TYPE*" ***for selecting the correct submodule***
 * Datalogger
   * verify datalogger's CC code
     * `device.datalogger_validate()`
@@ -78,7 +77,6 @@ This package aims to
       * `plant.list_dataloggers()`
       * `datalogger.list_smart_meters()`
       * `datalogger.list_env_sensors()`
-    ***use this to query your inverter's*** "*TYPE*" ***required for subsequent requests***
   * query device type
     * `device.type_info()`
     * *** this is NOT the same as the inverter type ***
@@ -89,19 +87,29 @@ This package aims to
   * get device tree
     * get plant by device_sn `device.get_plant()`
     * get datalogger by device_sn `device.get_datalogger()`
-* Inverter (*TYPE=1* (including MAX))
+* Inverter (DeviceType.INVERTER)
   * general device data
-    * read device data `inverter.details()`
+    * read device data
+      * `inverter.details()`
+      * `inverter.details_v4()` (using new API)
     * read alarms/notification `inverter.alarms()`
   * device settings
     * read settings value `inverter.setting_read()`
-    * write settings value `inverter.setting_write()` (***use with caution***)
+    * write settings value
+      * `inverter.setting_write()` (***use with caution***)
+      * `inverter.setting_write_on_off()` (using new API)
+      * `inverter.setting_write_active_power()` (using new API)
   * device power/energy metrics
-    * current `inverter.energy()`
-    * current for multiple inverters `inverter.energy_multiple()`
-    * historical data `inverter.energy_history()`
+    * current
+      * `inverter.energy()`
+      * `inverter.energy_v4()` (using new API)
+      * `inverter.energy_multiple()`
+    * historical data
+      * `inverter.energy_history()`
+      * `inverter.energy_history_v4()` (using new API)
+      * `inverter.energy_history_multiple_v4()` (using new API)
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* Storage (*TYPE=2*)
+* Storage (DeviceType.STORAGE)
   * general device data
     * read device data `storage.details()`
     * read alarms/notification `storage.alarms()`
@@ -112,7 +120,7 @@ This package aims to
     * current `storage.energy()`
     * historical data `storage.energy_history()`
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* MAX (*TYPE=4* - MAX)
+* MAX (DeviceType.MAX)
   * general device data
     * read device data `max.details()`
     * read alarms/notification `max.alarms()`
@@ -124,7 +132,7 @@ This package aims to
     * current for multiple inverters `max.energy_multiple()`
     * historical data `max.energy_history()`
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* SPH (*TYPE=5* - SPH/MIX) (TODO: refactor rename to MIX?)
+* SPH (DeviceType.SPH - (MIX))
   * general device data
     * read device data `sph.details()`
     * read alarms/notification `sph.alarms()`
@@ -136,7 +144,7 @@ This package aims to
     * current for multiple inverters `sph.energy_multiple()`
     * historical data `sph.energy_history()`
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* SPA (*TYPE=6* - SPA)
+* SPA (DeviceType.SPA)
   * general device data
     * read device data `spa.details()`
     * read alarms/notification `spa.alarms()`
@@ -148,7 +156,7 @@ This package aims to
     * current for multiple inverters `spa.energy_multiple()`
     * historical data `spa.energy_history()`
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* MIN (*TYPE=7* - MIN/MAC/MOD-XH/MID-XH/NEO)
+* MIN (DeviceType.MIN - TLX/MIN/MAC/MOD-XH/MID-XH/NEO)
   * general device data
     * read device data
       * `min.details()`
@@ -171,10 +179,10 @@ This package aims to
       * `min.energy_multiple()`
     * historical data
       * `min.energy_history()`
-      * `min.energy_history_v4()`
-      * `min.energy_history_multiple_v4()`
+      * `min.energy_history_v4()` (using new API)
+      * `min.energy_history_multiple_v4()` (using new API)
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* PCS (*TYPE=8*)
+* PCS (DeviceType.PCS)
   * general device data
     * read device data `pcs.details()`
     * read alarms/notification `pcs.alarms()`
@@ -182,14 +190,14 @@ This package aims to
     * current `pcs.energy()`
     * historical data `pcs.energy_history()`
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* HPS (*TYPE=9*)
+* HPS (DeviceType.HPS)
   * general device data
     * read device data `hps.details()`
     * read alarms/notification `hps.alarms()`
   * device power/energy metrics
     * current `hps.energy()`
     * historical data `hps.energy_history()`
-* PBD (*TYPE=10*)
+* PBD (DeviceType.PBD)
   * general device data
     * read device data `pbd.details()`
     * read alarms/notification `pbd.alarms()`
@@ -197,26 +205,26 @@ This package aims to
     * current `pbd.energy()`
     * historical data `pbd.energy_history()`
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* Smart meter (*TYPE=3* - SmartMeter/SDM/CHNT)
+* Smart meter (DeviceType.OTHER - SmartMeter/SDM/CHNT)
   * get meters attached to datalogger
     * `datalogger.list_smart_meters()`
   * device power/energy metrics
     * current `smart_meter.energy()`
     * historical data `smart_meter.energy_history()`
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* Environmental sensor (*TYPE=3* - Temperature/Humidity/Wind/...)
+* Environmental sensor (DeviceType.OTHER - Temperature/Humidity/Wind/...)
   * get sensors attached to datalogger
     * `datalogger.list_env_sensors()`
   * device metrics
     * current `env_sensor.metrics()`
     * historical data `env_sensor.metrics_history()`
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* VPP (VirtualPowerPlant *TYPE=3/5/6* - MIN/SPH/SPA)
+* VPP (DeviceType.MIN/SPH/SPA - VirtualPowerPlant MIN/SPH/SPA)
   * get current State-of-Charge (SOC) `vpp.soc()`
   * change time period settings
     * set current (dis)charge power `vpp.write()` (***use with caution***)
     * configure (dis)charge power for time periods `vpp.write_time_periods()` (***use with caution***)
-* GroBoost (*TYPE=11* - GroBoost)
+* GroBoost (DeviceType.GROBOOST)
   * general device data
     * read device data `groboost.details()`
   * device metrics

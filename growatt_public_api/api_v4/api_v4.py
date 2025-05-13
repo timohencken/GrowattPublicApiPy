@@ -1231,7 +1231,7 @@ class ApiV4:
             },
         )
 
-        if device_type == DeviceType.INVERTER:  # TODO
+        if device_type == DeviceType.INVERTER:
             return InverterDetailsV4.model_validate(response)
         elif device_type == DeviceType.STORAGE:  # TODO
             return StorageDetailsV4.model_validate(response)
@@ -3222,7 +3222,7 @@ class ApiV4:
             },
         )
 
-        if device_type == DeviceType.INVERTER:  # TODO
+        if device_type == DeviceType.INVERTER:
             return InverterEnergyV4.model_validate(response)
         elif device_type == DeviceType.STORAGE:  # TODO
             return StorageEnergyV4.model_validate(response)
@@ -3305,7 +3305,7 @@ class ApiV4:
             },
         )
 
-        if device_type == DeviceType.INVERTER:  # TODO
+        if device_type == DeviceType.INVERTER:
             return InverterEnergyHistoryV4.model_validate(response)
         elif device_type == DeviceType.STORAGE:  # TODO
             return StorageEnergyHistoryV4.model_validate(response)
@@ -3390,7 +3390,7 @@ class ApiV4:
             },
         )
 
-        if device_type == DeviceType.INVERTER:  # TODO
+        if device_type == DeviceType.INVERTER:
             return InverterEnergyHistoryMultipleV4.model_validate(response)
         elif device_type == DeviceType.STORAGE:  # TODO
             return StorageEnergyHistoryMultipleV4.model_validate(response)
@@ -3471,7 +3471,6 @@ class ApiV4:
             },
         )
 
-        # TODO "inv"
         # TODO "storage"
         # TODO "max"
         # TODO "sph"
@@ -3535,7 +3534,6 @@ class ApiV4:
             },
         )
 
-        # TODO "inv"
         # TODO "storage"
         # TODO "max"
         # TODO "sph"
@@ -3803,7 +3801,6 @@ class ApiV4:
         )
 
         # TODO The current interface only supports sph, spa, min, wit device types.
-        # TODO NOT "inv"
         # TODO NOT "storage"
         # TODO NOT "max"
         # TODO "sph"
@@ -4009,7 +4006,6 @@ class ApiV4:
         )
 
         # TODO The current interface only supports sph, spa, min, wit device types.
-        # TODO NOT "inv"
         # TODO NOT "storage"
         # TODO NOT "max"
         # TODO "sph"

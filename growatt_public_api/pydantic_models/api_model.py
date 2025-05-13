@@ -1,6 +1,7 @@
 # Idea based on fastapi-restful which has a MIT License
 # Fastapi-restful was deprecated in favor of fastapi-utils (which is MIT as well).
 # This code is a rewritten and simplified version of the code from fastapi-restful and adjusted to work with pydantic V2.
+import datetime
 from typing import Any, TypeAlias, Annotated, Union
 
 # LICENSE: https://github.com/dmontagu/fastapi-utils/blob/master/LICENSE
@@ -79,5 +80,5 @@ class GrowattTime(ApiModel):
     minutes: int  # e.g. 32
     seconds: int  # e.g. 1
     day: int  # weekday, e.g. 2
-    time: int  # timestamp, e.g. 1740414721500
+    time: datetime.datetime  # timestamp, e.g. 1740414721500
     timezone_offset: int  # e.g. -480
