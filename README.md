@@ -335,6 +335,7 @@ To the best of our knowledge only the settings functions perform modifications t
   * refactoring: moved some endpoints from/to smart_meter/env_sensor/datalogger
   * common device type `growatt_public_api.DeviceType`
     * retrieve device type by `api.device.get_device_type()`
+      # FIXME idea: return correct API by device type (e.g. inv.* for inverter, storage.* for storage, etc.)
   * # FIXME ONGOING: refactor to integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
 * 2025.05.12 (pre-alpha)
   * add tests to verify returned parameters are same as expected parameters

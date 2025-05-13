@@ -50,26 +50,6 @@ truststore.inject_into_ssl()
 from session import GrowattApiSession  # noqa: E402
 
 
-NEW_API_ERROR_CODES = {  # TODO use this for something?
-    0: "Normal",
-    1: "System Error",
-    2: "Invalid Secret Token",
-    3: "Device Permission Verification Failed",
-    4: "Device Not Found",
-    5: "Device Offline",
-    6: "Failed to Set Parameters",
-    7: "Device Type Error",
-    8: "Device SN is Empty",
-    9: "Date Cannot Be Empty",
-    10: "Page Number Cannot Be Empty",
-    11: "Device SN Exceeds Quantity Limit",
-    12: "No Permission to Access Device",
-    100: "API Access Interval",
-    101: "No Permission to Access",
-    102: "Access Frequency Limit, Different Interfaces Have Different Time Limits",
-    -1: "Please Use the New Domain for Access",
-}
-
 DeviceTypeStr = Literal["inv", "storage", "max", "sph", "spa", "min", "wit", "sph-s", "noah"]
 
 
@@ -1251,23 +1231,23 @@ class ApiV4:
             },
         )
 
-        if device_type == DeviceType.INVERTER:
+        if device_type == DeviceType.INVERTER:  # TODO
             return InverterDetailsV4.model_validate(response)
-        elif device_type == DeviceType.STORAGE:
+        elif device_type == DeviceType.STORAGE:  # TODO
             return StorageDetailsV4.model_validate(response)
-        elif device_type == DeviceType.MAX:
+        elif device_type == DeviceType.MAX:  # TODO
             return MaxDetailsV4.model_validate(response)
-        elif device_type == DeviceType.SPH:
+        elif device_type == DeviceType.SPH:  # TODO
             return SphDetailsV4.model_validate(response)
-        elif device_type == DeviceType.SPA:
+        elif device_type == DeviceType.SPA:  # TODO
             return SpaDetailsV4.model_validate(response)
-        elif device_type == DeviceType.MIN:
+        elif device_type == DeviceType.MIN:  # TODO
             return MinDetailsV4.model_validate(response)
-        elif device_type == DeviceType.WIT:
+        elif device_type == DeviceType.WIT:  # TODO
             return WitDetailsV4.model_validate(response)
-        elif device_type == DeviceType.SPHS:
+        elif device_type == DeviceType.SPHS:  # TODO
             return SphsDetailsV4.model_validate(response)
-        elif device_type == DeviceType.NOAH:
+        elif device_type == DeviceType.NOAH:  # TODO
             return NoahDetailsV4.model_validate(response)
         else:
             raise ValueError(f"Unknown device type: {device_type}")
@@ -3242,23 +3222,23 @@ class ApiV4:
             },
         )
 
-        if device_type == DeviceType.INVERTER:
+        if device_type == DeviceType.INVERTER:  # TODO
             return InverterEnergyV4.model_validate(response)
-        elif device_type == DeviceType.STORAGE:
+        elif device_type == DeviceType.STORAGE:  # TODO
             return StorageEnergyV4.model_validate(response)
-        elif device_type == DeviceType.MAX:
+        elif device_type == DeviceType.MAX:  # TODO
             return MaxEnergyV4.model_validate(response)
-        elif device_type == DeviceType.SPH:
+        elif device_type == DeviceType.SPH:  # TODO
             return SphEnergyV4.model_validate(response)
-        elif device_type == DeviceType.SPA:
+        elif device_type == DeviceType.SPA:  # TODO
             return SpaEnergyV4.model_validate(response)
-        elif device_type == DeviceType.MIN:
+        elif device_type == DeviceType.MIN:  # TODO
             return MinEnergyV4.model_validate(response)
-        elif device_type == DeviceType.WIT:
+        elif device_type == DeviceType.WIT:  # TODO
             return WitEnergyV4.model_validate(response)
-        elif device_type == DeviceType.SPHS:
+        elif device_type == DeviceType.SPHS:  # TODO
             return SphsEnergyV4.model_validate(response)
-        elif device_type == DeviceType.NOAH:
+        elif device_type == DeviceType.NOAH:  # TODO
             logger.warning(
                 "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
             )
@@ -3325,23 +3305,23 @@ class ApiV4:
             },
         )
 
-        if device_type == DeviceType.INVERTER:
+        if device_type == DeviceType.INVERTER:  # TODO
             return InverterEnergyHistoryV4.model_validate(response)
-        elif device_type == DeviceType.STORAGE:
+        elif device_type == DeviceType.STORAGE:  # TODO
             return StorageEnergyHistoryV4.model_validate(response)
-        elif device_type == DeviceType.MAX:
+        elif device_type == DeviceType.MAX:  # TODO
             return MaxEnergyHistoryV4.model_validate(response)
-        elif device_type == DeviceType.SPH:
+        elif device_type == DeviceType.SPH:  # TODO
             return SphEnergyHistoryV4.model_validate(response)
-        elif device_type == DeviceType.SPA:
+        elif device_type == DeviceType.SPA:  # TODO
             return SpaEnergyHistoryV4.model_validate(response)
-        elif device_type == DeviceType.MIN:
+        elif device_type == DeviceType.MIN:  # TODO
             return MinEnergyHistoryV4.model_validate(response)
-        elif device_type == DeviceType.WIT:
+        elif device_type == DeviceType.WIT:  # TODO
             return WitEnergyHistoryV4.model_validate(response)
-        elif device_type == DeviceType.SPHS:
+        elif device_type == DeviceType.SPHS:  # TODO
             return SphsEnergyHistoryV4.model_validate(response)
-        elif device_type == DeviceType.NOAH:
+        elif device_type == DeviceType.NOAH:  # TODO
             logger.warning(
                 "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
             )
@@ -3410,23 +3390,23 @@ class ApiV4:
             },
         )
 
-        if device_type == DeviceType.INVERTER:
+        if device_type == DeviceType.INVERTER:  # TODO
             return InverterEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == DeviceType.STORAGE:
+        elif device_type == DeviceType.STORAGE:  # TODO
             return StorageEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == DeviceType.MAX:
+        elif device_type == DeviceType.MAX:  # TODO
             return MaxEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == DeviceType.SPH:
+        elif device_type == DeviceType.SPH:  # TODO
             return SphEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == DeviceType.SPA:
+        elif device_type == DeviceType.SPA:  # TODO
             return SpaEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == DeviceType.MIN:
+        elif device_type == DeviceType.MIN:  # TODO
             return MinEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == DeviceType.WIT:
+        elif device_type == DeviceType.WIT:  # TODO
             return WitEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == DeviceType.SPHS:
+        elif device_type == DeviceType.SPHS:  # TODO
             return SphsEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == DeviceType.NOAH:
+        elif device_type == DeviceType.NOAH:  # TODO
             logger.warning(
                 "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
             )
@@ -3491,6 +3471,16 @@ class ApiV4:
             },
         )
 
+        # TODO "inv"
+        # TODO "storage"
+        # TODO "max"
+        # TODO "sph"
+        # TODO "spa"
+        # TODO "min"
+        # TODO "wit"
+        # TODO "sph-s"
+        # TODO NOT "noah"
+
         return SettingWriteV4.model_validate(response)
 
     def setting_write_active_power(  # noqa: C901 'ApiV4.energy' is too complex (11)
@@ -3546,6 +3536,16 @@ class ApiV4:
             },
         )
 
+        # TODO "inv"
+        # TODO "storage"
+        # TODO "max"
+        # TODO "sph"
+        # TODO "spa"
+        # TODO "min"
+        # TODO "wit"
+        # TODO "sph-s"
+        # TODO "noah"
+
         return SettingWriteV4.model_validate(response)
 
     def setting_write_soc_upper_limit(  # noqa: C901 'ApiV4.energy' is too complex (11)
@@ -3597,6 +3597,8 @@ class ApiV4:
                 "value": soc_limit,
             },
         )
+
+        # TODO "noah"
 
         return SettingWriteV4.model_validate(response)
 
@@ -3650,6 +3652,8 @@ class ApiV4:
                 "value": soc_limit,
             },
         )
+
+        # TODO "noah"
 
         return SettingWriteV4.model_validate(response)
 
@@ -3734,6 +3738,8 @@ class ApiV4:
             },
         )
 
+        # TODO "noah"
+
         return SettingWriteV4.model_validate(response)
 
     def setting_read_vpp_param(  # noqa: C901 'ApiV4.energy' is too complex (11)
@@ -3797,6 +3803,17 @@ class ApiV4:
                 "setType": parameter_id,
             },
         )
+
+        # TODO The current interface only supports sph, spa, min, wit device types.
+        # TODO NOT "inv"
+        # TODO NOT "storage"
+        # TODO NOT "max"
+        # TODO "sph"
+        # TODO "spa"
+        # TODO "min"
+        # TODO "wit"
+        # TODO NOT "sph-s"
+        # TODO NOT "noah"
 
         return SettingReadVppV4.model_validate(response)
 
@@ -3993,5 +4010,16 @@ class ApiV4:
                 "value": str(value),
             },
         )
+
+        # TODO The current interface only supports sph, spa, min, wit device types.
+        # TODO NOT "inv"
+        # TODO NOT "storage"
+        # TODO NOT "max"
+        # TODO "sph"
+        # TODO "spa"
+        # TODO "min"
+        # TODO "wit"
+        # TODO NOT "sph-s"
+        # TODO NOT "noah"
 
         return SettingWriteV4.model_validate(response)

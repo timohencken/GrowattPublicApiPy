@@ -123,9 +123,6 @@ class Device:
             )
             return None
 
-        # FIXME search through code to find other endpoints returning v1 device ids (e.g. 22=min)
-        # FIXME idea: return correct API by device type (e.g. inv.* for inverter, storage.* for storage, etc.)
-
     def list(
         self,
         page: Optional[int] = None,
