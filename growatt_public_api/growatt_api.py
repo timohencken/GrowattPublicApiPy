@@ -2,11 +2,12 @@ from typing import Optional
 
 import truststore
 
-
 truststore.inject_into_ssl()
+
 from session import GrowattApiSession  # noqa: E402
 from user import User  # noqa: E402
 from plant import Plant  # noqa: E402
+from datalogger import Datalogger  # noqa: E402
 from device import Device  # noqa: E402
 from inverter import Inverter  # noqa: E402
 from storage import Storage  # noqa: E402
@@ -28,6 +29,7 @@ class GrowattApi:
     session: GrowattApiSession
     user: User
     plant: Plant
+    datalogger: Datalogger
     device: Device
     inverter: Inverter
     storage: Storage
@@ -60,6 +62,7 @@ class GrowattApi:
         self.session = GrowattApiSession(token=token, server_url=server_url or "https://openapi.growatt.com")
         self.user = User(self.session)
         self.plant = Plant(self.session)
+        self.datalogger = Datalogger(self.session)
         self.device = Device(self.session)
         self.inverter = Inverter(self.session)
         self.storage = Storage(self.session)

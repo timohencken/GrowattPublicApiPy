@@ -5,7 +5,6 @@ import truststore
 from loguru import logger
 
 from pydantic_models.api_v4 import (
-    DeviceListV4,
     InverterDetailsV4,
     StorageDetailsV4,
     SphDetailsV4,
@@ -88,57 +87,6 @@ class ApiV4:
 
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
-
-    def list(
-        self,
-        page: Optional[int] = None,
-    ) -> DeviceListV4:
-        """
-        Device List
-        Retrieve the list of devices associated with the distributor, installer, and terminal account of the secret token.
-        The devices obtained through this interface are the only ones allowed to fetch data from.
-        Devices not on the list are not permitted to retrieve data.
-        https://www.showdoc.com.cn/2540838290984246/11292915113214428
-
-        Returned "device_type" values are: (according to https://www.showdoc.com.cn/2540838290984246/11292914311318022 and https://www.showdoc.com.cn/p/b42ee029e131c68c4dbfdd89285c0ec1)
-        * inv
-        * storage
-        * max
-        * sph
-        * spa
-        * min
-        * wit
-        * sph-s
-        * noah
-
-        Rate limit(s):
-        * Fetch frequency is limited to once every 5 seconds.
-
-        Args:
-            page (Optional[int]): Page number, default 1 (1~n)
-
-        Returns:
-            DeviceList
-            {   'data': {   'count': 7,
-                            'data': [   {'create_date': datetime.datetime(2021, 6, 29, 12, 2, 46), 'datalogger_sn': None, 'device_sn': 'HPJ0BF20FU', 'device_type': 'max'},
-                                        {'create_date': datetime.datetime(2024, 11, 30, 17, 37, 26), 'datalogger_sn': 'QMN000BZP0000000', 'device_sn': 'BZP0000000', 'device_type': 'min'}
-                                        {'create_date': datetime.datetime(2017, 1, 18, 14, 9, 53), 'datalogger_sn': None, 'device_sn': 'PR34211399', 'device_type': 'inv'}],
-                            'last_pager': True,
-                            'not_pager': False,
-                            'other': None,
-                            'page_size': 100,
-                            'pages': 1,
-                            'start_count': 0},
-                'error_code': 0,
-                'error_msg': 'SUCCESSFUL_OPERATION'}
-        """
-
-        response = self.session.post(
-            endpoint="new-api/queryDeviceList",
-            params={"page": page},
-        )
-
-        return DeviceListV4.model_validate(response)
 
     def details(  # noqa: C901 'ApiV4.details' is too complex (11)
         self,

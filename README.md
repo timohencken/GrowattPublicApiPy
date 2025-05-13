@@ -61,7 +61,7 @@ This package aims to
   * power metrics by day
     * `plant.power()`
   * list devices assigned to plant
-    * list dataloggers `device.list_dataloggers()`
+    * list dataloggers `plant.list_dataloggers()`
     * list inverters/storage `plant.list_devices()`
       * ***use this to query your inverter's*** "*TYPE*" ***for selecting the correct submodule***
 * Datalogger
@@ -70,7 +70,15 @@ This package aims to
   * get sensors attached to datalogger
     * get smart meters `datalogger.list_smart_meters()`
     * get environmental sensors `datalogger.list_env_sensors()`
-* Generic - all inverter types
+* Device (*ALL* inverter types)
+  * get devices (inverters) assigned to current user
+    * `device.list()`
+    * see also
+      * `plant.list_devices()`
+      * `plant.list_dataloggers()`
+      * `datalogger.list_smart_meters()`
+      * `datalogger.list_env_sensors()`
+    ***use this to query your inverter's*** "*TYPE*" ***required for subsequent requests***
   * query device type
     * `device.type_info()`
     * *** this is NOT the same as the inverter type ***
@@ -205,9 +213,6 @@ This package aims to
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 
 ### API v4 (a few additional endpoints)
-* get devices (inverters) assigned to current user
-  * `v4.list()`
-    ***use this to query your inverter's*** "*TYPE*" ***required for subsequent requests***
 * general device data
   * read device data `v4.details()`
 * device metrics
@@ -268,18 +273,16 @@ print(f"{plant_id=}")
 
 ### get your devices
 ```python
-from growatt_api import GrowattDeviceType
-
-device_list = api.device.list(plant_id=plant_id)
+device_list = api.plant.list_devices(plant_id=plant_id)
 device_sn = device_list.data.devices[0].device_sn
-device_type = device_list.data.devices[0].type
-print(f"{device_type=} ({GrowattDeviceType(device_type).name}), {device_sn=}")
-# => device_type=7 (min), device_sn='BZP0000000'
+device_type = api.device.get_device_type(device_sn=device_sn)
+print(f"{device_type=}, {device_sn=}")
+# => device_type=DeviceType.MIN, device_sn='BZP0000000'
 ```
 
 ### query device metrics
 Use the submodule matching your device type to retrieve its metrics or settings
-Note: Make sure to use `device.list()` for retrieving your device type - the internal type may differ form the marketing name.
+Note: Make sure to use `device.get_device_type()` for retrieving your device type - the internal type may differ form the marketing name.
 ```python
 min_details = api.min.details(device_sn=device_sn)
 print(min_details.data.model_dump_json())
@@ -321,17 +324,18 @@ To the best of our knowledge only the settings functions perform modifications t
 ***The library is used entirely at your own risk.***
 
 # TODOs
-* TODO: refactor to integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
 * TODO: refactor to integrate VPP into MIN,SPA,SPH
 * TODO: add caching to 5-minute-interval endpoints
   * ongoing - still some TODOs
-* TODO: common device type
 * TODO: generate & publish docs
 
 # Changelog
 * TBA (pre-alpha)
   * refactoring: moved some endpoints from/to plant/device/datalogger
   * refactoring: moved some endpoints from/to smart_meter/env_sensor/datalogger
+  * common device type `growatt_public_api.DeviceType`
+    * retrieve device type by `api.device.get_device_type()`
+  * # FIXME ONGOING: refactor to integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
 * 2025.05.12 (pre-alpha)
   * add tests to verify returned parameters are same as expected parameters
 * 2025.03.28 (pre-alpha)

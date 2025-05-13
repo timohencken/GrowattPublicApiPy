@@ -1,5 +1,5 @@
 from growatt_types import (  # noqa: F401
-    GrowattDeviceType,
+    DeviceType,
     GrowattCountry,
     PlantType,
 )

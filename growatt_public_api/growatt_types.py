@@ -1,19 +1,90 @@
-from enum import IntEnum, Enum
+from enum import Enum
+from typing import Optional, Self
 
 
-class GrowattDeviceType(IntEnum):
-    inverter = 1  # (including MAX)
-    storage = 2
-    other = 3  # smart meter / environmental tester / vpp
-    max = 4
-    sph = 5
-    spa = 6  # MIX
-    min = 7  # MIN / MAC / MOD-XH / MID-XH / NEO
-    pcs = 8
-    hps = 9
-    pbd = 10
-    groboost = 11
-    # vpp: supported by min, spa, sph
+class DeviceType(Enum):
+    GROBOOST = "groboost"
+    HPS = "hps"
+    INVERTER = "inv"
+    MAX = "max"
+    MIN = "min"
+    NOAH = "noah"
+    PBD = "pbd"
+    PCS = "pcs"
+    SPA = "spa"
+    SPH = "sph"
+    SPHS = "sph-s"
+    STORAGE = "storage"
+    WIT = "wit"
+    OTHER = "other"
+
+    @classmethod
+    def from_device_type_info(cls, device_type: int) -> Optional[Self]:
+        """
+        Args:
+            device_type (int): The device type as returned by device.type_info()
+        Returns:
+            DeviceType: The mapped enum value.
+        """
+        mapper = {
+            0: cls.OTHER,  # (datalogger / unknown / not existing ...)
+            16: cls.INVERTER,
+            17: cls.SPH,
+            18: cls.MAX,
+            19: cls.SPA,
+            22: cls.MIN,
+            81: cls.PCS,
+            82: cls.HPS,
+            83: cls.PBD,
+            96: cls.STORAGE,
+            218: cls.WIT,
+            260: cls.SPHS,
+        }
+        return mapper.get(device_type)
+
+    @classmethod
+    def from_device_list(cls, device_type: str) -> Optional[Self]:
+        """
+        Args:
+            device_type (str): The device type as returned by device.list()
+        Returns:
+            DeviceType: The mapped enum value.
+        """
+        mapper = {
+            "inv": cls.INVERTER,
+            "storage": cls.STORAGE,
+            "max": cls.MAX,
+            "sph": cls.SPH,
+            "spa": cls.SPA,
+            "min": cls.MIN,
+            "wit": cls.WIT,
+            "sph-s": cls.SPHS,
+            "noah": cls.NOAH,
+        }
+        return mapper.get(device_type)
+
+    @classmethod
+    def from_plant_list_devices(cls, device_type: int) -> Optional[Self]:
+        """
+        Args:
+            device_type (int): The device type as returned by plant.list_devices()
+        Returns:
+            DeviceType: The mapped enum value.
+        """
+        mapper = {
+            1: cls.INVERTER,
+            2: cls.STORAGE,
+            3: cls.OTHER,  # (datalogger, smart meter, environmental sensor, ...)
+            4: cls.MAX,
+            5: cls.SPH,
+            6: cls.SPA,
+            7: cls.MIN,
+            8: cls.PCS,
+            9: cls.HPS,
+            10: cls.PBD,
+            11: cls.GROBOOST,
+        }
+        return mapper.get(device_type)
 
 
 class PlantType(Enum):

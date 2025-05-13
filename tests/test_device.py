@@ -3,10 +3,10 @@ from typing import Union
 from unittest import skip
 from unittest.mock import patch
 
-from api_v4 import ApiV4
 from growatt_public_api import (
     GrowattApiSession,
     Device,
+    DeviceType,
 )
 from pydantic_models import PlantInfo
 from pydantic_models.device import (
@@ -47,14 +47,80 @@ class TestDevice(unittest.TestCase):
         cls.api = Device(session=gas)
         # get a device
         try:
-            apiv4 = ApiV4(session=gas)
-            _devices = apiv4.list()
+            _devices = cls.api.list()
             sn_list = [x for x in _devices.data.data]  # select any type
             cls.device_sn = sn_list[0].device_sn
             cls.datalogger_sn = sn_list[0].datalogger_sn
         except AttributeError:
             cls.device_sn = "SASF819012"  # ['SASF819012', 'GRT0010086', 'RUK0CAE00J', 'TAG1234567', 'GRT1234001', 'GRT1235001', 'GRT1235002', 'GRT1235003', 'GRT1235004', 'GRT1235005', 'GRT1235006', 'GRT1235112', 'YYX1235112', 'YYX1235113', 'GRT1236601', 'GRT1236602', 'GRT1236603', 'GRT1236604', 'GRT1236605', 'EVK0BHX111']
             cls.datalogger_sn = "WLC082100F"
+
+    def test_get_device_type(self):
+        """test device type detection"""
+        gas_v1 = GrowattApiSession(
+            # several min devices seen on v1 test server
+            server_url="https://test.growatt.com",
+            token="6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
+        )
+        device_api_v1 = Device(session=gas_v1)
+        gas_v4 = GrowattApiSession(
+            # several min devices seen on v1 test server
+            server_url="http://183.62.216.35:8081",
+            token="wa265d2h1og0873ml07142r81564hho6",  # gitleaks:allow
+        )
+        device_api_v4 = Device(session=gas_v4)
+        expected_devices = [
+            # GROBOOST not available
+            # HPS not available
+            # INVERTER
+            {"expected": DeviceType.INVERTER, "device_sn": "NHB691514F", "api": device_api_v4},
+            # MAX
+            {"expected": DeviceType.MAX, "device_sn": "SASF819012", "api": device_api_v1},
+            {"expected": DeviceType.MAX, "device_sn": "QXHLD7F0C9", "api": device_api_v4},
+            # MIN
+            {"expected": DeviceType.MIN, "device_sn": "GRT0010086", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "RUK0CAE00J", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "TAG1234567", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1234001", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1235001", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1235002", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1235003", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1235004", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1235005", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1235006", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1235112", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "YYX1235112", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "YYX1235113", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1236601", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1236602", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1236603", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1236604", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1236605", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "EVK0BHX111", "api": device_api_v1},
+            # NOAH not available
+            # PBD not available
+            # PCS not available
+            # SPA
+            {"expected": DeviceType.SPA, "device_sn": "CHENYINSHU", "api": device_api_v4},
+            # SPH
+            {"expected": DeviceType.SPH, "device_sn": "AQM1234567", "api": device_api_v4},
+            # SPH-S
+            {"expected": DeviceType.SPHS, "device_sn": "EFP0N1J023", "api": device_api_v4},
+            # STORAGE
+            {"expected": DeviceType.STORAGE, "device_sn": "KHMOCM5688", "api": device_api_v4},
+            # WIT
+            {"expected": DeviceType.WIT, "device_sn": "QWL0DC3002", "api": device_api_v4},
+            # Error cases
+            {"expected": None, "device_sn": "NOTEXISTING", "api": device_api_v1},
+            {"expected": None, "device_sn": "NOTEXISTING", "api": device_api_v4},
+        ]
+        for expected_device in expected_devices:
+            expected_type = expected_device["expected"]
+            device_sn = expected_device["device_sn"]
+            api = expected_device["api"]
+            print(f"checking {expected_type} {device_sn}")
+            actual_type = api.get_device_type(device_sn=device_sn)
+            self.assertEqual(expected_type, actual_type, f"unexpected type for device_sn: {device_sn}")
 
     def test_create_date(self):
         with patch(f"{TEST_FILE}.DeviceCreateDate", wraps=DeviceCreateDate) as mock_pyd_model:

@@ -1,9 +1,12 @@
 from datetime import date
 from typing import Optional, Union, List
+from loguru import logger
 
 import truststore
 
+from growatt_public_api import DeviceType
 from pydantic_models import PlantInfo
+from pydantic_models.api_v4 import DeviceListV4
 from pydantic_models.device import (
     DeviceTypeInfo,
     DeviceEnergyDay,
@@ -12,6 +15,8 @@ from pydantic_models.device import (
 )
 
 truststore.inject_into_ssl()
+
+from growatt_public_api.plant.plant import Plant  # noqa: E402
 from session import GrowattApiSession  # noqa: E402
 
 
@@ -24,6 +29,153 @@ class Device:
 
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
+
+    def get_device_type(  # noqa: C901 'Device.get_device_type' is too complex (12)
+        self,
+        device_sn: str,
+    ) -> Optional[DeviceType]:
+        """
+        convenience method to get device type by device_sn
+
+        will use following endpoints to retrieve device type
+        * device.type_info()
+        * device.list()
+        * plant.list_devices() (via device.get_plant())
+
+        Args:
+            device_sn (str): Device serial number
+
+        Returns:
+            DeviceType
+            e.g. DeviceType.MIN
+        """
+
+        # 1. get device type via v1 API device/check/sn
+        device_type_info = self.type_info(device_sn=device_sn)
+        if device_type_info.result == 1:
+            device_type = DeviceType.from_device_type_info(device_type=device_type_info.device_type)
+            if device_type and device_type != DeviceType.OTHER:
+                return DeviceType.from_device_type_info(device_type=device_type_info.device_type)
+            else:
+                logger.warning(
+                    f"Unknown device type {device_type_info.device_type} = {device_type} for device {device_sn} (v1 type_info). Trying fallback methods..."
+                )
+        else:
+            logger.warning(f"Error {device_type_info.result} querying v1 type_info. Trying fallback methods...")
+
+        # 2. get device type via v4 API device.list()
+        _page = 0
+        while _page < 20:
+            _page += 1
+            device_list = self.list(page=_page)
+            if device_list.error_code != 0:
+                logger.warning(
+                    f"Error {device_list.error_code}: '{device_list.error_msg}' querying v4 device list. Trying fallback methods..."
+                )
+                break
+            device_types = {x.device_sn: x.device_type for x in device_list.data.data}
+            if device_sn in device_types:
+                device_type_raw = device_types[device_sn]
+                device_type = DeviceType.from_device_list(device_types[device_sn])
+                if device_type and device_type != DeviceType.OTHER:
+                    return device_type
+                else:
+                    logger.warning(
+                        f"Unknown device type {device_type_raw} = {device_type} for device {device_sn} (v4 list). Trying fallback methods..."
+                    )
+                    break
+            if device_list.data.last_pager:
+                logger.warning(f"Device {device_sn} not found in v4 device list. Trying fallback methods...")
+                break  # reached last page (without match)
+
+        # 3. get device type via v1 API plant.list_devices()
+        # get plant for device
+        plant_info = self.get_plant(device_sn=device_sn)
+        if plant_info.error_code != 0:
+            logger.warning(
+                f"Error {plant_info.error_code}: '{plant_info.error_msg}' querying v1 plant info. No further fallbacks available."
+            )
+            return None
+        plant_id = plant_info.data.plant.plant_id
+        # get devices for plant
+        api_plant = Plant(session=self.session)
+        plant_devices = api_plant.list_devices(
+            plant_id=plant_id, limit=100
+        )  # no paging as plant with >100 devices are rare
+        if plant_devices.error_code != 0:
+            logger.warning(
+                f"Error {plant_devices.error_code}: '{plant_devices.error_msg}' querying v1 plant devices. No further fallbacks available."
+            )
+            return None
+        device_types = {x.device_sn: x.type for x in plant_devices.data.devices}
+        device_type_raw = device_types.get(device_sn)
+        if not device_type_raw:
+            logger.warning(
+                f"Unknown device type {device_type_raw} for device {device_sn} (v1 plant device). No further fallbacks available."
+            )
+            return None
+        device_type = DeviceType.from_plant_list_devices(device_type=device_type_raw)
+        if device_type and device_type != DeviceType.OTHER:
+            return device_type
+        else:
+            logger.warning(
+                f"Unknown device type {device_type_raw} = {device_type} for device {device_sn} (v1 plant device). No further fallbacks available."
+            )
+            return None
+
+        # FIXME search through code to find other endpoints returning v1 device ids (e.g. 22=min)
+        # FIXME idea: return correct API by device type (e.g. inv.* for inverter, storage.* for storage, etc.)
+
+    def list(
+        self,
+        page: Optional[int] = None,
+    ) -> DeviceListV4:
+        """
+        Device List
+        Retrieve the list of devices associated with the distributor, installer, and terminal account of the secret token.
+        The devices obtained through this interface are the only ones allowed to fetch data from.
+        Devices not on the list are not permitted to retrieve data.
+        https://www.showdoc.com.cn/2540838290984246/11292915113214428
+
+        Returned "device_type" values are: (according to https://www.showdoc.com.cn/2540838290984246/11292914311318022 and https://www.showdoc.com.cn/p/b42ee029e131c68c4dbfdd89285c0ec1)
+        * inv
+        * storage
+        * max
+        * sph
+        * spa
+        * min
+        * wit
+        * sph-s
+        * noah
+
+        Rate limit(s):
+        * Fetch frequency is limited to once every 5 seconds.
+
+        Args:
+            page (Optional[int]): Page number, default 1 (1~n)
+
+        Returns:
+            DeviceList
+            {   'data': {   'count': 7,
+                            'data': [   {'create_date': datetime.datetime(2021, 6, 29, 12, 2, 46), 'datalogger_sn': None, 'device_sn': 'HPJ0BF20FU', 'device_type': 'max'},
+                                        {'create_date': datetime.datetime(2024, 11, 30, 17, 37, 26), 'datalogger_sn': 'QMN000BZP0000000', 'device_sn': 'BZP0000000', 'device_type': 'min'}
+                                        {'create_date': datetime.datetime(2017, 1, 18, 14, 9, 53), 'datalogger_sn': None, 'device_sn': 'PR34211399', 'device_type': 'inv'}],
+                            'last_pager': True,
+                            'not_pager': False,
+                            'other': None,
+                            'page_size': 100,
+                            'pages': 1,
+                            'start_count': 0},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        response = self.session.post(
+            endpoint="new-api/queryDeviceList",
+            params={"page": page},
+        )
+
+        return DeviceListV4.model_validate(response)
 
     def type_info(
         self,
@@ -48,7 +200,7 @@ class Device:
         22 = MIN
         81 = PCS
         82 = HPS
-        83 = PDB
+        83 = PBD
         96 = Storage
         218 = WIT
         260 = SPH-S
