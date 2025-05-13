@@ -2,7 +2,7 @@ import hashlib
 import json
 import pickle
 from pathlib import Path
-from typing import Optional, Literal
+from typing import Optional, Literal, Self
 import truststore
 from loguru import logger
 
@@ -37,6 +37,28 @@ class GrowattApiSession:
         self.session = requests.Session()
         headers = {"token": self.token}
         self.session.headers.update(headers)
+
+    @classmethod
+    def using_test_server_v1(cls) -> Self:
+        """
+        Create a session using the test server
+        """
+        return cls(
+            server_url="https://test.growatt.com",
+            # test token from official API docs https://www.showdoc.com.cn/262556420217021/1494053950115877
+            token="6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
+        )
+
+    @classmethod
+    def using_test_server_v4(cls) -> Self:
+        """
+        Create a session using the test server
+        """
+        return cls(
+            server_url="http://183.62.216.35:8081",
+            # test token from official API docs https://www.showdoc.com.cn/2540838290984246/11292912972201443
+            token="wa265d2h1og0873ml07142r81564hho6",  # gitleaks:allow
+        )
 
     @staticmethod
     def generic_error_message(code: int):

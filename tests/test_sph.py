@@ -38,10 +38,7 @@ class TestSph(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # init API
-        gas = GrowattApiSession(
-            server_url="http://183.62.216.35:8081",
-            token="wa265d2h1og0873ml07142r81564hho6",  # gitleaks:allow
-        )
+        gas = GrowattApiSession.using_test_server_v4()
         # init
         cls.api = Sph(session=gas)
         # get a device

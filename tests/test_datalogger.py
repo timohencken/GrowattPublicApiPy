@@ -2,10 +2,10 @@ import unittest
 from unittest import skip
 from unittest.mock import patch
 
-from api_v4 import ApiV4
 from growatt_public_api import (
     GrowattApiSession,
     Datalogger,
+    Device,
 )
 from pydantic_models import EnvSensorList, SmartMeterList
 from pydantic_models.device import (
@@ -34,17 +34,13 @@ class TestDatalogger(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # init API
-        gas = GrowattApiSession(
-            # several min devices seen on v1 test server
-            server_url="https://test.growatt.com",
-            token="6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
-        )
+        gas = GrowattApiSession.using_test_server_v1()
         # init DEVICE
         cls.api = Datalogger(session=gas)
         # get a device
         try:
-            apiv4 = ApiV4(session=gas)
-            _devices = apiv4.list()
+            api_device = Device(session=gas)
+            _devices = api_device.list()
             sn_list = [x for x in _devices.data.data]  # select any type
             cls.datalogger_sn = sn_list[0].datalogger_sn
         except AttributeError:

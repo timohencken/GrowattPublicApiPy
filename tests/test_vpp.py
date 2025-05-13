@@ -26,11 +26,7 @@ class TestVpp(unittest.TestCase):
 
         # init API
         # noinspection PyUnreachableCode
-        gas = GrowattApiSession(
-            # several min devices seen on v1 test server
-            server_url="https://test.growatt.com",
-            token="6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
-        )
+        gas = GrowattApiSession.using_test_server_v1()
         # init DEVICE
         cls.api = Vpp(session=gas)
         cls.device_sn = ""  # "Currently no VPP device in test environment"

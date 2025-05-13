@@ -53,10 +53,7 @@ class TestMin(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # init API
-        gas = GrowattApiSession(
-            server_url="https://test.growatt.com",
-            token="6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
-        )
+        gas = GrowattApiSession.using_test_server_v1()
         # init
         cls.api = Min(session=gas)
         # get a device
@@ -345,10 +342,7 @@ class TestMin(unittest.TestCase):
         This endpoint is only available on the v4 test server (183.62.216.35:8081) and on the official server (openapi.growatt.com)
         """
         # use SPH device from v4 server
-        gas_server_v4 = GrowattApiSession(
-            server_url="http://183.62.216.35:8081", token="wa265d2h1og0873ml07142r81564hho6"  # gitleaks:allow
-        )
-        api_server_v4 = Min(session=gas_server_v4)
+        api_server_v4 = Min(session=GrowattApiSession.using_test_server_v4())
         device_sn = "AQM1234567"  # actually not MIN but SPH -- but works fine
 
         # test it
@@ -433,10 +427,7 @@ class TestMin(unittest.TestCase):
         This endpoint is only available on the v4 test server (183.62.216.35:8081) and on the official server (openapi.growatt.com)
         """
         # use SPH device from v4 server
-        gas_server_v4 = GrowattApiSession(
-            server_url="http://183.62.216.35:8081", token="wa265d2h1og0873ml07142r81564hho6"  # gitleaks:allow
-        )
-        api_server_v4 = Min(session=gas_server_v4)
+        api_server_v4 = Min(session=GrowattApiSession.using_test_server_v4())
         device_sn = "AQM1234567"  # actually not MIN but SPH -- but works fine
 
         # test it

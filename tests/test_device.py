@@ -38,11 +38,7 @@ class TestDevice(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # init API
-        gas = GrowattApiSession(
-            # several min devices seen on v1 test server
-            server_url="https://test.growatt.com",
-            token="6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
-        )
+        gas = GrowattApiSession.using_test_server_v1()
         # init DEVICE
         cls.api = Device(session=gas)
         # get a device
@@ -57,17 +53,9 @@ class TestDevice(unittest.TestCase):
 
     def test_get_device_type(self):
         """test device type detection"""
-        gas_v1 = GrowattApiSession(
-            # several min devices seen on v1 test server
-            server_url="https://test.growatt.com",
-            token="6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
-        )
+        gas_v1 = GrowattApiSession.using_test_server_v1()
         device_api_v1 = Device(session=gas_v1)
-        gas_v4 = GrowattApiSession(
-            # several min devices seen on v1 test server
-            server_url="http://183.62.216.35:8081",
-            token="wa265d2h1og0873ml07142r81564hho6",  # gitleaks:allow
-        )
+        gas_v4 = GrowattApiSession.using_test_server_v4()
         device_api_v4 = Device(session=gas_v4)
         expected_devices = [
             # GROBOOST not available
