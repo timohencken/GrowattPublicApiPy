@@ -20,7 +20,7 @@ class Pbd:
     https://www.showdoc.com.cn/262556420217021/6131307847776153
 
     Note:
-        Only applicable to devices with device type 10 (pbd) returned by device.list()
+        Only applicable to devices with device type 10 (pbd) returned by plant.list_devices()
     """
 
     session: GrowattApiSession
@@ -38,7 +38,7 @@ class Pbd:
         https://www.showdoc.com.cn/262556420217021/6131307847776153
 
         Note:
-            Only applicable to devices with device type 10 (pbd) returned by device.list()
+            Only applicable to devices with device type 10 (pbd) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -148,7 +148,7 @@ class Pbd:
         https://www.showdoc.com.cn/262556420217021/6131312777930154
 
         Note:
-            Only applicable to devices with device type 10 (pbd) returned by device.list()
+            Only applicable to devices with device type 10 (pbd) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -305,7 +305,7 @@ class Pbd:
         https://www.showdoc.com.cn/262556420217021/6131319527296946
 
         Note:
-            Only applicable to devices with device type 10 (pbd) returned by device.list()
+            Only applicable to devices with device type 10 (pbd) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -484,7 +484,7 @@ class Pbd:
         https://www.showdoc.com.cn/262556420217021/6131327683011501
 
         Note:
-            Only applicable to devices with device type 10 (pbd) returned by device.list()
+            Only applicable to devices with device type 10 (pbd) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes

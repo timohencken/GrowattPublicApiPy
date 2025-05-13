@@ -38,7 +38,7 @@ class Storage:
         https://www.showdoc.com.cn/262556420217021/6119793934974232
 
         Note:
-            Only applicable to devices with device type 2 (storage) returned by device.list()
+            Only applicable to devices with device type 2 (storage) returned by plant.list_devices()
 
         This method allows to read
         * predefined settings
@@ -102,7 +102,7 @@ class Storage:
 
         inv_setting_response = StorageSettingRead.model_validate(response)
         if inv_setting_response.error_code == 10002:
-            inv_setting_response.error_msg += " (or type != 2 - check with device.list())"
+            inv_setting_response.error_msg += " (or type != 2 - check with plant.list_devices())"
 
         return inv_setting_response
 
@@ -121,7 +121,7 @@ class Storage:
         https://www.showdoc.com.cn/262556420217021/6119502268976860
 
         Note:
-            Only applicable to devices with device type 2 (storage) returned by device.list()
+            Only applicable to devices with device type 2 (storage) returned by plant.list_devices()
 
         This method allows to set
         * predefined settings (see table below)
@@ -233,7 +233,7 @@ class Storage:
 
         inv_setting_response = StorageSettingWrite.model_validate(response)
         if inv_setting_response.error_code == 10012:
-            inv_setting_response.error_msg += " (or type != 2 - check with device.list())"
+            inv_setting_response.error_msg += " (or type != 2 - check with plant.list_devices())"
 
         return inv_setting_response
 
@@ -247,7 +247,7 @@ class Storage:
         https://www.showdoc.com.cn/262556420217021/6119506364286651
 
         Note:
-            Only applicable to devices with device type 2 (storage) returned by device.list()
+            Only applicable to devices with device type 2 (storage) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -355,7 +355,7 @@ class Storage:
         https://www.showdoc.com.cn/262556420217021/6119678224369391
 
         Note:
-            Only applicable to devices with device type 2 (storage) returned by device.list()
+            Only applicable to devices with device type 2 (storage) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -593,7 +593,7 @@ class Storage:
 
         response_parsed = StorageEnergyOverview.model_validate(response)
         if response_parsed.error_code == 10002:
-            response_parsed.error_msg += " (or type != 2 - check with device.list())"
+            response_parsed.error_msg += " (or type != 2 - check with plant.list_devices())"
 
         return response_parsed
 
@@ -612,7 +612,7 @@ class Storage:
         https://www.showdoc.com.cn/262556420217021/6119692996848995
 
         Note:
-            Only applicable to devices with device type 2 (storage) returned by device.list()
+            Only applicable to devices with device type 2 (storage) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -672,7 +672,7 @@ class Storage:
 
         response_parsed = StorageEnergyHistory.model_validate(response)
         if response_parsed.error_code == 10005:
-            response_parsed.error_msg += " (or type != 2 - check with device.list())"
+            response_parsed.error_msg += " (or type != 2 - check with plant.list_devices())"
 
         return response_parsed
 
@@ -687,7 +687,7 @@ class Storage:
         https://www.showdoc.com.cn/262556420217021/6119784080785951
 
         Note:
-            Only applicable to devices with device type 2 (storage) returned by device.list()
+            Only applicable to devices with device type 2 (storage) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -737,6 +737,6 @@ class Storage:
 
         response_parsed = StorageAlarms.model_validate(response)
         if response_parsed.error_code == 10005:
-            response_parsed.error_msg += " (or type != 2 - check with device.list())"
+            response_parsed.error_msg += " (or type != 2 - check with plant.list_devices())"
 
         return response_parsed

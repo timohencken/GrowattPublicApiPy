@@ -4,7 +4,6 @@ from typing import Optional
 import truststore
 
 from pydantic_models.smart_meter import (
-    SmartMeterList,
     SmartMeterEnergyOverview,
     SmartMeterEnergyHistory,
 )
@@ -19,72 +18,13 @@ class SmartMeter:
     https://www.showdoc.com.cn/262556420217021/6131333103798986
 
     Note:
-        Only applicable to devices with device type 3 (other) returned by device.list() - if device is a meter
+        Only applicable to devices with device type 3 (other) returned by plant.list_devices() - if device is a meter
     """
 
     session: GrowattApiSession
 
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
-
-    def list(
-        self,
-        datalogger_sn: str,
-        page: Optional[int] = None,
-        limit: Optional[int] = None,
-    ) -> SmartMeterList:
-        """
-        Obtain the list of smart meters according to the c
-        Get the interface of smart meter list according to the collector SN
-        https://www.showdoc.com.cn/262556420217021/6131333103798986
-
-        Rate limit(s):
-        * The acquisition frequency is once every 5 minutes
-
-        Specific error codes:
-        * 10001: System error
-        * 10002: Collector SN error
-        * 10003: Collector does not exist
-
-        Note:
-            returned "device_type" mappings:
-            64: smart meter
-            66: SDM one-way meter
-            67: SDM three-way meter
-            70: CHNT one-way meter
-            71: CHNT three-way meter
-        Note:
-            returned "address" will be required for other API calls in this class
-
-        Args:
-            datalogger_sn (str): Datalogger serial number
-            page (Optional[int]): page number, default 1
-            limit (Optional[int]): Number of items per page, default 20, max 100
-
-        Returns:
-            SmartMeterList
-            {   'data': {   'count': 1,
-                            'datalogger_sn': 'CRAZT00001',
-                            'meters': [   {   'address': 1,
-                                              'datalogger_sn': 'CRAZT00001',
-                                              'device_name': 'AMMETER',
-                                              'device_type': '64',
-                                              'last_update_time': datetime.datetime(2019, 1, 9, 10, 33, 6),
-                                              'lost': False}]},
-                'error_code': 0,
-                'error_msg': None}
-        """
-
-        response = self.session.get(
-            endpoint="device/ammeter/meter_list",
-            params={
-                "datalog_sn": datalogger_sn,
-                "page": page,
-                "perpage": limit,
-            },
-        )
-
-        return SmartMeterList.model_validate(response)
 
     def energy(
         self,
@@ -97,7 +37,7 @@ class SmartMeter:
         https://www.showdoc.com.cn/262556420217021/6131369504550249
 
         Note:
-            Only applicable to devices with device type 3 (other) returned by device.list() - if device is a meter
+            Only applicable to devices with device type 3 (other) returned by plant.list_devices() - if device is a meter
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -306,7 +246,7 @@ class SmartMeter:
         https://www.showdoc.com.cn/262556420217021/6131319527296946
 
         Note:
-            Only applicable to devices with device type 3 (other) returned by device.list() - if device is a meter
+            Only applicable to devices with device type 3 (other) returned by plant.list_devices() - if device is a meter
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes

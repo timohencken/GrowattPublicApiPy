@@ -145,9 +145,7 @@ class InverterDetailDataV4(ApiModel):
 
 
 class InverterDetailsDataV4(ApiModel):
-    inv: List[InverterDetailDataV4] = (
-        None  # TODO actually, it's nasty to have proprietary attribute names here. maybe rename this to "device"? or remove one level?
-    )
+    inv: List[InverterDetailDataV4] = None
 
 
 class InverterDetailsV4(NewApiResponse):
@@ -1078,7 +1076,6 @@ class MinDetailsV4(NewApiResponse):
 
 
 # ------------------------------------------------------------------------------------------------
-# WIT: TODO: what's the matching v1 device_type for WIT???
 
 
 def _wit_details_to_camel(snake: str) -> str:
@@ -1524,7 +1521,6 @@ class SphsDetailsV4(NewApiResponse):
 
 
 # ------------------------------------------------------------------------------------------------
-# NOAH: TODO: what's the matching v1 device_type for NOAH???
 
 
 def _noah_details_to_camel(snake: str) -> str:
@@ -3265,7 +3261,6 @@ class MinEnergyV4(NewApiResponse):
 
 
 # ------------------------------------------------------------------------------------------------
-# WIT: TODO: what's the matching v1 device_type for WIT???
 
 
 def _wit_energy_to_camel(snake: str) -> str:

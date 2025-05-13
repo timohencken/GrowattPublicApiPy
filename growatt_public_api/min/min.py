@@ -25,7 +25,7 @@ class Min:
     https://www.showdoc.com.cn/262556420217021/6129816412127075
 
     Note:
-        Only applicable to devices with device type 7 (min) returned by device.list()
+        Only applicable to devices with device type 7 (min) returned by plant.list_devices()
     """
 
     session: GrowattApiSession
@@ -42,7 +42,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/8696815667375182
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         Args:
             device_sn (str): inverter SN
@@ -329,7 +329,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/6119793934974232
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         This method allows to read
         * predefined settings
@@ -424,7 +424,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/6129826876191828
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         This method allows to set
         * predefined settings (see table below)
@@ -585,7 +585,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/6129816412127075
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         Rate limit(s):
         * The acquisition frequency is once every 5 minutes
@@ -962,7 +962,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/6129822090975531
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -1230,7 +1230,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/6129830403882881
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -1528,7 +1528,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/8559849784929961
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         This endpoint returns only a subset of the parameters returned by the min.energy() endpoint
 
@@ -1796,7 +1796,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/6129824764736661
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes

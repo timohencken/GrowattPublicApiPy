@@ -21,7 +21,7 @@ class Groboost:
     https://www.showdoc.com.cn/262556420217021/7178727239710262
 
     Note:
-        Only applicable to devices with device type 11 (groboost) returned by device.list()
+        Only applicable to devices with device type 11 (groboost) returned by plant.list_devices()
     """
 
     session: GrowattApiSession
@@ -38,7 +38,7 @@ class Groboost:
         https://www.showdoc.com.cn/262556420217021/7178727239710262
 
         Note:
-            Only applicable to devices with device type 11 (groboost) returned by device.list()
+            Only applicable to devices with device type 11 (groboost) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -397,7 +397,7 @@ class Groboost:
         https://www.showdoc.com.cn/262556420217021/7178742217348819
 
         Note:
-            Only applicable to devices with device type 11 (groboost) returned by device.list()
+            Only applicable to devices with device type 11 (groboost) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -527,7 +527,7 @@ class Groboost:
         https://www.showdoc.com.cn/262556420217021/7178802101296935
 
         Note:
-            Only applicable to devices with device type 11 (groboost) returned by device.list()
+            Only applicable to devices with device type 11 (groboost) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -677,7 +677,7 @@ class Groboost:
         https://www.showdoc.com.cn/262556420217021/7178779509746518
 
         Note:
-            Only applicable to devices with device type 11 (groboost) returned by device.list()
+            Only applicable to devices with device type 11 (groboost) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds

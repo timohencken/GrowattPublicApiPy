@@ -24,7 +24,7 @@ class Sph:
     https://www.showdoc.com.cn/262556420217021/6129761750718760
 
     Note:
-        Only applicable to devices with device type 5 (sph) returned by device.list()
+        Only applicable to devices with device type 5 (sph) returned by plant.list_devices()
     """
 
     session: GrowattApiSession
@@ -45,7 +45,7 @@ class Sph:
         https://www.showdoc.com.cn/262556420217021/6129766954561259
 
         Note:
-            Only applicable to devices with device type 5 (sph) returned by device.list()
+            Only applicable to devices with device type 5 (sph) returned by plant.list_devices()
 
         This method allows to read
         * predefined settings
@@ -139,7 +139,7 @@ class Sph:
         https://www.showdoc.com.cn/262556420217021/6129761750718760
 
         Note:
-            Only applicable to devices with device type 5 (sph) returned by device.list()
+            Only applicable to devices with device type 5 (sph) returned by plant.list_devices()
 
         This method allows to set
         * predefined settings (see table below)
@@ -316,7 +316,7 @@ class Sph:
         https://www.showdoc.com.cn/262556420217021/6129763571291058
 
         Note:
-            Only applicable to devices with device type 5 (sph) returned by device.list()
+            Only applicable to devices with device type 5 (sph) returned by plant.list_devices()
 
         Args:
             device_sn (str): Mix device SN
@@ -487,7 +487,7 @@ class Sph:
         https://www.showdoc.com.cn/262556420217021/6129764434976910
 
         Note:
-            Only applicable to devices with device type 5 (sph) returned by device.list()
+            Only applicable to devices with device type 5 (sph) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -671,7 +671,7 @@ class Sph:
         https://www.showdoc.com.cn/262556420217021/6129786427013561
 
         Note:
-            Only applicable to devices with device type 5 (sph) returned by device.list()
+            Only applicable to devices with device type 5 (sph) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -883,7 +883,7 @@ class Sph:
         https://www.showdoc.com.cn/262556420217021/6129765461123058
 
         Note:
-            Only applicable to devices with device type 5 (sph) returned by device.list()
+            Only applicable to devices with device type 5 (sph) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -1094,7 +1094,7 @@ class Sph:
         https://www.showdoc.com.cn/262556420217021/6129766025111256
 
         Note:
-            Only applicable to devices with device type 5 (sph) returned by device.list()
+            Only applicable to devices with device type 5 (sph) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds

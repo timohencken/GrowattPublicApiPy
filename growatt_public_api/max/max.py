@@ -41,7 +41,7 @@ class Max:
         https://www.showdoc.com.cn/262556420217021/6127601154776404
 
         Note:
-            Only applicable to devices with device type 4 (max) returned by device.list()
+            Only applicable to devices with device type 4 (max) returned by plant.list_devices()
 
         This method allows to read
         * predefined settings
@@ -136,7 +136,7 @@ class Max:
         https://www.showdoc.com.cn/262556420217021/6127597452472600
 
         Note:
-            Only applicable to devices with device type 4 (max) returned by device.list()
+            Only applicable to devices with device type 4 (max) returned by plant.list_devices()
 
         This method allows to set
         * predefined settings (see table below)
@@ -248,7 +248,7 @@ class Max:
         https://www.showdoc.com.cn/262556420217021/6120369315865619
 
         Note:
-            Only applicable to devices with device type 4 (max) returned by device.list()
+            Only applicable to devices with device type 4 (max) returned by plant.list_devices()
 
         Args:
             device_sn (str): Max device SN
@@ -315,7 +315,7 @@ class Max:
         https://www.showdoc.com.cn/262556420217021/6127572916461964
 
         Note:
-            Only applicable to devices with device type 4 (max) returned by device.list()
+            Only applicable to devices with device type 4 (max) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -527,7 +527,7 @@ class Max:
         https://www.showdoc.com.cn/262556420217021/6127606661600864
 
         Note:
-            Only applicable to devices with device type 4 (max) returned by device.list()
+            Only applicable to devices with device type 4 (max) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -786,7 +786,7 @@ class Max:
         https://www.showdoc.com.cn/262556420217021/6127583793839931
 
         Note:
-            Only applicable to devices with device type 4 (max) returned by device.list()
+            Only applicable to devices with device type 4 (max) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -1047,7 +1047,7 @@ class Max:
         https://www.showdoc.com.cn/262556420217021/6127591022121148
 
         Note:
-            Only applicable to devices with device type 4 (max) returned by device.list()
+            Only applicable to devices with device type 4 (max) returned by plant.list_devices()
 
         Specific error codes:
         * 10001: system error

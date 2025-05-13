@@ -20,7 +20,7 @@ class Hps:
     https://www.showdoc.com.cn/262556420217021/6131272209142535
 
     Note:
-        Only applicable to devices with device type 9 (hps) returned by device.list()
+        Only applicable to devices with device type 9 (hps) returned by plant.list_devices()
     """
 
     session: GrowattApiSession
@@ -38,7 +38,7 @@ class Hps:
         https://www.showdoc.com.cn/262556420217021/6131272209142535
 
         Note:
-            Only applicable to devices with device type 9 (hps) returned by device.list()
+            Only applicable to devices with device type 9 (hps) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -132,7 +132,7 @@ class Hps:
         https://www.showdoc.com.cn/262556420217021/6131278907853302
 
         Note:
-            Only applicable to devices with device type 9 (hps) returned by device.list()
+            Only applicable to devices with device type 9 (hps) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -338,7 +338,7 @@ class Hps:
         https://www.showdoc.com.cn/262556420217021/6131286861044579
 
         Note:
-            Only applicable to devices with device type 9 (hps) returned by device.list()
+            Only applicable to devices with device type 9 (hps) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -566,7 +566,7 @@ class Hps:
         https://www.showdoc.com.cn/262556420217021/6131425592840458
 
         Note:
-            Only applicable to devices with device type 9 (hps) returned by device.list()
+            Only applicable to devices with device type 9 (hps) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
