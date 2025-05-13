@@ -5,9 +5,6 @@ from unittest.mock import patch
 from env_sensor import EnvSensor
 from growatt_public_api import GrowattApiSession, Device, Plant
 from pydantic_models.env_sensor import (
-    EnvSensorList,
-    EnvSensorListData,
-    EnvSensorData,
     EnvSensorMetricsOverview,
     EnvSensorMetricsOverviewData,
     EnvSensorMetricsHistory,
@@ -90,31 +87,6 @@ class TestEnvSensor(unittest.TestCase):
             print("Could not find any environmental sensor in devices")
             print(plant_devices)
             raise AttributeError("No environmental sensor found in test environment")
-
-    @skip("Currently no env sensors on test environment")
-    def test_list(self):
-        with patch(f"{TEST_FILE}.EnvSensorList", wraps=EnvSensorList) as mock_pyd_model:
-            self.api.list(datalogger_sn=self.datalogger_sn)
-
-        raw_data = mock_pyd_model.model_validate.call_args.args[0]
-
-        # check parameters are included in pydantic model
-        pydantic_keys = {v.alias for k, v in EnvSensorList.model_fields.items()} | set(
-            EnvSensorList.model_fields.keys()
-        )  # aliased and non-aliased params
-        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
-        # check data
-        pydantic_keys = {v.alias for k, v in EnvSensorListData.model_fields.items()} | set(
-            EnvSensorListData.model_fields.keys()
-        )
-        self.assertEqual(set(), set(raw_data["data"].keys()).difference(pydantic_keys), f"data")
-        # check data item
-        pydantic_keys = {v.alias for k, v in EnvSensorData.model_fields.items()} | set(
-            EnvSensorData.model_fields.keys()
-        )
-        self.assertEqual(
-            set(), set(raw_data["data"]["envs"][0].keys()).difference(pydantic_keys), f"data_dataloggers_0"
-        )
 
     @skip("Currently no env sensors on test environment")
     def test_metrics(self):

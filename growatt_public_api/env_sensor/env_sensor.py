@@ -4,7 +4,6 @@ from typing import Optional
 import truststore
 
 from pydantic_models.env_sensor import (
-    EnvSensorList,
     EnvSensorMetricsOverview,
     EnvSensorMetricsHistory,
 )
@@ -26,61 +25,6 @@ class EnvSensor:
 
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
-
-    def list(
-        self,
-        datalogger_sn: str,
-        page: Optional[int] = None,
-        limit: Optional[int] = None,
-    ) -> EnvSensorList:
-        """
-        Get the list of environmental detectors according...
-        According to the collector SN to obtain the interface of the environmental detector list
-        https://www.showdoc.com.cn/262556420217021/6131376900470247
-
-        Rate limit(s):
-        * The acquisition frequency is once every 5 minutes
-
-        Specific error codes:
-        * 10001: System error
-        * 10002: Collector SN error
-        * 10003: Collector does not exist
-
-        Note:
-            returned "device_type" mappings:
-            48: environmental tester
-        Note:
-            returned "address" will be required for other API calls in this class
-
-        Args:
-            datalogger_sn (str): Datalogger serial number
-            page (Optional[int]): page number, default 1
-            limit (Optional[int]): Number of items per page, default 20, max 100
-
-        Returns:
-            EnvSensorList
-            {   'data': {   'count': 1,
-                            'datalogger_sn': 'CRAZT00001',
-                            'envs': [   {   'address': 2,
-                                            'datalogger_sn': 'CRAZT00001',
-                                            'device_name': 'ENV_DEVICE',
-                                            'device_type': '48',
-                                            'last_update_time': datetime.datetime(2019, 1, 9, 10, 38, 11),
-                                            'lost': False}]},
-                'error_code': 0,
-                'error_msg': None}
-        """
-
-        response = self.session.get(
-            endpoint="device/env/env_list",
-            params={
-                "datalog_sn": datalogger_sn,
-                "page": page,
-                "perpage": limit,
-            },
-        )
-
-        return EnvSensorList.model_validate(response)
 
     def metrics(
         self,

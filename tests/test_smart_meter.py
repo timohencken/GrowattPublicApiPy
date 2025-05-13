@@ -37,7 +37,3 @@ class TestSmartMeter(unittest.TestCase):
     @skip("Currently no SmartMeter devices on test environment")
     def test_energy_history(self):
         raise NotImplementedError
-
-    @skip("Currently no SmartMeter devices on test environment")
-    def test_list(self):
-        raise NotImplementedError

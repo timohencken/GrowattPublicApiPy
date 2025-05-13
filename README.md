@@ -65,12 +65,15 @@ This package aims to
     * list inverters/storage `plant.list_devices()`
       * ***use this to query your inverter's*** "*TYPE*" ***for selecting the correct submodule***
 * Datalogger
+  * verify datalogger's CC code
+    * `device.datalogger_validate()`
+  * get sensors attached to datalogger
+    * get smart meters `datalogger.list_smart_meters()`
+    * get environmental sensors `datalogger.list_env_sensors()`
+* Generic - all inverter types
   * query device type
     * `device.type_info()`
     * *** this is NOT the same as the inverter type ***
-  * verify datalogger's CC code
-    * `device.datalogger_validate()`
-* Generic - all inverter types
   * get device creation date
     * `device.create_date()`
   * device power/energy metrics
@@ -101,8 +104,6 @@ This package aims to
     * current `storage.energy()`
     * historical data `storage.energy_history()`
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* Datalogger (*TYPE=3*)
-  * ***Not*** implemented yet (TODO: refactor structure)
 * MAX (*TYPE=4* - MAX)
   * general device data
     * read device data `max.details()`
@@ -177,14 +178,14 @@ This package aims to
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * Smart meter (*TYPE=3* - SmartMeter/SDM/CHNT)
   * get meters attached to datalogger
-    * `smart_meter.list()`
+    * `datalogger.list_smart_meters()`
   * device power/energy metrics
     * current `smart_meter.energy()`
     * historical data `smart_meter.energy_history()`
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * Environmental sensor (*TYPE=3* - Temperature/Humidity/Wind/...)
   * get sensors attached to datalogger
-    * `env_sensor.list()`
+    * `datalogger.list_env_sensors()`
   * device metrics
     * current `env_sensor.metrics()`
     * historical data `env_sensor.metrics_history()`
@@ -328,6 +329,9 @@ To the best of our knowledge only the settings functions perform modifications t
 * TODO: generate & publish docs
 
 # Changelog
+* TBA (pre-alpha)
+  * refactoring: moved some endpoints from/to plant/device/datalogger
+  * refactoring: moved some endpoints from/to smart_meter/env_sensor/datalogger
 * 2025.05.12 (pre-alpha)
   * add tests to verify returned parameters are same as expected parameters
 * 2025.03.28 (pre-alpha)

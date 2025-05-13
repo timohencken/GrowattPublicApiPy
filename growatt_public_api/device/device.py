@@ -6,7 +6,6 @@ import truststore
 from pydantic_models import PlantInfo
 from pydantic_models.device import (
     DeviceTypeInfo,
-    DataloggerValidation,
     DeviceEnergyDay,
     DeviceDatalogger,
     DeviceCreateDate,
@@ -96,43 +95,6 @@ class Device:
         )
 
         return DeviceTypeInfo.model_validate(response)
-
-    def datalogger_validate(
-        self,
-        datalogger_sn: str,
-        validation_code: Union[int, str],
-    ) -> DataloggerValidation:
-        """
-        3.6 Check whether the collector SN and check code
-        Interface to detect whether the collector SN and check code are qualified
-        https://www.showdoc.com.cn/262556420217021/6118001776634753
-
-        Note:
-            Only applicable to devices with device type 3 (other/datalogger) returned by plant.list_devices()
-
-        Specific error codes:
-        * 10001: the collector serial number is empty or the length is incorrect
-        * 10002: the collector serial number does not match the check code
-        * 10003: the collector already exists and has been added
-
-        Args:
-            datalogger_sn (str): Datalogger serial number
-            validation_code (Union[int, str]): Verification Code
-
-        Returns:
-            DataloggerValidation
-
-        """
-
-        response = self.session.post(
-            endpoint="device/datalogger/validate",
-            data={
-                "datalogSn": datalogger_sn,
-                "valiCode": validation_code,
-            },
-        )
-
-        return DataloggerValidation.model_validate(response)
 
     def energy_day(
         self,

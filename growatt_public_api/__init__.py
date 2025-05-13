@@ -5,6 +5,7 @@ from growatt_types import (  # noqa: F401
 )
 from growatt_api import GrowattApi  # noqa: F401
 from user import User  # noqa: F401
+from datalogger import Datalogger  # noqa: F401
 from device import Device  # noqa: F401
 from inverter import Inverter  # noqa: F401
 from min import Min  # noqa: F401
