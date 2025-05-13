@@ -960,6 +960,7 @@ class MinDetailDataV4(ApiModel):
         protected_namespaces=(),  # allow model_* keywords
     )
 
+    afci_version: Union[EmptyStrToNone, str] = None  # e.g. ''
     address: Union[EmptyStrToNone, int] = None  # Inverter address, e.g. 1
     alias: Union[EmptyStrToNone, str] = None  # alias, e.g. 'AFE494403F'
     bat_aging_test_step: Union[EmptyStrToNone, int] = (

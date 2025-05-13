@@ -150,16 +150,29 @@ This package aims to
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * MIN (*TYPE=7* - MIN/MAC/MOD-XH/MID-XH/NEO)
   * general device data
-    * read device data `min.details()`
+    * read device data
+      * `min.details()`
+      * `min.details_v4()` (using new API)
     * read alarms/notification `min.alarms()`
   * device settings
     * read settings overview `min.settings()`
-    * read settings value `min.setting_read()`
-    * write settings value `min.setting_write()` (***use with caution***)
+    * read settings value
+      * `min.setting_read()`
+      * `min.setting_read_vpp_param()` (using new API)
+    * write settings value
+      * `min.setting_write()` (***use with caution***)
+      * `min.setting_write_on_off()` (using new API)
+      * `min.setting_write_active_power()` (using new API)
+      * `min.setting_write_vpp_param()` (using new API)
   * device power/energy metrics
-    * current `min.energy()`
-    * current for multiple inverters `min.energy_multiple()`
-    * historical data `min.energy_history()`
+    * current
+      * `min.energy()`
+      * `min.energy_v4()` (using new API)
+      * `min.energy_multiple()`
+    * historical data
+      * `min.energy_history()`
+      * `min.energy_history_v4()`
+      * `min.energy_history_multiple_v4()`
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * PCS (*TYPE=8*)
   * general device data

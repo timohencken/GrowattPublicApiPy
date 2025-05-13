@@ -23,9 +23,9 @@ class GrowattApiSession:
     def __init__(
         self,
         token: str,
-        server_url: str,
+        server_url: Optional[str] = None,
     ) -> None:
-        self.server_url = server_url
+        self.server_url = server_url or "https://openapi.growatt.com"
         # API docs specify /v1/ for some endpoints and /v4/ for other ("new-api") endpoints
         # anyway, both (v1 and v4) work for all endpoints
         # so we just use v4 for simplicity
@@ -124,7 +124,9 @@ class GrowattApiSession:
 
         if '<html data-name="login">' in response.text:
             logger.error("Login page shown")
-        elif "Note: Dear user, you have not login to the system, skip login page login.." in response.text:
+        elif ("Note: Dear user, you have not login to the system, skip login page login.." in response.text) or (
+            '<a href="/login" target="_top" id="login">' in response.text
+        ):
             logger.error("Forwarded to login page")
 
         try:

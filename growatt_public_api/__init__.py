@@ -13,3 +13,6 @@ from plant import Plant  # noqa: F401
 from session import GrowattApiSession  # noqa: F401
 from storage import Storage  # noqa: F401
 from vpp import Vpp  # noqa: F401
+from wit import Wit  # noqa: F401
+from sphs import Sphs  # noqa: F401
+from noah import Noah  # noqa: F401

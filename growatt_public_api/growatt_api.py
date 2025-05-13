@@ -23,6 +23,8 @@ from smart_meter import SmartMeter  # noqa: E402
 from env_sensor import EnvSensor  # noqa: E402
 from groboost import Groboost  # noqa: E402
 from api_v4 import ApiV4  # noqa: E402
+from wit import Wit  # noqa: E402
+from sphs import Sphs  # noqa: E402
 
 
 class GrowattApi:
@@ -45,6 +47,8 @@ class GrowattApi:
     env_sensor: EnvSensor
     groboost: Groboost
     v4: ApiV4
+    wit: Wit
+    sphs: Sphs
 
     """
     API documents:
@@ -78,3 +82,5 @@ class GrowattApi:
         self.env_sensor = EnvSensor(self.session)
         self.groboost = Groboost(self.session)
         self.v4 = ApiV4(self.session)
+        self.wit = Wit(self.session)
+        self.sphs = Sphs(self.session)

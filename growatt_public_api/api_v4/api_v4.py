@@ -1241,7 +1241,7 @@ class ApiV4:
             return SphDetailsV4.model_validate(response)
         elif device_type == DeviceType.SPA:  # TODO
             return SpaDetailsV4.model_validate(response)
-        elif device_type == DeviceType.MIN:  # TODO
+        elif device_type == DeviceType.MIN:
             return MinDetailsV4.model_validate(response)
         elif device_type == DeviceType.WIT:  # TODO
             return WitDetailsV4.model_validate(response)
@@ -3232,7 +3232,7 @@ class ApiV4:
             return SphEnergyV4.model_validate(response)
         elif device_type == DeviceType.SPA:  # TODO
             return SpaEnergyV4.model_validate(response)
-        elif device_type == DeviceType.MIN:  # TODO
+        elif device_type == DeviceType.MIN:
             return MinEnergyV4.model_validate(response)
         elif device_type == DeviceType.WIT:  # TODO
             return WitEnergyV4.model_validate(response)
@@ -3315,7 +3315,7 @@ class ApiV4:
             return SphEnergyHistoryV4.model_validate(response)
         elif device_type == DeviceType.SPA:  # TODO
             return SpaEnergyHistoryV4.model_validate(response)
-        elif device_type == DeviceType.MIN:  # TODO
+        elif device_type == DeviceType.MIN:
             return MinEnergyHistoryV4.model_validate(response)
         elif device_type == DeviceType.WIT:  # TODO
             return WitEnergyHistoryV4.model_validate(response)
@@ -3400,7 +3400,7 @@ class ApiV4:
             return SphEnergyHistoryMultipleV4.model_validate(response)
         elif device_type == DeviceType.SPA:  # TODO
             return SpaEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == DeviceType.MIN:  # TODO
+        elif device_type == DeviceType.MIN:
             return MinEnergyHistoryMultipleV4.model_validate(response)
         elif device_type == DeviceType.WIT:  # TODO
             return WitEnergyHistoryMultipleV4.model_validate(response)
@@ -3476,7 +3476,6 @@ class ApiV4:
         # TODO "max"
         # TODO "sph"
         # TODO "spa"
-        # TODO "min"
         # TODO "wit"
         # TODO "sph-s"
         # TODO NOT "noah"
@@ -3541,7 +3540,6 @@ class ApiV4:
         # TODO "max"
         # TODO "sph"
         # TODO "spa"
-        # TODO "min"
         # TODO "wit"
         # TODO "sph-s"
         # TODO "noah"
@@ -3772,7 +3770,7 @@ class ApiV4:
         Rate limit(s):
         * The maximum frequency is once every 5 seconds.
 
-        Allowed/known values for vpp_param:
+        Allowed/known values for parameter_id:
           see self.setting_write_vpp_param()
 
         Args:
@@ -3810,7 +3808,6 @@ class ApiV4:
         # TODO NOT "max"
         # TODO "sph"
         # TODO "spa"
-        # TODO "min"
         # TODO "wit"
         # TODO NOT "sph-s"
         # TODO NOT "noah"
@@ -3825,11 +3822,11 @@ class ApiV4:
         value: Union[int, str],
     ) -> SettingWriteV4:
         """
-        Read VPP parameters
-        Read the VPP related parameters of the device according to the SN of the device.
+        VPP related parameter settings
+        Set the VPP related parameters of the device according to the SN of the device.
         The interface returns data only for devices that the secret token has permission to access.
         The device without permission will not be read and the results will not be returned.
-        https://www.showdoc.com.cn/2598832417617967/11558629942271434
+        https://www.showdoc.com.cn/2598832417617967/11558385202215329
 
         Note:
         * The current interface only supports sph, spa, min, wit device types.
@@ -4017,7 +4014,6 @@ class ApiV4:
         # TODO NOT "max"
         # TODO "sph"
         # TODO "spa"
-        # TODO "min"
         # TODO "wit"
         # TODO NOT "sph-s"
         # TODO NOT "noah"
