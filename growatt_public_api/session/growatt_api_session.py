@@ -2,7 +2,7 @@ import hashlib
 import json
 import pickle
 from pathlib import Path
-from typing import Optional, Literal
+from typing import Optional, Literal, Self
 import truststore
 from loguru import logger
 
@@ -23,9 +23,9 @@ class GrowattApiSession:
     def __init__(
         self,
         token: str,
-        server_url: str,
+        server_url: Optional[str] = None,
     ) -> None:
-        self.server_url = server_url
+        self.server_url = server_url or "https://openapi.growatt.com"
         # API docs specify /v1/ for some endpoints and /v4/ for other ("new-api") endpoints
         # anyway, both (v1 and v4) work for all endpoints
         # so we just use v4 for simplicity
@@ -37,6 +37,28 @@ class GrowattApiSession:
         self.session = requests.Session()
         headers = {"token": self.token}
         self.session.headers.update(headers)
+
+    @classmethod
+    def using_test_server_v1(cls) -> Self:
+        """
+        Create a session using the test server
+        """
+        return cls(
+            server_url="https://test.growatt.com",
+            # test token from official API docs https://www.showdoc.com.cn/262556420217021/1494053950115877
+            token="6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
+        )
+
+    @classmethod
+    def using_test_server_v4(cls) -> Self:
+        """
+        Create a session using the test server
+        """
+        return cls(
+            server_url="http://183.62.216.35:8081",
+            # test token from official API docs https://www.showdoc.com.cn/2540838290984246/11292912972201443
+            token="wa265d2h1og0873ml07142r81564hho6",  # gitleaks:allow
+        )
 
     @staticmethod
     def generic_error_message(code: int):
@@ -124,7 +146,9 @@ class GrowattApiSession:
 
         if '<html data-name="login">' in response.text:
             logger.error("Login page shown")
-        elif "Note: Dear user, you have not login to the system, skip login page login.." in response.text:
+        elif ("Note: Dear user, you have not login to the system, skip login page login.." in response.text) or (
+            '<a href="/login" target="_top" id="login">' in response.text
+        ):
             logger.error("Forwarded to login page")
 
         try:

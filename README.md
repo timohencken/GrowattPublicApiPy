@@ -31,204 +31,354 @@ This package aims to
 # Implementation status
 ## ***Alpha***: The library is in an early stage of development and is not yet feature complete.
 
-### API v1 (full featured API)
-* User
-  * list users
-    * `user.list()`
-  * check username available
-    * `user.check_username()`
-  * add user
-    * `user.register()`
-  * modify user information
-    * `user.modify()`
-* Plant
-  * plant management
-    * add new plant `plant.add()`
-    * modify plant `plant.modify()`
-    * delete plant `plant.delete()`
-  * list plants
-    * `plant.list()`
-    * `plant.list_by_user()`
-  * plant details
-    * `plant.details()`
-  * power/energy overview
-    * `plant.energy_overview()`
-  * energy history
-    * `plant.energy_history()`
-  * power metrics by day
-    * `plant.power()`
-* Datalogger
-  * datalogger management
-    * add datalogger to plant `device.datalogger_add()`
-    * remove datalogger from plant `device.datalogger_delete()`
-  * list dataloggers
-    * `device.datalogger_list()`
-  * query device type
-    * `device.type_info()`
-    * *** this is NOT the same as the inverter type ***
-  * verify datalogger's CC code
-    * `device.datalogger_validate()`
-* Generic - all inverter types
-  * get inverters assigned to plant
-    * `device.list()`
-    * ***use this to query your inverter's*** "*TYPE*" ***for selecting the correct submodule***
-  * get datalogger for inverter
-    * `device.get_datalogger()`
-  * get device creation date
-    * `device.create_date()`
-  * add inverter to plant
-    * `device.add()`
-  * device power/energy metrics
-    * get energy (sum) for specific day `device.energy_day()`
-* Inverter (*TYPE=1* (including MAX))
-  * general device data
-    * read device data `inverter.details()`
-    * read alarms/notification `inverter.alarms()`
-  * device settings
-    * read settings value `inverter.setting_read()`
-    * write settings value `inverter.setting_write()` (***use with caution***)
-  * device power/energy metrics
-    * current `inverter.energy()`
-    * current for multiple inverters `inverter.energy_multiple()`
-    * historical data `inverter.energy_history()`
-      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* Storage (*TYPE=2*)
-  * general device data
-    * read device data `storage.details()`
-    * read alarms/notification `storage.alarms()`
-  * device settings
-    * read settings value `storage.setting_read()`
-    * write settings value `storage.setting_write()` (***use with caution***)
-  * device power/energy metrics
-    * current `storage.energy()`
-    * historical data `storage.energy_history()`
-      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* Datalogger (*TYPE=3*)
-  * ***Not*** implemented yet (TODO: refactor structure)
-* MAX (*TYPE=4* - MAX)
-  * general device data
-    * read device data `max.details()`
-    * read alarms/notification `max.alarms()`
-  * device settings
-    * read settings value `max.setting_read()`
-    * write settings value `max.setting_write()` (***use with caution***)
-  * device power/energy metrics
-    * current `max.energy()`
-    * current for multiple inverters `max.energy_multiple()`
-    * historical data `max.energy_history()`
-      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* SPH (*TYPE=5* - SPH/MIX) (TODO: refactor rename to MIX?)
-  * general device data
-    * read device data `sph.details()`
-    * read alarms/notification `sph.alarms()`
-  * device settings
-    * read settings value `sph.setting_read()`
-    * write settings value `sph.setting_write()` (***use with caution***)
-  * device power/energy metrics
-    * current `sph.energy()`
-    * current for multiple inverters `sph.energy_multiple()`
-    * historical data `sph.energy_history()`
-      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* SPA (*TYPE=6* - SPA)
-  * general device data
-    * read device data `spa.details()`
-    * read alarms/notification `spa.alarms()`
-  * device settings
-    * read settings value `spa.setting_read()`
-    * write settings value `spa.setting_write()` (***use with caution***)
-  * device power/energy metrics
-    * current `spa.energy()`
-    * current for multiple inverters `spa.energy_multiple()`
-    * historical data `spa.energy_history()`
-      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* MIN (*TYPE=7* - MIN/MAC/MOD-XH/MID-XH/NEO)
-  * general device data
-    * read device data `min.details()`
-    * read alarms/notification `min.alarms()`
-  * device settings
-    * read settings overview `min.settings()`
-    * read settings value `min.setting_read()`
-    * write settings value `min.setting_write()` (***use with caution***)
-  * device power/energy metrics
-    * current `min.energy()`
-    * current for multiple inverters `min.energy_multiple()`
-    * historical data `min.energy_history()`
-      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* PCS (*TYPE=8*)
-  * general device data
-    * read device data `pcs.details()`
-    * read alarms/notification `pcs.alarms()`
-  * device power/energy metrics
-    * current `pcs.energy()`
-    * historical data `pcs.energy_history()`
-      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* HPS (*TYPE=9*)
-  * general device data
-    * read device data `hps.details()`
-    * read alarms/notification `hps.alarms()`
-  * device power/energy metrics
-    * current `hps.energy()`
-    * historical data `hps.energy_history()`
-* PBD (*TYPE=10*)
-  * general device data
-    * read device data `pbd.details()`
-    * read alarms/notification `pbd.alarms()`
-  * device power/energy metrics
-    * current `pbd.energy()`
-    * historical data `pbd.energy_history()`
-      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* Smart meter (*TYPE=3* - SmartMeter/SDM/CHNT)
-  * get meters attached to datalogger
-    * `smart_meter.list()`
-  * device power/energy metrics
-    * current `smart_meter.energy()`
-    * historical data `smart_meter.energy_history()`
-      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* Environmental sensor (*TYPE=3* - Temperature/Humidity/Wind/...)
-  * get sensors attached to datalogger
-    * `env_sensor.list()`
-  * device metrics
-    * current `env_sensor.metrics()`
-    * historical data `env_sensor.metrics_history()`
-      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* VPP (VirtualPowerPlant *TYPE=3/5/6* - MIN/SPH/SPA)
-  * get current State-of-Charge (SOC) `vpp.soc()`
-  * change time period settings
-    * set current (dis)charge power `vpp.write()` (***use with caution***)
-    * configure (dis)charge power for time periods `vpp.write_time_periods()` (***use with caution***)
-* GroBoost (*TYPE=11* - GroBoost)
-  * general device data
-    * read device data `groboost.details()`
-  * device metrics
-    * current `groboost.metrics()`
-    * current for multiple devices `groboost.metrics_multiple()`
-    * historical data `groboost.metrics_history()`
-      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+# Submodules and methods
 
-### API v4 (a few additional endpoints)
+## User
+* list users
+  * `user.list()`
+* check username available
+  * `user.check_username()`
+* add user
+  * `user.register()`
+* modify user information
+  * `user.modify()`
+
+## Plant
+* plant management
+  * add new plant `plant.add()`
+  * modify plant `plant.modify()`
+  * delete plant `plant.delete()`
+  * add inverter to plant `plant.add_device()`
+  * add datalogger to plant `plant.add_datalogger()`
+  * remove datalogger from plant `plant.remove_datalogger()`
+* list plants
+  * `plant.list()`
+  * `plant.list_by_user()`
+* plant details
+  * `plant.details()`
+* power/energy overview
+  * `plant.energy_overview()`
+* energy history
+  * `plant.energy_history()`
+* power metrics by day
+  * `plant.power()`
+* list devices assigned to plant
+  * list dataloggers `plant.list_dataloggers()`
+  * list inverters/storage `plant.list_devices()`
+
+## Datalogger
+* verify datalogger's CC code
+  * `device.datalogger_validate()`
+* get sensors attached to datalogger
+  * get smart meters `datalogger.list_smart_meters()`
+  * get environmental sensors `datalogger.list_env_sensors()`
+
+## Device (*ALL* inverter types)
 * get devices (inverters) assigned to current user
-  * `v4.list()`
-    ***use this to query your inverter's*** "*TYPE*" ***required for subsequent requests***
-* general device data
-  * read device data `v4.details()`
-* device metrics
-  * current `v4.energy()`
-    * Note for NOAH: API docs are incomplete. I would be happy if you dump NOAHs output and create a github issue.
-  * historical data `v4.energy_history()`
-  * historical data `v4.energy_history_multiple()` (query multiple devices at once)
-    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-* device settings (***use with caution***)
-  * power on/off: `v4.setting_write_on_off()`
-  * configure active power percentage: `v4.setting_write_active_power()`
-    * Note: for NOAH devices, pass 0~800W instead of 0~100%
-  * configure SOC limits: `v4.setting_write_soc_upper_limit()` / `v4.setting_write_soc_lower_limit()`
-    * Note: only for NOAH devices
-  * configure time period `v4.setting_write_time_period()`
-    * Note: only for NOAH devices
-  * configure VPP parameters: `v4.setting_write_vpp_param()` / `v4.setting_write_vpp_param()`
-    * Note: The current interface only supports sph, spa, min, wit device types.
-      The specific models are as follows: SPH 3000-6000TL BL, SPA 1000-3000TL BL, SPH 3000-6000TL BL US, SPH 4000-10000TL3 BH, SPA 4000-10000TL3 BH, MIN 2500-6000TL-XH US, MIN 2500-6000TL-XH, MOD-XH\MID-XH, WIT 100KTL3-H, WIS 215KTL3
+  * `device.list()`
+  * see also
+    * `plant.list_devices()`
+    * `plant.list_dataloggers()`
+    * `datalogger.list_smart_meters()`
+    * `datalogger.list_env_sensors()`
+* query device type
+  * `device.get_device_type()`
+    *** use this method to query your inverter's type ***
+* get device creation date
+  * `device.create_date()`
+* device power/energy metrics
+  * get energy (sum) for specific day `device.energy_day()`
+* get device tree
+  * get plant by device_sn `device.get_plant()`
+  * get datalogger by device_sn `device.get_datalogger()`
 
+## Inverter (DeviceType.INVERTER)
+* general device data
+  * read device data
+    * `inverter.details()`
+    * `inverter.details_v4()` (using new API)
+  * read alarms/notification `inverter.alarms()`
+* device power/energy metrics
+  * current
+    * `inverter.energy()`
+    * `inverter.energy_v4()` (using new API)
+    * `inverter.energy_multiple()`
+  * historical data
+    * `inverter.energy_history()`
+    * `inverter.energy_history_v4()` (using new API)
+    * `inverter.energy_history_multiple_v4()` (using new API)
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * read settings value `inverter.setting_read()`
+  * write settings value
+    * `inverter.setting_write()` (***use with caution***)
+    * `inverter.setting_write_on_off()` (using new API)
+    * `inverter.setting_write_active_power()` (using new API)
+
+## Storage (DeviceType.STORAGE)
+* general device data
+  * read device data
+    * `storage.details()`
+    * `storage.details_v4()` (using new API)
+  * read alarms/notification `storage.alarms()`
+* device power/energy metrics
+  * current
+    * `storage.energy()`
+    * `storage.energy_v4()` (using new API)
+  * historical data
+    * `storage.energy_history()`
+    * `storage.energy_history_v4()` (using new API)
+    * `storage.energy_history_multiple_v4()` (using new API)
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * read settings value `storage.setting_read()`
+  * write settings value
+    * `storage.setting_write()` (***use with caution***)
+    * `storage.setting_write_on_off()` (using new API)
+    * `storage.setting_write_active_power()` (using new API)
+
+## MAX (DeviceType.MAX)
+* general device data
+  * read device data
+    * `max.details()`
+    * `max.details_v4()` (using new API)
+  * read alarms/notification `max.alarms()`
+* device power/energy metrics
+  * current
+    * `max.energy()`
+    * `max.energy_multiple()`
+    * `max.energy_v4()` (using new API)
+  * historical data
+    * `max.energy_history()`
+    * `max.energy_history_v4()` (using new API)
+    * `max.energy_history_multiple_v4()` (using new API)
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * read settings value `max.setting_read()`
+  * write settings value
+    * `max.setting_write()` (***use with caution***)
+    * `max.setting_write_on_off()` (using new API)
+    * `max.setting_write_active_power()` (using new API)
+
+## SPH (DeviceType.SPH - (MIX))
+* general device data
+  * read device data
+    * `sph.details()`
+    * `sph.details_v4()` (using new API)
+  * read alarms/notification `sph.alarms()`
+* device power/energy metrics
+  * current
+    * `sph.energy()`
+    * `sph.energy_multiple()`
+    * `sph.energy_v4()` (using new API)
+  * historical data
+    * `sph.energy_history()`
+    * `sph.energy_history_v4()` (using new API)
+    * `sph.energy_history_multiple_v4()` (using new API)
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * read settings value
+    * `sph.setting_read()`
+    * `sph.setting_read_vpp_param()` (using new API)
+  * write settings value
+    * `sph.setting_write()` (***use with caution***)
+    * `sph.setting_write_on_off()` (using new API)
+    * `sph.setting_write_active_power()` (using new API)
+    * `sph.setting_write_vpp_param()` (using new API)
+  * VPP (VirtualPowerPlant) settings
+    * get current State-of-Charge (SOC) `sph.soc()`
+    * read vpp schedules
+      * `sph.setting_read_vpp_param()` (using new API)
+    * write vpp schedules
+      * `sph.setting_write_vpp_now()`
+      * `sph.setting_write_vpp_schedule()`
+      * `sph.setting_write_vpp_param()` (using new API)
+
+## SPA (DeviceType.SPA)
+* general device data
+  * read device data
+    * `spa.details()`
+    * `spa.details_v4()` (using new API)
+  * read alarms/notification `spa.alarms()`
+* device power/energy metrics
+  * current
+    * `spa.energy()`
+    * `spa.energy_multiple()`
+    * `spa.energy_v4()` (using new API)
+  * historical data
+    * `spa.energy_history()`
+    * `spa.energy_history_v4()` (using new API)
+    * `spa.energy_history_multiple_v4()` (using new API)
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * read settings value
+    * `spa.setting_read()`
+  * write settings value
+    * `spa.setting_write()` (***use with caution***)
+    * `spa.setting_write_on_off()` (using new API)
+    * `spa.setting_write_active_power()` (using new API)
+  * VPP (VirtualPowerPlant) settings
+    * get current State-of-Charge (SOC) `spa.soc()`
+    * read vpp schedules
+      * `spa.setting_read_vpp_param()` (using new API)
+    * write vpp schedules
+      * `spa.setting_write_vpp_now()`
+      * `spa.setting_write_vpp_schedule()`
+      * `spa.setting_write_vpp_param()` (using new API)
+
+## MIN (DeviceType.MIN - TLX/MIN/MAC/MOD-XH/MID-XH/NEO)
+* general device data
+  * read device data
+    * `min.details()`
+    * `min.details_v4()` (using new API)
+  * read alarms/notification `min.alarms()`
+* device power/energy metrics
+  * current
+    * `min.energy()`
+    * `min.energy_v4()` (using new API)
+    * `min.energy_multiple()`
+  * historical data
+    * `min.energy_history()`
+    * `min.energy_history_v4()` (using new API)
+    * `min.energy_history_multiple_v4()` (using new API)
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * read settings overview `min.settings()`
+  * read settings value
+    * `min.setting_read()`
+  * write settings value
+    * `min.setting_write()` (***use with caution***)
+    * `min.setting_write_on_off()` (using new API)
+    * `min.setting_write_active_power()` (using new API)
+  * VPP (VirtualPowerPlant) settings
+    * get current State-of-Charge (SOC) `min.soc()`
+    * read vpp schedules
+      * `min.setting_read_vpp_param()` (using new API)
+    * write vpp schedules
+      * `min.setting_write_vpp_now()`
+      * `min.setting_write_vpp_schedule()`
+      * `min.setting_write_vpp_param()` (using new API)
+
+## PCS (DeviceType.PCS)
+* general device data
+  * read device data `pcs.details()`
+  * read alarms/notification `pcs.alarms()`
+* device power/energy metrics
+  * current `pcs.energy()`
+  * historical data `pcs.energy_history()`
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+
+## HPS (DeviceType.HPS)
+* general device data
+  * read device data `hps.details()`
+  * read alarms/notification `hps.alarms()`
+* device power/energy metrics
+  * current `hps.energy()`
+  * historical data `hps.energy_history()`
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+
+## PBD (DeviceType.PBD)
+* general device data
+  * read device data `pbd.details()`
+  * read alarms/notification `pbd.alarms()`
+* device power/energy metrics
+  * current `pbd.energy()`
+  * historical data `pbd.energy_history()`
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+
+## WIT (DeviceType.WIT)
+*Note: WIT devices are not supported by APIv1 endpoints - only v4 endpoints available*
+* general device data
+  * read device data
+    * `wit.details_v4()` (using new API)
+* device power/energy metrics
+  * current
+    * `wit.energy_v4()` (using new API)
+  * historical data
+    * `wit.energy_history_v4()` (using new API)
+    * `wit.energy_history_multiple_v4()` (using new API)
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * write settings value
+    * `wit.setting_write_on_off()` (using new API)
+    * `wit.setting_write_active_power()` (using new API)
+  * VPP (VirtualPowerPlant) settings
+    * read vpp schedules
+      * `wit.setting_read_vpp_param()` (using new API)
+    * write vpp schedules
+      * `wit.setting_write_vpp_param()` (using new API)
+
+## SPH-S (DeviceType.SPHS)
+*Note: SPH-S devices are not supported by APIv1 endpoints - only v4 endpoints available*
+* general device data
+  * read device data
+    * `sphs.details_v4()` (using new API)
+* device power/energy metrics
+  * current
+    * `sphs.energy_v4()` (using new API)
+  * historical data
+    * `sphs.energy_history_v4()` (using new API)
+    * `sphs.energy_history_multiple_v4()` (using new API)
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * write settings value
+    * `sphs.setting_write_on_off()` (using new API)
+    * `sphs.setting_write_active_power()` (using new API)
+  * VPP (VirtualPowerPlant) settings
+    * read vpp schedules
+      * `sphs.setting_read_vpp_param()` (using new API)
+    * write vpp schedules
+      * `sphs.setting_write_vpp_param()` (using new API)
+
+## Noah (DeviceType.NOAH)
+*Note: Noah devices are not supported by APIv1 endpoints - only v4 endpoints available*
+* general device data
+  * read device data
+    * `noah.details_v4()` (using new API)
+* device power/energy metrics
+  * current
+    * `noah.energy_v4()` (using new API)
+  * historical data
+    * `noah.energy_history_v4()` (using new API)
+    * `noah.energy_history_multiple_v4()` (using new API)
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * read settings value
+    * `noah.setting_read_vpp_param()` (using new API)
+  * write settings value
+    * `noah.setting_write_on_off()` (using new API)
+    * `noah.setting_write_active_power()` (using new API)
+    * `noah.setting_write_vpp_param()` (using new API)
+  * VPP (VirtualPowerPlant) settings
+    * read vpp schedules
+      * `noah.setting_read_vpp_param()` (using new API)
+    * write vpp schedules
+      * `noah.setting_write_vpp_param()` (using new API)
+
+## GroBoost (DeviceType.GROBOOST)
+* general device data
+  * read device data `groboost.details()`
+* device metrics
+  * current `groboost.metrics()`
+  * current for multiple devices `groboost.metrics_multiple()`
+  * historical data `groboost.metrics_history()`
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+
+## Smart meter (DeviceType.OTHER - SmartMeter/SDM/CHNT)
+* get meters attached to datalogger
+  * `datalogger.list_smart_meters()`
+* device power/energy metrics
+  * current `smart_meter.energy()`
+  * historical data `smart_meter.energy_history()`
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+
+## Environmental sensor (DeviceType.OTHER - Temperature/Humidity/Wind/...)
+* get sensors attached to datalogger
+  * `datalogger.list_env_sensors()`
+* device metrics
+  * current `env_sensor.metrics()`
+  * historical data `env_sensor.metrics_history()`
+    * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 
 # Usage
 ## Login
@@ -269,18 +419,16 @@ print(f"{plant_id=}")
 
 ### get your devices
 ```python
-from growatt_api import GrowattDeviceType
-
-device_list = api.device.list(plant_id=plant_id)
+device_list = api.plant.list_devices(plant_id=plant_id)
 device_sn = device_list.data.devices[0].device_sn
-device_type = device_list.data.devices[0].type
-print(f"{device_type=} ({GrowattDeviceType(device_type).name}), {device_sn=}")
-# => device_type=7 (min), device_sn='BZP0000000'
+device_type = api.device.get_device_type(device_sn=device_sn)
+print(f"{device_type=}, {device_sn=}")
+# => device_type=DeviceType.MIN, device_sn='BZP0000000'
 ```
 
 ### query device metrics
 Use the submodule matching your device type to retrieve its metrics or settings
-Note: Make sure to use `device.list()` for retrieving your device type - the internal type may differ form the marketing name.
+Note: Make sure to use `device.get_device_type()` for retrieving your device type - the internal type may differ form the marketing name.
 ```python
 min_details = api.min.details(device_sn=device_sn)
 print(min_details.data.model_dump_json())
@@ -322,14 +470,19 @@ To the best of our knowledge only the settings functions perform modifications t
 ***The library is used entirely at your own risk.***
 
 # TODOs
-* TODO: refactor to integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
-* TODO: refactor to integrate VPP into MIN,SPA,SPH
 * TODO: add caching to 5-minute-interval endpoints
   * ongoing - still some TODOs
-* TODO: common device type
 * TODO: generate & publish docs
+* TODO: idea: return correct API by device type (e.g. inv.* for inverter, storage.* for storage, etc.)
 
 # Changelog
+* 2025.05.22 (pre-alpha)
+  * refactoring: moved some endpoints from/to plant/device/datalogger
+  * refactoring: moved some endpoints from/to smart_meter/env_sensor/datalogger
+  * common device type `growatt_public_api.DeviceType`
+    * retrieve device type by `api.device.get_device_type()`
+  * refactoring: integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
+  * refactoring: integrate VPP into MIN,SPA,SPH
 * 2025.05.12 (pre-alpha)
   * add tests to verify returned parameters are same as expected parameters
 * 2025.03.28 (pre-alpha)

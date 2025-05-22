@@ -3,25 +3,23 @@ from typing import Union
 from unittest import skip
 from unittest.mock import patch
 
-from api_v4 import ApiV4
-from growatt_public_api import GrowattApiSession, Device, Plant
+from growatt_public_api import (
+    GrowattApiSession,
+    Device,
+    DeviceType,
+)
+from pydantic_models import PlantInfo
 from pydantic_models.device import (
     DeviceCreateDate,
     DeviceBasicData,
-    DataloggerList,
-    DataloggerListData,
-    DataloggerData,
     DataloggerValidation,
     DataloggerValidationData,
     DeviceEnergyDay,
     DeviceDatalogger,
     DeviceDataloggerData,
-    DeviceList,
-    DeviceListData,
-    DeviceData,
     DeviceTypeInfo,
 )
-
+from pydantic_models.plant import PlantInfoData
 
 TEST_FILE = "device.device"
 
@@ -36,38 +34,81 @@ class TestDevice(unittest.TestCase):
     api: Device = None
     device_sn: str = None
     datalogger_sn: str = None
-    plant_id: int = None
 
     @classmethod
     def setUpClass(cls):
         # init API
-        gas = GrowattApiSession(
-            # several min devices seen on v1 test server
-            server_url="https://test.growatt.com",
-            token="6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
-        )
+        gas = GrowattApiSession.using_test_server_v1()
         # init DEVICE
         cls.api = Device(session=gas)
-        # get a DEVICE device
+        # get a device
         try:
-            apiv4 = ApiV4(session=gas)
-            _devices = apiv4.list()
+            _devices = cls.api.list()
             sn_list = [x for x in _devices.data.data]  # select any type
             cls.device_sn = sn_list[0].device_sn
             cls.datalogger_sn = sn_list[0].datalogger_sn
-            # get plant information
-            api_plant = Plant(session=gas)
-            _plant_info = api_plant.by_device(device_sn=cls.device_sn)
-            cls.plant_id = _plant_info.data.plant.plant_id
         except AttributeError:
-            # getting "FREQUENTLY_ACCESS" easily # TODO caching would be nice
             cls.device_sn = "SASF819012"  # ['SASF819012', 'GRT0010086', 'RUK0CAE00J', 'TAG1234567', 'GRT1234001', 'GRT1235001', 'GRT1235002', 'GRT1235003', 'GRT1235004', 'GRT1235005', 'GRT1235006', 'GRT1235112', 'YYX1235112', 'YYX1235113', 'GRT1236601', 'GRT1236602', 'GRT1236603', 'GRT1236604', 'GRT1236605', 'EVK0BHX111']
             cls.datalogger_sn = "WLC082100F"
-            cls.plant_id = 23
 
-    @skip("Currently not testing endpoints writing data")
-    def test_add(self):
-        raise NotImplementedError
+    def test_get_device_type(self):
+        """test device type detection"""
+        gas_v1 = GrowattApiSession.using_test_server_v1()
+        device_api_v1 = Device(session=gas_v1)
+        gas_v4 = GrowattApiSession.using_test_server_v4()
+        device_api_v4 = Device(session=gas_v4)
+        expected_devices = [
+            # GROBOOST not available
+            # HPS not available
+            # INVERTER
+            {"expected": DeviceType.INVERTER, "device_sn": "NHB691514F", "api": device_api_v4},
+            # MAX
+            {"expected": DeviceType.MAX, "device_sn": "SASF819012", "api": device_api_v1},
+            {"expected": DeviceType.MAX, "device_sn": "QXHLD7F0C9", "api": device_api_v4},
+            # MIN
+            {"expected": DeviceType.MIN, "device_sn": "GRT0010086", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "RUK0CAE00J", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "TAG1234567", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1234001", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1235001", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1235002", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1235003", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1235004", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1235005", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1235006", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1235112", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "YYX1235112", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "YYX1235113", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1236601", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1236602", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1236603", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1236604", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "GRT1236605", "api": device_api_v1},
+            # {"expected": DeviceType.MIN, "device_sn": "EVK0BHX111", "api": device_api_v1},
+            # NOAH not available
+            # PBD not available
+            # PCS not available
+            # SPA
+            {"expected": DeviceType.SPA, "device_sn": "CHENYINSHU", "api": device_api_v4},
+            # SPH
+            {"expected": DeviceType.SPH, "device_sn": "AQM1234567", "api": device_api_v4},
+            # SPH-S
+            {"expected": DeviceType.SPHS, "device_sn": "EFP0N1J023", "api": device_api_v4},
+            # STORAGE
+            {"expected": DeviceType.STORAGE, "device_sn": "KHMOCM5688", "api": device_api_v4},
+            # WIT
+            {"expected": DeviceType.WIT, "device_sn": "QWL0DC3002", "api": device_api_v4},
+            # Error cases
+            {"expected": None, "device_sn": "NOTEXISTING", "api": device_api_v1},
+            {"expected": None, "device_sn": "NOTEXISTING", "api": device_api_v4},
+        ]
+        for expected_device in expected_devices:
+            expected_type = expected_device["expected"]
+            device_sn = expected_device["device_sn"]
+            api = expected_device["api"]
+            print(f"checking {expected_type} {device_sn}")
+            actual_type = api.get_device_type(device_sn=device_sn)
+            self.assertEqual(expected_type, actual_type, f"unexpected type for device_sn: {device_sn}")
 
     def test_create_date(self):
         with patch(f"{TEST_FILE}.DeviceCreateDate", wraps=DeviceCreateDate) as mock_pyd_model:
@@ -87,39 +128,6 @@ class TestDevice(unittest.TestCase):
         )
         self.assertEqual(
             set(), set(raw_data["data"][self.device_sn].keys()).difference(pydantic_keys), f"data_{self.device_sn}"
-        )
-
-    @skip("Currently not testing endpoints writing data")
-    def test_datalogger_add(self):
-        raise NotImplementedError
-
-    @skip("Currently not testing endpoints writing data")
-    def test_datalogger_delete(self):
-        raise NotImplementedError
-
-    def test_datalogger_list(self):
-        with patch(f"{TEST_FILE}.DataloggerList", wraps=DataloggerList) as mock_pyd_model:
-            self.api.datalogger_list(plant_id=self.plant_id)
-
-        raw_data = mock_pyd_model.model_validate.call_args.args[0]
-
-        # check parameters are included in pydantic model
-        pydantic_keys = {v.alias for k, v in DataloggerList.model_fields.items()} | set(
-            DataloggerList.model_fields.keys()
-        )  # aliased and non-aliased params
-        for param in set(raw_data.keys()):
-            self.assertIn(param, pydantic_keys)
-        # check data
-        pydantic_keys = {v.alias for k, v in DataloggerListData.model_fields.items()} | set(
-            DataloggerListData.model_fields.keys()
-        )
-        self.assertEqual(set(), set(raw_data["data"].keys()).difference(pydantic_keys), f"data")
-        # check data item
-        pydantic_keys = {v.alias for k, v in DataloggerData.model_fields.items()} | set(
-            DataloggerData.model_fields.keys()
-        )
-        self.assertEqual(
-            set(), set(raw_data["data"]["dataloggers"][0].keys()).difference(pydantic_keys), f"data_dataloggers_0"
         )
 
     @skip("Cannot test without validation code")
@@ -175,28 +183,6 @@ class TestDevice(unittest.TestCase):
         # check correct data returned
         self.assertEqual(self.datalogger_sn, actual.data.datalogger_sn)
 
-    def test_list(self):
-        with patch(f"{TEST_FILE}.DeviceList", wraps=DeviceList) as mock_pyd_model:
-            self.api.list(plant_id=self.plant_id)
-
-        raw_data = mock_pyd_model.model_validate.call_args.args[0]
-
-        # check parameters are included in pydantic model
-        pydantic_keys = {v.alias for k, v in DeviceList.model_fields.items()} | set(
-            DeviceList.model_fields.keys()
-        )  # aliased and non-aliased params
-        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
-        # check data
-        pydantic_keys = {v.alias for k, v in DeviceListData.model_fields.items()} | set(
-            DeviceListData.model_fields.keys()
-        )
-        self.assertEqual(set(), set(raw_data["data"].keys()).difference(pydantic_keys), f"data")
-        # check data item
-        pydantic_keys = {v.alias for k, v in DeviceData.model_fields.items()} | set(DeviceData.model_fields.keys())
-        self.assertEqual(
-            set(), set(raw_data["data"]["devices"][0].keys()).difference(pydantic_keys), f"data_dataloggers_0"
-        )
-
     def test_type_info(self):
         with patch(f"{TEST_FILE}.DeviceTypeInfo", wraps=DeviceTypeInfo) as mock_pyd_model:
             self.api.type_info(device_sn=self.device_sn)
@@ -208,3 +194,20 @@ class TestDevice(unittest.TestCase):
             DeviceTypeInfo.model_fields.keys()
         )  # aliased and non-aliased params
         self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+    def test_get_plant(self):
+        with patch(f"{TEST_FILE}.PlantInfo", wraps=PlantInfo) as mock_pyd_model:
+            self.api.get_plant(device_sn=self.device_sn)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in PlantInfo.model_fields.items()} | set(
+            PlantInfo.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+        # check data
+        pydantic_keys = {v.alias for k, v in PlantInfoData.model_fields.items()} | set(
+            PlantInfoData.model_fields.keys()
+        )
+        self.assertEqual(set(), set(raw_data["data"].keys()).difference(pydantic_keys), "data")

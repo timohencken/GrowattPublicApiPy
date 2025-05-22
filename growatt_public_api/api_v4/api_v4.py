@@ -4,8 +4,8 @@ from typing import Optional, Literal, List, Union
 import truststore
 from loguru import logger
 
+from growatt_public_api import DeviceType
 from pydantic_models.api_v4 import (
-    DeviceListV4,
     InverterDetailsV4,
     StorageDetailsV4,
     SphDetailsV4,
@@ -50,100 +50,41 @@ truststore.inject_into_ssl()
 from session import GrowattApiSession  # noqa: E402
 
 
-NEW_API_ERROR_CODES = {  # TODO use this for something?
-    0: "Normal",
-    1: "System Error",
-    2: "Invalid Secret Token",
-    3: "Device Permission Verification Failed",
-    4: "Device Not Found",
-    5: "Device Offline",
-    6: "Failed to Set Parameters",
-    7: "Device Type Error",
-    8: "Device SN is Empty",
-    9: "Date Cannot Be Empty",
-    10: "Page Number Cannot Be Empty",
-    11: "Device SN Exceeds Quantity Limit",
-    12: "No Permission to Access Device",
-    100: "API Access Interval",
-    101: "No Permission to Access",
-    102: "Access Frequency Limit, Different Interfaces Have Different Time Limits",
-    -1: "Please Use the New Domain for Access",
-}
-
-DeviceType = Literal["inv", "storage", "max", "sph", "spa", "min", "wit", "sph-s", "noah"]
+DeviceTypeStr = Literal["inv", "storage", "max", "sph", "spa", "min", "wit", "sph-s", "noah"]
 
 
 class ApiV4:
     """
     New API (v4)
     https://www.showdoc.com.cn/2540838290984246/11292912972201443
+
+    v4 error codes
+    https://www.showdoc.com.cn/2540838290984246/11292913883034530
+
+    Do not use this module directly, use the device-specific implementation instead.
     """
-
-    # TODO refactor - we do not want a v4 package (at least not external) - distribute to corresponding "device_type" packages
-
-    # TODO v4 error codes
-    # https://www.showdoc.com.cn/2540838290984246/11292913883034530
 
     session: GrowattApiSession
 
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
 
-    def list(
-        self,
-        page: Optional[int] = None,
-    ) -> DeviceListV4:
-        """
-        Device List
-        Retrieve the list of devices associated with the distributor, installer, and terminal account of the secret token.
-        The devices obtained through this interface are the only ones allowed to fetch data from.
-        Devices not on the list are not permitted to retrieve data.
-        https://www.showdoc.com.cn/2540838290984246/11292915113214428
+    @staticmethod
+    def _device_type(device_type: Union[DeviceType, DeviceTypeStr]) -> DeviceType:
+        if isinstance(device_type, DeviceType):
+            return device_type
 
-        Returned "device_type" values are: (according to https://www.showdoc.com.cn/2540838290984246/11292914311318022 and https://www.showdoc.com.cn/p/b42ee029e131c68c4dbfdd89285c0ec1)
-        * inv
-        * storage
-        * max
-        * sph
-        * spa
-        * min
-        * wit
-        * sph-s
-        * noah
-
-        Rate limit(s):
-        * Fetch frequency is limited to once every 5 seconds.
-
-        Args:
-            page (Optional[int]): Page number, default 1 (1~n)
-
-        Returns:
-            DeviceList
-            {   'data': {   'count': 7,
-                            'data': [   {'create_date': datetime.datetime(2021, 6, 29, 12, 2, 46), 'datalogger_sn': None, 'device_sn': 'HPJ0BF20FU', 'device_type': 'max'},
-                                        {'create_date': datetime.datetime(2024, 11, 30, 17, 37, 26), 'datalogger_sn': 'QMN000BZP0000000', 'device_sn': 'BZP0000000', 'device_type': 'min'}
-                                        {'create_date': datetime.datetime(2017, 1, 18, 14, 9, 53), 'datalogger_sn': None, 'device_sn': 'PR34211399', 'device_type': 'inv'}],
-                            'last_pager': True,
-                            'not_pager': False,
-                            'other': None,
-                            'page_size': 100,
-                            'pages': 1,
-                            'start_count': 0},
-                'error_code': 0,
-                'error_msg': 'SUCCESSFUL_OPERATION'}
-        """
-
-        response = self.session.post(
-            endpoint="new-api/queryDeviceList",
-            params={"page": page},
-        )
-
-        return DeviceListV4.model_validate(response)
+        try:
+            return DeviceType(device_type)
+        except ValueError:
+            raise ValueError(
+                f"device type '{device_type}' cannot be mapped to any known device type ({', '.join([x.name for x in DeviceType])})"
+            )
 
     def details(  # noqa: C901 'ApiV4.details' is too complex (11)
         self,
         device_sn: Union[str, List[str]],
-        device_type: DeviceType,
+        device_type: Union[DeviceType, DeviceTypeStr],
     ) -> Union[
         InverterDetailsV4,
         StorageDetailsV4,
@@ -167,7 +108,7 @@ class ApiV4:
 
         Args:
             device_sn (Union[str, List[str]]): Inverter serial number or list of (multiple) inverter serial numbers (max 100)
-            device_type (DeviceType): Device type (as returned by list())
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list())
 
         Returns:
             Union[InverterDetailsV4, StorageDetailsV4, MaxDetailsV4, SphDetailsV4, SpaDetailsV4, MinDetailsV4, WitDetailsV4, SphsDetailsV4, NoahDetailsV4]
@@ -1276,6 +1217,8 @@ class ApiV4:
                 'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
+        device_type = self._device_type(device_type=device_type)
+
         if isinstance(device_sn, list):
             assert len(device_sn) <= 100, "Max 100 devices per request"
             device_sn = ",".join(device_sn)
@@ -1284,28 +1227,27 @@ class ApiV4:
             endpoint="new-api/queryDeviceInfo",
             params={
                 "deviceSn": device_sn,
-                "deviceType": device_type,
+                "deviceType": device_type.value,
             },
         )
 
-        device_type = device_type.lower()
-        if device_type == "inv":
+        if device_type == DeviceType.INVERTER:
             return InverterDetailsV4.model_validate(response)
-        elif device_type == "storage":
+        elif device_type == DeviceType.STORAGE:
             return StorageDetailsV4.model_validate(response)
-        elif device_type == "max":
+        elif device_type == DeviceType.MAX:
             return MaxDetailsV4.model_validate(response)
-        elif device_type == "sph":
+        elif device_type == DeviceType.SPH:
             return SphDetailsV4.model_validate(response)
-        elif device_type == "spa":
+        elif device_type == DeviceType.SPA:
             return SpaDetailsV4.model_validate(response)
-        elif device_type == "min":
+        elif device_type == DeviceType.MIN:
             return MinDetailsV4.model_validate(response)
-        elif device_type == "wit":
+        elif device_type == DeviceType.WIT:
             return WitDetailsV4.model_validate(response)
-        elif device_type == "sph-s":
+        elif device_type == DeviceType.SPHS:
             return SphsDetailsV4.model_validate(response)
-        elif device_type == "noah":
+        elif device_type == DeviceType.NOAH:
             return NoahDetailsV4.model_validate(response)
         else:
             raise ValueError(f"Unknown device type: {device_type}")
@@ -1313,7 +1255,7 @@ class ApiV4:
     def energy(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
         device_sn: Union[str, List[str]],
-        device_type: DeviceType,
+        device_type: Union[DeviceType, DeviceTypeStr],
     ) -> Union[
         InverterEnergyV4,
         StorageEnergyV4,
@@ -1338,7 +1280,7 @@ class ApiV4:
 
         Args:
             device_sn (Union[str, List[str]]): Inverter serial number or list of (multiple) inverter serial numbers (max 100)
-            device_type (DeviceType): Device type (as returned by list())
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list())
 
         Returns:
             Union[InverterEnergyV4, StorageEnergyV4, MaxEnergyV4, SphEnergyV4, SpaEnergyV4, MinEnergyV4, WitEnergyV4, SphsEnergyV4, NoahEnergyV4,]
@@ -3214,8 +3156,8 @@ class ApiV4:
                                              'warnCode1': 0,
                                              'warnText': 'Unknown',
                                              'withTime': False}]},
-                'message': 'SUCCESSFUL_OPERATION'}
-            {'data': {'sph': None}, 'error_code': 0, 'error_msg': 'SUCCESSFUL_OPERATION'}
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
 
             NoahEnergyV4
             Note: NOAH documentation is VERY incomplete
@@ -3266,6 +3208,8 @@ class ApiV4:
                 'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
+        device_type = self._device_type(device_type=device_type)
+
         if isinstance(device_sn, list):
             assert len(device_sn) <= 100, "Max 100 devices per request"
             device_sn = ",".join(device_sn)
@@ -3274,28 +3218,27 @@ class ApiV4:
             endpoint="new-api/queryLastData",
             params={
                 "deviceSn": device_sn,
-                "deviceType": device_type,
+                "deviceType": device_type.value,
             },
         )
 
-        device_type = device_type.lower()
-        if device_type == "inv":
+        if device_type == DeviceType.INVERTER:
             return InverterEnergyV4.model_validate(response)
-        elif device_type == "storage":
+        elif device_type == DeviceType.STORAGE:
             return StorageEnergyV4.model_validate(response)
-        elif device_type == "max":
+        elif device_type == DeviceType.MAX:
             return MaxEnergyV4.model_validate(response)
-        elif device_type == "sph":
+        elif device_type == DeviceType.SPH:
             return SphEnergyV4.model_validate(response)
-        elif device_type == "spa":
+        elif device_type == DeviceType.SPA:
             return SpaEnergyV4.model_validate(response)
-        elif device_type == "min":
+        elif device_type == DeviceType.MIN:
             return MinEnergyV4.model_validate(response)
-        elif device_type == "wit":
+        elif device_type == DeviceType.WIT:
             return WitEnergyV4.model_validate(response)
-        elif device_type == "sph-s":
+        elif device_type == DeviceType.SPHS:
             return SphsEnergyV4.model_validate(response)
-        elif device_type == "noah":
+        elif device_type == DeviceType.NOAH:
             logger.warning(
                 "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
             )
@@ -3308,7 +3251,7 @@ class ApiV4:
     def energy_history(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
         device_sn: str,
-        device_type: DeviceType,
+        device_type: Union[DeviceType, DeviceTypeStr],
         date_: Optional[datetime.date] = None,
     ) -> Union[
         InverterEnergyHistoryV4,
@@ -3333,7 +3276,7 @@ class ApiV4:
 
         Args:
             device_sn (str): Device unique serial number (SN)
-            device_type (DeviceType): Device type (as returned by list())
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list())
             date_ (Optional[date]): Start Date - defaults to today
 
         Returns:
@@ -3349,35 +3292,36 @@ class ApiV4:
 
         """
 
+        device_type = self._device_type(device_type=device_type)
+
         date_ = date_ or datetime.date.today()
 
         response = self.session.post(
             endpoint="new-api/queryHistoricalData",
             params={
                 "deviceSn": device_sn,
-                "deviceType": device_type,
+                "deviceType": device_type.value,
                 "date": date_.strftime("%Y-%m-%d"),
             },
         )
 
-        device_type = device_type.lower()
-        if device_type == "inv":
+        if device_type == DeviceType.INVERTER:
             return InverterEnergyHistoryV4.model_validate(response)
-        elif device_type == "storage":
+        elif device_type == DeviceType.STORAGE:
             return StorageEnergyHistoryV4.model_validate(response)
-        elif device_type == "max":
+        elif device_type == DeviceType.MAX:
             return MaxEnergyHistoryV4.model_validate(response)
-        elif device_type == "sph":
+        elif device_type == DeviceType.SPH:
             return SphEnergyHistoryV4.model_validate(response)
-        elif device_type == "spa":
+        elif device_type == DeviceType.SPA:
             return SpaEnergyHistoryV4.model_validate(response)
-        elif device_type == "min":
+        elif device_type == DeviceType.MIN:
             return MinEnergyHistoryV4.model_validate(response)
-        elif device_type == "wit":
+        elif device_type == DeviceType.WIT:
             return WitEnergyHistoryV4.model_validate(response)
-        elif device_type == "sph-s":
+        elif device_type == DeviceType.SPHS:
             return SphsEnergyHistoryV4.model_validate(response)
-        elif device_type == "noah":
+        elif device_type == DeviceType.NOAH:
             logger.warning(
                 "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
             )
@@ -3390,7 +3334,7 @@ class ApiV4:
     def energy_history_multiple(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
         device_sn: Union[str, List[str]],
-        device_type: DeviceType,
+        device_type: Union[DeviceType, DeviceTypeStr],
         date_: Optional[datetime.date] = None,
     ) -> Union[
         InverterEnergyHistoryMultipleV4,
@@ -3415,7 +3359,7 @@ class ApiV4:
 
         Args:
             device_sn (Union[str, List[str]]): Inverter serial number or list of (multiple) inverter serial numbers (max 100)
-            device_type (DeviceType): Device type (as returned by list())
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list())
             date_ (Optional[date]): Start Date - defaults to today
 
         Returns:
@@ -3429,6 +3373,8 @@ class ApiV4:
 
         """
 
+        device_type = self._device_type(device_type=device_type)
+
         date_ = date_ or datetime.date.today()
 
         if isinstance(device_sn, list):
@@ -3439,29 +3385,28 @@ class ApiV4:
             endpoint="new-api/queryDevicesHistoricalData",
             params={
                 "deviceSn": device_sn,
-                "deviceType": device_type,
+                "deviceType": device_type.value,
                 "date": date_.strftime("%Y-%m-%d"),
             },
         )
 
-        device_type = device_type.lower()
-        if device_type == "inv":
+        if device_type == DeviceType.INVERTER:
             return InverterEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "storage":
+        elif device_type == DeviceType.STORAGE:
             return StorageEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "max":
+        elif device_type == DeviceType.MAX:
             return MaxEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "sph":
+        elif device_type == DeviceType.SPH:
             return SphEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "spa":
+        elif device_type == DeviceType.SPA:
             return SpaEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "min":
+        elif device_type == DeviceType.MIN:
             return MinEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "wit":
+        elif device_type == DeviceType.WIT:
             return WitEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "sph-s":
+        elif device_type == DeviceType.SPHS:
             return SphsEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == "noah":
+        elif device_type == DeviceType.NOAH:
             logger.warning(
                 "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
             )
@@ -3474,7 +3419,7 @@ class ApiV4:
     def setting_write_on_off(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
         device_sn: str,
-        device_type: DeviceType,
+        device_type: Union[DeviceType, DeviceTypeStr],
         power_on: bool,
     ) -> SettingWriteV4:
         """
@@ -3492,7 +3437,7 @@ class ApiV4:
 
         Args:
             device_sn (str): Inverter serial number
-            device_type (DeviceType): Device type (as returned by list())
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list())
             power_on (bool): True = Power On, False = Power Off
 
         Returns:
@@ -3504,7 +3449,9 @@ class ApiV4:
 
         """
 
-        if device_type == "noah":
+        device_type = self._device_type(device_type=device_type)
+
+        if device_type == DeviceType.NOAH:
             raise AttributeError("NOAH devices do not support power on/off setting")
 
         if power_on:
@@ -3519,7 +3466,7 @@ class ApiV4:
             endpoint="new-api/setOnOrOff",
             params={
                 "deviceSn": device_sn,
-                "deviceType": device_type,
+                "deviceType": device_type.value,
                 "value": value,
             },
         )
@@ -3529,7 +3476,7 @@ class ApiV4:
     def setting_write_active_power(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
         device_sn: str,
-        device_type: DeviceType,
+        device_type: Union[DeviceType, DeviceTypeStr],
         active_power: int,
     ) -> SettingWriteV4:
         """
@@ -3548,7 +3495,7 @@ class ApiV4:
 
         Args:
             device_sn (str): Inverter serial number
-            device_type (DeviceType): Device type (as returned by list())
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list())
             active_power (int): Percentage of active power, range 0-100 --- NOAH device is set to power (range 0-800W, unit W)
 
         Returns:
@@ -3560,8 +3507,10 @@ class ApiV4:
 
         """
 
+        device_type = self._device_type(device_type=device_type)
+
         active_power = int(active_power)
-        if device_type == "noah":
+        if device_type == DeviceType.NOAH:
             assert 0 <= active_power <= 800, "NOAH devices can be configured to 0 ~ 800 W"
             logger.info(f"Setting {device_type} device '{device_sn}' power to {active_power} W")
         else:
@@ -3572,7 +3521,7 @@ class ApiV4:
             endpoint="new-api/setPower",
             params={
                 "deviceSn": device_sn,
-                "deviceType": device_type,
+                "deviceType": device_type.value,
                 "value": active_power,
             },
         )
@@ -3582,7 +3531,7 @@ class ApiV4:
     def setting_write_soc_upper_limit(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
         device_sn: str,
-        device_type: DeviceType,
+        device_type: Union[DeviceType, DeviceTypeStr],
         soc_limit: int,
     ) -> SettingWriteV4:
         """
@@ -3600,7 +3549,7 @@ class ApiV4:
 
         Args:
             device_sn (str): Inverter serial number
-            device_type (DeviceType): Device type (as returned by list()) -- This API is only applicable to NOAH device type
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list()) -- This API is only applicable to NOAH device type
             soc_limit (int): discharge SOC upper limit, range 0-100, range 0-100 %
 
         Returns:
@@ -3612,8 +3561,10 @@ class ApiV4:
 
         """
 
+        device_type = self._device_type(device_type=device_type)
+
         soc_limit = int(soc_limit)
-        if device_type != "noah":
+        if device_type != DeviceType.NOAH:
             raise AttributeError("This API is only applicable to NOAH device type")
 
         logger.info(f"Setting {device_type} device '{device_sn}' SOC discharge upper limit to {soc_limit} %")
@@ -3622,7 +3573,7 @@ class ApiV4:
             endpoint="new-api/setHighLimitSoc",
             params={
                 "deviceSn": device_sn,
-                "deviceType": device_type,
+                "deviceType": device_type.value,
                 "value": soc_limit,
             },
         )
@@ -3632,7 +3583,7 @@ class ApiV4:
     def setting_write_soc_lower_limit(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
         device_sn: str,
-        device_type: DeviceType,
+        device_type: Union[DeviceType, DeviceTypeStr],
         soc_limit: int,
     ) -> SettingWriteV4:
         """
@@ -3650,7 +3601,7 @@ class ApiV4:
 
         Args:
             device_sn (str): Inverter serial number
-            device_type (DeviceType): Device type (as returned by list()) -- This API is only applicable to NOAH device type
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list()) -- This API is only applicable to NOAH device type
             soc_limit (int): discharge SOC lower limit, range 0-100, range 0-100 %
 
         Returns:
@@ -3662,9 +3613,12 @@ class ApiV4:
 
         """
 
-        soc_limit = int(soc_limit)
-        if device_type != "noah":
+        device_type = self._device_type(device_type=device_type)
+
+        if device_type != DeviceType.NOAH:
             raise AttributeError("This API is only applicable to NOAH device type")
+
+        soc_limit = int(soc_limit)
 
         logger.info(f"Setting {device_type} device '{device_sn}' SOC discharge lower limit to {soc_limit} %")
 
@@ -3672,7 +3626,7 @@ class ApiV4:
             endpoint="new-api/setLowLimitSoc",
             params={
                 "deviceSn": device_sn,
-                "deviceType": device_type,
+                "deviceType": device_type.value,
                 "value": soc_limit,
             },
         )
@@ -3682,7 +3636,7 @@ class ApiV4:
     def setting_write_time_period(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
         device_sn: str,
-        device_type: DeviceType,
+        device_type: Union[DeviceType, DeviceTypeStr],
         time_period_nr: int,
         start_time: datetime.time,
         end_time: datetime.time,
@@ -3705,7 +3659,7 @@ class ApiV4:
 
         Args:
             device_sn (str): Inverter serial number
-            device_type (DeviceType): Device type (as returned by list()) -- This API is only applicable to NOAH device type
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list()) -- This API is only applicable to NOAH device type
             time_period_nr (int): time period number - range 1 ~ 9
             start_time (datetime.time): period start time
             end_time (datetime.time): period end time
@@ -3722,7 +3676,9 @@ class ApiV4:
 
         """
 
-        if device_type != "noah":
+        device_type = self._device_type(device_type=device_type)
+
+        if device_type != DeviceType.NOAH:
             raise AttributeError("This API is only applicable to NOAH device type")
 
         time_period_nr = int(time_period_nr)
@@ -3748,7 +3704,7 @@ class ApiV4:
             endpoint="new-api/setTimeSegment",
             params={
                 "deviceSn": device_sn,
-                "deviceType": device_type,
+                "deviceType": device_type.value,
                 "type": time_period_nr,
                 "startTime": start_time.strftime("%H:%M"),
                 "endTime": end_time.strftime("%H:%M"),
@@ -3763,7 +3719,7 @@ class ApiV4:
     def setting_read_vpp_param(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
         device_sn: str,
-        device_type: DeviceType,
+        device_type: Union[DeviceType, DeviceTypeStr],
         parameter_id: str,
     ) -> SettingReadVppV4:
         """
@@ -3777,9 +3733,9 @@ class ApiV4:
         * The current interface only supports sph, spa, min, wit device types.
           The specific models are as follows:
           * SPH 3000-6000TL BL
-          * SPA 1000-3000TL BL
           * SPH 3000-6000TL BL US
           * SPH 4000-10000TL3 BH
+          * SPA 1000-3000TL BL
           * SPA 4000-10000TL3 BH
           * MIN 2500-6000TL-XH US
           * MIN 2500-6000TL-XH
@@ -3790,12 +3746,12 @@ class ApiV4:
         Rate limit(s):
         * The maximum frequency is once every 5 seconds.
 
-        Allowed/known values for vpp_param:
+        Allowed/known values for parameter_id:
           see self.setting_write_vpp_param()
 
         Args:
             device_sn (str): Inverter serial number
-            device_type (DeviceType): Device type (as returned by list()) -- This API is only applicable to NOAH device type
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list())
             parameter_id (str): Set parameter enumeration, example: set_param_1
 
 
@@ -3808,6 +3764,8 @@ class ApiV4:
 
         """
 
+        device_type = self._device_type(device_type=device_type)
+
         assert parameter_id.startswith("set_param_"), "parameter_id must start with 'set_param_'"
         assert parameter_id[10:].isdigit(), "parameter_id must be followed by a number"
 
@@ -3815,7 +3773,7 @@ class ApiV4:
             endpoint="new-api/readVppParameter",
             params={
                 "deviceSn": device_sn,
-                "deviceType": device_type,
+                "deviceType": device_type.value,
                 "setType": parameter_id,
             },
         )
@@ -3825,16 +3783,16 @@ class ApiV4:
     def setting_write_vpp_param(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
         device_sn: str,
-        device_type: DeviceType,
+        device_type: Union[DeviceType, DeviceTypeStr],
         parameter_id: str,
         value: Union[int, str],
     ) -> SettingWriteV4:
         """
-        Read VPP parameters
-        Read the VPP related parameters of the device according to the SN of the device.
+        VPP related parameter settings
+        Set the VPP related parameters of the device according to the SN of the device.
         The interface returns data only for devices that the secret token has permission to access.
         The device without permission will not be read and the results will not be returned.
-        https://www.showdoc.com.cn/2598832417617967/11558629942271434
+        https://www.showdoc.com.cn/2598832417617967/11558385202215329
 
         Note:
         * The current interface only supports sph, spa, min, wit device types.
@@ -3987,7 +3945,7 @@ class ApiV4:
 
         Args:
             device_sn (str): Inverter serial number
-            device_type (DeviceType): Device type (as returned by list()) -- This API is only applicable to NOAH device type
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list())
             parameter_id (str): Set parameter enumeration, example: set_param_1
             value (Union[int, str]): the parameter value set, example:value
 
@@ -4001,6 +3959,8 @@ class ApiV4:
 
         """
 
+        device_type = self._device_type(device_type=device_type)
+
         assert parameter_id.startswith("set_param_"), "parameter_id must start with 'set_param_'"
         assert parameter_id[10:].isdigit(), "parameter_id must be followed by a number"
 
@@ -4008,7 +3968,7 @@ class ApiV4:
             endpoint="new-api/setVppParameter",
             params={
                 "deviceSn": device_sn,
-                "deviceType": device_type,
+                "deviceType": device_type.value,
                 "setType": parameter_id,
                 "value": str(value),
             },

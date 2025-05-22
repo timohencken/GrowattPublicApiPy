@@ -28,9 +28,9 @@ just enumerate available devices from test environment(s)
             min                MIN             MIN     other     Other  EVK0BHX111   https://test.growatt.com         MIN 11400TL-XH-US  VC51010223062195      29             22    4             7
             spa                NaN             SPA  inverter  Inverter  CHENYINSHU  http://183.62.216.35:8081             Growatt1000-S        BQC0733006       NaN           19    1             NaN
             sph                NaN             SPH   storage   Storage  AQM1234567  http://183.62.216.35:8081          SPH 5000TL BL-UP        XGD6E9K06M       NaN           17    2             NaN
-          sph-s                NaN            None   storage   Storage  EFP0N1J023  http://183.62.216.35:8081                S10000H-48  VC41010123438079       NaN          260    2             NaN
+          sph-s                NaN           SPH-S   storage   Storage  EFP0N1J023  http://183.62.216.35:8081                S10000H-48  VC41010123438079       NaN          260    2             NaN
         storage                NaN         Storage   storage   Storage  KHMOCM5688  http://183.62.216.35:8081  Growatt SPF 6000 ES PLUS        EAP0D9M006       NaN           96    2             NaN
-            wit                NaN            None   storage   Storage  QWL0DC3002  http://183.62.216.35:8081            WIT 100K- HE L        XGD6E7C4S2       NaN          218    2             NaN
+            wit                NaN             WIT   storage   Storage  QWL0DC3002  http://183.62.216.35:8081            WIT 100K- HE L        XGD6E7C4S2       NaN          218    2             NaN
 """
 
 import pandas as pd
@@ -42,13 +42,11 @@ from pydantic_models.api_v4 import DeviceListV4
 envs = [
     {
         "name": "test_v1",
-        "server_url": "https://test.growatt.com",
-        "token": "6eb6f069523055a339d71e5b1f6c88cc",  # gitleaks:allow
+        "gas": GrowattApiSession.using_test_server_v1(),
     },
     {
         "name": "test_v4",
-        "server_url": "http://183.62.216.35:8081",
-        "token": "wa265d2h1og0873ml07142r81564hho6",  # gitleaks:allow
+        "gas": GrowattApiSession.using_test_server_v4(),
     },
 ]
 
@@ -56,19 +54,16 @@ device_overview = []
 for env in envs:  # noqa C901 'Loop 25' is too complex (14)
     print(f"Checking env '{env.get('name')}'")
     # init API
-    gas = GrowattApiSession(
-        server_url=env.get("server_url"),
-        token=env.get("token"),
-    )
+    gas = env["gas"]
     # get devices
+    api_device = Device(session=gas)
     apiv4 = ApiV4(session=gas)
     print("\rgetting device list")
-    devices: DeviceListV4 = apiv4.list()
+    devices: DeviceListV4 = api_device.list()
 
     # get device type info
     print("\rgetting device type infos")
     device_type_infos = {}
-    api_device = Device(session=gas)
     for idx, device in enumerate(devices.data.data):
         print(f"\r {idx+1}/{len(devices.data.data)}: {device.device_sn}      ", end="")
         device_sn: str = device.device_sn
@@ -82,7 +77,7 @@ for env in envs:  # noqa C901 'Loop 25' is too complex (14)
     for idx, device in enumerate(devices.data.data):
         print(f"\r {idx + 1}/{len(devices.data.data)}: {device.device_sn}      ", end="")
         device_sn: str = device.device_sn
-        device_plant_info = api_plant.by_device(device_sn=device_sn)
+        device_plant_info = api_device.get_plant(device_sn=device_sn)
         device_plant_infos[device_sn] = device_plant_info
 
     # we might have "hidden" devices only visible in v1 (e.g. MAX has two devices (type 1 & 4 with same sn)
@@ -91,7 +86,7 @@ for env in envs:  # noqa C901 'Loop 25' is too complex (14)
     plant_ids = {x.data.plant.plant_id for x in device_plant_infos.values() if x.data}
     for idx, plant_id in enumerate(plant_ids):
         print(f"\r {idx + 1}/{len(plant_ids)}: {plant_id}      ", end="")
-        plant_devices[plant_id] = api_device.list(plant_id=plant_id)
+        plant_devices[plant_id] = api_plant.list_devices(plant_id=plant_id, limit=100)
 
     # #################################################################################################################
     # collect and merge data
@@ -125,6 +120,8 @@ for env in envs:  # noqa C901 'Loop 25' is too complex (14)
         82: "HPS",
         83: "PDB",
         96: "Storage",
+        218: "WIT",
+        260: "SPH-S",
     }
     for device_sn, device_type_info in device_type_infos.items():
         if device_sn not in [x["device_sn"] for x in device_overview]:

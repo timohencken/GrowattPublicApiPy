@@ -1,8 +1,18 @@
-from datetime import date, timedelta
-from typing import Optional, Union, List, Dict, Any
+from datetime import date, timedelta, time
+from typing import Optional, Union, List, Dict, Any, Tuple
 
 import truststore
 
+from growatt_public_api import DeviceType
+from pydantic_models import VppSoc, VppWrite
+from pydantic_models.api_v4 import (
+    MinDetailsV4,
+    MinEnergyV4,
+    MinEnergyHistoryV4,
+    MinEnergyHistoryMultipleV4,
+    SettingWriteV4,
+    SettingReadVppV4,
+)
 from pydantic_models.min import (
     MinSettingRead,
     MinSettingWrite,
@@ -17,6 +27,8 @@ from pydantic_models.min import (
 
 truststore.inject_into_ssl()
 from session import GrowattApiSession  # noqa: E402
+from api_v4.api_v4 import ApiV4  # noqa: E402
+from vpp.vpp import Vpp  # noqa: E402
 
 
 class Min:
@@ -25,13 +37,17 @@ class Min:
     https://www.showdoc.com.cn/262556420217021/6129816412127075
 
     Note:
-        Only applicable to devices with device type 7 (min) returned by device.list()
+        Only applicable to devices with device type 7 (min) returned by plant.list_devices()
     """
 
     session: GrowattApiSession
+    _api_v4: ApiV4
+    _api_vpp: Vpp
 
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
+        self._api_v4 = ApiV4(session)
+        self._api_vpp = Vpp(session)
 
     def settings(
         self,
@@ -42,7 +58,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/8696815667375182
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         Args:
             device_sn (str): inverter SN
@@ -329,7 +345,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/6119793934974232
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         This method allows to read
         * predefined settings
@@ -393,6 +409,46 @@ class Min:
 
         return MinSettingRead.model_validate(response)
 
+    def setting_read_vpp_param(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: str,
+        parameter_id: str,
+    ) -> SettingReadVppV4:
+        """
+        Read VPP parameters using "new-api" endpoint
+        Read the VPP related parameters of the device according to the SN of the device.
+        https://www.showdoc.com.cn/2598832417617967/11558629942271434
+
+        Note:
+        * The current interface only supports
+          * MIN 2500-6000TL-XH US
+          * MIN 2500-6000TL-XH
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Allowed/known values for vpp_param:
+          see self.setting_write_vpp_param()
+
+        Args:
+            device_sn (str): Inverter serial number
+            parameter_id (str): Set parameter enumeration, example: set_param_1
+
+        Returns:
+            SettingReadVppV4
+            e.g.
+            {   'data': 0,
+                'error_code': 0,
+                'error_msg': 'success'}
+
+        """
+
+        return self._api_v4.setting_read_vpp_param(
+            device_sn=device_sn,
+            device_type=DeviceType.MIN,
+            parameter_id=parameter_id,
+        )
+
     # noinspection PyUnusedLocal
     def setting_write(
         self,
@@ -424,7 +480,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/6129826876191828
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         This method allows to set
         * predefined settings (see table below)
@@ -575,6 +631,246 @@ class Min:
 
         return MinSettingWrite.model_validate(response)
 
+    def setting_write_on_off(
+        self,
+        device_sn: str,
+        power_on: bool,
+    ) -> SettingWriteV4:
+        """
+        Set the power on and off using "new-api" endpoint
+        Turn device on/off
+        https://www.showdoc.com.cn/2540838290984246/11330750679726415
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            power_on (bool): True = Power On, False = Power Off
+
+        Returns:
+            SettingWriteV4
+            e.g.
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+        """
+
+        return self._api_v4.setting_write_on_off(
+            device_sn=device_sn,
+            device_type=DeviceType.MIN,
+            power_on=power_on,
+        )
+
+    def setting_write_active_power(
+        self,
+        device_sn: str,
+        active_power_percent: int,
+    ) -> SettingWriteV4:
+        """
+        Set the active power using "new-api" endpoint
+        Set the active power percentage of the device based on the device type and SN of the device.
+        https://www.showdoc.com.cn/2540838290984246/11330751643769012
+
+        Note:
+        * most devices can be configured to 0 ~ 100 %
+        * NOAH devices can be configured to 0 ~ 800 W
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            active_power_percent (int): Percentage of active power, range 0-100
+
+        Returns:
+            SettingWriteV4
+            e.g.
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        return self._api_v4.setting_write_active_power(
+            device_sn=device_sn,
+            device_type=DeviceType.MIN,
+            active_power=active_power_percent,
+        )
+
+    def setting_write_vpp_param(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: str,
+        parameter_id: str,
+        value: Union[int, str],
+    ) -> SettingWriteV4:
+        """
+        Set VPP parameters using "new-api" endpoint
+        Set the VPP related parameters of the device according to the SN of the device.
+        https://www.showdoc.com.cn/2598832417617967/11558385202215329
+
+        Note:
+        * The current interface only supports
+          * MIN 2500-6000TL-XH US
+          * MIN 2500-6000TL-XH
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Allowed/known values for vpp_param:
+        ========================+===============+===========================+============================================================================
+        description             | parameter_id  | parameter_value           | comment
+        ========================+===============+===========================+============================================================================
+        Control authority       | set_param_1   | 0 ~ 1                     | 0 = disabled (default)
+                                |               |                           | 1 = enabled
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        On off command          | set_param_2   | 0 ~ 1                     | Not storage
+                                |               |                           | 0 = power off
+                                |               |                           | 1 = power on (default)
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        System time             | set_param_3   | yyyy-mm-dd HH:MM:SS       | Example: 2024-10-10 13:14:14
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        SYN enable              | set_param_4   | 0 ~ 1                     | Offline box enable
+                                |               |                           | 0: not enabled (default)
+                                |               |                           | 1: enable
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Active power            | set_param_5   | 0 ~ 100                   | Power limit percentage
+         percentage derating    |               |                           | default value = 100
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Static active power     | set_param_6   | 0 ~ 100                   | Power limit percent
+                                |               |                           | Actual active power is the less one between Active power percentage derating
+                                |               |                           |  and Static active power limitation - Not storage
+                                |               |                           | default value = 100
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        EPS offline enable      | set_param_7   | 0 ~ 1                     | 0 = disabled (default)
+                                |               |                           | 1 = enabled
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        EPS offline frequency   | set_param_8   | 0 ~ 1                     | 0 = 50 Hz (default)
+                                |               |                           | 1 = 60 Hz
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        EPS offline voltage(3)  | set_param_9   | 0 ~ 6                     | 0 = 230 V (default)
+                                |               |                           | 1 = 208V
+                                |               |                           | 2 = 240V
+                                |               |                           | 3 = 220V
+                                |               |                           | 4 = 127V
+                                |               |                           | 5 = 277V
+                                |               |                           | 6 = 254V
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Fix Q                   | set_param_10  | 0 ~ 60                    | Power limit percentage
+                                |               |                           | default value = 60
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Reactive power mode     | set_param_11  | 0 ~ 5                     | 0: PF=1 (default)
+                                |               |                           | 1: Pf value setting
+                                |               |                           | 2: Default pf curve(reserve)
+                                |               |                           | 3: User set pf curve(reserve)
+                                |               |                           | 4: Lagging reactive power (+)
+                                |               |                           | 5: Leading reactive power (-)
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Power factor            | set_param_12  | 0 ~ 20000                 | Actual power factor = (10000 - set_value) * 0.0001
+                                |               |                           | default value = 10000
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Dynamic export          | set_param_13  | 0 ~ 1                     | 0 = disabled (default)
+         limitation             |               |                           | 1 = single machine anti-back flow enable
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Export limitation power | set_param_14  | -100 ~ 100                | Positive value is backflow, negative value is fair current
+                                |               |                           | default value = 0
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Failure value of        | set_param_15  | 0 ~ 100                   | When the communication with meter failed (30204 is 1), use this register
+         anti-backflow limiting |               |                           |  to limit reactive power，for backflow control
+         power                  |               |                           | default value = 0
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Anti-back flow fail     | set_param_16  | 0 ~ 300                   | default value = 30
+         time/EMS communicating |               |                           |
+         fail time              |               |                           |
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        EMS communicating fail  | set_param_17  | 0 ~ 1                     | 0 = disabled (default)
+         enable                 |               |                           | 1 = enabled
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Super anti-backflow     | set_param_18  | 0 ~ 1                     | 0 = disabled (default)
+         enable                 |               |                           | 1 = enabled
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Anti-backflow feed      | set_param_19  | 0 ~ 20000                 | default value = 27
+         power change slope     |               |                           |
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Anti-backflow single    | set_param_20  | 0 ~ 1                     | 0 = disabled (default)
+         phase ctrl enable      |               |                           | 1 = enabled
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Anti-backflow           | set_param_21  | 0 ~ 1                     | 0 = Default mode (default)
+         protection mode（1）    |               |                           | 1 = software and hardware control mode
+                                |               |                           | 2 = software control mode
+                                |               |                           | 3 = hardware control mode
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Charging cut off SOC    | set_param_22  | 70 ~ 100                  | default value = 100
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Online discharge cut    | set_param_23  | 10 ~ 30                   | default value = 10
+         off SOC                |               |                           |
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Load priority discharge | set_param_24  | 10 ~ 20                   | default value = 10
+         cut off SOC (2)        |               |                           |
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Remote power control    | set_param_25  | 0 ~ 1                     | Not storage
+         enable                 |               |                           | 0 = disabled (default)
+                                |               |                           | 1 = enabled
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Remote power control    | set_param_26  | 0 ~ 1440                  | Not storage
+         charging time          |               |                           | 0: unlimited time (default)
+                                |               |                           | 1 ~ 1440 min: control the power duration according to the set time
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Remote charge and       | set_param_27  | -100 ~ 100                | Not storage
+         discharge power        |               |                           | negative value = discharge, positive value = charge
+                                |               |                           | default value = 0
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        AC charging enable      | set_param_28  | 0 ~ 1                     | 0 = disabled (default)
+                                |               |                           | 1 = enabled
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Offline discharge cut   | set_param_29  | 10 ~ 30                   | default value = 10
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Battery charge stop     | set_param_30  | 0 ~ 15000                 | Lead-acid battery used - Distinguished by voltage level
+         voltage                |               |                           |  3800 = 127 V
+                                |               |                           | 10000 = 227 V
+                                |               |                           |  8000 = Others
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Battery discharge stop  | set_param_31  | 0 ~ 15000                 | Lead-acid battery used - Distinguished by voltage level
+         voltage                |               |                           | 3800 = 127 V
+                                |               |                           | 7500 = 227 V
+                                |               |                           | 6500 = Others
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Battery max charge      | set_param_32  | 0 ~ 2000                  | Lead-acid battery used
+         current                |               |                           | default value = 1500
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Battery max discharge   | set_param_33  | 0 ~ 2000                  | Lead-acid battery used
+         current                |               |                           | default value = 1500
+        ------------------------+---------------+---------------------------+----------------------------------------------------------------------------
+        Charging and discharging| set_param_34  | 0 ~ 2000                  | Set time period (json format: [{percentage: power, startTime: start time, endTime: end time}]
+         in different periods   |               |                           | time range: 0-1440
+          (20 sections)         |               |                           | e.g.: [{"percentage":95,"startTime":0,"endTime":300},{"percentage":-60,"startTime":301,"endTime":720}]
+        ========================+===============+===========================+============================================================================
+        see https://www.showdoc.com.cn/2598832417617967/11558385130027995 or https://www.showdoc.com.cn/p/fc84c86facd79b3692f585fbd7a6e33b
+        ========================+===============+===========================+============================================================================
+
+
+        Args:
+            device_sn (str): Inverter serial number
+            parameter_id (str): Set parameter enumeration, example: set_param_1
+            value (Union[int, str]): the parameter value set, example:value
+
+
+        Returns:
+            SettingWriteV4
+            e.g.
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        return self._api_v4.setting_write_vpp_param(
+            device_sn=device_sn,
+            device_type=DeviceType.MIN,
+            parameter_id=parameter_id,
+            value=value,
+        )
+
     def details(
         self,
         device_sn: str,
@@ -585,7 +881,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/6129816412127075
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         Rate limit(s):
         * The acquisition frequency is once every 5 minutes
@@ -952,6 +1248,124 @@ class Min:
 
         return MinDetails.model_validate(response)
 
+    def details_v4(
+        self,
+        device_sn: Union[str, List[str]],
+    ) -> MinDetailsV4:
+        """
+        Batch device information using "new-api" endpoint
+        Retrieve basic information of devices in bulk based on device SN.
+        https://www.showdoc.com.cn/2540838290984246/11292915673945114
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 minutes.
+
+        Args:
+            device_sn (Union[str, List[str]]): Inverter serial number or list of (multiple) inverter serial numbers (max 100)
+
+        Returns:
+            MinDetailsV4
+            e.g.
+            {   'data': {   'min': [   {   'address': 1,
+                                           'alias': 'BZP3N6U09K',
+                                           'bat_aging_test_step': 0,
+                                           'bat_parallel_num': 0,
+                                           'bat_series_num': 0,
+                                           'bat_sys_energy': 0.0,
+                                           'bat_temp_lower_limit_c': 0.0,
+                                           'bat_temp_lower_limit_d': 0.0,
+                                           'bat_temp_upper_limit_c': 0.0,
+                                           'bat_temp_upper_limit_d': 0.0,
+                                           'battery_type': 0,
+                                           'baudrate': 0,
+                                           'bct_adjust': 0,
+                                           'bct_mode': 0,
+                                           'bcu_version': None,
+                                           'bdc1_model': '0',
+                                           'bdc1_sn': None,
+                                           'bdc1_version': '\x00\x00\x00\x00-0',
+                                           'bdc_auth_version': 0,
+                                           'bdc_mode': 0,
+                                           'bms_communication_type': 0,
+                                           'bms_software_version': None,
+                                           'children': None,
+                                           'com_address': 1,
+                                           'communication_version': 'GJAA-0004',
+                                           'country_selected': 1,
+                                           'datalogger_sn': 'QMN000BZP3N6U09K',
+                                           'device_type': 5,
+                                           'dtc': 5203,
+                                           'e_today': 0.0,
+                                           'e_total': 0.0,
+                                           'energy_day_map': {},
+                                           'energy_month': 0.0,
+                                           'energy_month_text': '0',
+                                           'fw_version': 'GJ1.0',
+                                           'group_id': -1,
+                                           'hw_version': '0',
+                                           'id': 1404608,
+                                           'img_path': './css/img/status_gray.gif',
+                                           'inner_version': 'GJAA04xx',
+                                           'last_update_time': 1742876493000,
+                                           'last_update_time_text': datetime.datetime(2025, 3, 25, 12, 21, 33),
+                                           'level': 4,
+                                           'li_battery_fw_version': None,
+                                           'li_battery_manufacturers': None,
+                                           'location': None,
+                                           'lost': False,
+                                           'manufacturer': '   PV Inverter  ',
+                                           'modbus_version': 0,
+                                           'model': 504403158517219338,
+                                           'model_text': 'S07B00D00T00P0FU01M000A',
+                                           'monitor_version': None,
+                                           'mppt': 513.0,
+                                           'optimizer_list': None,
+                                           'p_charge': 0.0,
+                                           'p_discharge': 0.0,
+                                           'parent_id': 'LIST_QMN000BZP3N6U09K_22',
+                                           'plant_id': 0,
+                                           'plantname': None,
+                                           'pmax': 1000,
+                                           'port_name': 'ShinePano-QMN000BZP3N6U09K',
+                                           'power': 0.0,
+                                           'power_max': None,
+                                           'power_max_text': None,
+                                           'power_max_time': None,
+                                           'priority_choose': 0,
+                                           'pv_num': 0,
+                                           'record': None,
+                                           'restart_time': 65,
+                                           'safety_version': 0,
+                                           'serial_num': 'BZP3N6U09K',
+                                           'start_time': 65,
+                                           'status': 1,
+                                           'status_text': 'tlx.status.checking',
+                                           'str_num': -1,
+                                           'sys_time': None,
+                                           'tcp_server_ip': '47.254.132.50',
+                                           'timezone': 1.0,
+                                           'tlx_set_bean': None,
+                                           'tracker_model': 0,
+                                           'tree_id': 'ST_BZP3N6U09K',
+                                           'tree_name': 'BZP3N6U09K',
+                                           'updating': False,
+                                           'user_name': None,
+                                           'vbat_start_for_discharge': 0.0,
+                                           'vbat_stop_for_charge': 0.0,
+                                           'vbat_stop_for_discharge': 0.0,
+                                           'vbat_warn_clr': 0.0,
+                                           'vbat_warning': 0.0,
+                                           'vnormal': 280.0,
+                                           'vpp_open': 0.0}]},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        return self._api_v4.details(
+            device_sn=device_sn,
+            device_type=DeviceType.MIN,
+        )
+
     def energy(
         self,
         device_sn: str,
@@ -962,7 +1376,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/6129822090975531
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -1219,6 +1633,247 @@ class Min:
 
         return MinEnergyOverview.model_validate(response)
 
+    def energy_v4(
+        self,
+        device_sn: Union[str, List[str]],
+    ) -> MinEnergyV4:
+        """
+        Batch equipment data information using "new-api" endpoint
+        Retrieve the last detailed data for multiple devices based on their SN and device type.
+        https://www.showdoc.com.cn/2540838290984246/11292915898375566
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 minutes.
+
+        Args:
+            device_sn (Union[str, List[str]]): Inverter serial number or list of (multiple) inverter serial numbers (max 100)
+
+        Returns:
+            MinEnergyV4
+            e.g.
+            {   'data': {   'min': [   {   'address': 0,
+                                           'again': False,
+                                           'alias': None,
+                                           'b_merter_connect_flag': False,
+                                           'bat_sn': None,
+                                           'battery_no': -1,
+                                           'battery_sn': None,
+                                           'bdc1_charge_power': 0.0,
+                                           'bdc1_charge_total': 0.0,
+                                           'bdc1_discharge_power': 0.0,
+                                           'bdc1_discharge_total': 0.0,
+                                           'bdc1_fault_type': 0,
+                                           'bdc1_ibat': 0.0,
+                                           'bdc1_ibb': 0.0,
+                                           'bdc1_illc': 0.0,
+                                           'bdc1_mode': 0,
+                                           'bdc1_soc': 0.0,
+                                           'bdc1_status': 0,
+                                           'bdc1_temp1': 0.0,
+                                           'bdc1_temp2': 0.0,
+                                           'bdc1_vbat': 0.0,
+                                           'bdc1_vbus1': 0.0,
+                                           'bdc1_vbus2': 0.0,
+                                           'bdc1_warn_code': 0,
+                                           'bdc2_charge_power': 0.0,
+                                           'bdc2_charge_total': 0.0,
+                                           'bdc2_discharge_power': 0.0,
+                                           'bdc2_discharge_total': 0.0,
+                                           'bdc2_fault_type': 0,
+                                           'bdc2_ibat': 0.0,
+                                           'bdc2_ibb': 0.0,
+                                           'bdc2_illc': 0.0,
+                                           'bdc2_mode': 0,
+                                           'bdc2_soc': 0.0,
+                                           'bdc2_status': 0,
+                                           'bdc2_temp1': 0.0,
+                                           'bdc2_temp2': 0.0,
+                                           'bdc2_vbat': 0.0,
+                                           'bdc2_vbus1': 0.0,
+                                           'bdc2_vbus2': 0.0,
+                                           'bdc2_warn_code': 0,
+                                           'bdc_bus_ref': 0,
+                                           'bdc_derate_reason': 0,
+                                           'bdc_fault_sub_code': 0,
+                                           'bdc_status': 0,
+                                           'bdc_vbus2_neg': 0.0,
+                                           'bdc_warn_sub_code': 0,
+                                           'bgrid_type': 0,
+                                           'bms_communication_type': 0,
+                                           'bms_cv_volt': 0.0,
+                                           'bms_error2': 0,
+                                           'bms_error3': 0,
+                                           'bms_error4': 0,
+                                           'bms_fault_type': 0,
+                                           'bms_fw_version': '0',
+                                           'bms_ibat': 0.0,
+                                           'bms_icycle': 0.0,
+                                           'bms_info': 0.0,
+                                           'bms_ios_status': 0,
+                                           'bms_max_curr': 0.0,
+                                           'bms_mcu_version': '0',
+                                           'bms_pack_info': 0.0,
+                                           'bms_soc': 0.0,
+                                           'bms_soh': 0.0,
+                                           'bms_status': 0,
+                                           'bms_temp1_bat': 0.0,
+                                           'bms_using_cap': 0.0,
+                                           'bms_vbat': 0.0,
+                                           'bms_vdelta': 0.0,
+                                           'bms_warn2': 0,
+                                           'bms_warn_code': 0.0,
+                                           'bsystem_work_mode': 0,
+                                           'calendar': 1742974615711,
+                                           'datalogger_sn': 'QMN000BZP3N6U09K',
+                                           'day': None,
+                                           'dc_voltage': 0.0,
+                                           'dci_r': 0.0,
+                                           'dci_s': 0.0,
+                                           'dci_t': 0.0,
+                                           'debug1': '0，0，0，0，0，2，2，0',
+                                           'debug2': '0，1，9，5660，0，12260，1，0',
+                                           'derating_mode': 0,
+                                           'device_sn': 'BZP3N6U09K',
+                                           'dry_contact_status': 0,
+                                           'e_charge_today': 0.0,
+                                           'e_charge_total': 0.0,
+                                           'e_discharge_today': 0.0,
+                                           'e_discharge_total': 0.0,
+                                           'e_local_load_today': 0.0,
+                                           'e_local_load_total': 0.0,
+                                           'e_self_today': 0.0,
+                                           'e_self_total': 0.0,
+                                           'e_system_today': 0.0,
+                                           'e_system_total': 0.0,
+                                           'e_to_grid_today': 0.0,
+                                           'e_to_grid_total': 0.0,
+                                           'e_to_user_today': 0.0,
+                                           'e_to_user_total': 0.0,
+                                           'eac_charge_today': 0.0,
+                                           'eac_charge_total': 0.0,
+                                           'eac_today': 0.2,
+                                           'eac_total': 76.8,
+                                           'eex1_today': -0.1,
+                                           'eex1_total': -0.1,
+                                           'eex2_today': -0.1,
+                                           'eex2_total': -0.1,
+                                           'eps_fac': 0.0,
+                                           'eps_iac1': 0.0,
+                                           'eps_iac2': 0.0,
+                                           'eps_iac3': 0.0,
+                                           'eps_pac': 0.0,
+                                           'eps_pac1': 0.0,
+                                           'eps_pac2': 0.0,
+                                           'eps_pac3': 0.0,
+                                           'eps_pf': -1.0,
+                                           'eps_vac1': 0.0,
+                                           'eps_vac2': 0.0,
+                                           'eps_vac3': 0.0,
+                                           'epv1_today': 0.3,
+                                           'epv1_total': 83.5,
+                                           'epv2_today': 0.0,
+                                           'epv2_total': 0.0,
+                                           'epv3_today': 0.0,
+                                           'epv3_total': 0.0,
+                                           'epv4_today': 0.0,
+                                           'epv4_total': 0.0,
+                                           'epv_total': 83.5,
+                                           'error_text': 'Unknown',
+                                           'fac': 50.0,
+                                           'fault_type': 0,
+                                           'fault_type1': 0,
+                                           'gfci': 0.0,
+                                           'iac1': 0.1,
+                                           'iac2': 0.0,
+                                           'iac3': 0.0,
+                                           'iacr': 0.0,
+                                           'inv_delay_time': 65.0,
+                                           'ipv1': 0.7,
+                                           'ipv2': 0.0,
+                                           'ipv3': 0.0,
+                                           'ipv4': 0.0,
+                                           'is_again': False,
+                                           'iso': 2648.0,
+                                           'load_percent': 0.0,
+                                           'lost': True,
+                                           'mtnc_mode': 0,
+                                           'mtnc_rqst': 0.0,
+                                           'n_bus_voltage': 0.0,
+                                           'new_warn_code': 0,
+                                           'new_warn_sub_code': 0,
+                                           'op_fullwatt': 0.0,
+                                           'operating_mode': 0,
+                                           'p_bus_voltage': 447.8,
+                                           'p_self': 0.0,
+                                           'p_system': 0.0,
+                                           'pac': 10.6,
+                                           'pac1': 17.2,
+                                           'pac2': 0.0,
+                                           'pac3': 0.0,
+                                           'pac_to_grid_total': 0.0,
+                                           'pac_to_local_load': 0.0,
+                                           'pac_to_user_total': 0.0,
+                                           'pacr': 0.0,
+                                           'pex1': -0.1,
+                                           'pex2': -0.1,
+                                           'pf': 1.0,
+                                           'ppv': 21.6,
+                                           'ppv1': 21.6,
+                                           'ppv2': 0.0,
+                                           'ppv3': 0.0,
+                                           'ppv4': 0.0,
+                                           'real_op_percent': 1.0,
+                                           'soc1': 0.0,
+                                           'soc2': 0.0,
+                                           'status': 1,
+                                           'status_text': 'Normal',
+                                           'sys_fault_word': 0,
+                                           'sys_fault_word1': 2,
+                                           'sys_fault_word2': 0,
+                                           'sys_fault_word3': 0,
+                                           'sys_fault_word4': 0,
+                                           'sys_fault_word5': 0,
+                                           'sys_fault_word6': 0,
+                                           'sys_fault_word7': 0,
+                                           't_mtnc_strt': None,
+                                           't_win_end': None,
+                                           't_win_start': None,
+                                           'temp1': 21.2,
+                                           'temp2': 21.2,
+                                           'temp3': 21.2,
+                                           'temp4': 21.2,
+                                           'temp5': 0.0,
+                                           'time': datetime.datetime(2025, 3, 26, 15, 36, 55),
+                                           'time_total': 3055520.5,
+                                           'tlx_bean': None,
+                                           'total_working_time': 0.0,
+                                           'uw_sys_work_mode': 0,
+                                           'vac1': 233.4,
+                                           'vac2': 0.0,
+                                           'vac3': 0.0,
+                                           'vac_rs': 233.4,
+                                           'vac_st': 0.0,
+                                           'vac_tr': 0.0,
+                                           'vacr': 0.0,
+                                           'vacrs': 0.0,
+                                           'vpv1': 28.8,
+                                           'vpv2': 10.1,
+                                           'vpv3': 0.0,
+                                           'vpv4': 0.0,
+                                           'warn_code': 220,
+                                           'warn_code1': 2,
+                                           'warn_text': 'Unknown',
+                                           'win_mode': 0,
+                                           'win_off_grid_soc': 0.0,
+                                           'win_on_grid_soc': 0.0,
+                                           'win_request': 0,
+                                           'with_time': False}]},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        return self._api_v4.energy(device_sn=device_sn, device_type=DeviceType.MIN)
+
     def energy_multiple(
         self,
         device_sn: Union[str, List[str]],
@@ -1230,7 +1885,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/6129830403882881
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -1528,7 +2183,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/8559849784929961
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         This endpoint returns only a subset of the parameters returned by the min.energy() endpoint
 
@@ -1783,6 +2438,67 @@ class Min:
 
         return MinEnergyHistory.model_validate(response)
 
+    def energy_history_v4(
+        self,
+        device_sn: str,
+        date_: Optional[date] = None,
+    ) -> MinEnergyHistoryV4:
+        """
+        One day data using "new-api" endpoint
+        Retrieves all detailed data for a specific device on a particular day based on the device SN, device type, and date.
+        https://www.showdoc.com.cn/2540838290984246/11292916022305414
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 minutes.
+
+        Args:
+            device_sn (str): Device unique serial number (SN)
+            date_ (Optional[date]): Start Date - defaults to today
+
+        Returns:
+            MinEnergyHistoryV4
+            e.g.
+            {   'data': {   'datas': [   {
+                                             <see energy_v4() for attributes>
+                                         }],
+                            'have_next': False,
+                            'start': 0},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        return self._api_v4.energy_history(device_sn=device_sn, device_type=DeviceType.MIN, date_=date_)
+
+    def energy_history_multiple_v4(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: Union[str, List[str]],
+        date_: Optional[date] = None,
+    ) -> MinEnergyHistoryMultipleV4:
+        """
+        One day data using "new-api" endpoint
+        Retrieves all detailed data for a specific device on a particular day based on the device SN, device type, and date.
+        https://www.showdoc.com.cn/2540838290984246/11292916022305414
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 minutes.
+
+        Args:
+            device_sn (Union[str, List[str]]): Inverter serial number or list of (multiple) inverter serial numbers (max 100)
+            date_ (Optional[date]): Start Date - defaults to today
+
+        Returns:
+            MinEnergyHistoryMultipleV4
+            e.g.
+            {   'data': {   'NHB691514F': [   {
+                                                  <see energy_v4() for attributes>
+                                              }]},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
+
+        """
+
+        return self._api_v4.energy_history_multiple(device_sn=device_sn, device_type=DeviceType.MIN, date_=date_)
+
     def alarms(
         self,
         device_sn: str,
@@ -1796,7 +2512,7 @@ class Min:
         https://www.showdoc.com.cn/262556420217021/6129824764736661
 
         Note:
-            Only applicable to devices with device type 7 (min) returned by device.list()
+            Only applicable to devices with device type 7 (min) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -1849,3 +2565,125 @@ class Min:
         )
 
         return MinAlarms.model_validate(response)
+
+    def soc(
+        self,
+        device_sn: str,
+    ) -> VppSoc:
+        """
+        Get machine SOC value (VPP)
+        Get machine SOC value interface (only supports MIN SPA SPH models)
+        https://www.showdoc.com.cn/262556420217021/7178565721512898
+
+        Rate limit(s):
+        * The frequency of acquisition is once every 10 seconds
+
+        Specific error codes:
+        * 10001: read failure
+        * 10002: device does not exist
+        * 10003: device serial number is empty
+
+        Args:
+            device_sn (str): VPP SN
+
+        Returns:
+            VppSoc
+            {
+                'error_code': 0,
+                'error_msg': None,
+                'soc': 65.0,
+                'datalogger_sn': 'JPC5A11700',
+                'device_sn': 'MIXECN6000'
+            }
+        """
+
+        return self._api_vpp.soc(device_sn=device_sn)
+
+    def settings_write_vpp_now(
+        self,
+        device_sn: str,
+        time_: time,
+        percentage: int,
+    ) -> VppWrite:
+        """
+        Read the machine to perform battery charging contr
+        The reading machine immediately executes the battery charging control interface (only supports MIN SPA SPH models)
+        https://www.showdoc.com.cn/262556420217021/7178602212464389
+
+        Note: this endpoint is poorly documented
+
+        Rate limit(s):
+        * The frequency of acquisition is once every 10 seconds
+
+        Specific error codes:
+        * 500: Set Parameter Failure
+        * 10001: Reading failed
+        * 10012: Device does not exist
+        * 10004: Device serial number is empty
+        * 10005: Collector offline
+        * 10007: Setting parameter is null
+        * 10008: Setting value is out of range Or abnormal
+        * 10009: The type of the read setting parameter does not exist
+        * 10011: No permission
+
+        Args:
+            device_sn (str): VPP SN
+            time_ (time): Set time - 00:00 ~ 24:00 (hh:mm),
+            percentage (int): Set the power positive number for charging - negative number for discharge -100 ~ 100
+
+        Returns:
+            VppWrite
+            {
+                'error_code': 0,
+                'error_msg': None,
+                'data': 0,
+            }
+        """
+
+        return self._api_vpp.write(
+            device_sn=device_sn,
+            time_=time_,
+            percentage=percentage,
+        )
+
+    def settings_write_vpp_schedule(self, device_sn: str, schedules: List[Tuple[int, time, time]]) -> VppWrite:
+        """
+        Read and set VPP time period parameters (VPP)
+        Read and set VPP time period parameter interface (only support MIN SPA SPH model)
+        https://www.showdoc.com.cn/262556420217021/7178602212464389
+
+        Note: this endpoint is poorly documented
+
+        Rate limit(s):
+        * The frequency of acquisition is once every 10 seconds
+
+        Specific error codes:
+        * 10001: Reading/Writing failed
+        * 10012: Device does not exist
+        * 10004: Device serial number is empty
+        * 10005: Collector offline
+        * 10007: Setting parameter is null
+        * 10008: Setting value is out of range Or abnormal
+        * 10009: The type of the read setting parameter does not exist
+        * 10011: No permission
+
+        Args:
+            device_sn (str): VPP SN
+            schedules (List[Tuple[int, time, time]]): Set time period
+                Tuple with (power_percentage (int), start_time (time), end_time (time))
+                percentage: positive number for charge 0 ~ 100, negative number for discharge -100 ~ 0
+                e.g. [
+                    (95, time(hour=0, minute=0), time(hour=5, minute=0)),    # 00:00 ~ 05:00 95% charge
+                    (-60, time(hour=5, minute=1), time(hour=12, minute=0)),  # 05:01 ~ 12:00 60% discharge
+                ]
+
+        Returns:
+            VppWrite
+            {
+                'error_code': 0,
+                'error_msg': None,
+                'data': 0,
+            }
+        """
+
+        return self._api_vpp.write_multiple(device_sn=device_sn, schedules=schedules)

@@ -74,7 +74,7 @@ class Vpp:
         The reading machine immediately executes the battery charging control interface (only supports MIN SPA SPH models)
         https://www.showdoc.com.cn/262556420217021/7178602212464389
 
-        # TODO this endpoint is poorly documented - find a device to try this and try to fix the documentation
+        Note: this endpoint is poorly documented
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -121,13 +121,13 @@ class Vpp:
 
         return VppWrite.model_validate(response)
 
-    def write_multiple(self, device_sn: str, time_percent: List[Tuple[int, time, time]]) -> VppWrite:
+    def write_multiple(self, device_sn: str, schedules: List[Tuple[int, time, time]]) -> VppWrite:
         """
         Read and set VPP time period parameters (VPP)
         Read and set VPP time period parameter interface (only support MIN SPA SPH model)
         https://www.showdoc.com.cn/262556420217021/7178602212464389
 
-        # TODO this endpoint is poorly documented - find a device to try this and try to fix the documentation
+        Note: this endpoint is poorly documented
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -144,7 +144,7 @@ class Vpp:
 
         Args:
             device_sn (str): VPP SN
-            time_percent (List[Tuple[int, time, time]]): Set time period
+            schedules (List[Tuple[int, time, time]]): Set time period
                 Tuple with (power_percentage (int), start_time (time), end_time (time))
                 percentage: positive number for charge 0 ~ 100, negative number for discharge -100 ~ 0
                 e.g. [
@@ -162,7 +162,7 @@ class Vpp:
         """
 
         time_periods_parsed = []
-        for percentage, start_time, end_time in time_percent:
+        for percentage, start_time, end_time in schedules:
             percentage = int(round(percentage, 0))
             assert -100 <= percentage <= 100, f"Percentage must be between -100 and 100. You specified {percentage}"
             start_min = start_time.hour * 60 + start_time.minute

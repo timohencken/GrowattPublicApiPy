@@ -1,29 +1,28 @@
 from datetime import date
 from typing import Optional, Union, List
+from loguru import logger
 
 import truststore
 
+from growatt_public_api import DeviceType
+from pydantic_models import PlantInfo
+from pydantic_models.api_v4 import DeviceListV4
 from pydantic_models.device import (
-    DeviceList,
-    DataloggerList,
     DeviceTypeInfo,
-    DataloggerValidation,
     DeviceEnergyDay,
     DeviceDatalogger,
     DeviceCreateDate,
-    DeviceAdd,
-    DataloggerAdd,
-    DataloggerDelete,
 )
 
 truststore.inject_into_ssl()
+
+from growatt_public_api.plant.plant import Plant  # noqa: E402
 from session import GrowattApiSession  # noqa: E402
 
 
 class Device:
     """
     https://www.showdoc.com.cn/262556420217021/11038523729597006
-    TODO: Maybe refactor to distinguish Datalogger and Inverter?
     """
 
     session: GrowattApiSession
@@ -31,312 +30,149 @@ class Device:
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
 
-    def datalogger_add(  # TODO this should be in the "plant" module
+    def get_device_type(  # noqa: C901 'Device.get_device_type' is too complex (12)
         self,
-        user_id: int,
-        plant_id: int,
-        datalogger_sn: str,
-    ) -> DataloggerAdd:
+        device_sn: str,
+    ) -> Optional[DeviceType]:
         """
-        3.1 Add collector
-        Add the interface of the collector
-        https://www.showdoc.com.cn/262556420217021/6117939786619819
+        convenience method to get device type by device_sn
 
-        Rate limit(s):
-        * The acquisition frequency is once every 5 minutes
-
-        Specific error codes:
-        * 10001: system error
-        * 10002: power station ID is empty or collector serial number error
-        * 10003: collector already exists
-        * 10004: power station does not exist
-        * 10005: user does not exist
-        * 10006: user ID is empty
+        will use following endpoints to retrieve device type
+        * device.type_info()
+        * device.list()
+        * plant.list_devices() (via device.get_plant())
 
         Args:
-            user_id (int): User ID ("c_user_id" as returned in register()), e.g. 74
-            plant_id (int): Power Station ID
-            datalogger_sn (str): Datalogger serial number
+            device_sn (str): Device serial number
 
         Returns:
-            DataloggerAdd
-            {   'data': None,
-                'error_code': 0,
-                'error_msg': None}
+            DeviceType
+            e.g. DeviceType.MIN
         """
 
-        response = self.session.post(
-            endpoint="device/datalogger/add",
-            data={
-                "plant_id": plant_id,
-                "sn": datalogger_sn,
-                "c_user_id": user_id,
-            },
-        )
+        # 1. get device type via v1 API device/check/sn
+        device_type_info = self.type_info(device_sn=device_sn)
+        if device_type_info.result == 1:
+            device_type = DeviceType.from_device_type_info(device_type=device_type_info.device_type)
+            if device_type and device_type != DeviceType.OTHER:
+                return DeviceType.from_device_type_info(device_type=device_type_info.device_type)
+            else:
+                logger.warning(
+                    f"Unknown device type {device_type_info.device_type} = {device_type} for device {device_sn} (v1 type_info). Trying fallback methods..."
+                )
+        else:
+            logger.warning(f"Error {device_type_info.result} querying v1 type_info. Trying fallback methods...")
 
-        return DataloggerAdd.model_validate(response)
+        # 2. get device type via v4 API device.list()
+        _page = 0
+        while _page < 20:
+            _page += 1
+            device_list = self.list(page=_page)
+            if device_list.error_code != 0:
+                logger.warning(
+                    f"Error {device_list.error_code}: '{device_list.error_msg}' querying v4 device list. Trying fallback methods..."
+                )
+                break
+            device_types = {x.device_sn: x.device_type for x in device_list.data.data}
+            if device_sn in device_types:
+                device_type_raw = device_types[device_sn]
+                device_type = DeviceType.from_device_list(device_types[device_sn])
+                if device_type and device_type != DeviceType.OTHER:
+                    return device_type
+                else:
+                    logger.warning(
+                        f"Unknown device type {device_type_raw} = {device_type} for device {device_sn} (v4 list). Trying fallback methods..."
+                    )
+                    break
+            if device_list.data.last_pager:
+                logger.warning(f"Device {device_sn} not found in v4 device list. Trying fallback methods...")
+                break  # reached last page (without match)
 
-    def datalogger_delete(  # TODO this should be in the "plant" module
+        # 3. get device type via v1 API plant.list_devices()
+        # get plant for device
+        plant_info = self.get_plant(device_sn=device_sn)
+        if plant_info.error_code != 0:
+            logger.warning(
+                f"Error {plant_info.error_code}: '{plant_info.error_msg}' querying v1 plant info. No further fallbacks available."
+            )
+            return None
+        plant_id = plant_info.data.plant.plant_id
+        # get devices for plant
+        api_plant = Plant(session=self.session)
+        plant_devices = api_plant.list_devices(
+            plant_id=plant_id, limit=100
+        )  # no paging as plant with >100 devices are rare
+        if plant_devices.error_code != 0:
+            logger.warning(
+                f"Error {plant_devices.error_code}: '{plant_devices.error_msg}' querying v1 plant devices. No further fallbacks available."
+            )
+            return None
+        device_types = {x.device_sn: x.type for x in plant_devices.data.devices}
+        device_type_raw = device_types.get(device_sn)
+        if not device_type_raw:
+            logger.warning(
+                f"Unknown device type {device_type_raw} for device {device_sn} (v1 plant device). No further fallbacks available."
+            )
+            return None
+        device_type = DeviceType.from_plant_list_devices(device_type=device_type_raw)
+        if device_type and device_type != DeviceType.OTHER:
+            return device_type
+        else:
+            logger.warning(
+                f"Unknown device type {device_type_raw} = {device_type} for device {device_sn} (v1 plant device). No further fallbacks available."
+            )
+            return None
+
+    def list(
         self,
-        plant_id: int,
-        datalogger_sn: str,
-    ) -> DataloggerDelete:
-        """
-        3.2 Delete collector
-        Delete the interface of the collector
-        https://www.showdoc.com.cn/262556420217021/6117952419029888
-
-
-        Rate limit(s):
-        * The acquisition frequency is once every 5 minutes
-
-        Specific error codes:
-        * 10001: system error
-        * 10002: power station ID is empty or the collector serial number is wrong
-        * 10003: power station does not exist
-        * 10004: collector does not exist
-
-        Args:
-            plant_id (int): Power Station ID
-            datalogger_sn (str): Datalogger serial number
-
-        Returns:
-            DataloggerDelete
-            {   'data': None,
-                'error_code': 0,
-                'error_msg': None}
-        """
-
-        response = self.session.post(
-            endpoint="device/datalogger/delete",
-            data={
-                "plant_id": plant_id,
-                "sn": datalogger_sn,
-            },
-        )
-
-        return DataloggerDelete.model_validate(response)
-
-    def list(  # TODO this should be in the "plant" module
-        self,
-        plant_id: int,
         page: Optional[int] = None,
-        limit: Optional[int] = None,
-    ) -> DeviceList:
+    ) -> DeviceListV4:
         """
-        3.3 Obtain a power station equipment list
-        Interface to get a list of power station equipment
-        https://www.showdoc.com.cn/262556420217021/6117958613377445
+        Device List
+        Retrieve the list of devices associated with the distributor, installer, and terminal account of the secret token.
+        The devices obtained through this interface are the only ones allowed to fetch data from.
+        Devices not on the list are not permitted to retrieve data.
+        https://www.showdoc.com.cn/2540838290984246/11292915113214428
+
+        Returned "device_type" values are: (according to https://www.showdoc.com.cn/2540838290984246/11292914311318022 and https://www.showdoc.com.cn/p/b42ee029e131c68c4dbfdd89285c0ec1)
+        * inv
+        * storage
+        * max
+        * sph
+        * spa
+        * min
+        * wit
+        * sph-s
+        * noah
 
         Rate limit(s):
-        * The acquisition frequency is once every 5 minutes
-
-        Specific error codes:
-        * 10001: system error
-        * 10002: power station ID is empty
-        * 10003: power station does not exist
-
-        Note:
-            returned "device_type" mappings:
-             1: inverter (including MAX)
-             2: storage
-             3: other (datalogger, smart meter, environmental sensor, ...)
-             4: max (single MAX)
-             5: sph
-             6: spa
-             7: min
-             8: pcs
-             9: hps
-            10: pbd
-            11: groboost
+        * Fetch frequency is limited to once every 5 seconds.
 
         Args:
-            plant_id (int): Power Station ID
-            page (Optional[int]): page number, default 1
-            limit (Optional[int]): Number of items per page, default 20, max 100
+            page (Optional[int]): Page number, default 1 (1~n)
 
         Returns:
             DeviceList
-            e.g.
-            {
-                "data": {
-                    "count": 3,
-                    "devices": [
-                        {
-                            "device_sn": "ZT00100001",
-                            "last_update_time": "2018-12-13 11:03:52",
-                            "model": "A0B0D0T0PFU1M3S4",
-                            "lost": True,
-                            "status": 0,
-                            "manufacturer": "Growatt",
-                            "device_id": 116,
-                            "datalogger_sn": "CRAZT00001",
-                            "type": 1
-                        },
-                    ]
-                },
-                "error_code": 0,
-                "error_msg": ""
-            }
+            {   'data': {   'count': 7,
+                            'data': [   {'create_date': datetime.datetime(2021, 6, 29, 12, 2, 46), 'datalogger_sn': None, 'device_sn': 'HPJ0BF20FU', 'device_type': 'max'},
+                                        {'create_date': datetime.datetime(2024, 11, 30, 17, 37, 26), 'datalogger_sn': 'QMN000BZP0000000', 'device_sn': 'BZP0000000', 'device_type': 'min'}
+                                        {'create_date': datetime.datetime(2017, 1, 18, 14, 9, 53), 'datalogger_sn': None, 'device_sn': 'PR34211399', 'device_type': 'inv'}],
+                            'last_pager': True,
+                            'not_pager': False,
+                            'other': None,
+                            'page_size': 100,
+                            'pages': 1,
+                            'start_count': 0},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
-        response = self.session.get(
-            endpoint="device/list",
-            params={
-                "plant_id": plant_id,
-                "page": page,
-                "perpage": limit,
-            },
+        response = self.session.post(
+            endpoint="new-api/queryDeviceList",
+            params={"page": page},
         )
 
-        return DeviceList.model_validate(response)
-
-    def datalogger_list(  # TODO this should be in the "plant" module
-        self,
-        plant_id: int,
-        page: Optional[int] = None,
-        limit: Optional[int] = None,
-    ) -> DataloggerList:
-        """
-        3.4 Get a list of power station collectors
-        The interface to obtain the collector list of a certain power station
-        https://www.showdoc.com.cn/262556420217021/6117971175828060
-
-        Rate limit(s):
-        * The acquisition frequency is once every 5 minutes
-
-        Specific error codes:
-        * 10001: system error
-        * 10002: power station ID is empty
-        * 10003: power station does not exist
-
-        Args:
-            plant_id (int): Power Station ID
-            page (Optional[int]): page number, default 1
-            limit (Optional[int]): Number of items per page, default 20, max 100
-
-        Returns:
-            DataloggerList
-            e.g.
-            {
-                "data": {
-                    "peak_power_actual": {
-                        "treeID": "PLANT_24765",
-                        "flatPeriodPrice": 0,
-                        "longitudeText": "null°null′null″",
-                        "storage_eChargeToday": 0,
-                        "storage_BattoryPercentage": 0,
-                        "dataLogList": [],
-                        "designCompany": "API interface testing manufacturer",
-                        "timezoneText": "GMT+8",
-                        "defaultPlant": False,
-                        "peakPeriodPrice": 0,
-                        "formulaCoal": 0.4000000059604645,
-                        "storage_eDisChargeToday": 0,
-                        "city": "Shenzhen",
-                        "nominalPower": 20000,
-                        "unitMap": None,
-                        "timezone": 8,
-                        "level": 1,
-                        "formulaMoneyUnitId": "rmb",
-                        "currentPacTxt": "0",
-                        "panelTemp": 0,
-                        "fixedPowerPrice": 0,
-                        "imgPath": "css/img/plant.gif",
-                        "storage_TotalToGrid": 0,
-                        "moneyUnitText": "￥",
-                        "locationImgName": "1.png",
-                        "prToday": "0",
-                        "energyMonth": 0,
-                        "deviceCount": 0,
-                        "plantName": "API interface test plant",
-                        "plantImgName": "2.png",
-                        "eToday": 0,
-                        "etodaySo2Text": "0",
-                        "country": "China",
-                        "emonthMoneyText": "0",
-                        "longitude_d": "",
-                        "longitude_f": "",
-                        "formulaMoney": 1.2000000476837158,
-                        "userAccount": "API interface test",
-                        "mapLat": "",
-                        "longitude_m": "",
-                        "createDateText": "2018-12-12",
-                        "formulaSo2": 0.800000011920929,
-                        "valleyPeriodPrice": 0,
-                        "mapLng": "",
-                        "energyYear": 0,
-                        "treeName": "API interface test power station",
-                        "plant_lat": "22.6",
-                        "onLineEnvCount": 0,
-                        "etodayCo2Text": "0",
-                        "latitudeText": "null°null′null″",
-                        "etotalSo2Text": "0",
-                        "children": [],
-                        "hasDeviceOnLine": 0,
-                        "id": 24765,
-                        "etodayCoalText": "0",
-                        "etodayMoney": 0,
-                        "createDate": {"time": 1544544000000, "minutes": 0, "seconds": 0, "hours": 0, "month": 11, "year": 118, "timezoneOffset": -480, "day": 3, "date": 12 },
-                        "prMonth": "0",
-                        "mapCity": "",
-                        "etotalMoney": 0,
-                        "envTemp": 0,
-                        "storage_TodayToGrid": 0,
-                        "alias": "",
-                        "etotalCo2Text": "0",
-                        "emonthCo2Text": "0",
-                        "eTotal": 0,
-                        "etotalMoneyText": "0",
-                        "formulaCo2": 0.6000000238418579,
-                        "irradiance": 0,
-                        "emonthSo2Text": "0",
-                        "hasStorage": 0,
-                        "windAngle": 0,
-                        "etotalCoalText": "0",
-                        "windSpeed": 0,
-                        "emonthCoalText": "0",
-                        "parentID": "",
-                        "EYearMoneyText": "0",
-                        "etodayMoneyText": "0",
-                        "plant_lng": "113.9",
-                        "pairViewUserAccount": "",
-                        "latitude_m": "",
-                        "userBean": None,
-                        "storage_TotalToUser": 0,
-                        "storage_TodayToUser": 0,
-                        "isShare": False,
-                        "currentPac": 0,
-                        "latitude_d": "",
-                        "latitude_f": ""
-                    },
-                    "count": 1,
-                    "dataloggers": [
-                        {
-                            "last_update_time": {"time": 1544670394000, "minutes": 6, "seconds": 34, "hours": 11, "month": 11, "timezoneOffset": -480, "year": 118, "day": 4, "date": 13},
-                            "model": "ShineWifiBox",
-                            "sn": "CRAZT00001",
-                            "lost": True,
-                            "manufacturer": "Growatt",
-                            "type": 0
-                        }
-                    ]
-                },
-                "error_code": 0,
-                "error_msg": ""
-            }
-        """
-
-        response = self.session.get(
-            endpoint="device/datalogger/list",
-            params={
-                "plant_id": plant_id,
-                "page": page,
-                "perpage": limit,
-            },
-        )
-
-        return DataloggerList.model_validate(response)
+        return DeviceListV4.model_validate(response)
 
     def type_info(
         self,
@@ -361,8 +197,10 @@ class Device:
         22 = MIN
         81 = PCS
         82 = HPS
-        83 = PDB
+        83 = PBD
         96 = Storage
+        218 = WIT
+        260 = SPH-S
 
         Rate limit(s):
         * The acquisition frequency is once every 5 minutes
@@ -407,43 +245,6 @@ class Device:
 
         return DeviceTypeInfo.model_validate(response)
 
-    def datalogger_validate(
-        self,
-        datalogger_sn: str,
-        validation_code: Union[int, str],
-    ) -> DataloggerValidation:
-        """
-        3.6 Check whether the collector SN and check code
-        Interface to detect whether the collector SN and check code are qualified
-        https://www.showdoc.com.cn/262556420217021/6118001776634753
-
-        Note:
-            Only applicable to devices with device type 3 (other/datalogger) returned by device.list()
-
-        Specific error codes:
-        * 10001: the collector serial number is empty or the length is incorrect
-        * 10002: the collector serial number does not match the check code
-        * 10003: the collector already exists and has been added
-
-        Args:
-            datalogger_sn (str): Datalogger serial number
-            validation_code (Union[int, str]): Verification Code
-
-        Returns:
-            DataloggerValidation
-
-        """
-
-        response = self.session.post(
-            endpoint="device/datalogger/validate",
-            data={
-                "datalogSn": datalogger_sn,
-                "valiCode": validation_code,
-            },
-        )
-
-        return DataloggerValidation.model_validate(response)
-
     def energy_day(
         self,
         device_sn: str,
@@ -455,7 +256,7 @@ class Device:
         https://www.showdoc.com.cn/262556420217021/6118030327488881
 
         Note:
-            Only applicable to devices with device type 3 (other/datalogger) returned by device.list()
+            Only applicable to devices with device type 3 (other/datalogger) returned by plant.list_devices()
 
         Rate limit(s):
         * The frequency of acquisition is once every 5 minutes
@@ -481,7 +282,6 @@ class Device:
                 "device_sn": 'NOD1851006'
             }
         """
-        # TODO device_? or inverter_?
 
         date_ = date_ or date.today()
 
@@ -584,54 +384,56 @@ class Device:
 
         return DeviceCreateDate.model_validate(response)
 
-    def add(  # TODO this should be in the "plant" module
-        self,
-        plant_id: int,
-        device_sn: str,
-        user_id: int,
-    ) -> DeviceAdd:
+    def get_plant(self, device_sn: str) -> PlantInfo:
         """
-        Assign inverter to user account.
-        If possible, please use device.datalogger_add() instead.
+        Retrieve plant data (similar to list() by device_id (e.g. inverter id))
 
-        Add device associated account interface
-        The terminal account relationship associated with the device SN is used when the collector SN is not known,
-         but the device SN is known, but there is a certain delay.
-        The association relationship is not necessarily real-time, only when the device is online.
-        It will be associated in real time.
-        If the device is not online, it will be associated after the device is online.
-        https://www.showdoc.com.cn/262556420217021/9462221142197198
+        2.10 Get the plant information of a device
+        Obtain an interface for the plant information of a device
+        https://www.showdoc.com.cn/262556420217021/1494064780850155
 
         Rate limit(s):
-        * The acquisition frequency is once every 5 minutes
+        * Get the frequency once every 5 minutes
 
         Specific error codes:
-        * 10001: system error
+        * 10001: System error
+        * 10002: Account does not exist
+        * 10003: Device serial number is empty
+        * 10004: Device type is empty
+        * 10005: Device does not exist
 
         Args:
-            plant_id (int): Power Station ID
-            device_sn (str): Inverter serial number
-            user_id (int): User ID
+            device_sn (str): Device serial number (non-collector serial number)
 
         Returns:
-            DeviceAdd
-            e.g.
-            {
-                "error_code": 0,
-                "error_msg": ""
-            }
+            PlantInfo
+            {   'data': {   'plant': {   'city': 'Shenzhen',
+                                         'country': 'China',
+                                         'create_date': datetime.date(2018, 12, 12),
+                                         'current_power': None,
+                                         'image_url': '2.png',
+                                         'installer': 'API interface test vendor',
+                                         'latitude': 22.6,
+                                         'latitude_d': None,
+                                         'latitude_f': None,
+                                         'locale': None,
+                                         'longitude': 113.9,
+                                         'name': 'API interface test power station',
+                                         'operator': 'API interface test vendor',
+                                         'peak_power': 20.0,
+                                         'plant_id': 24765,
+                                         'status': 4,
+                                         'total_energy': 15.699999809265137,
+                                         'user_id': 33}},
+                'error_code': 0,
+                'error_msg': None}
         """
-        if isinstance(device_sn, list):
-            assert len(device_sn) <= 100, "Max 100 devices per request"
-            device_sn = ",".join(device_sn)
 
         response = self.session.post(
-            endpoint="device/sn/add",
+            endpoint="plant/sn_plant",
             data={
-                "plant_id": plant_id,
-                "sn": device_sn,
-                "c_user_id": user_id,
+                "device_sn": device_sn,
             },
         )
 
-        return DeviceAdd.model_validate(response)
+        return PlantInfo.model_validate(response)
