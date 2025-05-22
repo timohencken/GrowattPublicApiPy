@@ -3,6 +3,15 @@ from typing import Optional, Union, List
 
 import truststore
 
+from api_v4 import ApiV4
+from growatt_public_api import DeviceType
+from pydantic_models.api_v4 import (
+    MaxDetailsV4,
+    MaxEnergyV4,
+    MaxEnergyHistoryV4,
+    MaxEnergyHistoryMultipleV4,
+    SettingWriteV4,
+)
 from pydantic_models.max import (
     MaxSettingRead,
     MaxSettingWrite,
@@ -25,9 +34,11 @@ class Max:
     """
 
     session: GrowattApiSession
+    _api_v4: ApiV4
 
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
+        self._api_v4 = ApiV4(session)
 
     def setting_read(
         self,
@@ -238,6 +249,73 @@ class Max:
 
         return MaxSettingWrite.model_validate(response)
 
+    def setting_write_on_off(
+        self,
+        device_sn: str,
+        power_on: bool,
+    ) -> SettingWriteV4:
+        """
+        Set the power on and off using "new-api" endpoint
+        Turn device on/off
+        https://www.showdoc.com.cn/2540838290984246/11330750679726415
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            power_on (bool): True = Power On, False = Power Off
+
+        Returns:
+            SettingWriteV4
+            e.g.
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+        """
+
+        return self._api_v4.setting_write_on_off(
+            device_sn=device_sn,
+            device_type=DeviceType.MAX,
+            power_on=power_on,
+        )
+
+    def setting_write_active_power(
+        self,
+        device_sn: str,
+        active_power_percent: int,
+    ) -> SettingWriteV4:
+        """
+        Set the active power using "new-api" endpoint
+        Set the active power percentage of the device based on the device type and SN of the device.
+        https://www.showdoc.com.cn/2540838290984246/11330751643769012
+
+        Note:
+        * most devices can be configured to 0 ~ 100 %
+        * NOAH devices can be configured to 0 ~ 800 W
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            active_power_percent (int): Percentage of active power, range 0-100
+
+        Returns:
+            SettingWriteV4
+            e.g.
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        return self._api_v4.setting_write_active_power(
+            device_sn=device_sn,
+            device_type=DeviceType.MAX,
+            active_power=active_power_percent,
+        )
+
     def details(
         self,
         device_sn: str,
@@ -304,6 +382,107 @@ class Max:
         )
 
         return MaxDetails.model_validate(response)
+
+    def details_v4(
+        self,
+        device_sn: Union[str, List[str]],
+    ) -> MaxDetailsV4:
+        """
+        Batch device information using "new-api" endpoint
+        Retrieve basic information of devices in bulk based on device SN.
+        https://www.showdoc.com.cn/2540838290984246/11292915673945114
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 minutes.
+
+        Args:
+            device_sn (Union[str, List[str]]): Inverter serial number or list of (multiple) inverter serial numbers (max 100)
+
+        Returns:
+            MaxDetailsV4
+            e.g.
+            {   'data': {   'max': [   {   'active_rate': 0.0,
+                                           'address': 1,
+                                           'alias': 'HPJ0BF20FU',
+                                           'backflow_default_power': 0.0,
+                                           'big_device': False,
+                                           'children': None,
+                                           'communication_version': 'ZBab-0002',
+                                           'datalogger_sn': 'BLE4BEQ0BW',
+                                           'device_type': 1,
+                                           'dtc': 5001,
+                                           'e_today': 0.0,
+                                           'e_total': 0.0,
+                                           'energy_day': 0.0,
+                                           'energy_day_map': {},
+                                           'energy_month': 0.0,
+                                           'energy_month_text': '0',
+                                           'export_limit': 0.0,
+                                           'export_limit_power_rate': 0.0,
+                                           'fac_high': 0.0,
+                                           'fac_low': 0.0,
+                                           'frequency_high_limit': 0.0,
+                                           'frequency_low_limit': 0.0,
+                                           'fw_version': 'TJ1.0',
+                                           'group_id': -1,
+                                           'id': 0,
+                                           'img_path': './css/img/status_gray.gif',
+                                           'inner_version': 'TJAA08020002',
+                                           'last_update_time': 1716534733000,
+                                           'last_update_time_text': datetime.datetime(2024, 5, 24, 15, 12, 13),
+                                           'lcd_language': 0,
+                                           'level': 6,
+                                           'location': None,
+                                           'lost': False,
+                                           'max_set_bean': None,
+                                           'model': 720575940631003386,
+                                           'model_text': 'S0AB00D00T00P0FU01M00FA',
+                                           'normal_power': 25000.0,
+                                           'on_off': False,
+                                           'parent_id': 'LIST_BLE4BEQ0BW_3',
+                                           'pf': 0.0,
+                                           'pf_model': 0,
+                                           'pflinep1_lp': 0.0,
+                                           'pflinep1_pf': 0.0,
+                                           'pflinep2_lp': 0.0,
+                                           'pflinep2_pf': 0.0,
+                                           'pflinep3_lp': 0.0,
+                                           'pflinep3_pf': 0.0,
+                                           'pflinep4_lp': 0.0,
+                                           'pflinep4_pf': 0.0,
+                                           'plant_id': 0,
+                                           'plant_name': None,
+                                           'port_name': 'ShinePano - BLE4BEQ0BW',
+                                           'power': 0.0,
+                                           'power_max': None,
+                                           'power_max_text': None,
+                                           'power_max_time': None,
+                                           'pv_pf_cmd_memory_state': 0,
+                                           'reactive_rate': 0.0,
+                                           'record': None,
+                                           'serial_num': 'HPJ0BF20FU',
+                                           'status': 1,
+                                           'status_text': 'max.status.normal',
+                                           'str_num': 0,
+                                           'sys_time': None,
+                                           'tcp_server_ip': '47.119.22.101',
+                                           'timezone': 8.0,
+                                           'tree_id': 'HPJ0BF20FU',
+                                           'tree_name': 'HPJ0BF20FU',
+                                           'updating': False,
+                                           'user_name': None,
+                                           'vac_high': 0.0,
+                                           'vac_low': 0.0,
+                                           'voltage_high_limit': 0.0,
+                                           'voltage_low_limit': 0.0}]},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        return self._api_v4.details(
+            device_sn=device_sn,
+            device_type=DeviceType.MAX,
+        )
 
     def energy(
         self,
@@ -515,6 +694,307 @@ class Max:
         )
 
         return MaxEnergyOverview.model_validate(response)
+
+    def energy_v4(
+        self,
+        device_sn: Union[str, List[str]],
+    ) -> MaxEnergyV4:
+        """
+        Batch equipment data information using "new-api" endpoint
+        Retrieve the last detailed data for multiple devices based on their SN and device type.
+        https://www.showdoc.com.cn/2540838290984246/11292915898375566
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 minutes.
+
+        Args:
+            device_sn (Union[str, List[str]]): Inverter serial number or list of (multiple) inverter serial numbers (max 100)
+
+        Returns:
+            MaxEnergyV4
+            e.g.
+            {   'data': {   'max': [   {   'address': 0,
+                                           'afci_pv1': 0,
+                                           'afci_pv2': 0,
+                                           'afci_status': 0,
+                                           'again': False,
+                                           'alias': None,
+                                           'apf_status': 0.0,
+                                           'apf_status_text': None,
+                                           'calendar': 1714113885020,
+                                           'comp_har_ir': 0.0,
+                                           'comp_har_is': 0.0,
+                                           'comp_har_it': 0.0,
+                                           'comp_qr': 0.0,
+                                           'comp_qs': 0.0,
+                                           'comp_qt': 0.0,
+                                           'ct_har_ir': 0.0,
+                                           'ct_har_is': 0.0,
+                                           'ct_har_it': 0.0,
+                                           'ct_ir': 0.0,
+                                           'ct_is': 0.0,
+                                           'ct_it': 0.0,
+                                           'ct_qr': 0.0,
+                                           'ct_qs': 0.0,
+                                           'ct_qt': 0.0,
+                                           'current_string1': 0.0,
+                                           'current_string10': 0.0,
+                                           'current_string11': 0.0,
+                                           'current_string12': 0.0,
+                                           'current_string13': 0.0,
+                                           'current_string14': 0.0,
+                                           'current_string15': 0.0,
+                                           'current_string16': 0.0,
+                                           'current_string17': 0.0,
+                                           'current_string18': 0.0,
+                                           'current_string19': 0.0,
+                                           'current_string2': 0.0,
+                                           'current_string21': 0.0,
+                                           'current_string22': 0.0,
+                                           'current_string23': 0.0,
+                                           'current_string24': 0.0,
+                                           'current_string25': 0.0,
+                                           'current_string26': 0.0,
+                                           'current_string27': 0.0,
+                                           'current_string28': 0.0,
+                                           'current_string29': 0.0,
+                                           'current_string3': 0.0,
+                                           'current_string30': 0.0,
+                                           'current_string31': 0.0,
+                                           'current_string32': 0.0,
+                                           'current_string4': 0.0,
+                                           'current_string5': 0.0,
+                                           'current_string6': 0.0,
+                                           'current_string7': 0.0,
+                                           'current_string8': 0.0,
+                                           'current_string9': 0.0,
+                                           'datalogger_sn': 'BLE4BL40GS',
+                                           'day': None,
+                                           'debug1': '0，0，0，30200，7，55，0，8200',
+                                           'debug2': '0，24，3，20，24，4，26，0',
+                                           'debug3': '0，0，0，0，0，0，0，0',
+                                           'derating_mode': 7,
+                                           'device_sn': 'QXHLD7F0C9',
+                                           'dw_string_warning_value1': 0,
+                                           'e_rac_today': 0.0,
+                                           'e_rac_total': 0.0,
+                                           'eac_today': 0.0,
+                                           'eac_total': 225.9,
+                                           'epv10_today': 0.0,
+                                           'epv10_total': 0.0,
+                                           'epv11_today': 0.0,
+                                           'epv11_total': 0.0,
+                                           'epv12_today': 0.0,
+                                           'epv12_total': 0.0,
+                                           'epv13_today': 0.0,
+                                           'epv13_total': 0.0,
+                                           'epv14_today': 0.0,
+                                           'epv14_total': 0.0,
+                                           'epv15_today': 0.0,
+                                           'epv15_total': 0.0,
+                                           'epv16_today': 0.0,
+                                           'epv16_total': 0.0,
+                                           'epv1_today': 0.0,
+                                           'epv1_total': 140.3,
+                                           'epv2_today': 0.0,
+                                           'epv2_total': 83.6,
+                                           'epv3_today': 0.0,
+                                           'epv3_total': 0.0,
+                                           'epv4_today': 0.0,
+                                           'epv4_total': 0.0,
+                                           'epv5_today': 0.0,
+                                           'epv5_total': 0.0,
+                                           'epv6_today': 0.0,
+                                           'epv6_total': 0.0,
+                                           'epv7_today': 0.0,
+                                           'epv7_total': 0.0,
+                                           'epv8_today': 0.0,
+                                           'epv8_total': 0.0,
+                                           'epv9_today': 0.0,
+                                           'epv9_total': 0.0,
+                                           'epv_total': 223.9,
+                                           'fac': 46.0,
+                                           'fault_code1': 0,
+                                           'fault_code2': 0,
+                                           'fault_type': 302,
+                                           'fault_value': 0,
+                                           'gfci': 2.0,
+                                           'i_pid_pvape': 0.0,
+                                           'i_pid_pvbpe': 0.0,
+                                           'i_pid_pvcpe': 0.0,
+                                           'i_pid_pvdpe': 0.0,
+                                           'i_pid_pvepe': 0.0,
+                                           'i_pid_pvfpe': 0.0,
+                                           'i_pid_pvgpe': 0.0,
+                                           'i_pid_pvhpe': 0.0,
+                                           'i_pid_pvpe10': 0.0,
+                                           'i_pid_pvpe11': 0.0,
+                                           'i_pid_pvpe12': 0.0,
+                                           'i_pid_pvpe13': 0.0,
+                                           'i_pid_pvpe14': 0.0,
+                                           'i_pid_pvpe15': 0.0,
+                                           'i_pid_pvpe16': 0.0,
+                                           'i_pid_pvpe9': 0.0,
+                                           'iacr': 0.0,
+                                           'iacs': 0.0,
+                                           'iact': 0.0,
+                                           'id': 0,
+                                           'ipm_temperature': 0.0,
+                                           'ipv1': 0.0,
+                                           'ipv10': 0.0,
+                                           'ipv11': 0.0,
+                                           'ipv12': 0.0,
+                                           'ipv13': 0.0,
+                                           'ipv14': 0.0,
+                                           'ipv15': 0.0,
+                                           'ipv16': 0.0,
+                                           'ipv2': 0.0,
+                                           'ipv3': 0.0,
+                                           'ipv4': 0.0,
+                                           'ipv5': 0.0,
+                                           'ipv6': 0.0,
+                                           'ipv7': 0.0,
+                                           'ipv8': 0.0,
+                                           'ipv9': 0.0,
+                                           'lost': True,
+                                           'max_bean': None,
+                                           'n_bus_voltage': 292.9,
+                                           'op_fullwatt': 555.5,
+                                           'p_bus_voltage': 300.4,
+                                           'pac': 0.0,
+                                           'pacr': 0.0,
+                                           'pacs': 0.0,
+                                           'pact': 0.0,
+                                           'pf': 1.0,
+                                           'pid_bus': 0.0,
+                                           'pid_fault_code': 0,
+                                           'pid_status': 0,
+                                           'pid_status_text': 'Lost',
+                                           'power_today': 0.0,
+                                           'power_total': 0.0,
+                                           'ppv': 0.0,
+                                           'ppv1': 0.0,
+                                           'ppv10': 0.0,
+                                           'ppv11': 0.0,
+                                           'ppv12': 0.0,
+                                           'ppv13': 0.0,
+                                           'ppv14': 0.0,
+                                           'ppv15': 0.0,
+                                           'ppv16': 0.0,
+                                           'ppv2': 0.0,
+                                           'ppv3': 0.0,
+                                           'ppv4': 0.0,
+                                           'ppv5': 0.0,
+                                           'ppv6': 0.0,
+                                           'ppv7': 0.0,
+                                           'ppv8': 0.0,
+                                           'ppv9': 0.0,
+                                           'pv_iso': 0.0,
+                                           'r_dci': 0.0,
+                                           'rac': 0.0,
+                                           'react_power': 0.0,
+                                           'react_power_max': 0.0,
+                                           'react_power_total': 0.0,
+                                           'real_op_percent': 0.0,
+                                           's_dci': 0.0,
+                                           'status': 3,
+                                           'status_text': 'Fault',
+                                           'str_break': 0,
+                                           'str_fault': 0,
+                                           'str_unbalance': 0,
+                                           'str_unmatch': 0,
+                                           't_dci': 0.0,
+                                           'temperature': 55.100002,
+                                           'temperature2': 25.7,
+                                           'temperature3': 25.7,
+                                           'temperature4': 0.0,
+                                           'temperature5': 0.0,
+                                           'time': datetime.datetime(2024, 4, 26, 14, 44, 45),
+                                           'time_calendar': 1714113885020,
+                                           'time_total': 808233.0,
+                                           'v_pid_pvape': 0.0,
+                                           'v_pid_pvbpe': 0.0,
+                                           'v_pid_pvcpe': 0.0,
+                                           'v_pid_pvdpe': 0.0,
+                                           'v_pid_pvepe': 0.0,
+                                           'v_pid_pvfpe': 0.0,
+                                           'v_pid_pvgpe': 0.0,
+                                           'v_pid_pvhpe': 0.0,
+                                           'v_pid_pvpe10': 0.0,
+                                           'v_pid_pvpe11': 0.0,
+                                           'v_pid_pvpe12': 0.0,
+                                           'v_pid_pvpe13': 0.0,
+                                           'v_pid_pvpe14': 0.0,
+                                           'v_pid_pvpe15': 0.0,
+                                           'v_pid_pvpe16': 0.0,
+                                           'v_pid_pvpe9': 0.0,
+                                           'v_string1': 0.0,
+                                           'v_string10': 0.0,
+                                           'v_string11': 0.0,
+                                           'v_string12': 0.0,
+                                           'v_string13': 0.0,
+                                           'v_string14': 0.0,
+                                           'v_string15': 0.0,
+                                           'v_string16': 0.0,
+                                           'v_string17': 0.0,
+                                           'v_string18': 0.0,
+                                           'v_string19': 0.0,
+                                           'v_string2': 0.0,
+                                           'v_string20': 0.0,
+                                           'v_string21': 0.0,
+                                           'v_string22': 0.0,
+                                           'v_string23': 0.0,
+                                           'v_string24': 0.0,
+                                           'v_string25': 0.0,
+                                           'v_string26': 0.0,
+                                           'v_string27': 0.0,
+                                           'v_string28': 0.0,
+                                           'v_string29': 0.0,
+                                           'v_string3': 0.0,
+                                           'v_string30': 0.0,
+                                           'v_string31': 0.0,
+                                           'v_string32': 0.0,
+                                           'v_string4': 0.0,
+                                           'v_string5': 0.0,
+                                           'v_string6': 0.0,
+                                           'v_string7': 0.0,
+                                           'v_string8': 0.0,
+                                           'v_string9': 0.0,
+                                           'vac_rs': 0.3,
+                                           'vac_st': 2.5,
+                                           'vac_tr': 2.3,
+                                           'vacr': 0.7,
+                                           'vacs': 0.90000004,
+                                           'vact': 1.6,
+                                           'vpv1': 599.8,
+                                           'vpv10': 0.0,
+                                           'vpv11': 0.0,
+                                           'vpv12': 0.0,
+                                           'vpv13': 0.0,
+                                           'vpv14': 0.0,
+                                           'vpv15': 0.0,
+                                           'vpv16': 0.0,
+                                           'vpv2': 292.7,
+                                           'vpv3': 0.0,
+                                           'vpv4': 0.0,
+                                           'vpv5': 0.0,
+                                           'vpv6': 0.0,
+                                           'vpv7': 0.0,
+                                           'vpv8': 0.0,
+                                           'vpv9': 0.0,
+                                           'w_pid_fault_value': 0,
+                                           'w_string_status_value': 0,
+                                           'warn_bit': 0,
+                                           'warn_code': 0,
+                                           'warning_value1': 0,
+                                           'warning_value2': 0,
+                                           'warning_value3': 0,
+                                           'with_time': False}]},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        return self._api_v4.energy(device_sn=device_sn, device_type=DeviceType.MAX)
 
     def energy_multiple(
         self,
@@ -1033,6 +1513,67 @@ class Max:
         )
 
         return MaxEnergyHistory.model_validate(response)
+
+    def energy_history_v4(
+        self,
+        device_sn: str,
+        date_: Optional[date] = None,
+    ) -> MaxEnergyHistoryV4:
+        """
+        One day data using "new-api" endpoint
+        Retrieves all detailed data for a specific device on a particular day based on the device SN, device type, and date.
+        https://www.showdoc.com.cn/2540838290984246/11292916022305414
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 minutes.
+
+        Args:
+            device_sn (str): Device unique serial number (SN)
+            date_ (Optional[date]): Start Date - defaults to today
+
+        Returns:
+            MaxEnergyHistoryV4
+            e.g.
+            {   'data': {   'datas': [   {
+                                             <see energy_v4() for attributes>
+                                         }],
+                            'have_next': False,
+                            'start': 0},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        return self._api_v4.energy_history(device_sn=device_sn, device_type=DeviceType.MAX, date_=date_)
+
+    def energy_history_multiple_v4(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: Union[str, List[str]],
+        date_: Optional[date] = None,
+    ) -> MaxEnergyHistoryMultipleV4:
+        """
+        One day data using "new-api" endpoint
+        Retrieves all detailed data for a specific device on a particular day based on the device SN, device type, and date.
+        https://www.showdoc.com.cn/2540838290984246/11292916022305414
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 minutes.
+
+        Args:
+            device_sn (Union[str, List[str]]): Inverter serial number or list of (multiple) inverter serial numbers (max 100)
+            date_ (Optional[date]): Start Date - defaults to today
+
+        Returns:
+            MaxEnergyHistoryMultipleV4
+            e.g.
+            {   'data': {   'NHB691514F': [   {
+                                                  <see energy_v4() for attributes>
+                                              }]},
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
+
+        """
+
+        return self._api_v4.energy_history_multiple(device_sn=device_sn, device_type=DeviceType.MAX, date_=date_)
 
     def alarms(
         self,
