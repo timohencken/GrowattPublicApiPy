@@ -406,7 +406,7 @@ To the best of our knowledge only the settings functions perform modifications t
     * spa done
     * wit done
     * sphs done
-    * # TODO noah
+    * noah
     * # TODO check readme if all endpoints are documented
     * # TODO remove TODO from v4 file
 * 2025.05.12 (pre-alpha)

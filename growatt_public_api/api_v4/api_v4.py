@@ -1247,7 +1247,7 @@ class ApiV4:
             return WitDetailsV4.model_validate(response)
         elif device_type == DeviceType.SPHS:
             return SphsDetailsV4.model_validate(response)
-        elif device_type == DeviceType.NOAH:  # TODO
+        elif device_type == DeviceType.NOAH:
             return NoahDetailsV4.model_validate(response)
         else:
             raise ValueError(f"Unknown device type: {device_type}")
@@ -3238,7 +3238,7 @@ class ApiV4:
             return WitEnergyV4.model_validate(response)
         elif device_type == DeviceType.SPHS:
             return SphsEnergyV4.model_validate(response)
-        elif device_type == DeviceType.NOAH:  # TODO
+        elif device_type == DeviceType.NOAH:
             logger.warning(
                 "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
             )
@@ -3321,7 +3321,7 @@ class ApiV4:
             return WitEnergyHistoryV4.model_validate(response)
         elif device_type == DeviceType.SPHS:
             return SphsEnergyHistoryV4.model_validate(response)
-        elif device_type == DeviceType.NOAH:  # TODO
+        elif device_type == DeviceType.NOAH:
             logger.warning(
                 "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
             )
@@ -3406,7 +3406,7 @@ class ApiV4:
             return WitEnergyHistoryMultipleV4.model_validate(response)
         elif device_type == DeviceType.SPHS:
             return SphsEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == DeviceType.NOAH:  # TODO
+        elif device_type == DeviceType.NOAH:
             logger.warning(
                 "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
             )
@@ -3471,9 +3471,6 @@ class ApiV4:
             },
         )
 
-        # TODO "sph-s"
-        # TODO NOT "noah"
-
         return SettingWriteV4.model_validate(response)
 
     def setting_write_active_power(  # noqa: C901 'ApiV4.energy' is too complex (11)
@@ -3529,9 +3526,6 @@ class ApiV4:
             },
         )
 
-        # TODO "sph-s"
-        # TODO "noah"
-
         return SettingWriteV4.model_validate(response)
 
     def setting_write_soc_upper_limit(  # noqa: C901 'ApiV4.energy' is too complex (11)
@@ -3583,8 +3577,6 @@ class ApiV4:
                 "value": soc_limit,
             },
         )
-
-        # TODO "noah"
 
         return SettingWriteV4.model_validate(response)
 
@@ -3638,8 +3630,6 @@ class ApiV4:
                 "value": soc_limit,
             },
         )
-
-        # TODO "noah"
 
         return SettingWriteV4.model_validate(response)
 
