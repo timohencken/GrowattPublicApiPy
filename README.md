@@ -365,10 +365,12 @@ To the best of our knowledge only the settings functions perform modifications t
     * storage done
     * max done
     * sph done
-    * # TODO spa
+    * spa done
     * # TODO wit
     * # TODO sphs
     * # TODO noah
+    * # TODO check readme if all endpoints are documented
+    * # TODO remove TODO from v4 file
 * 2025.05.12 (pre-alpha)
   * add tests to verify returned parameters are same as expected parameters
 * 2025.03.28 (pre-alpha)
