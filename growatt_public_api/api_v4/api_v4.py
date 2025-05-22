@@ -1243,7 +1243,7 @@ class ApiV4:
             return SpaDetailsV4.model_validate(response)
         elif device_type == DeviceType.MIN:
             return MinDetailsV4.model_validate(response)
-        elif device_type == DeviceType.WIT:  # TODO
+        elif device_type == DeviceType.WIT:
             return WitDetailsV4.model_validate(response)
         elif device_type == DeviceType.SPHS:  # TODO
             return SphsDetailsV4.model_validate(response)
@@ -3234,7 +3234,7 @@ class ApiV4:
             return SpaEnergyV4.model_validate(response)
         elif device_type == DeviceType.MIN:
             return MinEnergyV4.model_validate(response)
-        elif device_type == DeviceType.WIT:  # TODO
+        elif device_type == DeviceType.WIT:
             return WitEnergyV4.model_validate(response)
         elif device_type == DeviceType.SPHS:  # TODO
             return SphsEnergyV4.model_validate(response)
@@ -3317,7 +3317,7 @@ class ApiV4:
             return SpaEnergyHistoryV4.model_validate(response)
         elif device_type == DeviceType.MIN:
             return MinEnergyHistoryV4.model_validate(response)
-        elif device_type == DeviceType.WIT:  # TODO
+        elif device_type == DeviceType.WIT:
             return WitEnergyHistoryV4.model_validate(response)
         elif device_type == DeviceType.SPHS:  # TODO
             return SphsEnergyHistoryV4.model_validate(response)
@@ -3402,7 +3402,7 @@ class ApiV4:
             return SpaEnergyHistoryMultipleV4.model_validate(response)
         elif device_type == DeviceType.MIN:
             return MinEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == DeviceType.WIT:  # TODO
+        elif device_type == DeviceType.WIT:
             return WitEnergyHistoryMultipleV4.model_validate(response)
         elif device_type == DeviceType.SPHS:  # TODO
             return SphsEnergyHistoryMultipleV4.model_validate(response)
@@ -3471,7 +3471,6 @@ class ApiV4:
             },
         )
 
-        # TODO "wit"
         # TODO "sph-s"
         # TODO NOT "noah"
 
@@ -3530,7 +3529,6 @@ class ApiV4:
             },
         )
 
-        # TODO "wit"
         # TODO "sph-s"
         # TODO "noah"
 
@@ -3793,7 +3791,6 @@ class ApiV4:
         )
 
         # TODO The current interface only supports sph, spa, min, wit device types.
-        # TODO "wit"
         # TODO NOT "sph-s"
         # TODO NOT "noah"
 
@@ -3994,7 +3991,6 @@ class ApiV4:
         )
 
         # TODO The current interface only supports sph, spa, min, wit device types.
-        # TODO "wit"
         # TODO NOT "sph-s"
         # TODO NOT "noah"
 

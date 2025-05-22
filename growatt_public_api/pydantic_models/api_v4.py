@@ -1385,6 +1385,7 @@ class WitDetailDataV4(ApiModel):
     safety_correspond_num: Union[EmptyStrToNone, float] = None  # e.g. 0
     safety_version: Union[EmptyStrToNone, int] = None  # e.g. 0
     safety_function: Union[EmptyStrToNone, int] = None  # e.g. 0
+    second_load_down_soc: Union[EmptyStrToNone, int] = None  # e.g. -1
     serial_num: Union[EmptyStrToNone, str] = None  # Device SN, e.g. '0ZFN00R23ZBF0002'
     single_export: Union[EmptyStrToNone, int] = None  # e.g. 0
     status: Union[EmptyStrToNone, int] = None  # Device Status, e.g. 0
@@ -1489,6 +1490,7 @@ class WitDetailDataV4(ApiModel):
     vnormal: Union[EmptyStrToNone, float] = None  # Nominal PV voltage, e.g. 2.0
     voltage_high_limit: Union[EmptyStrToNone, float] = None  # Mains voltage upper limit, e.g. 456.4
     voltage_low_limit: Union[EmptyStrToNone, float] = None  # Mains voltage lower limit, e.g. 277.7
+    vpp_version: Union[EmptyStrToNone, int] = None  # e.g. 0
     vpv_start: Union[EmptyStrToNone, float] = None  # e.g. 250.0
     w_anti_backflow_meter_power_limit: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     w_power_restart_slope_ee: Union[EmptyStrToNone, float] = None  # e.g. 50.0
@@ -3375,8 +3377,8 @@ def _wit_energy_to_camel(snake: str) -> str:
         "e_charge2_total": "echarge2Total",
         "e_charge3_today": "echarge3Today",
         "e_charge3_total": "echarge3Total",
-        "e_discharge1_today": "edischargeToday",
-        "e_discharge1_total": "edischargeTotal",
+        "e_discharge1_today": "edischarge1Today",
+        "e_discharge1_total": "edischarge1Total",
         "e_discharge2_today": "edischarge2Today",
         "e_discharge2_total": "edischarge2Total",
         "e_discharge3_today": "edischarge3Today",
@@ -3390,7 +3392,7 @@ def _wit_energy_to_camel(snake: str) -> str:
         "e_to_grid_today": "etoGridToday",
         "e_to_user_today": "etoUserToday",
         "e_to_user_total": "etoUserTotal",
-        "e_to_grid_total": "etogridTotal",
+        "e_to_grid_total": "etoGridTotal",
         "off_grid_status": "offgridStatus",
         "p_self": "pself",
         "p_system": "psystem",

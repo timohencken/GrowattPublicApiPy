@@ -343,11 +343,6 @@ class TestSph(unittest.TestCase):
             self.assertNotEqual("", raw_data["data"])
 
     def test_setting_read_vpp_param(self):
-        """
-        This endpoint cannot be tested using the v1 test server (test.growatt.com), since it returns 404
-        This endpoint is only available on the v4 test server (183.62.216.35:8081) and on the official server (openapi.growatt.com)
-        """
-        # test it
         with patch(f"{TEST_FILE_V4}.SettingReadVppV4", wraps=SettingReadVppV4) as mock_pyd_model:
             self.api.setting_read_vpp_param(device_sn=self.device_sn, parameter_id="set_param_1")
 

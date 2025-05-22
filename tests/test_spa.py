@@ -342,6 +342,18 @@ class TestSpa(unittest.TestCase):
             self.assertIsNotNone(raw_data["data"])
             self.assertNotEqual("", raw_data["data"])
 
+    def test_setting_read_vpp_param(self):
+        with patch(f"{TEST_FILE_V4}.SettingReadVppV4", wraps=SettingReadVppV4) as mock_pyd_model:
+            self.api.setting_read_vpp_param(device_sn=self.device_sn, parameter_id="set_param_1")
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in SettingReadVppV4.model_fields.items()} | set(
+            SettingReadVppV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
     def test_setting_write__by_name(self):
         with patch(f"{TEST_FILE}.SpaSettingWrite", wraps=SpaSettingWrite) as mock_pyd_model:
             self.api.setting_write(device_sn=self.device_sn, parameter_id="pv_on_off", parameter_value_1=1)
@@ -360,22 +372,6 @@ class TestSpa(unittest.TestCase):
         else:
             # should anything but None if successful
             self.assertIsNotNone(raw_data["data"])
-
-    def test_setting_read_vpp_param(self):
-        """
-        This endpoint cannot be tested using the v1 test server (test.growatt.com), since it returns 404
-        This endpoint is only available on the v4 test server (183.62.216.35:8081) and on the official server (openapi.growatt.com)
-        """
-        with patch(f"{TEST_FILE_V4}.SettingReadVppV4", wraps=SettingReadVppV4) as mock_pyd_model:
-            self.api.setting_read_vpp_param(device_sn=self.device_sn, parameter_id="set_param_1")
-
-        raw_data = mock_pyd_model.model_validate.call_args.args[0]
-
-        # check parameters are included in pydantic model
-        pydantic_keys = {v.alias for k, v in SettingReadVppV4.model_fields.items()} | set(
-            SettingReadVppV4.model_fields.keys()
-        )  # aliased and non-aliased params
-        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
 
     def test_setting_write__by_register(self):
         with patch(f"{TEST_FILE}.SpaSettingWrite", wraps=SpaSettingWrite) as mock_pyd_model:
