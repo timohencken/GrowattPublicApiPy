@@ -57,12 +57,12 @@ class ApiV4:
     """
     New API (v4)
     https://www.showdoc.com.cn/2540838290984246/11292912972201443
+
+    v4 error codes
+    https://www.showdoc.com.cn/2540838290984246/11292913883034530
+
+    Do not use this module directly, use the device-specific implementation instead.
     """
-
-    # TODO refactor - we do not want a v4 package (at least not external) - distribute to corresponding "device_type" packages
-
-    # TODO v4 error codes
-    # https://www.showdoc.com.cn/2540838290984246/11292913883034530
 
     session: GrowattApiSession
 
@@ -3714,8 +3714,6 @@ class ApiV4:
             },
         )
 
-        # TODO "noah"
-
         return SettingWriteV4.model_validate(response)
 
     def setting_read_vpp_param(  # noqa: C901 'ApiV4.energy' is too complex (11)
@@ -3779,9 +3777,6 @@ class ApiV4:
                 "setType": parameter_id,
             },
         )
-
-        # TODO The current interface only supports sph, spa, min, wit device types.
-        # TODO NOT "noah"
 
         return SettingReadVppV4.model_validate(response)
 
@@ -3978,8 +3973,5 @@ class ApiV4:
                 "value": str(value),
             },
         )
-
-        # TODO The current interface only supports sph, spa, min, wit device types.
-        # TODO NOT "noah"
 
         return SettingWriteV4.model_validate(response)

@@ -74,7 +74,7 @@ class Vpp:
         The reading machine immediately executes the battery charging control interface (only supports MIN SPA SPH models)
         https://www.showdoc.com.cn/262556420217021/7178602212464389
 
-        # TODO this endpoint is poorly documented - find a device to try this and try to fix the documentation
+        Note: this endpoint is poorly documented
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
@@ -127,7 +127,7 @@ class Vpp:
         Read and set VPP time period parameter interface (only support MIN SPA SPH model)
         https://www.showdoc.com.cn/262556420217021/7178602212464389
 
-        # TODO this endpoint is poorly documented - find a device to try this and try to fix the documentation
+        Note: this endpoint is poorly documented
 
         Rate limit(s):
         * The frequency of acquisition is once every 10 seconds
