@@ -1237,7 +1237,7 @@ class ApiV4:
             return StorageDetailsV4.model_validate(response)
         elif device_type == DeviceType.MAX:
             return MaxDetailsV4.model_validate(response)
-        elif device_type == DeviceType.SPH:  # TODO
+        elif device_type == DeviceType.SPH:
             return SphDetailsV4.model_validate(response)
         elif device_type == DeviceType.SPA:  # TODO
             return SpaDetailsV4.model_validate(response)
@@ -3228,7 +3228,7 @@ class ApiV4:
             return StorageEnergyV4.model_validate(response)
         elif device_type == DeviceType.MAX:
             return MaxEnergyV4.model_validate(response)
-        elif device_type == DeviceType.SPH:  # TODO
+        elif device_type == DeviceType.SPH:
             return SphEnergyV4.model_validate(response)
         elif device_type == DeviceType.SPA:  # TODO
             return SpaEnergyV4.model_validate(response)
@@ -3311,7 +3311,7 @@ class ApiV4:
             return StorageEnergyHistoryV4.model_validate(response)
         elif device_type == DeviceType.MAX:
             return MaxEnergyHistoryV4.model_validate(response)
-        elif device_type == DeviceType.SPH:  # TODO
+        elif device_type == DeviceType.SPH:
             return SphEnergyHistoryV4.model_validate(response)
         elif device_type == DeviceType.SPA:  # TODO
             return SpaEnergyHistoryV4.model_validate(response)
@@ -3396,7 +3396,7 @@ class ApiV4:
             return StorageEnergyHistoryMultipleV4.model_validate(response)
         elif device_type == DeviceType.MAX:
             return MaxEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == DeviceType.SPH:  # TODO
+        elif device_type == DeviceType.SPH:
             return SphEnergyHistoryMultipleV4.model_validate(response)
         elif device_type == DeviceType.SPA:  # TODO
             return SpaEnergyHistoryMultipleV4.model_validate(response)
@@ -3471,7 +3471,6 @@ class ApiV4:
             },
         )
 
-        # TODO "sph"
         # TODO "spa"
         # TODO "wit"
         # TODO "sph-s"
@@ -3532,7 +3531,6 @@ class ApiV4:
             },
         )
 
-        # TODO "sph"
         # TODO "spa"
         # TODO "wit"
         # TODO "sph-s"
@@ -3751,9 +3749,9 @@ class ApiV4:
         * The current interface only supports sph, spa, min, wit device types.
           The specific models are as follows:
           * SPH 3000-6000TL BL
-          * SPA 1000-3000TL BL
           * SPH 3000-6000TL BL US
           * SPH 4000-10000TL3 BH
+          * SPA 1000-3000TL BL
           * SPA 4000-10000TL3 BH
           * MIN 2500-6000TL-XH US
           * MIN 2500-6000TL-XH
@@ -3797,7 +3795,6 @@ class ApiV4:
         )
 
         # TODO The current interface only supports sph, spa, min, wit device types.
-        # TODO "sph"
         # TODO "spa"
         # TODO "wit"
         # TODO NOT "sph-s"
@@ -4000,7 +3997,6 @@ class ApiV4:
         )
 
         # TODO The current interface only supports sph, spa, min, wit device types.
-        # TODO "sph"
         # TODO "spa"
         # TODO "wit"
         # TODO NOT "sph-s"

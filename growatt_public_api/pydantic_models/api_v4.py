@@ -397,11 +397,15 @@ def _sph_details_to_camel(snake: str) -> str:
         "buck_ups_volt_set": "buckUPSVoltSet",
         "datalogger_sn": "dataLogSn",
         "discharge_power_command": "disChargePowerCommand",
+        "grid_hv_reduce_load_high": "gridHVReduceLoadHigh",
+        "grid_hv_reduce_load_low": "gridHVReduceLoadLow",
         "off_grid_discharge_soc": "offGridDischargeSOC",
         "parent_id": "parentID",
         "plant_name": "plantname",
         "pv_pf_cmd_memory_state_mix": "pvPfCmdMemoryState",  # avoid name collision
         "pv_pf_cmd_memory_state": "pv_pf_cmd_memory_state",  # avoid name collision
+        "qv_out_hv_power_per": "qvOutHVPowerPer",
+        "qv_in_lv_power_per": "qvInLVPowerPer",
         "tree_id": "treeID",
         "uw_hf_rt2_ee": "uwHFRT2EE",
         "uw_hf_rt_ee": "uwHFRTEE",
@@ -443,6 +447,7 @@ class SphDetailDataV4(ApiModel):
     active_rate: Union[EmptyStrToNone, float] = None  # Active power, e.g. 100
     address: Union[EmptyStrToNone, int] = None  # Inverter address, e.g. 1
     alias: Union[EmptyStrToNone, str] = None  # Alias, e.g. 'OZD0849010'
+    anti_island_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
     back_up_en: Union[EmptyStrToNone, int] = None  # e.g. 0
     backflow_setting: Union[EmptyStrToNone, str] = None  # Anti-Backflow Setting, e.g. None
     bat_aging_test_step: Union[EmptyStrToNone, int] = (
@@ -476,6 +481,7 @@ class SphDetailDataV4(ApiModel):
     country_selected: Union[EmptyStrToNone, int] = None  # Country Selection, e.g. 0
     cv_voltage: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     datalogger_sn: Union[EmptyStrToNone, str] = None  # DataLog Serial Number, e.g. 'JAD084800B'
+    device_model: Union[EmptyStrToNone, Any] = None  # e.g. None
     device_type: Union[EmptyStrToNone, int] = None  # Device Type (0: Mix6k, 1: Mix4-10k), e.g. 0
     discharge_power_command: Union[EmptyStrToNone, int] = None  # Discharge Power Setting, e.g. 100
     discharge_time1: Union[EmptyStrToNone, str] = None  # e.g. None
@@ -533,6 +539,8 @@ class SphDetailDataV4(ApiModel):
     grid_first_switch1: Union[EmptyStrToNone, bool] = None  # e.g. 0
     grid_first_switch2: Union[EmptyStrToNone, bool] = None  # e.g. 0
     grid_first_switch3: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    grid_hv_reduce_load_high: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    grid_hv_reduce_load_low: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     group_id: Union[EmptyStrToNone, int] = None  # Inverter Group, e.g. -1
     id: Union[EmptyStrToNone, int] = None  # e.g. 0
     img_path: Union[EmptyStrToNone, str] = None  # e.g. './css/img/status_gray.gif'
@@ -592,6 +600,8 @@ class SphDetailDataV4(ApiModel):
     pv_power_factor: Union[EmptyStrToNone, float] = None  # Set PF Value, e.g. ''
     pv_reactive_p_rate: Union[EmptyStrToNone, float] = None  # Set Reactive Power, e.g. ''
     pv_reactive_p_rate_two: Union[EmptyStrToNone, float] = None  # Reactive Power (Capacitive/Inductive), e.g. ''
+    qv_out_hv_power_per: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    qv_in_lv_power_per: Union[EmptyStrToNone, float] = None  # e.g. 1
     reactive_delay: Union[EmptyStrToNone, float] = None  # e.g. 150.0
     reactive_power_limit: Union[EmptyStrToNone, float] = None  # e.g. 48.0
     reactive_rate: Union[EmptyStrToNone, float] = None  # Reactive power, e.g. 100
@@ -654,6 +664,7 @@ class SphDetailDataV4(ApiModel):
     voltage_high_limit: Union[EmptyStrToNone, float] = None  # Utility Voltage Upper Limit, e.g. 263.0
     voltage_low_limit: Union[EmptyStrToNone, float] = None  # Utility Voltage Lower Limit, e.g. 186.0
     vpp_open: Union[EmptyStrToNone, float] = None  # e.g. 160
+    vpp_version: Union[EmptyStrToNone, int] = None  # e.g. 0
     w_charge_soc_low_limit1: Union[EmptyStrToNone, int] = None  # Load Priority Mode Charge, e.g. 100
     w_charge_soc_low_limit2: Union[EmptyStrToNone, int] = None  # Battery Priority Mode Charge, e.g. 100
     w_discharge_soc_low_limit1: Union[EmptyStrToNone, int] = None  # Load Priority Mode Discharge, e.g. 100
@@ -2557,8 +2568,8 @@ def _sph_energy_to_camel(snake: str) -> str:
         "bms_soh": "bmsSOH",
         "e_charge1_today": "echarge1Today",
         "e_charge1_total": "echarge1Total",
-        "e_discharge1_today": "edischargeToday",
-        "e_discharge1_total": "edischargeTotal",
+        "e_discharge1_today": "edischarge1Today",
+        "e_discharge1_total": "edischarge1Total",
         "e_local_load_today": "elocalLoadToday",
         "e_local_load_total": "elocalLoadTotal",
         "epv_today": "epvtoday",
@@ -2570,7 +2581,7 @@ def _sph_energy_to_camel(snake: str) -> str:
         "e_to_user_today": "etoUserToday",
         "e_to_user_total": "etoUserTotal",
         "e_to_grid_total": "etogridTotal",
-        "first_batt_fault_sn": "firstBattFaultS",
+        "first_batt_fault_sn": "firstBattFaultSn",
         "max_soc": "maxSOC",
         "min_soc": "minSOC",
         "p_self": "pself",
@@ -2786,7 +2797,7 @@ class SphEnergyDataV4(ApiModel):
     ups_pac2: Union[EmptyStrToNone, float] = None  # Off-grid side power, e.g. 0
     ups_pac3: Union[EmptyStrToNone, float] = None  # Off-grid side power, e.g. 0
     ups_vac1: Union[EmptyStrToNone, float] = None  # Emergency voltage, e.g. 0
-    uw_bat_cycle_cnt_pr: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_bat_cycle_cnt_pre: Union[EmptyStrToNone, int] = None  # e.g. 0
     uw_dsp_dc_dc_debug_data: Union[EmptyStrToNone, int] = None  # e.g. -1
     uw_dsp_dc_dc_debug_data1: Union[EmptyStrToNone, int] = None  # e.g. -1
     uw_dsp_dc_dc_debug_data2: Union[EmptyStrToNone, int] = None  # e.g. -1

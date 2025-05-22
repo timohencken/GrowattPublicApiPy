@@ -364,7 +364,7 @@ To the best of our knowledge only the settings functions perform modifications t
     * inv done
     * storage done
     * max done
-    * # TODO sph
+    * sph done
     * # TODO spa
     * # TODO wit
     * # TODO sphs
