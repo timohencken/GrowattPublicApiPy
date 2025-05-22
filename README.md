@@ -238,20 +238,39 @@ This package aims to
   Note: WIT devices are not supported by APIv1 endpoints - only v4 endpoints available
   * general device data
     * read device data
-      * `min.details_v4()` (using new API)
+      * `wit.details_v4()` (using new API)
   * device settings
     * read settings value
-      * `min.setting_read_vpp_param()` (using new API)
+      * `wit.setting_read_vpp_param()` (using new API)
     * write settings value
-      * `min.setting_write_on_off()` (using new API)
-      * `min.setting_write_active_power()` (using new API)
-      * `min.setting_write_vpp_param()` (using new API)
+      * `wit.setting_write_on_off()` (using new API)
+      * `wit.setting_write_active_power()` (using new API)
+      * `wit.setting_write_vpp_param()` (using new API)
   * device power/energy metrics
     * current
-      * `min.energy_v4()` (using new API)
+      * `wit.energy_v4()` (using new API)
     * historical data
-      * `min.energy_history_v4()` (using new API)
-      * `min.energy_history_multiple_v4()` (using new API)
+      * `wit.energy_history_v4()` (using new API)
+      * `wit.energy_history_multiple_v4()` (using new API)
+      * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* SPH-S (DeviceType.SPHS)
+  Note: SPH-S devices are not supported by APIv1 endpoints - only v4 endpoints available
+  * general device data
+    * read device data
+      * `sphs.details_v4()` (using new API)
+  * device settings
+    * read settings value
+      * `sphs.setting_read_vpp_param()` (using new API)
+    * write settings value
+      * `sphs.setting_write_on_off()` (using new API)
+      * `sphs.setting_write_active_power()` (using new API)
+      * `sphs.setting_write_vpp_param()` (using new API)
+  * device power/energy metrics
+    * current
+      * `sphs.energy_v4()` (using new API)
+    * historical data
+      * `sphs.energy_history_v4()` (using new API)
+      * `sphs.energy_history_multiple_v4()` (using new API)
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 
 ### API v4 (a few additional endpoints)
@@ -386,7 +405,7 @@ To the best of our knowledge only the settings functions perform modifications t
     * sph done
     * spa done
     * wit done
-    * # TODO sphs
+    * sphs done
     * # TODO noah
     * # TODO check readme if all endpoints are documented
     * # TODO remove TODO from v4 file

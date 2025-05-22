@@ -1245,7 +1245,7 @@ class ApiV4:
             return MinDetailsV4.model_validate(response)
         elif device_type == DeviceType.WIT:
             return WitDetailsV4.model_validate(response)
-        elif device_type == DeviceType.SPHS:  # TODO
+        elif device_type == DeviceType.SPHS:
             return SphsDetailsV4.model_validate(response)
         elif device_type == DeviceType.NOAH:  # TODO
             return NoahDetailsV4.model_validate(response)
@@ -3156,8 +3156,8 @@ class ApiV4:
                                              'warnCode1': 0,
                                              'warnText': 'Unknown',
                                              'withTime': False}]},
-                'message': 'SUCCESSFUL_OPERATION'}
-            {'data': {'sph': None}, 'error_code': 0, 'error_msg': 'SUCCESSFUL_OPERATION'}
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'}
 
             NoahEnergyV4
             Note: NOAH documentation is VERY incomplete
@@ -3236,7 +3236,7 @@ class ApiV4:
             return MinEnergyV4.model_validate(response)
         elif device_type == DeviceType.WIT:
             return WitEnergyV4.model_validate(response)
-        elif device_type == DeviceType.SPHS:  # TODO
+        elif device_type == DeviceType.SPHS:
             return SphsEnergyV4.model_validate(response)
         elif device_type == DeviceType.NOAH:  # TODO
             logger.warning(
@@ -3319,7 +3319,7 @@ class ApiV4:
             return MinEnergyHistoryV4.model_validate(response)
         elif device_type == DeviceType.WIT:
             return WitEnergyHistoryV4.model_validate(response)
-        elif device_type == DeviceType.SPHS:  # TODO
+        elif device_type == DeviceType.SPHS:
             return SphsEnergyHistoryV4.model_validate(response)
         elif device_type == DeviceType.NOAH:  # TODO
             logger.warning(
@@ -3404,7 +3404,7 @@ class ApiV4:
             return MinEnergyHistoryMultipleV4.model_validate(response)
         elif device_type == DeviceType.WIT:
             return WitEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == DeviceType.SPHS:  # TODO
+        elif device_type == DeviceType.SPHS:
             return SphsEnergyHistoryMultipleV4.model_validate(response)
         elif device_type == DeviceType.NOAH:  # TODO
             logger.warning(
@@ -3791,7 +3791,6 @@ class ApiV4:
         )
 
         # TODO The current interface only supports sph, spa, min, wit device types.
-        # TODO NOT "sph-s"
         # TODO NOT "noah"
 
         return SettingReadVppV4.model_validate(response)
@@ -3991,7 +3990,6 @@ class ApiV4:
         )
 
         # TODO The current interface only supports sph, spa, min, wit device types.
-        # TODO NOT "sph-s"
         # TODO NOT "noah"
 
         return SettingWriteV4.model_validate(response)

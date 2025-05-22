@@ -3836,10 +3836,11 @@ def _sphs_energy_to_camel(snake: str) -> str:
     override = {
         "bms_soc": "bmsSOC",
         "bms_soh": "bmsSOH",
+        "datalogger_sn": "dataLogSn",
         "e_charge1_today": "echarge1Today",
         "e_charge1_total": "echarge1Total",
-        "e_discharge1_today": "edischargeToday",
-        "e_discharge1_total": "edischargeTotal",
+        "e_discharge1_today": "edischarge1Today",
+        "e_discharge1_total": "edischarge1Total",
         "e_local_load_hour": "elocalLoadHour",
         "e_local_load_month": "elocalLoadMonth",
         "e_local_load_today": "elocalLoadToday",
@@ -3903,6 +3904,8 @@ class SphsEnergyDataV4(ApiModel):
     e_local_load_today: Union[EmptyStrToNone, float] = None  # User load daily consumption, e.g. 1018.2
     e_local_load_total: Union[EmptyStrToNone, float] = None  # User load total consumption, e.g. 1071.6
     e_local_load_year: Union[EmptyStrToNone, float] = None  # e.g. 1071.6
+    eac_today: Union[EmptyStrToNone, float] = None  # Daily power generation
+    eac_total: Union[EmptyStrToNone, float] = None  # Total power generation
     eps_iac1: Union[EmptyStrToNone, float] = None  # Off-grid R current, e.g. 3.8
     eps_iac2: Union[EmptyStrToNone, float] = None  # Off-grid S current, e.g. 0.0
     eps_vac2: Union[EmptyStrToNone, float] = None  # Off-grid S voltage, e.g.  0.0
