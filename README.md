@@ -473,17 +473,16 @@ To the best of our knowledge only the settings functions perform modifications t
 * TODO: add caching to 5-minute-interval endpoints
   * ongoing - still some TODOs
 * TODO: generate & publish docs
+* TODO: idea: return correct API by device type (e.g. inv.* for inverter, storage.* for storage, etc.)
 
 # Changelog
-* TBA (pre-alpha)
+* 2025.05.22 (pre-alpha)
   * refactoring: moved some endpoints from/to plant/device/datalogger
   * refactoring: moved some endpoints from/to smart_meter/env_sensor/datalogger
   * common device type `growatt_public_api.DeviceType`
     * retrieve device type by `api.device.get_device_type()`
-      # FIXME idea: return correct API by device type (e.g. inv.* for inverter, storage.* for storage, etc.)
   * refactoring: integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
   * refactoring: integrate VPP into MIN,SPA,SPH
-  * # TODO fix tests
 * 2025.05.12 (pre-alpha)
   * add tests to verify returned parameters are same as expected parameters
 * 2025.03.28 (pre-alpha)

@@ -82,3 +82,9 @@ class GrowattTime(ApiModel):
     day: int  # weekday, e.g. 2
     time: datetime.datetime  # timestamp, e.g. 1740414721500
     timezone_offset: int  # e.g. -480
+
+
+class GrowattTimeGregorianChange(GrowattTime):
+    """'gregorianChange' has a negative timestamp, so we cannot use datetime directly."""
+
+    time: int  # timestamp, e.g. -12219292800000

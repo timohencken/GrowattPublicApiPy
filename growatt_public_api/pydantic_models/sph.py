@@ -12,6 +12,7 @@ from pydantic_models.api_model import (
     EmptyStrToNone,
     GrowattTime,
     ApiModel,
+    GrowattTimeGregorianChange,
 )
 
 
@@ -278,7 +279,7 @@ class GrowattTimeCalendar(ApiModel):
     week_year: Union[EmptyStrToNone, int] = None  # e.g. 2018
     time: Union[EmptyStrToNone, GrowattTime] = None
     weeks_in_week_year: Union[EmptyStrToNone, int] = None  # e.g. 52
-    gregorian_change: Union[EmptyStrToNone, GrowattTime] = None
+    gregorian_change: Union[EmptyStrToNone, GrowattTimeGregorianChange] = None
     time_zone: Union[EmptyStrToNone, GrowattTimeCalendarTimeZone] = None
     time_in_millis: Union[EmptyStrToNone, int] = None  # e.g. 1544670232000
     lenient: Union[EmptyStrToNone, bool] = None  # e.g. true
