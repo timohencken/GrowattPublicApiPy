@@ -98,12 +98,6 @@ This package aims to
     * `inverter.details()`
     * `inverter.details_v4()` (using new API)
   * read alarms/notification `inverter.alarms()`
-* device settings
-  * read settings value `inverter.setting_read()`
-  * write settings value
-    * `inverter.setting_write()` (***use with caution***)
-    * `inverter.setting_write_on_off()` (using new API)
-    * `inverter.setting_write_active_power()` (using new API)
 * device power/energy metrics
   * current
     * `inverter.energy()`
@@ -114,6 +108,12 @@ This package aims to
     * `inverter.energy_history_v4()` (using new API)
     * `inverter.energy_history_multiple_v4()` (using new API)
     * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * read settings value `inverter.setting_read()`
+  * write settings value
+    * `inverter.setting_write()` (***use with caution***)
+    * `inverter.setting_write_on_off()` (using new API)
+    * `inverter.setting_write_active_power()` (using new API)
 
 ## Storage (DeviceType.STORAGE)
 * general device data
@@ -121,12 +121,6 @@ This package aims to
     * `storage.details()`
     * `storage.details_v4()` (using new API)
   * read alarms/notification `storage.alarms()`
-* device settings
-  * read settings value `storage.setting_read()`
-  * write settings value
-    * `storage.setting_write()` (***use with caution***)
-    * `storage.setting_write_on_off()` (using new API)
-    * `storage.setting_write_active_power()` (using new API)
 * device power/energy metrics
   * current
     * `storage.energy()`
@@ -136,6 +130,12 @@ This package aims to
     * `storage.energy_history_v4()` (using new API)
     * `storage.energy_history_multiple_v4()` (using new API)
     * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * read settings value `storage.setting_read()`
+  * write settings value
+    * `storage.setting_write()` (***use with caution***)
+    * `storage.setting_write_on_off()` (using new API)
+    * `storage.setting_write_active_power()` (using new API)
 
 ## MAX (DeviceType.MAX)
 * general device data
@@ -143,12 +143,6 @@ This package aims to
     * `max.details()`
     * `max.details_v4()` (using new API)
   * read alarms/notification `max.alarms()`
-* device settings
-  * read settings value `max.setting_read()`
-  * write settings value
-    * `max.setting_write()` (***use with caution***)
-    * `max.setting_write_on_off()` (using new API)
-    * `max.setting_write_active_power()` (using new API)
 * device power/energy metrics
   * current
     * `max.energy()`
@@ -159,6 +153,12 @@ This package aims to
     * `max.energy_history_v4()` (using new API)
     * `max.energy_history_multiple_v4()` (using new API)
     * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * read settings value `max.setting_read()`
+  * write settings value
+    * `max.setting_write()` (***use with caution***)
+    * `max.setting_write_on_off()` (using new API)
+    * `max.setting_write_active_power()` (using new API)
 
 ## SPH (DeviceType.SPH - (MIX))
 * general device data
@@ -166,15 +166,6 @@ This package aims to
     * `sph.details()`
     * `sph.details_v4()` (using new API)
   * read alarms/notification `sph.alarms()`
-* device settings
-  * read settings value
-    * `sph.setting_read()`
-    * `sph.setting_read_vpp_param()` (using new API)
-  * write settings value
-    * `sph.setting_write()` (***use with caution***)
-    * `sph.setting_write_on_off()` (using new API)
-    * `sph.setting_write_active_power()` (using new API)
-    * `sph.setting_write_vpp_param()` (using new API)
 * device power/energy metrics
   * current
     * `sph.energy()`
@@ -185,6 +176,23 @@ This package aims to
     * `sph.energy_history_v4()` (using new API)
     * `sph.energy_history_multiple_v4()` (using new API)
     * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * read settings value
+    * `sph.setting_read()`
+    * `sph.setting_read_vpp_param()` (using new API)
+  * write settings value
+    * `sph.setting_write()` (***use with caution***)
+    * `sph.setting_write_on_off()` (using new API)
+    * `sph.setting_write_active_power()` (using new API)
+    * `sph.setting_write_vpp_param()` (using new API)
+  * VPP (VirtualPowerPlant) settings
+    * get current State-of-Charge (SOC) `sph.soc()`
+    * read vpp schedules
+      * `sph.setting_read_vpp_param()` (using new API)
+    * write vpp schedules
+      * `sph.setting_write_vpp_now()`
+      * `sph.setting_write_vpp_schedule()`
+      * `sph.setting_write_vpp_param()` (using new API)
 
 ## SPA (DeviceType.SPA)
 * general device data
@@ -192,15 +200,6 @@ This package aims to
     * `spa.details()`
     * `spa.details_v4()` (using new API)
   * read alarms/notification `spa.alarms()`
-* device settings
-  * read settings value
-    * `spa.setting_read()`
-    * `spa.setting_read_vpp_param()` (using new API)
-  * write settings value
-    * `spa.setting_write()` (***use with caution***)
-    * `spa.setting_write_on_off()` (using new API)
-    * `spa.setting_write_active_power()` (using new API)
-    * `spa.setting_write_vpp_param()` (using new API)
 * device power/energy metrics
   * current
     * `spa.energy()`
@@ -211,6 +210,21 @@ This package aims to
     * `spa.energy_history_v4()` (using new API)
     * `spa.energy_history_multiple_v4()` (using new API)
     * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * read settings value
+    * `spa.setting_read()`
+  * write settings value
+    * `spa.setting_write()` (***use with caution***)
+    * `spa.setting_write_on_off()` (using new API)
+    * `spa.setting_write_active_power()` (using new API)
+  * VPP (VirtualPowerPlant) settings
+    * get current State-of-Charge (SOC) `spa.soc()`
+    * read vpp schedules
+      * `spa.setting_read_vpp_param()` (using new API)
+    * write vpp schedules
+      * `spa.setting_write_vpp_now()`
+      * `spa.setting_write_vpp_schedule()`
+      * `spa.setting_write_vpp_param()` (using new API)
 
 ## MIN (DeviceType.MIN - TLX/MIN/MAC/MOD-XH/MID-XH/NEO)
 * general device data
@@ -218,16 +232,6 @@ This package aims to
     * `min.details()`
     * `min.details_v4()` (using new API)
   * read alarms/notification `min.alarms()`
-* device settings
-  * read settings overview `min.settings()`
-  * read settings value
-    * `min.setting_read()`
-    * `min.setting_read_vpp_param()` (using new API)
-  * write settings value
-    * `min.setting_write()` (***use with caution***)
-    * `min.setting_write_on_off()` (using new API)
-    * `min.setting_write_active_power()` (using new API)
-    * `min.setting_write_vpp_param()` (using new API)
 * device power/energy metrics
   * current
     * `min.energy()`
@@ -238,6 +242,22 @@ This package aims to
     * `min.energy_history_v4()` (using new API)
     * `min.energy_history_multiple_v4()` (using new API)
     * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * read settings overview `min.settings()`
+  * read settings value
+    * `min.setting_read()`
+  * write settings value
+    * `min.setting_write()` (***use with caution***)
+    * `min.setting_write_on_off()` (using new API)
+    * `min.setting_write_active_power()` (using new API)
+  * VPP (VirtualPowerPlant) settings
+    * get current State-of-Charge (SOC) `min.soc()`
+    * read vpp schedules
+      * `min.setting_read_vpp_param()` (using new API)
+    * write vpp schedules
+      * `min.setting_write_vpp_now()`
+      * `min.setting_write_vpp_schedule()`
+      * `min.setting_write_vpp_param()` (using new API)
 
 ## PCS (DeviceType.PCS)
 * general device data
@@ -271,13 +291,6 @@ This package aims to
 * general device data
   * read device data
     * `wit.details_v4()` (using new API)
-* device settings
-  * read settings value
-    * `wit.setting_read_vpp_param()` (using new API)
-  * write settings value
-    * `wit.setting_write_on_off()` (using new API)
-    * `wit.setting_write_active_power()` (using new API)
-    * `wit.setting_write_vpp_param()` (using new API)
 * device power/energy metrics
   * current
     * `wit.energy_v4()` (using new API)
@@ -285,19 +298,21 @@ This package aims to
     * `wit.energy_history_v4()` (using new API)
     * `wit.energy_history_multiple_v4()` (using new API)
     * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * write settings value
+    * `wit.setting_write_on_off()` (using new API)
+    * `wit.setting_write_active_power()` (using new API)
+  * VPP (VirtualPowerPlant) settings
+    * read vpp schedules
+      * `wit.setting_read_vpp_param()` (using new API)
+    * write vpp schedules
+      * `wit.setting_write_vpp_param()` (using new API)
 
 ## SPH-S (DeviceType.SPHS)
 *Note: SPH-S devices are not supported by APIv1 endpoints - only v4 endpoints available*
 * general device data
   * read device data
     * `sphs.details_v4()` (using new API)
-* device settings
-  * read settings value
-    * `sphs.setting_read_vpp_param()` (using new API)
-  * write settings value
-    * `sphs.setting_write_on_off()` (using new API)
-    * `sphs.setting_write_active_power()` (using new API)
-    * `sphs.setting_write_vpp_param()` (using new API)
 * device power/energy metrics
   * current
     * `sphs.energy_v4()` (using new API)
@@ -305,19 +320,21 @@ This package aims to
     * `sphs.energy_history_v4()` (using new API)
     * `sphs.energy_history_multiple_v4()` (using new API)
     * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * write settings value
+    * `sphs.setting_write_on_off()` (using new API)
+    * `sphs.setting_write_active_power()` (using new API)
+  * VPP (VirtualPowerPlant) settings
+    * read vpp schedules
+      * `sphs.setting_read_vpp_param()` (using new API)
+    * write vpp schedules
+      * `sphs.setting_write_vpp_param()` (using new API)
 
 ## Noah (DeviceType.NOAH)
 *Note: Noah devices are not supported by APIv1 endpoints - only v4 endpoints available*
 * general device data
   * read device data
     * `noah.details_v4()` (using new API)
-* device settings
-  * read settings value
-    * `noah.setting_read_vpp_param()` (using new API)
-  * write settings value
-    * `noah.setting_write_on_off()` (using new API)
-    * `noah.setting_write_active_power()` (using new API)
-    * `noah.setting_write_vpp_param()` (using new API)
 * device power/energy metrics
   * current
     * `noah.energy_v4()` (using new API)
@@ -325,6 +342,18 @@ This package aims to
     * `noah.energy_history_v4()` (using new API)
     * `noah.energy_history_multiple_v4()` (using new API)
     * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
+* device settings
+  * read settings value
+    * `noah.setting_read_vpp_param()` (using new API)
+  * write settings value
+    * `noah.setting_write_on_off()` (using new API)
+    * `noah.setting_write_active_power()` (using new API)
+    * `noah.setting_write_vpp_param()` (using new API)
+  * VPP (VirtualPowerPlant) settings
+    * read vpp schedules
+      * `noah.setting_read_vpp_param()` (using new API)
+    * write vpp schedules
+      * `noah.setting_write_vpp_param()` (using new API)
 
 ## GroBoost (DeviceType.GROBOOST)
 * general device data
@@ -350,12 +379,6 @@ This package aims to
   * current `env_sensor.metrics()`
   * historical data `env_sensor.metrics_history()`
     * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
-
-## VPP (DeviceType.MIN/SPH/SPA - VirtualPowerPlant MIN/SPH/SPA)
-  * get current State-of-Charge (SOC) `vpp.soc()`
-  * change time period settings
-    * set current (dis)charge power `vpp.write()` (***use with caution***)
-    * configure (dis)charge power for time periods `vpp.write_time_periods()` (***use with caution***)
 
 # Usage
 ## Login
@@ -459,7 +482,8 @@ To the best of our knowledge only the settings functions perform modifications t
     * retrieve device type by `api.device.get_device_type()`
       # FIXME idea: return correct API by device type (e.g. inv.* for inverter, storage.* for storage, etc.)
   * refactoring: integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
-  * # TODO: refactor to integrate VPP into MIN,SPA,SPH
+  * refactoring: integrate VPP into MIN,SPA,SPH
+  * # TODO fix tests
 * 2025.05.12 (pre-alpha)
   * add tests to verify returned parameters are same as expected parameters
 * 2025.03.28 (pre-alpha)

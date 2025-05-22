@@ -1,9 +1,10 @@
-from datetime import date, timedelta
-from typing import Optional, Union, List, Dict, Any
+from datetime import date, timedelta, time
+from typing import Optional, Union, List, Dict, Any, Tuple
 
 import truststore
 
-from growatt_public_api import DeviceType
+from growatt_public_api import DeviceType, Vpp
+from pydantic_models import VppSoc, VppWrite
 from pydantic_models.api_v4 import (
     MinDetailsV4,
     MinEnergyV4,
@@ -40,10 +41,12 @@ class Min:
 
     session: GrowattApiSession
     _api_v4: ApiV4
+    _api_vpp: Vpp
 
     def __init__(self, session: GrowattApiSession) -> None:
         self.session = session
         self._api_v4 = ApiV4(session)
+        self._api_vpp = Vpp(session)
 
     def settings(
         self,
@@ -2561,3 +2564,125 @@ class Min:
         )
 
         return MinAlarms.model_validate(response)
+
+    def soc(
+        self,
+        device_sn: str,
+    ) -> VppSoc:
+        """
+        Get machine SOC value (VPP)
+        Get machine SOC value interface (only supports MIN SPA SPH models)
+        https://www.showdoc.com.cn/262556420217021/7178565721512898
+
+        Rate limit(s):
+        * The frequency of acquisition is once every 10 seconds
+
+        Specific error codes:
+        * 10001: read failure
+        * 10002: device does not exist
+        * 10003: device serial number is empty
+
+        Args:
+            device_sn (str): VPP SN
+
+        Returns:
+            VppSoc
+            {
+                'error_code': 0,
+                'error_msg': None,
+                'soc': 65.0,
+                'datalogger_sn': 'JPC5A11700',
+                'device_sn': 'MIXECN6000'
+            }
+        """
+
+        return self._api_vpp.soc(device_sn=device_sn)
+
+    def settings_write_vpp_now(
+        self,
+        device_sn: str,
+        time_: time,
+        percentage: int,
+    ) -> VppWrite:
+        """
+        Read the machine to perform battery charging contr
+        The reading machine immediately executes the battery charging control interface (only supports MIN SPA SPH models)
+        https://www.showdoc.com.cn/262556420217021/7178602212464389
+
+        Note: this endpoint is poorly documented
+
+        Rate limit(s):
+        * The frequency of acquisition is once every 10 seconds
+
+        Specific error codes:
+        * 500: Set Parameter Failure
+        * 10001: Reading failed
+        * 10012: Device does not exist
+        * 10004: Device serial number is empty
+        * 10005: Collector offline
+        * 10007: Setting parameter is null
+        * 10008: Setting value is out of range Or abnormal
+        * 10009: The type of the read setting parameter does not exist
+        * 10011: No permission
+
+        Args:
+            device_sn (str): VPP SN
+            time_ (time): Set time - 00:00 ~ 24:00 (hh:mm),
+            percentage (int): Set the power positive number for charging - negative number for discharge -100 ~ 100
+
+        Returns:
+            VppWrite
+            {
+                'error_code': 0,
+                'error_msg': None,
+                'data': 0,
+            }
+        """
+
+        return self._api_vpp.write(
+            device_sn=device_sn,
+            time_=time_,
+            percentage=percentage,
+        )
+
+    def settings_write_vpp_schedule(self, device_sn: str, schedules: List[Tuple[int, time, time]]) -> VppWrite:
+        """
+        Read and set VPP time period parameters (VPP)
+        Read and set VPP time period parameter interface (only support MIN SPA SPH model)
+        https://www.showdoc.com.cn/262556420217021/7178602212464389
+
+        Note: this endpoint is poorly documented
+
+        Rate limit(s):
+        * The frequency of acquisition is once every 10 seconds
+
+        Specific error codes:
+        * 10001: Reading/Writing failed
+        * 10012: Device does not exist
+        * 10004: Device serial number is empty
+        * 10005: Collector offline
+        * 10007: Setting parameter is null
+        * 10008: Setting value is out of range Or abnormal
+        * 10009: The type of the read setting parameter does not exist
+        * 10011: No permission
+
+        Args:
+            device_sn (str): VPP SN
+            schedules (List[Tuple[int, time, time]]): Set time period
+                Tuple with (power_percentage (int), start_time (time), end_time (time))
+                percentage: positive number for charge 0 ~ 100, negative number for discharge -100 ~ 0
+                e.g. [
+                    (95, time(hour=0, minute=0), time(hour=5, minute=0)),    # 00:00 ~ 05:00 95% charge
+                    (-60, time(hour=5, minute=1), time(hour=12, minute=0)),  # 05:01 ~ 12:00 60% discharge
+                ]
+
+        Returns:
+            VppWrite
+            {
+                'error_code': 0,
+                'error_msg': None,
+                'data': 0,
+            }
+        """
+
+        return self._api_vpp.write_multiple(device_sn=device_sn, schedules=schedules)
