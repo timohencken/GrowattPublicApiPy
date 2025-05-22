@@ -1233,7 +1233,7 @@ class ApiV4:
 
         if device_type == DeviceType.INVERTER:
             return InverterDetailsV4.model_validate(response)
-        elif device_type == DeviceType.STORAGE:  # TODO
+        elif device_type == DeviceType.STORAGE:
             return StorageDetailsV4.model_validate(response)
         elif device_type == DeviceType.MAX:  # TODO
             return MaxDetailsV4.model_validate(response)
@@ -3224,7 +3224,7 @@ class ApiV4:
 
         if device_type == DeviceType.INVERTER:
             return InverterEnergyV4.model_validate(response)
-        elif device_type == DeviceType.STORAGE:  # TODO
+        elif device_type == DeviceType.STORAGE:
             return StorageEnergyV4.model_validate(response)
         elif device_type == DeviceType.MAX:  # TODO
             return MaxEnergyV4.model_validate(response)
@@ -3307,7 +3307,7 @@ class ApiV4:
 
         if device_type == DeviceType.INVERTER:
             return InverterEnergyHistoryV4.model_validate(response)
-        elif device_type == DeviceType.STORAGE:  # TODO
+        elif device_type == DeviceType.STORAGE:
             return StorageEnergyHistoryV4.model_validate(response)
         elif device_type == DeviceType.MAX:  # TODO
             return MaxEnergyHistoryV4.model_validate(response)
@@ -3392,7 +3392,7 @@ class ApiV4:
 
         if device_type == DeviceType.INVERTER:
             return InverterEnergyHistoryMultipleV4.model_validate(response)
-        elif device_type == DeviceType.STORAGE:  # TODO
+        elif device_type == DeviceType.STORAGE:
             return StorageEnergyHistoryMultipleV4.model_validate(response)
         elif device_type == DeviceType.MAX:  # TODO
             return MaxEnergyHistoryMultipleV4.model_validate(response)
@@ -3471,7 +3471,6 @@ class ApiV4:
             },
         )
 
-        # TODO "storage"
         # TODO "max"
         # TODO "sph"
         # TODO "spa"
@@ -3534,7 +3533,6 @@ class ApiV4:
             },
         )
 
-        # TODO "storage"
         # TODO "max"
         # TODO "sph"
         # TODO "spa"
@@ -3801,7 +3799,6 @@ class ApiV4:
         )
 
         # TODO The current interface only supports sph, spa, min, wit device types.
-        # TODO NOT "storage"
         # TODO NOT "max"
         # TODO "sph"
         # TODO "spa"
@@ -4006,7 +4003,6 @@ class ApiV4:
         )
 
         # TODO The current interface only supports sph, spa, min, wit device types.
-        # TODO NOT "storage"
         # TODO NOT "max"
         # TODO "sph"
         # TODO "spa"

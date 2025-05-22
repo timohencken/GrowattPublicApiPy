@@ -161,11 +161,20 @@ def _storage_details_to_camel(snake: str) -> str:
         "address": "addr",
         "buzzer_en": "buzzerEN",
         "datalogger_sn": "dataLogSn",
+        "feed_uti_high_frequency_loss": "feedUtiHihFrequencyLoss",
+        "gfci_protect_set": "gfciprotectSet",
+        "no_afci": "noAFCI",
+        "out_ct_sample_rate_set": "outCTSampleRateSet",
+        "out_ct_set": "outCTSet",
         "parent_id": "parentID",
         "plant_name": "plantname",
         "rate_va": "rateVA",
+        "relay_ng": "relayNG",
         "tree_id": "treeID",
         "user_id": "userID",
+        "uti_output2_off_soc": "utiOutput2OffSOC",
+        "uti_output2_on_soc": "utiOutput2OnSOC",
+        "uw_fault_restart_en": "uwFaultResartEn",
     }
     return override.get(snake, to_camel(snake=snake))
 
@@ -182,6 +191,7 @@ class StorageDetailDataV4(ApiModel):
     ac_max_charge_curr: Union[EmptyStrToNone, float] = None  # e.g. 30
     address: Union[EmptyStrToNone, int] = None  # Address, e.g. 1
     alias: Union[EmptyStrToNone, str] = None  # Alias, e.g. "裁床照明+插座+大空调"
+    anti_reverse_flow_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     b_light_en: Union[EmptyStrToNone, int] = None  # e.g. 0
     bat_low_to_uti_volt: Union[EmptyStrToNone, float] = None  # e.g. 46.0
     battery_type: Union[EmptyStrToNone, int] = None  # e.g. 0
@@ -190,14 +200,24 @@ class StorageDetailDataV4(ApiModel):
     buzzer_en: Union[EmptyStrToNone, int] = None  # e.g. 1
     charge_config: Union[EmptyStrToNone, int] = None  # e.g. 0
     children: Union[EmptyStrToNone, List[Any]] = None  # e.g. None
+    chip_select: Union[EmptyStrToNone, int] = None  # e.g. 0
+    comboard_version: Union[EmptyStrToNone, int] = None  # e.g. 14300
     communication_version: Union[EmptyStrToNone, str] = None  # e.g. None
     datalogger_sn: Union[EmptyStrToNone, str] = (
         None  # SN of the data logger associated with the energy storage device, e.g. "DDD0CGA0CF"
     )
+    debug_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
     device_type: Union[EmptyStrToNone, int] = None  # e.g. 3
     dtc: Union[EmptyStrToNone, int] = None  # e.g. 20105
+    feed_uti_high_voltage_loss: Union[EmptyStrToNone, float] = None  # e.g. 0
+    feed_uti_high_frequency_loss: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    feed_uti_low_frequency_loss: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    feed_uti_low_voltage_loss: Union[EmptyStrToNone, float] = None  # e.g. 0
     float_charge_volt: Union[EmptyStrToNone, float] = None  # e.g. 54.0
     fw_version: Union[EmptyStrToNone, str] = None  # Firmware version of the energy storage device, e.g. "067.01/068.01"
+    gen_dry_contact_en: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    gfci_protect_set: Union[EmptyStrToNone, int] = None  # e.g. 0
+    ground_line_detection: Union[EmptyStrToNone, int] = None  # e.g. 0
     group_id: Union[EmptyStrToNone, int] = None  # e.g. -1
     img_path: Union[EmptyStrToNone, str] = None  # e.g. './css/img/status_gray.gif'
     inner_version: Union[EmptyStrToNone, str] = None  # Software version, e.g. 'null'
@@ -212,8 +232,14 @@ class StorageDetailDataV4(ApiModel):
     mains_to_battery_operat_point: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     manual_start_en: Union[EmptyStrToNone, float] = None  # e.g. 0
     max_charge_curr: Union[EmptyStrToNone, float] = None  # e.g. 1000
+    max_gen_chg_curr: Union[EmptyStrToNone, float] = None  # e.g. 20.0
+    max_gen_run_time: Union[EmptyStrToNone, float] = None  # e.g. 0
+    menu_return: Union[EmptyStrToNone, int] = None  # e.g. 0
     model: Union[EmptyStrToNone, int] = None  # e.g. 0
     model_text: Union[EmptyStrToNone, str] = None  # e.g. "A0B0D0T0P0U0M0S0"
+    no_afci: Union[EmptyStrToNone, int] = None  # e.g. 0
+    out_ct_sample_rate_set: Union[EmptyStrToNone, int] = None  # e.g. 0
+    out_ct_set: Union[EmptyStrToNone, int] = None  # e.g. 0
     output_config: Union[EmptyStrToNone, float] = None  # e.g. 3
     output_freq_type: Union[EmptyStrToNone, int] = None  # e.g. 0
     output_volt_type: Union[EmptyStrToNone, int] = None  # e.g. 1
@@ -227,11 +253,17 @@ class StorageDetailDataV4(ApiModel):
     port_name: Union[EmptyStrToNone, str] = None  # e.g. None
     pow_saving_en: Union[EmptyStrToNone, int] = None  # e.g. 0
     pv_model: Union[EmptyStrToNone, int] = None  # e.g. 0
+    pvios_detection: Union[EmptyStrToNone, int] = None  # e.g. 0
     rate_va: Union[EmptyStrToNone, float] = None  # e.g. 5000
     rate_watt: Union[EmptyStrToNone, float] = None  # e.g. 5000
     record: Union[EmptyStrToNone, str] = None  # e.g. None
+    redundant_relay_detection: Union[EmptyStrToNone, int] = None  # e.g. 0
+    regulation_type: Union[EmptyStrToNone, int] = None  # e.g. 0
+    relay_ng: Union[EmptyStrToNone, int] = None  # e.g. 0
+    reset_to_factory: Union[EmptyStrToNone, int] = None  # e.g. 0
     sci_loss_chk_en: Union[EmptyStrToNone, int] = None  # e.g. 0
     serial_num: Union[EmptyStrToNone, str] = None  # Device SN, e.g. 'JNK1CJM0GR'
+    smart_port: Union[EmptyStrToNone, int] = None  # e.g. 0
     status: Union[EmptyStrToNone, int] = (  # e.g. 5
         # Device status
         # 0: Offline
@@ -277,16 +309,74 @@ class StorageDetailDataV4(ApiModel):
     timezone: Union[EmptyStrToNone, float] = None  # e.g. 8.0
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_JNK1CJM0GR'
     tree_name: Union[EmptyStrToNone, str] = None  # e.g. '裁床照明+插座+大空调',
+    typical_set: Union[EmptyStrToNone, int] = None  # e.g. 0
     updating: Union[EmptyStrToNone, bool] = None  # e.g. False
     user_name: Union[EmptyStrToNone, str] = None  # e.g. None
     uti_charge_end: Union[EmptyStrToNone, float] = None  # e.g. 0
+    uti_charge_end_new: Union[EmptyStrToNone, str] = None  # e.g. ''
     uti_charge_start: Union[EmptyStrToNone, float] = None  # e.g. 0
+    uti_charge_start_new: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uti_en_output2_always_on: Union[EmptyStrToNone, int] = None  # e.g. 0
     uti_out_end: Union[EmptyStrToNone, float] = None  # e.g. 0
+    uti_out_end_new: Union[EmptyStrToNone, str] = None  # e.g. ''
     uti_out_start: Union[EmptyStrToNone, float] = None  # e.g. 0
+    uti_out_start_new: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uti_output2_off_soc: Union[EmptyStrToNone, float] = None  # e.g. 0
+    uti_output2_off_voltage: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uti_output2_on_pv: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uti_output2_on_soc: Union[EmptyStrToNone, float] = None  # e.g. 0
+    uti_output2_on_voltage: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uti_output2_time_end1: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uti_output2_time_end2: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uti_output2_time_end3: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uti_output2_time_start1: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uti_output2_time_start2: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uti_output2_time_start3: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uti_peak_shaving_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    uti_peak_shaving_set: Union[EmptyStrToNone, int] = None  # e.g. 0
+    utility_priority: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_bat_community_fail_en: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    uw_bat_feed_curr: Union[EmptyStrToNone, float] = None  # e.g. 250.0
+    uw_bat_feed_en: Union[EmptyStrToNone, bool] = None  # e.g. 0
+    uw_bat_feed_soc_back: Union[EmptyStrToNone, float] = None  # e.g. 90
+    uw_bat_feed_soc_loss: Union[EmptyStrToNone, float] = None  # e.g. 50
+    uw_bat_feed_time_end1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_bat_feed_time_end1_new: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uw_bat_feed_time_end2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_bat_feed_time_end2_new: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uw_bat_feed_time_end3: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_bat_feed_time_end3_new: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uw_bat_feed_time_start1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_bat_feed_time_start1_new: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uw_bat_feed_time_start2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_bat_feed_time_start2_new: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uw_bat_feed_time_start3: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_bat_feed_time_start3_new: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uw_bat_feed_v_back: Union[EmptyStrToNone, float] = None  # e.g. 54.0
+    uw_bat_feed_v_loss: Union[EmptyStrToNone, float] = None  # e.g. 50.0
     uw_bat_type2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_fault_restart_en: Union[EmptyStrToNone, bool] = None  # e.g. 1
     uw_feed_en: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_feed_pow: Union[EmptyStrToNone, float] = None  # e.g. 12.0
     uw_feed_range: Union[EmptyStrToNone, float] = None  # e.g. 0
+    uw_grid_chg_time_end1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_grid_chg_time_end1_new: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uw_grid_chg_time_end2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_grid_chg_time_end2_new: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uw_grid_chg_time_end3: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_grid_chg_time_end3_new: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uw_grid_chg_time_start1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_grid_chg_time_start1_new: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uw_grid_chg_time_start2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_grid_chg_time_start2_new: Union[EmptyStrToNone, str] = None  # e.g. ''
+    uw_grid_chg_time_start3: Union[EmptyStrToNone, int] = None  # e.g. 0
+    uw_grid_chg_time_start3_new: Union[EmptyStrToNone, str] = None  # e.g. ''
     uw_load_first: Union[EmptyStrToNone, float] = None  # e.g. 0
+    var1_address: Union[EmptyStrToNone, int] = None  # e.g. 0
+    var1_setting: Union[EmptyStrToNone, int] = None  # e.g. 0
+    var1_value: Union[EmptyStrToNone, int] = None  # e.g. 0
+    var2_address: Union[EmptyStrToNone, int] = None  # e.g. 0
+    var2_value: Union[EmptyStrToNone, int] = None  # e.g. 0
 
 
 class StorageDetailsDataV4(ApiModel):

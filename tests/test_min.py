@@ -168,8 +168,7 @@ class TestMin(unittest.TestCase):
         pydantic_keys = {v.alias for k, v in MinEnergyV4.model_fields.items()} | set(
             MinEnergyV4.model_fields.keys()
         )  # aliased and non-aliased params
-        for param in set(raw_data.keys()):
-            self.assertIn(param, pydantic_keys)
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
         # check data
         pydantic_keys = {v.alias for k, v in MinEnergyOverviewDataV4.model_fields.items()} | set(
             MinEnergyOverviewDataV4.model_fields.keys()

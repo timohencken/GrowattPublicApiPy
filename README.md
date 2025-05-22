@@ -111,7 +111,9 @@ This package aims to
       * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 * Storage (DeviceType.STORAGE)
   * general device data
-    * read device data `storage.details()`
+    * read device data
+      * `storage.details()`
+      * `storage.details_v4()` (using new API)
     * read alarms/notification `storage.alarms()`
   * device settings
     * read settings value `storage.setting_read()`
@@ -358,6 +360,15 @@ To the best of our knowledge only the settings functions perform modifications t
     * retrieve device type by `api.device.get_device_type()`
       # FIXME idea: return correct API by device type (e.g. inv.* for inverter, storage.* for storage, etc.)
   * # FIXME ONGOING: refactor to integrate v4 endpoints in "normal" code (use submodule instead of device_type parameter)
+    * min done
+    * inv done
+    * storage done
+    * # TODO max
+    * # TODO sph
+    * # TODO spa
+    * # TODO wit
+    * # TODO sphs
+    * # TODO noah
 * 2025.05.12 (pre-alpha)
   * add tests to verify returned parameters are same as expected parameters
 * 2025.03.28 (pre-alpha)
