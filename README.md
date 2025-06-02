@@ -31,6 +31,9 @@ This package aims to
 # Implementation status
 ## ***Alpha***: The library is in an early stage of development and is not yet feature complete.
 
+## Reading/writing settings seems not to work. All tries I did returned "error code 1: SYSTEM_ERROR" :(
+(But still I was able to set my inverter to standby mode, so it seems to work despite the error message)
+
 # Submodules and methods
 
 ## User
@@ -427,10 +430,21 @@ print(f"{device_type=}, {device_sn=}")
 ```
 
 ### query device metrics
+#### Option 1: use device-specifc API explicitly
 Use the submodule matching your device type to retrieve its metrics or settings
 Note: Make sure to use `device.get_device_type()` for retrieving your device type - the internal type may differ form the marketing name.
 ```python
 min_details = api.min.details(device_sn=device_sn)
+print(min_details.data.model_dump_json())
+# => {"alias":"BZP0000000","datalogger_sn":"QMN0000000000000","e_today":0.0,...}
+```
+#### Option 2: use the convenience API to automatically detect and use the correct device type
+Here, retrieve the correct decive API's instance by using `api.api_for_device(device_sn=device_sn)`.
+In following calls, the device_sn does not need to be supplied anymore.
+```python
+my_device = api.api_for_device(device_sn=device_sn)
+# my_device will be of type `Min` for MIN devices with device_sn pre-set
+min_details = my_device.details()
 print(min_details.data.model_dump_json())
 # => {"alias":"BZP0000000","datalogger_sn":"QMN0000000000000","e_today":0.0,...}
 ```
@@ -470,12 +484,27 @@ To the best of our knowledge only the settings functions perform modifications t
 ***The library is used entirely at your own risk.***
 
 # TODOs
+* TODO move `GrowattTimeCalendar` etc to common module
 * TODO: add caching to 5-minute-interval endpoints
   * ongoing - still some TODOs
 * TODO: generate & publish docs
-* TODO: idea: return correct API by device type (e.g. inv.* for inverter, storage.* for storage, etc.)
 
 # Changelog
+* 2025.06.03 (pre-alpha)
+  * new [example for MIN](examples/min_data.py) devices (e.g. NEO)
+  * convenience method `api_for_device()` for retrieving device-specific API
+    ```python
+    from growatt_api import GrowattApi
+    api = GrowattApi(token="your_token")
+    # now you can get your device-specifc api by
+    my_device = api.api_for_device(device_sn="your_device_sn")
+    # this returns e.g. `api.min` for MIN devices
+    # arguments "device_sn" does not need to be supplied anymore, so you can do e.g.
+    min_details = my_device.details()
+    # instead of
+    min_details = api.min.details(device_sn="your_device_sn")
+    print(min_details.data.model_dump_json())
+    ```
 * 2025.05.22 (pre-alpha)
   * refactoring: moved some endpoints from/to plant/device/datalogger
   * refactoring: moved some endpoints from/to smart_meter/env_sensor/datalogger

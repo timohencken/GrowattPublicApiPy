@@ -42,15 +42,26 @@ class Sph:
     session: GrowattApiSession
     _api_v4: ApiV4
     _api_vpp: Vpp
+    device_sn: Optional[str] = None
 
-    def __init__(self, session: GrowattApiSession) -> None:
+    def __init__(self, session: GrowattApiSession, device_sn: Optional[str] = None) -> None:
         self.session = session
         self._api_v4 = ApiV4(session)
         self._api_vpp = Vpp(session)
+        self.device_sn = device_sn
+
+    def _device_sn(self, device_sn: Optional[Union[str, List[str]]]) -> Union[str, List[str]]:
+        """
+        Use device_sn explicitly provided, fallback to the one from the instance
+        """
+        device_sn = device_sn or self.device_sn
+        if device_sn is None:
+            raise AttributeError("device_sn must be provided")
+        return device_sn
 
     def setting_read(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
         parameter_id: Optional[str] = None,
         start_address: Optional[int] = None,
         end_address: Optional[int] = None,
@@ -116,7 +127,7 @@ class Sph:
         response = self.session.post(
             endpoint="readMixParam",
             data={
-                "device_sn": device_sn,
+                "device_sn": self._device_sn(device_sn),
                 "paramId": parameter_id,
                 "startAddr": start_address,
                 "endAddr": end_address,
@@ -127,8 +138,8 @@ class Sph:
 
     def setting_read_vpp_param(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
-        device_sn: str,
         parameter_id: str,
+        device_sn: Optional[str] = None,
     ) -> SettingReadVppV4:
         """
         Read VPP parameters using "new-api" endpoint
@@ -161,7 +172,7 @@ class Sph:
         """
 
         return self._api_v4.setting_read_vpp_param(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.SPH,
             parameter_id=parameter_id,
         )
@@ -169,7 +180,6 @@ class Sph:
     # noinspection PyUnusedLocal
     def setting_write(
         self,
-        device_sn: str,
         parameter_id: str,
         parameter_value_1: Union[str, int],
         parameter_value_2: Optional[Union[str, int]] = None,
@@ -189,6 +199,7 @@ class Sph:
         parameter_value_16: Optional[Union[str, int]] = None,
         parameter_value_17: Optional[Union[str, int]] = None,
         parameter_value_18: Optional[Union[str, int]] = None,
+        device_sn: Optional[str] = None,
     ) -> SphSettingWrite:
         """
         SPH parameter settings
@@ -355,7 +366,7 @@ class Sph:
         response = self.session.post(
             endpoint="mixSet",
             data={
-                "mix_sn": device_sn,
+                "mix_sn": self._device_sn(device_sn),
                 "type": parameter_id,
                 **{f"param{i}": parameters[i] for i in range(1, 19)},
             },
@@ -365,8 +376,8 @@ class Sph:
 
     def setting_write_on_off(
         self,
-        device_sn: str,
         power_on: bool,
+        device_sn: Optional[str] = None,
     ) -> SettingWriteV4:
         """
         Set the power on and off using "new-api" endpoint
@@ -389,15 +400,15 @@ class Sph:
         """
 
         return self._api_v4.setting_write_on_off(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.SPH,
             power_on=power_on,
         )
 
     def setting_write_active_power(
         self,
-        device_sn: str,
         active_power_percent: int,
+        device_sn: Optional[str] = None,
     ) -> SettingWriteV4:
         """
         Set the active power using "new-api" endpoint
@@ -425,16 +436,16 @@ class Sph:
         """
 
         return self._api_v4.setting_write_active_power(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.SPH,
             active_power=active_power_percent,
         )
 
     def setting_write_vpp_param(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
-        device_sn: str,
         parameter_id: str,
         value: Union[int, str],
+        device_sn: Optional[str] = None,
     ) -> SettingWriteV4:
         """
         Set VPP parameters using "new-api" endpoint
@@ -598,7 +609,7 @@ class Sph:
         """
 
         return self._api_v4.setting_write_vpp_param(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.SPH,
             parameter_id=parameter_id,
             value=value,
@@ -606,7 +617,7 @@ class Sph:
 
     def details(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
     ) -> SphDetails:
         """
         Get basic information of SPH
@@ -769,7 +780,7 @@ class Sph:
         response = self.session.get(
             endpoint="device/mix/mix_data_info",
             params={
-                "device_sn": device_sn,
+                "device_sn": self._device_sn(device_sn),
             },
         )
 
@@ -777,7 +788,7 @@ class Sph:
 
     def details_v4(
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
     ) -> SphDetailsV4:
         """
         Batch device information using "new-api" endpoint
@@ -1003,13 +1014,13 @@ class Sph:
         """
 
         return self._api_v4.details(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.SPH,
         )
 
     def energy(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
     ) -> SphEnergyOverview:
         """
         Get the latest real-time data of SPH
@@ -1184,7 +1195,7 @@ class Sph:
         response = self.session.post(
             endpoint="device/mix/mix_last_data",
             data={
-                "mix_sn": device_sn,
+                "mix_sn": self._device_sn(device_sn),
             },
         )
 
@@ -1192,7 +1203,7 @@ class Sph:
 
     def energy_v4(
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
     ) -> SphEnergyV4:
         """
         Batch equipment data information using "new-api" endpoint
@@ -1441,11 +1452,11 @@ class Sph:
                 'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
-        return self._api_v4.energy(device_sn=device_sn, device_type=DeviceType.SPH)
+        return self._api_v4.energy(device_sn=self._device_sn(device_sn), device_type=DeviceType.SPH)
 
     def energy_multiple(
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
         page: Optional[int] = None,
     ) -> SphEnergyOverviewMultiple:
         """
@@ -1624,6 +1635,7 @@ class Sph:
                 'page_num': 1}
         """
 
+        device_sn = self._device_sn(device_sn)
         if isinstance(device_sn, list):
             assert len(device_sn) <= 100, "Max 100 devices per request"
             device_sn = ",".join(device_sn)
@@ -1653,7 +1665,7 @@ class Sph:
 
     def energy_history(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
         start_date: Optional[date] = None,
         end_date: Optional[date] = None,
         timezone: Optional[str] = None,
@@ -1853,7 +1865,7 @@ class Sph:
         response = self.session.post(
             endpoint="device/mix/mix_data",
             data={
-                "mix_sn": device_sn,
+                "mix_sn": self._device_sn(device_sn),
                 "start_date": start_date.strftime("%Y-%m-%d"),
                 "end_date": end_date.strftime("%Y-%m-%d"),
                 "timezone_id": timezone,
@@ -1866,7 +1878,7 @@ class Sph:
 
     def energy_history_v4(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
         date_: Optional[date] = None,
     ) -> SphEnergyHistoryV4:
         """
@@ -1893,11 +1905,13 @@ class Sph:
                 'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
-        return self._api_v4.energy_history(device_sn=device_sn, device_type=DeviceType.SPH, date_=date_)
+        return self._api_v4.energy_history(
+            device_sn=self._device_sn(device_sn), device_type=DeviceType.SPH, date_=date_
+        )
 
-    def energy_history_multiple_v4(  # noqa: C901 'ApiV4.energy' is too complex (11)
+    def energy_history_multiple_v4(
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
         date_: Optional[date] = None,
     ) -> SphEnergyHistoryMultipleV4:
         """
@@ -1923,11 +1937,13 @@ class Sph:
 
         """
 
-        return self._api_v4.energy_history_multiple(device_sn=device_sn, device_type=DeviceType.SPH, date_=date_)
+        return self._api_v4.energy_history_multiple(
+            device_sn=self._device_sn(device_sn), device_type=DeviceType.SPH, date_=date_
+        )
 
     def alarms(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
         date_: Optional[date] = None,
         page: Optional[int] = None,
         limit: Optional[int] = None,
@@ -1983,7 +1999,7 @@ class Sph:
         response = self.session.post(
             endpoint="device/mix/alarm_data",
             data={
-                "mix_sn": device_sn,
+                "mix_sn": self._device_sn(device_sn),
                 "date": date_.strftime("%Y-%m-%d"),
                 "page": page,
                 "perpage": limit,
@@ -1994,7 +2010,7 @@ class Sph:
 
     def soc(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
     ) -> VppSoc:
         """
         Get machine SOC value (VPP)
@@ -2023,13 +2039,13 @@ class Sph:
             }
         """
 
-        return self._api_vpp.soc(device_sn=device_sn)
+        return self._api_vpp.soc(device_sn=self._device_sn(device_sn))
 
     def settings_write_vpp_now(
         self,
-        device_sn: str,
         time_: time,
         percentage: int,
+        device_sn: Optional[str] = None,
     ) -> VppWrite:
         """
         Read the machine to perform battery charging contr
@@ -2067,12 +2083,14 @@ class Sph:
         """
 
         return self._api_vpp.write(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             time_=time_,
             percentage=percentage,
         )
 
-    def settings_write_vpp_schedule(self, device_sn: str, schedules: List[Tuple[int, time, time]]) -> VppWrite:
+    def settings_write_vpp_schedule(
+        self, schedules: List[Tuple[int, time, time]], device_sn: Optional[str] = None
+    ) -> VppWrite:
         """
         Read and set VPP time period parameters (VPP)
         Read and set VPP time period parameter interface (only support MIN SPA SPH model)
@@ -2112,4 +2130,4 @@ class Sph:
             }
         """
 
-        return self._api_vpp.write_multiple(device_sn=device_sn, schedules=schedules)
+        return self._api_vpp.write_multiple(device_sn=self._device_sn(device_sn), schedules=schedules)

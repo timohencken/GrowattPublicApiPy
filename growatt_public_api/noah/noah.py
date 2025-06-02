@@ -25,14 +25,25 @@ class Noah:
 
     session: GrowattApiSession
     _api_v4: ApiV4
+    device_sn: Optional[str] = None
 
-    def __init__(self, session: GrowattApiSession) -> None:
+    def __init__(self, session: GrowattApiSession, device_sn: Optional[str] = None) -> None:
         self.session = session
         self._api_v4 = ApiV4(session)
+        self.device_sn = device_sn
+
+    def _device_sn(self, device_sn: Optional[Union[str, List[str]]]) -> Union[str, List[str]]:
+        """
+        Use device_sn explicitly provided, fallback to the one from the instance
+        """
+        device_sn = device_sn or self.device_sn
+        if device_sn is None:
+            raise AttributeError("device_sn must be provided")
+        return device_sn
 
     def details_v4(
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
     ) -> NoahDetailsV4:
         """
         Batch device information using "new-api" endpoint
@@ -124,13 +135,13 @@ class Noah:
         """
 
         return self._api_v4.details(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.NOAH,
         )
 
     def energy_v4(
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
     ) -> NoahEnergyV4:
         """
         Batch equipment data information using "new-api" endpoint
@@ -192,11 +203,11 @@ class Noah:
                 'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
-        return self._api_v4.energy(device_sn=device_sn, device_type=DeviceType.NOAH)
+        return self._api_v4.energy(device_sn=self._device_sn(device_sn), device_type=DeviceType.NOAH)
 
     def energy_history_v4(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
         date_: Optional[date] = None,
     ) -> NoahEnergyHistoryV4:
         """
@@ -223,11 +234,13 @@ class Noah:
                 'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
-        return self._api_v4.energy_history(device_sn=device_sn, device_type=DeviceType.NOAH, date_=date_)
+        return self._api_v4.energy_history(
+            device_sn=self._device_sn(device_sn), device_type=DeviceType.NOAH, date_=date_
+        )
 
     def energy_history_multiple_v4(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
         date_: Optional[date] = None,
     ) -> NoahEnergyHistoryMultipleV4:
         """
@@ -253,12 +266,14 @@ class Noah:
 
         """
 
-        return self._api_v4.energy_history_multiple(device_sn=device_sn, device_type=DeviceType.NOAH, date_=date_)
+        return self._api_v4.energy_history_multiple(
+            device_sn=self._device_sn(device_sn), device_type=DeviceType.NOAH, date_=date_
+        )
 
     def setting_write_active_power(
         self,
-        device_sn: str,
         active_power_watt: int,
+        device_sn: Optional[str] = None,
     ) -> SettingWriteV4:
         """
         Set the active power using "new-api" endpoint
@@ -285,15 +300,15 @@ class Noah:
         """
 
         return self._api_v4.setting_write_active_power(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.NOAH,
             active_power=active_power_watt,
         )
 
     def setting_write_soc_upper_limit(
         self,
-        device_sn: str,
         soc_limit: int,
+        device_sn: Optional[str] = None,
     ) -> SettingWriteV4:
         """
         Set the upper limit of the discharge SOC using "new-api" endpoint
@@ -316,15 +331,15 @@ class Noah:
         """
 
         return self._api_v4.setting_write_soc_upper_limit(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.NOAH,
             soc_limit=soc_limit,
         )
 
     def setting_write_soc_lower_limit(
         self,
-        device_sn: str,
         soc_limit: int,
+        device_sn: Optional[str] = None,
     ) -> SettingWriteV4:
         """
         Set the lower limit of the discharge SOC using "new-api" endpoint
@@ -347,20 +362,20 @@ class Noah:
         """
 
         return self._api_v4.setting_write_soc_lower_limit(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.NOAH,
             soc_limit=soc_limit,
         )
 
     def setting_write_time_period(
         self,
-        device_sn: str,
         time_period_nr: int,
         start_time: time,
         end_time: time,
         load_priority: bool,
         power_watt: int,
         enabled: bool,
+        device_sn: Optional[str] = None,
     ) -> SettingWriteV4:
         """
         Set the lower limit of the discharge SOC using "new-api" endpoint
@@ -388,7 +403,7 @@ class Noah:
         """
 
         return self._api_v4.setting_write_time_period(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.NOAH,
             time_period_nr=time_period_nr,
             start_time=start_time,

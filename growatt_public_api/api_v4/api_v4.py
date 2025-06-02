@@ -3461,7 +3461,7 @@ class ApiV4:
             value = 0
             log_txt = "off"
 
-        logger.info(f"Turning {device_type} device '{device_sn}' {log_txt}")
+        logger.info(f"Turning {device_type.name} device '{device_sn}' {log_txt}")
         response = self.session.post(
             endpoint="new-api/setOnOrOff",
             params={

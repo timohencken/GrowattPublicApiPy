@@ -615,9 +615,9 @@ class MinEnergyOverviewData(ApiModel):
         alias_generator=_min_energy_overview_data_to_camel,
     )
 
+    address: Union[EmptyStrToNone, int] = None  # e.g. 0
     alias: Union[EmptyStrToNone, str] = None  # e.g. ''
     again: Union[EmptyStrToNone, bool] = None  # e.g. False
-    address: Union[EmptyStrToNone, int] = None  # e.g. 0
     b_merter_connect_flag: Union[EmptyStrToNone, bool] = None  # e.g. 0
     bat_sn: Union[EmptyStrToNone, str] = None  # e.g. ''
     battery_no: Union[EmptyStrToNone, int] = None  # e.g. 0

@@ -204,7 +204,7 @@ class TestInverter(unittest.TestCase):
     def test_energy_history_v4(self):
         # get date with data
         _details = self.api_v4.details_v4(device_sn=self.device_sn_v4)
-        _last_ts = _details.data.inv[0].last_update_time
+        _last_ts = _details.data.devices[0].last_update_time
 
         with patch(f"{TEST_FILE_V4}.InverterEnergyHistoryV4", wraps=InverterEnergyHistoryV4) as mock_pyd_model:
             self.api_v4.energy_history_v4(device_sn=self.device_sn_v4, date_=_last_ts.date())
@@ -233,7 +233,7 @@ class TestInverter(unittest.TestCase):
     def test_energy_history_multiple_v4(self):
         # get date with data
         _details = self.api_v4.details_v4(device_sn=self.device_sn_v4)
-        _last_ts = _details.data.inv[0].last_update_time
+        _last_ts = _details.data.devices[0].last_update_time
 
         with patch(
             f"{TEST_FILE_V4}.InverterEnergyHistoryMultipleV4", wraps=InverterEnergyHistoryMultipleV4

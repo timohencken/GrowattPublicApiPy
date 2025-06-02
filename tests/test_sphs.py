@@ -94,7 +94,7 @@ class TestSphs(unittest.TestCase):
     def test_energy_history_v4(self):
         # get date with data
         _details = self.api.details_v4(device_sn=self.device_sn)
-        _last_ts = _details.data.sphs[0].last_update_time
+        _last_ts = _details.data.devices[0].last_update_time
 
         with patch(f"{TEST_FILE_V4}.SphsEnergyHistoryV4", wraps=SphsEnergyHistoryV4) as mock_pyd_model:
             self.api.energy_history_v4(device_sn=self.device_sn, date_=_last_ts.date())
@@ -123,7 +123,7 @@ class TestSphs(unittest.TestCase):
     def test_energy_history_multiple_v4(self):
         # get date with data
         _details = self.api.details_v4(device_sn=self.device_sn)
-        _last_ts = _details.data.sphs[0].last_update_time
+        _last_ts = _details.data.devices[0].last_update_time
 
         with patch(f"{TEST_FILE_V4}.SphsEnergyHistoryMultipleV4", wraps=SphsEnergyHistoryMultipleV4) as mock_pyd_model:
             self.api.energy_history_multiple_v4(device_sn=self.device_sn, date_=_last_ts.date())

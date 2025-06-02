@@ -26,14 +26,25 @@ class Wit:
 
     session: GrowattApiSession
     _api_v4: ApiV4
+    device_sn: Optional[str] = None
 
-    def __init__(self, session: GrowattApiSession) -> None:
+    def __init__(self, session: GrowattApiSession, device_sn: Optional[str] = None) -> None:
         self.session = session
         self._api_v4 = ApiV4(session)
+        self.device_sn = device_sn
+
+    def _device_sn(self, device_sn: Optional[Union[str, List[str]]]) -> Union[str, List[str]]:
+        """
+        Use device_sn explicitly provided, fallback to the one from the instance
+        """
+        device_sn = device_sn or self.device_sn
+        if device_sn is None:
+            raise AttributeError("device_sn must be provided")
+        return device_sn
 
     def details_v4(
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
     ) -> WitDetailsV4:
         """
         Batch device information using "new-api" endpoint
@@ -314,13 +325,13 @@ class Wit:
         """
 
         return self._api_v4.details(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.WIT,
         )
 
     def energy_v4(
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
     ) -> WitEnergyV4:
         """
         Batch equipment data information using "new-api" endpoint
@@ -729,11 +740,11 @@ class Wit:
                 'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
-        return self._api_v4.energy(device_sn=device_sn, device_type=DeviceType.WIT)
+        return self._api_v4.energy(device_sn=self._device_sn(device_sn), device_type=DeviceType.WIT)
 
     def energy_history_v4(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
         date_: Optional[date] = None,
     ) -> WitEnergyHistoryV4:
         """
@@ -760,11 +771,13 @@ class Wit:
                 'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
-        return self._api_v4.energy_history(device_sn=device_sn, device_type=DeviceType.WIT, date_=date_)
+        return self._api_v4.energy_history(
+            device_sn=self._device_sn(device_sn), device_type=DeviceType.WIT, date_=date_
+        )
 
-    def energy_history_multiple_v4(  # noqa: C901 'ApiV4.energy' is too complex (11)
+    def energy_history_multiple_v4(
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
         date_: Optional[date] = None,
     ) -> WitEnergyHistoryMultipleV4:
         """
@@ -790,12 +803,14 @@ class Wit:
 
         """
 
-        return self._api_v4.energy_history_multiple(device_sn=device_sn, device_type=DeviceType.WIT, date_=date_)
+        return self._api_v4.energy_history_multiple(
+            device_sn=self._device_sn(device_sn), device_type=DeviceType.WIT, date_=date_
+        )
 
-    def setting_read_vpp_param(  # noqa: C901 'ApiV4.energy' is too complex (11)
+    def setting_read_vpp_param(
         self,
-        device_sn: str,
         parameter_id: str,
+        device_sn: Optional[str] = None,
     ) -> SettingReadVppV4:
         """
         Read VPP parameters using "new-api" endpoint
@@ -827,15 +842,15 @@ class Wit:
         """
 
         return self._api_v4.setting_read_vpp_param(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.WIT,
             parameter_id=parameter_id,
         )
 
     def setting_write_on_off(
         self,
-        device_sn: str,
         power_on: bool,
+        device_sn: Optional[str] = None,
     ) -> SettingWriteV4:
         """
         Set the power on and off using "new-api" endpoint
@@ -858,15 +873,15 @@ class Wit:
         """
 
         return self._api_v4.setting_write_on_off(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.WIT,
             power_on=power_on,
         )
 
     def setting_write_active_power(
         self,
-        device_sn: str,
         active_power_percent: int,
+        device_sn: Optional[str] = None,
     ) -> SettingWriteV4:
         """
         Set the active power using "new-api" endpoint
@@ -894,16 +909,16 @@ class Wit:
         """
 
         return self._api_v4.setting_write_active_power(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.WIT,
             active_power=active_power_percent,
         )
 
     def setting_write_vpp_param(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
-        device_sn: str,
         parameter_id: str,
         value: Union[int, str],
+        device_sn: Optional[str] = None,
     ) -> SettingWriteV4:
         """
         Set VPP parameters using "new-api" endpoint
@@ -1066,7 +1081,7 @@ class Wit:
         """
 
         return self._api_v4.setting_write_vpp_param(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.WIT,
             parameter_id=parameter_id,
             value=value,
