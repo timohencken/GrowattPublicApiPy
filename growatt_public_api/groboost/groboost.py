@@ -25,13 +25,24 @@ class Groboost:
     """
 
     session: GrowattApiSession
+    device_sn: Optional[str] = None
 
-    def __init__(self, session: GrowattApiSession) -> None:
+    def __init__(self, session: GrowattApiSession, device_sn: Optional[str] = None) -> None:
         self.session = session
+        self.device_sn = device_sn
+
+    def _device_sn(self, device_sn: Optional[Union[str, List[str]]]) -> Union[str, List[str]]:
+        """
+        Use device_sn explicitly provided, fallback to the one from the instance
+        """
+        device_sn = device_sn or self.device_sn
+        if device_sn is None:
+            raise AttributeError("device_sn must be provided")
+        return device_sn
 
     def details(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
     ) -> GroboostDetails:
         """
         Interface to get basic information of GroBoost
@@ -381,7 +392,7 @@ class Groboost:
         response = self.session.get(
             endpoint="device/boost/boost_data_info",
             params={
-                "device_sn": device_sn,
+                "device_sn": self._device_sn(device_sn),
             },
         )
 
@@ -389,7 +400,7 @@ class Groboost:
 
     def metrics(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
     ) -> GroboostMetricsOverview:
         """
         Get the latest real-time data of GroBoost
@@ -510,7 +521,7 @@ class Groboost:
         response = self.session.post(
             endpoint="device/boost/boost_last_data",
             data={
-                "boost_sn": device_sn,
+                "boost_sn": self._device_sn(device_sn),
             },
         )
 
@@ -518,7 +529,7 @@ class Groboost:
 
     def metrics_multiple(
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
         page: Optional[int] = None,
     ) -> GroboostMetricsOverviewMultiple:
         """
@@ -635,6 +646,7 @@ class Groboost:
                 'page_num': 1}
         """
 
+        device_sn = self._device_sn(device_sn)
         if isinstance(device_sn, list):
             assert len(device_sn) <= 100, "Max 100 devices per request"
             device_sn = ",".join(device_sn)
@@ -664,7 +676,7 @@ class Groboost:
 
     def metrics_history(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
         start_date: Optional[date] = None,
         end_date: Optional[date] = None,
         timezone: Optional[str] = None,
@@ -809,7 +821,7 @@ class Groboost:
         response = self.session.post(
             endpoint="device/boost/boost_data",
             data={
-                "boost_sn": device_sn,
+                "boost_sn": self._device_sn(device_sn),
                 "start_date": start_date.strftime("%Y-%m-%d"),
                 "end_date": end_date.strftime("%Y-%m-%d"),
                 "timezone_id": timezone,

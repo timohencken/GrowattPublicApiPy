@@ -144,8 +144,21 @@ class InverterDetailDataV4(ApiModel):
     user_name: Union[EmptyStrToNone, str] = None  # e.g. ""
 
 
+def _inverter_details_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "inv",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class InverterDetailsDataV4(ApiModel):
-    inv: List[InverterDetailDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_inverter_details_data_to_camel,
+    )
+
+    devices: List[InverterDetailDataV4] = None
 
 
 class InverterDetailsV4(NewApiResponse):
@@ -379,8 +392,21 @@ class StorageDetailDataV4(ApiModel):
     var2_value: Union[EmptyStrToNone, int] = None  # e.g. 0
 
 
+def _storage_details_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "storage",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class StorageDetailsDataV4(ApiModel):
-    storage: List[StorageDetailDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_storage_details_data_to_camel,
+    )
+
+    devices: List[StorageDetailDataV4] = None
 
 
 class StorageDetailsV4(NewApiResponse):
@@ -672,8 +698,21 @@ class SphDetailDataV4(ApiModel):
     baudrate: Union[EmptyStrToNone, int] = None  # Baud Rate Selection, e.g. 0
 
 
+def _sph_details_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "sph",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class SphDetailsDataV4(ApiModel):
-    sph: List[SphDetailDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_sph_details_data_to_camel,
+    )
+
+    devices: List[SphDetailDataV4] = None
 
 
 class SphDetailsV4(NewApiResponse):
@@ -794,8 +833,21 @@ class MaxDetailDataV4(ApiModel):
     voltage_low_limit: Union[EmptyStrToNone, float] = None  # e.g. 0.0
 
 
+def _max_details_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "max",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class MaxDetailsDataV4(ApiModel):
-    max: List[MaxDetailDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_max_details_data_to_camel,
+    )
+
+    devices: List[MaxDetailDataV4] = None
 
 
 class MaxDetailsV4(NewApiResponse):
@@ -1026,8 +1078,21 @@ class SpaDetailDataV4(ApiModel):
     baudrate: Union[EmptyStrToNone, int] = None  # Baud Rate Selection, e.g. 0
 
 
+def _spa_details_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "spa",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class SpaDetailsDataV4(ApiModel):
-    spa: List[SpaDetailDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_spa_details_data_to_camel,
+    )
+
+    devices: List[SpaDetailDataV4] = None
 
 
 class SpaDetailsV4(NewApiResponse):
@@ -1170,8 +1235,21 @@ class MinDetailDataV4(ApiModel):
     baudrate: Union[EmptyStrToNone, int] = None  # Baud Rate Selection, e.g. 0
 
 
+def _min_details_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "min",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class MinDetailsDataV4(ApiModel):
-    min: List[MinDetailDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_min_details_data_to_camel,
+    )
+
+    devices: List[MinDetailDataV4] = None
 
 
 class MinDetailsV4(NewApiResponse):
@@ -1188,6 +1266,7 @@ def _wit_details_to_camel(snake: str) -> str:
         "datalogger_sn": "dataLogSn",
         "parent_id": "parentID",
         "line_n_disconnect_enable": "lineNdisconnectEnable",
+        "outer_ct_enable": "outerCTEnable",
         "power_ud_forced_enable": "powerUDForcedEnable",
         "safety_function": "saftyFunc",
         "uw_1th_bat_charge_limit": "uw1thBatChgLimit",
@@ -1329,6 +1408,7 @@ class WitDetailDataV4(ApiModel):
     oil_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
     oil_rated_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     on_off: Union[EmptyStrToNone, bool] = None  # On/Off (1=on; 0=off), 1
+    outer_ct_enable: Union[EmptyStrToNone, bool] = None  # e.g. 1
     over_fre_drop_point: Union[EmptyStrToNone, float] = None  # Over frequency drop point, e.g. 50.3
     over_fre_lo_red_delay_time: Union[EmptyStrToNone, float] = (
         None  # Over frequency load reduction delay time, e.g. 0.0
@@ -1499,8 +1579,21 @@ class WitDetailDataV4(ApiModel):
     baudrate: Union[EmptyStrToNone, int] = None  # Baud Rate Selection, e.g. 0
 
 
+def _wit_details_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "wit",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class WitDetailsDataV4(ApiModel):
-    wit: List[WitDetailDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_wit_details_data_to_camel,
+    )
+
+    devices: List[WitDetailDataV4] = None
 
 
 class WitDetailsV4(NewApiResponse):
@@ -1607,7 +1700,7 @@ class SphsDetailDataV4(ApiModel):
 
 def _sphs_details_data_to_camel(snake: str) -> str:
     override = {
-        "sphs": "sph-s",
+        "devices": "sph-s",
     }
     return override.get(snake, to_camel(snake=snake))
 
@@ -1618,7 +1711,8 @@ class SphsDetailsDataV4(ApiModel):
         populate_by_name=True,
         alias_generator=_sphs_details_data_to_camel,
     )
-    sphs: List[SphsDetailDataV4] = None
+
+    devices: List[SphsDetailDataV4] = None
 
 
 class SphsDetailsV4(NewApiResponse):
@@ -1717,7 +1811,20 @@ class NoahDetailDataV4(ApiModel):
     time9_start: Union[EmptyStrToNone, ForcedTime] = None  # e.g. '0:0'
 
 
+def _noah_details_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "noah",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class NoahDetailsDataV4(ApiModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_noah_details_data_to_camel,
+    )
+
     noah: List[NoahDetailDataV4] = None
 
 
@@ -1825,8 +1932,21 @@ class InverterEnergyDataV4(ApiModel):
     warning_value2: Union[EmptyStrToNone, int] = None  # e.g. 0
 
 
+def _inverter_energy_overview_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "inv",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class InverterEnergyOverviewDataV4(ApiModel):
-    inv: List[InverterEnergyDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_inverter_energy_overview_data_to_camel,
+    )
+
+    devices: List[InverterEnergyDataV4] = None
 
 
 class InverterEnergyV4(NewApiResponse):
@@ -2222,8 +2342,21 @@ class StorageEnergyDataV4(ApiModel):
     with_time: Union[EmptyStrToNone, bool] = None  # e.g. False
 
 
+def _storage_energy_overview_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "storage",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class StorageEnergyOverviewDataV4(ApiModel):
-    storage: List[StorageEnergyDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_storage_energy_overview_data_to_camel,
+    )
+
+    devices: List[StorageEnergyDataV4] = None
 
 
 class StorageEnergyV4(NewApiResponse):
@@ -2546,8 +2679,21 @@ class MaxEnergyDataV4(ApiModel):
     with_time: Union[EmptyStrToNone, bool] = None  # Whether the data sent has its own time, e.g. False
 
 
+def _max_energy_overview_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "max",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class MaxEnergyOverviewDataV4(ApiModel):
-    max: List[MaxEnergyDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_max_energy_overview_data_to_camel,
+    )
+
+    devices: List[MaxEnergyDataV4] = None
 
 
 class MaxEnergyV4(NewApiResponse):
@@ -2834,8 +2980,21 @@ class SphEnergyDataV4(ApiModel):
     with_time: Union[EmptyStrToNone, bool] = None  # Whether the incoming data includes time, e.g. False
 
 
+def _sph_energy_overview_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "sph",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class SphEnergyOverviewDataV4(ApiModel):
-    sph: List[SphEnergyDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_sph_energy_overview_data_to_camel,
+    )
+
+    devices: List[SphEnergyDataV4] = None
 
 
 class SphEnergyV4(NewApiResponse):
@@ -3084,8 +3243,21 @@ class SpaEnergyDataV4(ApiModel):
     with_time: Union[EmptyStrToNone, bool] = None  # Whether the received data includes time, e.g. False
 
 
+def _spa_energy_overview_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "spa",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class SpaEnergyOverviewDataV4(ApiModel):
-    spa: List[SpaEnergyDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_spa_energy_overview_data_to_camel,
+    )
+
+    devices: List[SpaEnergyDataV4] = None
 
 
 class SpaEnergyV4(NewApiResponse):
@@ -3357,8 +3529,21 @@ class MinEnergyDataV4(ApiModel):
     with_time: Union[EmptyStrToNone, bool] = None  # Whether the incoming data includes time, e.g. False
 
 
+def _min_energy_overview_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "min",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class MinEnergyOverviewDataV4(ApiModel):
-    min: List[MinEnergyDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_min_energy_overview_data_to_camel,
+    )
+
+    devices: List[MinEnergyDataV4] = None
 
 
 class MinEnergyV4(NewApiResponse):
@@ -3821,8 +4006,21 @@ class WitEnergyDataV4(ApiModel):
     with_time: Union[EmptyStrToNone, bool] = None  # Whether the incoming data includes time, e.g. False
 
 
+def _wit_energy_overview_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "wit",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class WitEnergyOverviewDataV4(ApiModel):
-    wit: List[WitEnergyDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_wit_energy_overview_data_to_camel,
+    )
+
+    devices: List[WitEnergyDataV4] = None
 
 
 class WitEnergyV4(NewApiResponse):
@@ -4025,7 +4223,7 @@ class SphsEnergyDataV4(ApiModel):
 
 def _sphs_energy_overview_data_to_camel(snake: str) -> str:
     override = {
-        "sphs": "sph-s",
+        "devices": "sph-s",
     }
     return override.get(snake, to_camel(snake=snake))
 
@@ -4037,7 +4235,7 @@ class SphsEnergyOverviewDataV4(ApiModel):
         alias_generator=_sphs_energy_overview_data_to_camel,
     )
 
-    sphs: List[SphsEnergyDataV4] = None
+    devices: List[SphsEnergyDataV4] = None
 
 
 class SphsEnergyV4(NewApiResponse):
@@ -4137,8 +4335,21 @@ class NoahEnergyDataV4(ApiModel):
     work_mode: Union[EmptyStrToNone, int] = None  # Current time period working mode
 
 
+def _noah_energy_overview_data_to_camel(snake: str) -> str:
+    override = {
+        "devices": "noah",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
 class NoahEnergyOverviewDataV4(ApiModel):
-    noah: List[NoahEnergyDataV4] = None
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_noah_energy_overview_data_to_camel,
+    )
+
+    devices: List[NoahEnergyDataV4] = None
 
 
 class NoahEnergyV4(NewApiResponse):

@@ -34,14 +34,25 @@ class Inverter:
 
     session: GrowattApiSession
     _api_v4: ApiV4
+    device_sn: Optional[str] = None
 
-    def __init__(self, session: GrowattApiSession) -> None:
+    def __init__(self, session: GrowattApiSession, device_sn: Optional[str] = None) -> None:
         self.session = session
         self._api_v4 = ApiV4(session)
+        self.device_sn = device_sn
+
+    def _device_sn(self, device_sn: Optional[Union[str, List[str]]]) -> Union[str, List[str]]:
+        """
+        Use device_sn explicitly provided, fallback to the one from the instance
+        """
+        device_sn = device_sn or self.device_sn
+        if device_sn is None:
+            raise AttributeError("device_sn must be provided")
+        return device_sn
 
     def setting_read(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
         parameter_id: Optional[str] = None,
         start_address: Optional[int] = None,
         end_address: Optional[int] = None,
@@ -100,7 +111,7 @@ class Inverter:
         response = self.session.post(
             endpoint="readInverterParam",
             data={
-                "device_sn": device_sn,
+                "device_sn": self._device_sn(device_sn),
                 "paramId": parameter_id,
                 "startAddr": start_address,
                 "endAddr": end_address,
@@ -115,10 +126,10 @@ class Inverter:
 
     def setting_write(
         self,
-        device_sn: str,
         parameter_id: str,
         parameter_value_1: Union[str, int],
         parameter_value_2: Optional[Union[str, int]] = None,
+        device_sn: Optional[str] = None,
     ) -> InverterSettingWrite:
         """
         Inverter parameter setting
@@ -220,7 +231,7 @@ class Inverter:
         response = self.session.post(
             endpoint="inverterSet",
             data={
-                "device_sn": device_sn,
+                "device_sn": self._device_sn(device_sn),
                 "paramId": parameter_id,
                 "command_1": parameter_value_1,
                 "command_2": parameter_value_2,
@@ -235,8 +246,8 @@ class Inverter:
 
     def setting_write_on_off(
         self,
-        device_sn: str,
         power_on: bool,
+        device_sn: Optional[str] = None,
     ) -> SettingWriteV4:
         """
         Set the power on and off using "new-api" endpoint
@@ -259,15 +270,15 @@ class Inverter:
         """
 
         return self._api_v4.setting_write_on_off(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.INVERTER,
             power_on=power_on,
         )
 
     def setting_write_active_power(
         self,
-        device_sn: str,
         active_power_percent: int,
+        device_sn: Optional[str] = None,
     ) -> SettingWriteV4:
         """
         Set the active power using "new-api" endpoint
@@ -295,14 +306,14 @@ class Inverter:
         """
 
         return self._api_v4.setting_write_active_power(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.INVERTER,
             active_power=active_power_percent,
         )
 
     def details(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
     ) -> InverterDetails:
         """
         Get basic information about the inverter
@@ -386,7 +397,7 @@ class Inverter:
         response = self.session.get(
             endpoint="device/inverter/inv_data_info",
             params={
-                "device_sn": device_sn,
+                "device_sn": self._device_sn(device_sn),
             },
         )
 
@@ -394,7 +405,7 @@ class Inverter:
 
     def details_v4(
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
     ) -> InverterDetailsV4:
         """
         Batch device information using "new-api" endpoint
@@ -467,13 +478,13 @@ class Inverter:
         """
 
         return self._api_v4.details(
-            device_sn=device_sn,
+            device_sn=self._device_sn(device_sn),
             device_type=DeviceType.INVERTER,
         )
 
     def energy(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
     ) -> InverterEnergyOverview:
         """
         Get the latest real-time data of the inverter
@@ -703,7 +714,7 @@ class Inverter:
         response = self.session.get(
             endpoint="device/inverter/last_new_data",
             params={
-                "device_sn": device_sn,
+                "device_sn": self._device_sn(device_sn),
             },
         )
 
@@ -711,7 +722,7 @@ class Inverter:
 
     def energy_v4(
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
     ) -> InverterEnergyV4:
         """
         Batch equipment data information using "new-api" endpoint
@@ -808,11 +819,11 @@ class Inverter:
                 'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
-        return self._api_v4.energy(device_sn=device_sn, device_type=DeviceType.INVERTER)
+        return self._api_v4.energy(device_sn=self._device_sn(device_sn), device_type=DeviceType.INVERTER)
 
     def energy_multiple(
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
         page: Optional[int] = None,
     ) -> InverterEnergyOverviewMultiple:
         """
@@ -1046,6 +1057,7 @@ class Inverter:
              'page_num': 1}
         """
 
+        device_sn = self._device_sn(device_sn)
         if isinstance(device_sn, list):
             assert len(device_sn) <= 100, "Max 100 devices per request"
             device_sn = ",".join(device_sn)
@@ -1075,7 +1087,7 @@ class Inverter:
 
     def energy_history(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
         start_date: Optional[date] = None,
         end_date: Optional[date] = None,
         timezone: Optional[str] = None,
@@ -1159,7 +1171,7 @@ class Inverter:
         response = self.session.get(
             endpoint="device/inverter/data",
             params={
-                "device_sn": device_sn,
+                "device_sn": self._device_sn(device_sn),
                 "start_date": start_date.strftime("%Y-%m-%d"),
                 "end_date": end_date.strftime("%Y-%m-%d"),
                 "timezone_id": timezone,
@@ -1172,7 +1184,7 @@ class Inverter:
 
     def energy_history_v4(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
         date_: Optional[date] = None,
     ) -> InverterEnergyHistoryV4:
         """
@@ -1199,11 +1211,13 @@ class Inverter:
                 'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
-        return self._api_v4.energy_history(device_sn=device_sn, device_type=DeviceType.INVERTER, date_=date_)
+        return self._api_v4.energy_history(
+            device_sn=self._device_sn(device_sn), device_type=DeviceType.INVERTER, date_=date_
+        )
 
     def energy_history_multiple_v4(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,
-        device_sn: Union[str, List[str]],
+        device_sn: Optional[Union[str, List[str]]] = None,
         date_: Optional[date] = None,
     ) -> InverterEnergyHistoryMultipleV4:
         """
@@ -1229,11 +1243,13 @@ class Inverter:
 
         """
 
-        return self._api_v4.energy_history_multiple(device_sn=device_sn, device_type=DeviceType.INVERTER, date_=date_)
+        return self._api_v4.energy_history_multiple(
+            device_sn=self._device_sn(device_sn), device_type=DeviceType.INVERTER, date_=date_
+        )
 
     def alarms(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
         date_: Optional[date] = None,
         page: Optional[int] = None,
         limit: Optional[int] = None,
@@ -1287,7 +1303,7 @@ class Inverter:
         response = self.session.get(
             endpoint="device/inverter/alarm",
             params={
-                "device_sn": device_sn,
+                "device_sn": self._device_sn(device_sn),
                 "date": date_.strftime("%Y-%m-%d"),
                 "page": page,
                 "perpage": limit,

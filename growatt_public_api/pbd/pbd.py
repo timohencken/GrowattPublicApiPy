@@ -24,13 +24,24 @@ class Pbd:
     """
 
     session: GrowattApiSession
+    device_sn: Optional[str] = None
 
-    def __init__(self, session: GrowattApiSession) -> None:
+    def __init__(self, session: GrowattApiSession, device_sn: Optional[str] = None) -> None:
         self.session = session
+        self.device_sn = device_sn
+
+    def _device_sn(self, device_sn: Optional[str]) -> str:
+        """
+        Use device_sn explicitly provided, fallback to the one from the instance
+        """
+        device_sn = device_sn or self.device_sn
+        if device_sn is None:
+            raise AttributeError("device_sn must be provided")
+        return device_sn
 
     def details(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
     ) -> PbdDetails:
         """
         Get Pbd basic information
@@ -132,7 +143,7 @@ class Pbd:
         response = self.session.get(
             endpoint="device/pbd/pbd_data_info",
             params={
-                "device_sn": device_sn,
+                "device_sn": self._device_sn(device_sn),
             },
         )
 
@@ -140,7 +151,7 @@ class Pbd:
 
     def energy(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
     ) -> PbdEnergyOverview:
         """
         Get the latest real-time data of Pbd
@@ -284,7 +295,7 @@ class Pbd:
         response = self.session.post(
             endpoint="device/pbd/pbd_last_data",
             data={
-                "pbd_sn": device_sn,
+                "pbd_sn": self._device_sn(device_sn),
             },
         )
 
@@ -292,7 +303,7 @@ class Pbd:
 
     def energy_history(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
         start_date: Optional[date] = None,
         end_date: Optional[date] = None,
         timezone: Optional[str] = None,
@@ -460,7 +471,7 @@ class Pbd:
         response = self.session.post(
             endpoint="device/pbd/pbd_data",
             data={
-                "pbd_sn": device_sn,
+                "pbd_sn": self._device_sn(device_sn),
                 "start_date": start_date.strftime("%Y-%m-%d"),
                 "end_date": end_date.strftime("%Y-%m-%d"),
                 "timezone_id": timezone,
@@ -473,7 +484,7 @@ class Pbd:
 
     def alarms(
         self,
-        device_sn: str,
+        device_sn: Optional[str] = None,
         date_: Optional[date] = None,
         page: Optional[int] = None,
         limit: Optional[int] = None,
@@ -525,7 +536,7 @@ class Pbd:
         response = self.session.post(
             endpoint="device/pbd/alarm_data",
             data={
-                "pbd_sn": device_sn,
+                "pbd_sn": self._device_sn(device_sn),
                 "date": date_.strftime("%Y-%m-%d"),
                 "page": page,
                 "perpage": limit,
