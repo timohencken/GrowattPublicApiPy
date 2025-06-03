@@ -484,12 +484,13 @@ To the best of our knowledge only the settings functions perform modifications t
 ***The library is used entirely at your own risk.***
 
 # TODOs
-* TODO move `GrowattTimeCalendar` etc to common module
 * TODO: add caching to 5-minute-interval endpoints
   * ongoing - still some TODOs
 * TODO: generate & publish docs
 
 # Changelog
+* TBA (pre-alpha)
+  * moved `GrowattTimeCalendar` etc to common module
 * 2025.06.03 (pre-alpha)
   * new [example for MIN](examples/min_data.py) devices (e.g. NEO)
   * convenience method `api_for_device()` for retrieving device-specific API

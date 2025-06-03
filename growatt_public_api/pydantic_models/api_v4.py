@@ -1,29 +1,16 @@
 import datetime
-from typing import List, Union, Any, Optional, Annotated, TypeAlias, Dict
+from typing import List, Union, Any, Dict
 
-from pydantic import ConfigDict, BeforeValidator
+from pydantic import ConfigDict
 from pydantic.alias_generators import to_camel
 
 from pydantic_models.api_model import (
     NewApiResponse,
     ApiModel,
     EmptyStrToNone,
+    ForcedTime,
 )
 
-
-# !!! added NULL handling
-def parse_forced_time(value: Optional[str] = None):
-    """support 0:0 for 00:00"""
-    if value and value.strip() and value != "null":
-        try:
-            return datetime.datetime.strptime(value, "%H:%M").time()
-        except Exception as e:
-            raise ValueError(str(e))
-    else:
-        return None
-
-
-ForcedTime: TypeAlias = Annotated[Union[datetime.time, None], BeforeValidator(parse_forced_time)]
 
 # #####################################################################################################################
 # Device list #########################################################################################################
