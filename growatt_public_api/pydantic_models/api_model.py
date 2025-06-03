@@ -23,7 +23,6 @@ def _empty_str_to_none(v: str | None) -> None:
     )  # Not str or None, Fall to next type. e.g. Decimal, or a non-empty str
 
 
-# !!! added NULL handling
 def parse_forced_time(value: Optional[str] = None):
     """support 0:0 for 00:00"""
     if value and value.strip() and value != "null":
