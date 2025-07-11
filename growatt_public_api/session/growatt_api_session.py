@@ -1,6 +1,8 @@
 import hashlib
 import json
 import pickle
+import tempfile
+from datetime import timedelta, datetime
 from pathlib import Path
 from typing import Optional, Literal, Self
 import truststore
@@ -16,6 +18,8 @@ class GrowattApiSession:
     api_url: str
     token: str
     session: requests.Session
+    cache_folder: Path = None
+    max_cache_age: timedelta = timedelta(days=1)
     """
     https://www.showdoc.com.cn/262556420217021/0
     """
@@ -24,6 +28,7 @@ class GrowattApiSession:
         self,
         token: str,
         server_url: Optional[str] = None,
+        use_cache: bool = True,
     ) -> None:
         self.server_url = server_url or "https://openapi.growatt.com"
         # API docs specify /v1/ for some endpoints and /v4/ for other ("new-api") endpoints
@@ -37,6 +42,22 @@ class GrowattApiSession:
         self.session = requests.Session()
         headers = {"token": self.token}
         self.session.headers.update(headers)
+
+        # setup cache
+        if use_cache:
+            # set cache folder to TMP/growatt_public_api_cache
+            self.cache_folder = Path(tempfile.gettempdir()) / "growatt_public_api_cache"
+            self.cache_folder.mkdir(parents=True, exist_ok=True)
+            # clean outdated pickle files
+            cache_expires = datetime.now() - self.max_cache_age
+            for pickle_file in self.cache_folder.glob("*.pickle"):
+                mtime = datetime.fromtimestamp(pickle_file.stat().st_mtime)
+                if mtime < cache_expires:
+                    # Deleting outdated cache file
+                    try:
+                        pickle_file.unlink()
+                    except OSError:
+                        logger.debug(f"Failed to delete outdated cache file: {pickle_file}")
 
     @classmethod
     def using_test_server_v1(cls) -> Self:
@@ -156,14 +177,11 @@ class GrowattApiSession:
             # check error code
             error_code = json_data.get("error_code")
             error_code_new = json_data.get("code")
-            if use_cache:
+            if self.cache_folder and use_cache:
                 # create hash from request params
                 args_ = {"base_url": url, "endpoint": endpoint, "method": method, "params": params, "data": data}
                 hash_ = hashlib.md5(json.dumps(args_).encode()).hexdigest()
-                # TODO use pickle dir in tmp/from settings
-                # TODO add min time (directly use cache without doing request)
-                # TODO add max time (do not use outdated cache)
-                pickle_file = Path(__file__).parent.parent.parent / "pickle_cache" / f"{hash_}.pickle"
+                pickle_file = self.cache_folder / f"{hash_}.pickle"
                 pickle_file.parent.mkdir(parents=True, exist_ok=True)
 
                 if error_code == 10012 or error_code_new == 102:
@@ -177,9 +195,9 @@ class GrowattApiSession:
                     with pickle_file.open("wb") as f:
                         pickle.dump(json_data, f)
 
-            # recalculate as data might have been loaded from cache
-            error_code = json_data.get("error_code")
-            error_code_new = json_data.get("code")
+                # recalculate as data might have been loaded from cache
+                error_code = json_data.get("error_code")
+                error_code_new = json_data.get("code")
 
             if error_code:
                 error_msg = json_data.get("error_msg")

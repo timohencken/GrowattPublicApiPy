@@ -59,22 +59,19 @@ class GrowattApi:
       https://www.showdoc.com.cn/2540838290984246/0
     """
 
-    def __init__(
-        self,
-        token: str,
-        server_url: Optional[str] = None,
-    ) -> None:
+    def __init__(self, token: str, server_url: Optional[str] = None, use_cache: bool = True) -> None:
         """
         Initialize the GrowattApi with a session.
 
         :param token: The API token for authentication.
         :param server_url: The URL of the Growatt API server. If not provided, it defaults to the production server.
+        :param use_cache: Cache requests to Growatt API to avoid 'API rate limit exceeded' errors.
 
         :raises AssertionError: If no token is provided.
         """
         assert token
 
-        self.session = GrowattApiSession(token=token, server_url=server_url)
+        self.session = GrowattApiSession(token=token, server_url=server_url, use_cache=use_cache)
         self.user = User(self.session)
         self.plant = Plant(self.session)
         self.datalogger = Datalogger(self.session)
