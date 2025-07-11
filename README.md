@@ -485,6 +485,8 @@ To the best of our knowledge only the settings functions perform modifications t
 
 # TODOs
 * TODO: generate & publish docs
+* TODO: build package
+* TODO: publish to PyPi
 
 # Changelog
 * 2025.07.11 (pre-alpha)
