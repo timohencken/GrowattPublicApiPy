@@ -490,7 +490,7 @@ To the best of our knowledge only the settings functions perform modifications t
 
 # Changelog
 * TBA (pre-alpha)
-  * moved `GrowattTimeCalendar` etc to common module
+  * moved common pydantic models (e.g. `GrowattTimeCalendar`) to common module
 * 2025.06.03 (pre-alpha)
   * new [example for MIN](examples/min_data.py) devices (e.g. NEO)
   * convenience method `api_for_device()` for retrieving device-specific API

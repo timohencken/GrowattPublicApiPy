@@ -132,8 +132,6 @@ class TestInverter(unittest.TestCase):
 
         raw_data = mock_pyd_model.model_validate.call_args.args[0]
 
-        # FIXME data.InverterEnergyOverviewData.timeCalendar.GrowattTimeCalendar.gregorianChange.GrowattTime.time
-
         # check parameters are included in pydantic model
         pydantic_keys = {v.alias for k, v in InverterEnergyOverview.model_fields.items()} | set(
             InverterEnergyOverview.model_fields.keys()

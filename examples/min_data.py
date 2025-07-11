@@ -1,4 +1,5 @@
 import os
+from datetime import date
 
 import truststore
 from loguru import logger
@@ -100,9 +101,7 @@ logger.info(
     f"Retrieving today's energy history of '{device_types[device.device_sn].name}' device '{device.device_sn}'..."
 )
 # power = api.min.energy_history(device_sn=device.device_sn, limit=100)  # ! this endpoint uses paging - in real life, multiple requests are required to retrieve full day
-power = my_device_api.energy_history(
-    limit=100
-)  # ! this endpoint uses paging - in real life, multiple requests are required to retrieve full day
+power = my_device_api.energy_history_v4(date_=date.today())
 for ts, pac, ppv, ppv1, ppv2, ppv3, ppv4 in sorted(
     [(x.time, x.pac, x.ppv, x.ppv1, x.ppv2, x.ppv3, x.ppv4) for x in power.data.datas]
 ):

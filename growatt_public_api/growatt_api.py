@@ -61,9 +61,19 @@ class GrowattApi:
 
     def __init__(
         self,
-        token: str = None,
+        token: str,
         server_url: Optional[str] = None,
     ) -> None:
+        """
+        Initialize the GrowattApi with a session.
+
+        :param token: The API token for authentication.
+        :param server_url: The URL of the Growatt API server. If not provided, it defaults to the production server.
+
+        :raises AssertionError: If no token is provided.
+        """
+        assert token
+
         self.session = GrowattApiSession(token=token, server_url=server_url)
         self.user = User(self.session)
         self.plant = Plant(self.session)
