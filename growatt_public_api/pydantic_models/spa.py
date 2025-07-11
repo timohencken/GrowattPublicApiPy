@@ -1,9 +1,8 @@
 import datetime
-from typing import Union, Any, List, Optional, TypeAlias, Annotated
+from typing import Union, Any, List
 
 from pydantic import (
     ConfigDict,
-    BeforeValidator,
 )
 from pydantic.alias_generators import to_camel
 
@@ -12,7 +11,8 @@ from pydantic_models.api_model import (
     EmptyStrToNone,
     GrowattTime,
     ApiModel,
-    GrowattTimeGregorianChange,
+    GrowattTimeCalendar,
+    ForcedTime,
 )
 
 
@@ -55,20 +55,6 @@ def _spa_detail_data_to_camel(snake: str) -> str:
         "w_discharge_soc_low_limit2": "wdisChargeSOCLowLimit2",
     }
     return override.get(snake, to_camel(snake=snake))
-
-
-def parse_forced_time(value: Optional[str] = None):
-    """support 0:0 for 00:00"""
-    if value and value.strip():
-        try:
-            return datetime.datetime.strptime(value, "%H:%M").time()
-        except Exception as e:
-            raise ValueError(str(e))
-    else:
-        return None
-
-
-ForcedTime: TypeAlias = Annotated[Union[datetime.time, None], BeforeValidator(parse_forced_time)]
 
 
 class SpaDetailData(ApiModel):
@@ -233,45 +219,6 @@ class SpaDetails(ApiResponse):
 
 # #####################################################################################################################
 # Spa energy overview #################################################################################################
-
-
-def _growatt_time_calendar_timezone_to_camel(snake: str) -> str:
-    """
-    define own to_camel function to support weird API naming
-    """
-    override = {
-        "dst_savings": "DSTSavings",
-        "id": "ID",
-    }
-    return override.get(snake, to_camel(snake=snake))
-
-
-class GrowattTimeCalendarTimeZone(ApiModel):
-    model_config = ConfigDict(
-        from_attributes=True,
-        populate_by_name=True,
-        alias_generator=_growatt_time_calendar_timezone_to_camel,
-    )
-
-    dirty: Union[EmptyStrToNone, bool] = None  # e.g. false
-    display_name: Union[EmptyStrToNone, str] = None  # e.g. "China Standard Time"
-    dst_savings: Union[EmptyStrToNone, int] = None  # e.g. 0
-    id: Union[EmptyStrToNone, str] = None  # e.g. "Asia/Shanghai"
-    last_rule_instance: Union[EmptyStrToNone, str] = None  # e.g. null
-    raw_offset: Union[EmptyStrToNone, int] = None  # e.g. 28800000
-
-
-class GrowattTimeCalendar(ApiModel):
-    minimal_days_in_first_week: Union[EmptyStrToNone, int] = None  # e.g. 1
-    week_year: Union[EmptyStrToNone, int] = None  # e.g. 2018
-    time: Union[EmptyStrToNone, GrowattTime] = None
-    weeks_in_week_year: Union[EmptyStrToNone, int] = None  # e.g. 52
-    gregorian_change: Union[EmptyStrToNone, GrowattTimeGregorianChange] = None
-    time_zone: Union[EmptyStrToNone, GrowattTimeCalendarTimeZone] = None
-    time_in_millis: Union[EmptyStrToNone, int] = None  # e.g. 1544670232000
-    lenient: Union[EmptyStrToNone, bool] = None  # e.g. true
-    first_day_of_week: Union[EmptyStrToNone, int] = None  # e.g. 1
-    week_date_supported: Union[EmptyStrToNone, bool] = None
 
 
 def _spa_energy_overview_data_to_camel(snake: str) -> str:
