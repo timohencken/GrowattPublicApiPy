@@ -384,6 +384,12 @@ This package aims to
     * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 
 # Usage
+## Installation
+This package is available at [PiPy](https://pypi.org/project/growatt-public-api) and can be installed using pip:
+```shell
+pip install growatt-public-api
+```
+
 ## Login
 The API requires token authentication. The token can be retrieved via
 * Growatt Android/iOS app "ShinePhone"
@@ -485,10 +491,13 @@ To the best of our knowledge only the settings functions perform modifications t
 
 # TODOs
 * TODO: generate & publish docs
-* TODO: build package
 * TODO: publish to PyPi
+* TODO: remove truststore.inject_into_ssl()
+* TODO: adjust README & example
 
 # Changelog
+* 2025.07.13 (alpha)
+  * packaging & deploy to [PyPi](https://pypi.org/project/growatt-public-api/)
 * 2025.07.11 (pre-alpha)
   * moved common pydantic models (e.g. `GrowattTimeCalendar`) to common module
   * cache API requests (using TMP directory) to avoid 'API rate limit exceeded' errors

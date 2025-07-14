@@ -4,7 +4,7 @@ from typing import Union, List
 from pydantic import ConfigDict
 from pydantic.alias_generators import to_camel
 
-from pydantic_models.api_model import (
+from .api_model import (
     ApiResponse,
     ApiModel,
     EmptyStrToNone,

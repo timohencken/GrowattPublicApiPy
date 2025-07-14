@@ -4,9 +4,9 @@ from unittest import skip
 from unittest.mock import patch
 
 
-from api_v4 import ApiV4
+from growatt_public_api.api_v4 import ApiV4
 from growatt_public_api import Plant, GrowattApiSession, User, GrowattCountry, PlantType, Device
-from pydantic_models.device import (
+from growatt_public_api.pydantic_models.device import (
     DataloggerList,
     DataloggerListData,
     DataloggerData,
@@ -14,7 +14,7 @@ from pydantic_models.device import (
     DeviceListData,
     DeviceData,
 )
-from pydantic_models.plant import (
+from growatt_public_api.pydantic_models.plant import (
     PlantList,
     PlantData,
     PlantListData,
@@ -34,7 +34,7 @@ from pydantic_models.plant import (
     PlantDetailModule,
 )
 
-TEST_FILE = "plant.plant"
+TEST_FILE = "growatt_public_api.plant.plant"
 
 
 # noinspection DuplicatedCode

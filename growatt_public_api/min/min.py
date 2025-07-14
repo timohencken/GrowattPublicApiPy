@@ -3,9 +3,9 @@ from typing import Optional, Union, List, Dict, Any, Tuple
 
 import truststore
 
-from growatt_public_api import DeviceType
-from pydantic_models import VppSoc, VppWrite
-from pydantic_models.api_v4 import (
+from ..growatt_types import DeviceType
+from ..pydantic_models import VppSoc, VppWrite
+from ..pydantic_models.api_v4 import (
     MinDetailsV4,
     MinEnergyV4,
     MinEnergyHistoryV4,
@@ -13,7 +13,7 @@ from pydantic_models.api_v4 import (
     SettingWriteV4,
     SettingReadVppV4,
 )
-from pydantic_models.min import (
+from ..pydantic_models.min import (
     MinSettingRead,
     MinSettingWrite,
     MinDetails,
@@ -26,9 +26,9 @@ from pydantic_models.min import (
 )
 
 truststore.inject_into_ssl()
-from session import GrowattApiSession  # noqa: E402
-from api_v4.api_v4 import ApiV4  # noqa: E402
-from vpp.vpp import Vpp  # noqa: E402
+from ..session.growatt_api_session import GrowattApiSession  # noqa: E402
+from ..api_v4.api_v4 import ApiV4  # noqa: E402
+from ..vpp.vpp import Vpp  # noqa: E402
 
 
 class Min:

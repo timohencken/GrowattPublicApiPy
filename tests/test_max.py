@@ -3,9 +3,9 @@ from datetime import timedelta
 from unittest.mock import patch
 
 from growatt_public_api import GrowattApiSession, Device
-from max import Max
-from pydantic_models import MaxAlarms
-from pydantic_models.api_v4 import (
+from growatt_public_api.max import Max
+from growatt_public_api.pydantic_models import MaxAlarms
+from growatt_public_api.pydantic_models.api_v4 import (
     MaxDetailsV4,
     MaxDetailDataV4,
     MaxDetailsDataV4,
@@ -17,7 +17,7 @@ from pydantic_models.api_v4 import (
     MaxEnergyHistoryMultipleV4,
     SettingWriteV4,
 )
-from pydantic_models.max import (
+from growatt_public_api.pydantic_models.max import (
     MaxAlarmsData,
     MaxAlarm,
     MaxDetails,
@@ -33,8 +33,8 @@ from pydantic_models.max import (
 )
 
 
-TEST_FILE = "max.max"
-TEST_FILE_V4 = "api_v4.api_v4"
+TEST_FILE = "growatt_public_api.max.max"
+TEST_FILE_V4 = "growatt_public_api.api_v4.api_v4"
 
 
 # noinspection DuplicatedCode

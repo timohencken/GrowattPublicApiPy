@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch
 
 from growatt_public_api import GrowattApiSession, Device, Sphs
-from pydantic_models.api_v4 import (
+from growatt_public_api.pydantic_models.api_v4 import (
     SettingWriteV4,
     SphsDetailsV4,
     SphsDetailsDataV4,
@@ -15,8 +15,8 @@ from pydantic_models.api_v4 import (
     SphsEnergyHistoryMultipleV4,
 )
 
-TEST_FILE = "sphs.sphs"
-TEST_FILE_V4 = "api_v4.api_v4"
+TEST_FILE = "growatt_public_api.sphs.sphs"
+TEST_FILE_V4 = "growatt_public_api.api_v4.api_v4"
 
 
 # noinspection DuplicatedCode

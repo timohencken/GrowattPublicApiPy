@@ -6,7 +6,7 @@ from pydantic import (
 )
 from pydantic.alias_generators import to_camel
 
-from pydantic_models.api_model import (
+from .api_model import (
     ApiResponse,
     EmptyStrToNone,
     GrowattTime,
@@ -14,8 +14,8 @@ from pydantic_models.api_model import (
     GrowattTimeCalendar,
 )
 
-from pydantic_models.env_sensor import EnvSensorMetricsOverviewData
-from pydantic_models.smart_meter import SmartMeterEnergyOverviewData
+from .env_sensor import EnvSensorMetricsOverviewData
+from .smart_meter import SmartMeterEnergyOverviewData
 
 
 # #####################################################################################################################

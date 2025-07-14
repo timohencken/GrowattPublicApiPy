@@ -3,13 +3,13 @@ from typing import Optional
 
 import truststore
 
-from pydantic_models.env_sensor import (
+from ..pydantic_models.env_sensor import (
     EnvSensorMetricsOverview,
     EnvSensorMetricsHistory,
 )
 
 truststore.inject_into_ssl()
-from session import GrowattApiSession  # noqa: E402
+from ..session.growatt_api_session import GrowattApiSession  # noqa: E402
 
 
 class EnvSensor:

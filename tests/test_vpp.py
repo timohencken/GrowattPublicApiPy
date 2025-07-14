@@ -4,10 +4,10 @@ from unittest import skip
 from unittest.mock import patch
 
 from growatt_public_api import GrowattApiSession, Vpp
-from pydantic_models import VppSoc
+from growatt_public_api.pydantic_models import VppSoc
 
 
-TEST_FILE = "vpp.vpp"
+TEST_FILE = "growatt_public_api.vpp.vpp"
 
 
 # noinspection DuplicatedCode

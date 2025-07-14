@@ -3,30 +3,30 @@ from typing import Optional, Self, Union
 import truststore
 from loguru import logger
 
-from growatt_public_api import DeviceType
+from .growatt_types import DeviceType
 
 truststore.inject_into_ssl()
 
-from session import GrowattApiSession  # noqa: E402
-from user import User  # noqa: E402
-from plant import Plant  # noqa: E402
-from datalogger import Datalogger  # noqa: E402
-from device import Device  # noqa: E402
-from inverter import Inverter  # noqa: E402
-from storage import Storage  # noqa: E402
-from min import Min  # noqa: E402
-from max import Max  # noqa: E402
-from sph import Sph  # noqa: E402
-from spa import Spa  # noqa: E402
-from pcs import Pcs  # noqa: E402
-from hps import Hps  # noqa: E402
-from pbd import Pbd  # noqa: E402
-from smart_meter import SmartMeter  # noqa: E402
-from env_sensor import EnvSensor  # noqa: E402
-from groboost import Groboost  # noqa: E402
-from wit import Wit  # noqa: E402
-from sphs import Sphs  # noqa: E402
-from noah import Noah  # noqa: E402
+from .session.growatt_api_session import GrowattApiSession  # noqa: E402
+from .user.user import User  # noqa: E402
+from .plant.plant import Plant  # noqa: E402
+from .datalogger.datalogger import Datalogger  # noqa: E402
+from .device.device import Device  # noqa: E402
+from .inverter.inverter import Inverter  # noqa: E402
+from .storage.storage import Storage  # noqa: E402
+from .min.min import Min  # noqa: E402
+from .max.max import Max  # noqa: E402
+from .sph.sph import Sph  # noqa: E402
+from .spa.spa import Spa  # noqa: E402
+from .pcs.pcs import Pcs  # noqa: E402
+from .hps.hps import Hps  # noqa: E402
+from .pbd.pbd import Pbd  # noqa: E402
+from .smart_meter.smart_meter import SmartMeter  # noqa: E402
+from .env_sensor.env_sensor import EnvSensor  # noqa: E402
+from .groboost.groboost import Groboost  # noqa: E402
+from .wit.wit import Wit  # noqa: E402
+from .sphs.sphs import Sphs  # noqa: E402
+from .noah.noah import Noah  # noqa: E402
 
 
 class GrowattApi:
@@ -115,12 +115,16 @@ class GrowattApi:
         )
 
     def api_for_device(  # noqa: C901 'GrowattApi.api_for_device' is too complex (14)
-        self, device_sn: str
+        self, device_sn: str, device_type: Optional[DeviceType] = None
     ) -> Optional[Union[Groboost, Hps, Inverter, Max, Min, Noah, Pbd, Pcs, Spa, Sph, Sphs, Storage, Wit]]:
         """
         Get the API for a specific device.
+
+        :param device_sn: The serial number of the device.
+        :param device_type: The type of the device. If not provided, it will be automatically determined from the device's serial number.
         """
-        device_type = self.device.get_device_type(device_sn)
+        if device_type is None:
+            device_type = self.device.get_device_type(device_sn)
 
         if device_type == DeviceType.GROBOOST:
             return Groboost(session=self.session, device_sn=device_sn)

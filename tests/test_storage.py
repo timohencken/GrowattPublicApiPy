@@ -4,8 +4,8 @@ from unittest import skip
 from unittest.mock import patch
 
 from growatt_public_api import GrowattApiSession, Storage, Device
-from pydantic_models import StorageAlarms
-from pydantic_models.api_v4 import (
+from growatt_public_api.pydantic_models import StorageAlarms
+from growatt_public_api.pydantic_models.api_v4 import (
     StorageDetailsV4,
     StorageDetailDataV4,
     StorageDetailsDataV4,
@@ -17,7 +17,7 @@ from pydantic_models.api_v4 import (
     StorageEnergyHistoryMultipleV4,
     SettingWriteV4,
 )
-from pydantic_models.storage import (
+from growatt_public_api.pydantic_models.storage import (
     StorageAlarmsData,
     StorageAlarm,
     StorageDetails,
@@ -30,8 +30,8 @@ from pydantic_models.storage import (
     StorageSettingWrite,
 )
 
-TEST_FILE = "storage.storage"
-TEST_FILE_V4 = "api_v4.api_v4"
+TEST_FILE = "growatt_public_api.storage.storage"
+TEST_FILE_V4 = "growatt_public_api.api_v4.api_v4"
 
 
 class TestStorage(unittest.TestCase):

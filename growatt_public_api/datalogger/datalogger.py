@@ -2,13 +2,13 @@ from typing import Union, Optional
 
 import truststore
 
-from pydantic_models import EnvSensorList, SmartMeterList
-from pydantic_models.device import (
+from ..pydantic_models import EnvSensorList, SmartMeterList
+from ..pydantic_models.device import (
     DataloggerValidation,
 )
 
 truststore.inject_into_ssl()
-from session import GrowattApiSession  # noqa: E402
+from ..session.growatt_api_session import GrowattApiSession  # noqa: E402
 
 
 class Datalogger:

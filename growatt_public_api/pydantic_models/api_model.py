@@ -4,6 +4,8 @@
 import datetime
 from typing import Any, TypeAlias, Annotated, Union, Optional
 
+from loguru import logger
+
 # LICENSE: https://github.com/dmontagu/fastapi-utils/blob/master/LICENSE
 # Original Code: https://github.com/dmontagu/fastapi-utils/blob/master/fastapi_utils/api_model.py
 
@@ -26,8 +28,12 @@ def _empty_str_to_none(v: str | None) -> None:
 def parse_forced_time(value: Optional[str] = None):
     """support 0:0 for 00:00"""
     if value and value.strip() and value != "null":
+        # saw value "11:187" (="BBB") in test_min.test_details(), so we need to handle that
         try:
             return datetime.datetime.strptime(value, "%H:%M").time()
+        except ValueError:
+            logger.warning(f"Invalid time format: {value}. Returning None. Expected format is HH:MM.")
+            return None
         except Exception as e:
             raise ValueError(str(e))
     else:

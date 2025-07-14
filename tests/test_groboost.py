@@ -2,16 +2,16 @@ import unittest
 from unittest import skip
 from unittest.mock import patch
 
-from groboost import Groboost
+from growatt_public_api.groboost import Groboost
 from growatt_public_api import GrowattApiSession, Device, Plant
-from pydantic_models import GroboostDetails
-from pydantic_models.env_sensor import (
+from growatt_public_api.pydantic_models import GroboostDetails
+from growatt_public_api.pydantic_models.env_sensor import (
     EnvSensorMetricsOverviewData,
 )
-from pydantic_models.groboost import GroboostDetailData, SpctData, BoostData
-from pydantic_models.smart_meter import SmartMeterEnergyOverviewData
+from growatt_public_api.pydantic_models.groboost import GroboostDetailData, SpctData, BoostData
+from growatt_public_api.pydantic_models.smart_meter import SmartMeterEnergyOverviewData
 
-TEST_FILE = "groboost.groboost"
+TEST_FILE = "growatt_public_api.groboost.groboost"
 
 
 class TestGroboost(unittest.TestCase):

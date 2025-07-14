@@ -7,18 +7,18 @@ from growatt_public_api import (
     Datalogger,
     Device,
 )
-from pydantic_models import EnvSensorList, SmartMeterList
-from pydantic_models.device import (
+from growatt_public_api.pydantic_models import EnvSensorList, SmartMeterList
+from growatt_public_api.pydantic_models.device import (
     DataloggerValidation,
     DataloggerValidationData,
 )
-from pydantic_models.env_sensor import (
+from growatt_public_api.pydantic_models.env_sensor import (
     EnvSensorListData,
     EnvSensorData,
 )
-from pydantic_models.smart_meter import SmartMeterListData, SmartMeterData
+from growatt_public_api.pydantic_models.smart_meter import SmartMeterListData, SmartMeterData
 
-TEST_FILE = "datalogger.datalogger"
+TEST_FILE = "growatt_public_api.datalogger.datalogger"
 
 
 # noinspection DuplicatedCode

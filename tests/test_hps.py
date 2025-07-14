@@ -4,9 +4,9 @@ from unittest import skip
 from unittest.mock import patch
 
 from growatt_public_api import GrowattApiSession, Plant, Device
-from hps import Hps
-from pydantic_models import HpsAlarms
-from pydantic_models.hps import (
+from growatt_public_api.hps import Hps
+from growatt_public_api.pydantic_models import HpsAlarms
+from growatt_public_api.pydantic_models.hps import (
     HpsAlarmsData,
     HpsAlarm,
     HpsDetails,
@@ -18,7 +18,7 @@ from pydantic_models.hps import (
 )
 
 
-TEST_FILE = "hps.hps"
+TEST_FILE = "growatt_public_api.hps.hps"
 
 
 # noinspection DuplicatedCode

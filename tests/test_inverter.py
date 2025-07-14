@@ -3,8 +3,8 @@ from datetime import timedelta
 from unittest.mock import patch
 
 from growatt_public_api import GrowattApiSession, Inverter
-from pydantic_models import InverterAlarms
-from pydantic_models.api_v4 import (
+from growatt_public_api.pydantic_models import InverterAlarms
+from growatt_public_api.pydantic_models.api_v4 import (
     InverterDetailDataV4,
     InverterDetailsDataV4,
     InverterDetailsV4,
@@ -16,7 +16,7 @@ from pydantic_models.api_v4 import (
     InverterEnergyHistoryMultipleV4,
     SettingWriteV4,
 )
-from pydantic_models.inverter import (
+from growatt_public_api.pydantic_models.inverter import (
     InverterAlarmsData,
     InverterAlarm,
     InverterDetails,
@@ -33,8 +33,8 @@ from pydantic_models.inverter import (
 )
 
 
-TEST_FILE = "inverter.inverter"
-TEST_FILE_V4 = "api_v4.api_v4"
+TEST_FILE = "growatt_public_api.inverter.inverter"
+TEST_FILE_V4 = "growatt_public_api.api_v4.api_v4"
 
 
 # noinspection DuplicatedCode

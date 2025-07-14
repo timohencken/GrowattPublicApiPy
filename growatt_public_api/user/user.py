@@ -2,16 +2,16 @@ from typing import Optional, Union
 
 import truststore
 
-from pydantic_models.user import (
+from ..pydantic_models.user import (
     UserRegistration,
     UserModification,
     UsernameAvailabilityCheck,
     UserList,
 )
+from ..growatt_types import GrowattCountry  # noqa: E402
 
 truststore.inject_into_ssl()
-from growatt_types import GrowattCountry  # noqa: E402
-from session import GrowattApiSession  # noqa: E402
+from ..session import GrowattApiSession  # noqa: E402
 
 
 class User:

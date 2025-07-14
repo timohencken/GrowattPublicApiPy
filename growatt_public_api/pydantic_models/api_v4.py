@@ -4,7 +4,7 @@ from typing import List, Union, Any, Dict
 from pydantic import ConfigDict
 from pydantic.alias_generators import to_camel
 
-from pydantic_models.api_model import (
+from .api_model import (
     NewApiResponse,
     ApiModel,
     EmptyStrToNone,
@@ -1254,8 +1254,17 @@ def _wit_details_to_camel(snake: str) -> str:
         "parent_id": "parentID",
         "line_n_disconnect_enable": "lineNdisconnectEnable",
         "outer_ct_enable": "outerCTEnable",
+        "over_freq_drop_point": "overFreDropPoint",
+        "over_freq_load_reduction_delay_time": "overFreLoRedDelayTime",
+        "over_freq_load_reduction_reset_time": "overFreLoRedResTime",
+        "over_freq_load_reduction_slope": "overFreLoRedSlope",
         "power_ud_forced_enable": "powerUDForcedEnable",
         "safety_function": "saftyFunc",
+        "under_freq_load_delay_time": "underfreqLoadDelayTime",
+        "under_freq_load_enable": "underfreqLoadEnable",
+        "under_freq_load_point": "underfreqLoadPoint",
+        "under_freq_load_reset_time": "underfreqLoadResTime",
+        "under_freq_load_slope": "underfreqLoadSlope",
         "uw_1th_bat_charge_limit": "uw1thBatChgLimit",
         "uw_1th_bat_discharge_limit": "uw1thBatDisChgLimit",
         "uw_2th_bat_cap": "uw2thBatCap",
@@ -1396,13 +1405,20 @@ class WitDetailDataV4(ApiModel):
     oil_rated_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     on_off: Union[EmptyStrToNone, bool] = None  # On/Off (1=on; 0=off), 1
     outer_ct_enable: Union[EmptyStrToNone, bool] = None  # e.g. 1
-    over_fre_drop_point: Union[EmptyStrToNone, float] = None  # Over frequency drop point, e.g. 50.3
-    over_fre_lo_red_delay_time: Union[EmptyStrToNone, float] = (
+    over_freq_drop_point: Union[EmptyStrToNone, float] = None  # Over frequency drop point, e.g. 50.3
+    over_freq_load_reduction_delay_time: Union[EmptyStrToNone, float] = (
         None  # Over frequency load reduction delay time, e.g. 0.0
     )
-    over_fre_lo_red_res_time: Union[EmptyStrToNone, float] = None  # e.g. 0.0
-    over_fre_lo_red_slope: Union[EmptyStrToNone, float] = None  # Over frequency derating slope, e.g. 50
+    over_freq_load_reduction_reset_time: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    over_freq_load_reduction_slope: Union[EmptyStrToNone, float] = None  # Over frequency derating slope, e.g. 50
+    over_freq_time1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    over_freq_time2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    over_freq_time3: Union[EmptyStrToNone, int] = None  # e.g. 0
+    over_volt_time1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    over_volt_time2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    over_volt_time3: Union[EmptyStrToNone, int] = None  # e.g. 0
     parallel_enable: Union[EmptyStrToNone, bool] = None  # e.g. 1
+    parallel_num: Union[EmptyStrToNone, int] = None  # e.g. 0
     param_protect_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
     parent_id: Union[EmptyStrToNone, str] = None  # e.g. 'LIST_BLE094404C_22'
     pf_level1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
@@ -1479,11 +1495,17 @@ class WitDetailDataV4(ApiModel):
     timezone: Union[EmptyStrToNone, float] = None  # e.g. 8.0
     tree_id: Union[EmptyStrToNone, str] = None  # e.g. 'ST_0ZFN00R23ZBF0002'
     tree_name: Union[EmptyStrToNone, str] = None  # e.g. '0ZFN00R23ZBF0002'
-    underfreq_load_delay_time: Union[EmptyStrToNone, float] = None  # e.g. 0.0
-    underfreq_load_enable: Union[EmptyStrToNone, int] = None  # e.g. -1
-    underfreq_load_point: Union[EmptyStrToNone, float] = None  # e.g. 49.8
-    underfreq_load_res_time: Union[EmptyStrToNone, float] = None  # e.g. 0.0
-    underfreq_load_slope: Union[EmptyStrToNone, int] = None  # e.g. 400
+    under_freq_load_delay_time: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    under_freq_load_enable: Union[EmptyStrToNone, int] = None  # e.g. -1
+    under_freq_load_point: Union[EmptyStrToNone, float] = None  # e.g. 49.8
+    under_freq_load_reset_time: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    under_freq_load_slope: Union[EmptyStrToNone, int] = None  # e.g. 400
+    under_freq_time1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    under_freq_time2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    under_freq_time3: Union[EmptyStrToNone, int] = None  # e.g. 0
+    under_volt_time1: Union[EmptyStrToNone, int] = None  # e.g. 0
+    under_volt_time2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    under_volt_time3: Union[EmptyStrToNone, int] = None  # e.g. 0
     updating: Union[EmptyStrToNone, bool] = None  # e.g. False
     user_name: Union[EmptyStrToNone, str] = None  # e.g. None
     uw_1th_bat_charge_limit: Union[EmptyStrToNone, float] = None  # e.g. 0.0

@@ -5,10 +5,10 @@ from unittest import skip
 from unittest.mock import patch
 
 from growatt_public_api import User, GrowattApiSession
-from pydantic_models import UserList
-from pydantic_models.user import UserListData, UserInfo, UsernameAvailabilityCheck, UserModification
+from growatt_public_api.pydantic_models import UserList
+from growatt_public_api.pydantic_models.user import UserListData, UserInfo, UsernameAvailabilityCheck, UserModification
 
-TEST_FILE = "user.user"
+TEST_FILE = "growatt_public_api.user.user"
 
 
 # noinspection DuplicatedCode

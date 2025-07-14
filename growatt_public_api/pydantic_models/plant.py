@@ -1,7 +1,7 @@
 import datetime
 from typing import List, Union, Literal
 
-from pydantic_models.api_model import (
+from .api_model import (
     ApiResponse,
     ApiModel,
     EmptyStrToNone,

@@ -4,8 +4,8 @@ from unittest import skip
 from unittest.mock import patch
 
 from growatt_public_api import GrowattApiSession
-from pcs import Pcs
-from pydantic_models.pcs import (
+from growatt_public_api.pcs import Pcs
+from growatt_public_api.pydantic_models.pcs import (
     PcsAlarms,
     PcsAlarmsData,
     PcsAlarm,
@@ -17,7 +17,7 @@ from pydantic_models.pcs import (
     PcsEnergyHistoryData,
 )
 
-TEST_FILE = "pcs.pcs"
+TEST_FILE = "growatt_public_api.pcs.pcs"
 
 
 # noinspection DuplicatedCode

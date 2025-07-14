@@ -6,7 +6,7 @@ from pydantic import (
 )
 from pydantic.alias_generators import to_camel
 
-from pydantic_models.api_model import (
+from .api_model import (
     ApiResponse,
     EmptyStrToNone,
     ApiModel,
