@@ -1,8 +1,5 @@
 from datetime import date, timedelta
 from typing import Optional, Union, List
-
-import truststore
-
 from ..api_v4 import ApiV4
 from ..growatt_types import DeviceType
 from ..pydantic_models.api_v4 import (
@@ -20,9 +17,7 @@ from ..pydantic_models.storage import (
     StorageEnergyHistory,
     StorageAlarms,
 )
-
-truststore.inject_into_ssl()
-from ..session import GrowattApiSession  # noqa: E402
+from ..session import GrowattApiSession
 
 
 class Storage:

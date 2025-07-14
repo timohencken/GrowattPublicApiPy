@@ -1,8 +1,6 @@
 from datetime import date, timedelta, time
 from typing import Optional, Union, List, Dict, Any, Tuple
 
-import truststore
-
 from ..growatt_types import DeviceType
 from ..pydantic_models import VppSoc, VppWrite
 from ..pydantic_models.api_v4 import (
@@ -24,8 +22,6 @@ from ..pydantic_models.min import (
     MinEnergyOverviewMultipleItem,
     MinSettings,
 )
-
-truststore.inject_into_ssl()
 from ..session.growatt_api_session import GrowattApiSession  # noqa: E402
 from ..api_v4.api_v4 import ApiV4  # noqa: E402
 from ..vpp.vpp import Vpp  # noqa: E402

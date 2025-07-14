@@ -491,13 +491,11 @@ To the best of our knowledge only the settings functions perform modifications t
 
 # TODOs
 * TODO: generate & publish docs
-* TODO: publish to PyPi
-* TODO: remove truststore.inject_into_ssl()
-* TODO: adjust README & example
 
 # Changelog
 * 2025.07.13 (alpha)
   * packaging & deploy to [PyPi](https://pypi.org/project/growatt-public-api/)
+  * removed truststore SSL certificate injection
 * 2025.07.11 (pre-alpha)
   * moved common pydantic models (e.g. `GrowattTimeCalendar`) to common module
   * cache API requests (using TMP directory) to avoid 'API rate limit exceeded' errors

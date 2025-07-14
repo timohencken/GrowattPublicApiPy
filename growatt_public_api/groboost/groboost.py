@@ -1,8 +1,5 @@
 from datetime import date, timedelta
 from typing import Optional, Union, List
-
-import truststore
-
 from ..pydantic_models.groboost import (
     GroboostDetails,
     GroboostMetricsOverview,
@@ -10,9 +7,7 @@ from ..pydantic_models.groboost import (
     GroboostMetricsOverviewMultiple,
     GroboostMetricsOverviewMultipleItem,
 )
-
-truststore.inject_into_ssl()
-from ..session.growatt_api_session import GrowattApiSession  # noqa: E402
+from ..session.growatt_api_session import GrowattApiSession
 
 
 class Groboost:

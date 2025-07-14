@@ -1,9 +1,6 @@
 from datetime import date
 from typing import Optional, Union, List
 from loguru import logger
-
-import truststore
-
 from ..growatt_types import DeviceType
 from ..pydantic_models import PlantInfo
 from ..pydantic_models.api_v4 import DeviceListV4
@@ -13,11 +10,8 @@ from ..pydantic_models.device import (
     DeviceDatalogger,
     DeviceCreateDate,
 )
-
-truststore.inject_into_ssl()
-
-from ..plant.plant import Plant  # noqa: E402
-from ..session.growatt_api_session import GrowattApiSession  # noqa: E402
+from ..plant.plant import Plant
+from ..session.growatt_api_session import GrowattApiSession
 
 
 class Device:

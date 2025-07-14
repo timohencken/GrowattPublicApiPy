@@ -1,8 +1,5 @@
 from datetime import date, timedelta
 from typing import Optional, Union, List
-
-import truststore
-
 from ..growatt_types import DeviceType
 from ..pydantic_models.api_v4 import (
     InverterDetailsV4,
@@ -21,10 +18,8 @@ from ..pydantic_models.inverter import (
     InverterSettingRead,
     InverterEnergyOverviewMultipleItem,
 )
-
-truststore.inject_into_ssl()
-from ..session.growatt_api_session import GrowattApiSession  # noqa: E402
-from ..api_v4.api_v4 import ApiV4  # noqa: E402
+from ..session.growatt_api_session import GrowattApiSession
+from ..api_v4.api_v4 import ApiV4
 
 
 class Inverter:

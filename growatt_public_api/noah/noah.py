@@ -1,8 +1,5 @@
 from datetime import date, time
 from typing import Union, List, Optional
-
-import truststore
-
 from ..api_v4 import ApiV4
 from ..growatt_types import DeviceType
 from ..pydantic_models.api_v4 import (
@@ -12,8 +9,6 @@ from ..pydantic_models.api_v4 import (
     NoahEnergyHistoryMultipleV4,
     SettingWriteV4,
 )
-
-truststore.inject_into_ssl()
 from ..session.growatt_api_session import GrowattApiSession  # noqa: E402
 
 

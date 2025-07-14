@@ -1,15 +1,10 @@
 from datetime import date, timedelta
 from typing import Optional
-
-import truststore
-
 from ..pydantic_models.smart_meter import (
     SmartMeterEnergyOverview,
     SmartMeterEnergyHistory,
 )
-
-truststore.inject_into_ssl()
-from ..session import GrowattApiSession  # noqa: E402
+from ..session import GrowattApiSession
 
 
 class SmartMeter:

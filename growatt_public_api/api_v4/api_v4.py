@@ -1,9 +1,6 @@
 import datetime
 from typing import Optional, Literal, List, Union
-
-import truststore
 from loguru import logger
-
 from ..growatt_types import DeviceType
 from ..pydantic_models.api_v4 import (
     InverterDetailsV4,
@@ -45,9 +42,7 @@ from ..pydantic_models.api_v4 import (
     SettingWriteV4,
     SettingReadVppV4,
 )
-
-truststore.inject_into_ssl()
-from ..session.growatt_api_session import GrowattApiSession  # noqa: E402
+from ..session.growatt_api_session import GrowattApiSession
 
 
 DeviceTypeStr = Literal["inv", "storage", "max", "sph", "spa", "min", "wit", "sph-s", "noah"]

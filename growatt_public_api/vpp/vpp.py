@@ -1,15 +1,11 @@
 import json
 from datetime import time
 from typing import List, Tuple
-
-import truststore
 from ..pydantic_models.vpp import (
     VppSoc,
     VppWrite,
 )
-
-truststore.inject_into_ssl()
-from ..session import GrowattApiSession  # noqa: E402
+from ..session import GrowattApiSession
 
 
 class Vpp:

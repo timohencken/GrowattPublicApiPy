@@ -1,8 +1,5 @@
 from datetime import date, timedelta
 from typing import Optional, Union, List
-
-import truststore
-
 from ..api_v4.api_v4 import ApiV4
 from ..growatt_types import DeviceType
 from ..pydantic_models.api_v4 import (
@@ -22,9 +19,7 @@ from ..pydantic_models.max import (
     MaxEnergyOverviewMultiple,
     MaxEnergyOverviewMultipleItem,
 )
-
-truststore.inject_into_ssl()
-from ..session.growatt_api_session import GrowattApiSession  # noqa: E402
+from ..session.growatt_api_session import GrowattApiSession
 
 
 class Max:

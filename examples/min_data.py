@@ -1,12 +1,8 @@
 import os
 from datetime import date
-
-import truststore
 from loguru import logger
+from growatt_public_api import GrowattApi
 
-truststore.inject_into_ssl()
-
-from growatt_public_api import GrowattApi  # noqa: E402 module level import not at top of file
 
 """
 Example script to retrieve data from a MIN device (e.g. Growatt NEO)
@@ -14,6 +10,8 @@ Example script to retrieve data from a MIN device (e.g. Growatt NEO)
 Edit this code or set you own API key as environment variable "GROWATTAPITOKEN" to use your device.
 If nothing is set, test server will be used instead.
 """
+
+
 # init API
 SERVER_URL = None  # default
 API_TOKEN = os.environ.get("GROWATTAPITOKEN")
