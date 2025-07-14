@@ -1,11 +1,8 @@
 from datetime import date, timedelta, time
 from typing import Optional, Union, List, Tuple
-
-import truststore
-
-from growatt_public_api import DeviceType
-from pydantic_models import VppSoc, VppWrite
-from pydantic_models.api_v4 import (
+from ..growatt_types import DeviceType
+from ..pydantic_models import VppSoc, VppWrite
+from ..pydantic_models.api_v4 import (
     SpaDetailsV4,
     SpaEnergyV4,
     SpaEnergyHistoryV4,
@@ -13,7 +10,7 @@ from pydantic_models.api_v4 import (
     SettingReadVppV4,
     SettingWriteV4,
 )
-from pydantic_models.spa import (
+from ..pydantic_models.spa import (
     SpaSettingRead,
     SpaSettingWrite,
     SpaDetails,
@@ -23,11 +20,9 @@ from pydantic_models.spa import (
     SpaEnergyOverviewMultiple,
     SpaEnergyOverviewMultipleItem,
 )
-
-truststore.inject_into_ssl()
-from session import GrowattApiSession  # noqa: E402
-from api_v4.api_v4 import ApiV4  # noqa: E402
-from vpp.vpp import Vpp  # noqa: E402
+from ..session import GrowattApiSession
+from ..api_v4.api_v4 import ApiV4
+from ..vpp.vpp import Vpp
 
 
 class Spa:

@@ -34,9 +34,9 @@ just enumerate available devices from test environment(s)
 """
 
 import pandas as pd
-from api_v4 import ApiV4
+from growatt_public_api.api_v4 import ApiV4
 from growatt_public_api import GrowattApiSession, Device, Plant
-from pydantic_models.api_v4 import DeviceListV4
+from growatt_public_api.pydantic_models.api_v4 import DeviceListV4
 
 # test environments
 envs = [

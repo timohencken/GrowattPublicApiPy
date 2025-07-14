@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch
 
 from growatt_public_api import GrowattApiSession, Device, Wit
-from pydantic_models.api_v4 import (
+from growatt_public_api.pydantic_models.api_v4 import (
     SettingReadVppV4,
     SettingWriteV4,
     WitDetailsV4,
@@ -16,8 +16,8 @@ from pydantic_models.api_v4 import (
     WitEnergyHistoryMultipleV4,
 )
 
-TEST_FILE = "wit.wit"
-TEST_FILE_V4 = "api_v4.api_v4"
+TEST_FILE = "growatt_public_api.wit.wit"
+TEST_FILE_V4 = "growatt_public_api.api_v4.api_v4"
 
 
 # noinspection DuplicatedCode

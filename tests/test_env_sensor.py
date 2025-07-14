@@ -2,16 +2,16 @@ import unittest
 from unittest import skip
 from unittest.mock import patch
 
-from env_sensor import EnvSensor
+from growatt_public_api.env_sensor import EnvSensor
 from growatt_public_api import GrowattApiSession, Device, Plant
-from pydantic_models.env_sensor import (
+from growatt_public_api.pydantic_models.env_sensor import (
     EnvSensorMetricsOverview,
     EnvSensorMetricsOverviewData,
     EnvSensorMetricsHistory,
     EnvSensorMetricsHistoryData,
 )
 
-TEST_FILE = "env_sensor.env_sensor"
+TEST_FILE = "growatt_public_api.env_sensor.env_sensor"
 
 
 class TestEnvSensor(unittest.TestCase):

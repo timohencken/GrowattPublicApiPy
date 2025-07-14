@@ -4,9 +4,9 @@ from unittest import skip
 from unittest.mock import patch
 
 from growatt_public_api import GrowattApiSession
-from pbd import Pbd
-from pydantic_models import PbdAlarms
-from pydantic_models.pbd import (
+from growatt_public_api.pbd import Pbd
+from growatt_public_api.pydantic_models import PbdAlarms
+from growatt_public_api.pydantic_models.pbd import (
     PbdAlarmsData,
     PbdAlarm,
     PbdDetailData,
@@ -17,7 +17,7 @@ from pydantic_models.pbd import (
     PbdEnergyOverviewData,
 )
 
-TEST_FILE = "pbd.pbd"
+TEST_FILE = "growatt_public_api.pbd.pbd"
 
 
 # noinspection DuplicatedCode

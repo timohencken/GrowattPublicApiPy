@@ -1,4 +1,4 @@
-from .device import (  # noqa: F401
+from ..pydantic_models.device import (  # noqa: F401
     DeviceList,
     DataloggerList,
     DeviceTypeInfo,
@@ -7,24 +7,24 @@ from .device import (  # noqa: F401
     DeviceDatalogger,
     DeviceAdd,
 )
-from .env_sensor import (  # noqa: F401
+from ..pydantic_models.env_sensor import (  # noqa: F401
     EnvSensorList,
     EnvSensorMetricsOverview,
     EnvSensorMetricsHistory,
 )
-from .groboost import (  # noqa: F401
+from ..pydantic_models.groboost import (  # noqa: F401
     GroboostDetails,
     GroboostMetricsOverview,
     GroboostMetricsOverviewMultiple,
     GroboostMetricsHistory,
 )
-from .hps import (  # noqa: F401
+from ..pydantic_models.hps import (  # noqa: F401
     HpsDetails,
     HpsEnergyOverview,
     HpsEnergyHistory,
     HpsAlarms,
 )
-from .inverter import (  # noqa: F401
+from ..pydantic_models.inverter import (  # noqa: F401
     InverterSettingRead,
     InverterSettingWrite,
     InverterDetails,
@@ -33,7 +33,7 @@ from .inverter import (  # noqa: F401
     InverterEnergyHistory,
     InverterAlarms,
 )
-from .max import (  # noqa: F401
+from ..pydantic_models.max import (  # noqa: F401
     MaxSettingRead,
     MaxSettingWrite,
     MaxDetails,
@@ -42,7 +42,7 @@ from .max import (  # noqa: F401
     MaxEnergyHistory,
     MaxAlarms,
 )
-from .min import (  # noqa: F401
+from ..pydantic_models.min import (  # noqa: F401
     MinSettings,
     MinSettingRead,
     MinSettingWrite,
@@ -52,19 +52,19 @@ from .min import (  # noqa: F401
     MinEnergyHistory,
     MinAlarms,
 )
-from .pcs import (  # noqa: F401
+from ..pydantic_models.pcs import (  # noqa: F401
     PcsDetails,
     PcsEnergyOverview,
     PcsEnergyHistory,
     PcsAlarms,
 )
-from .pbd import (  # noqa: F401
+from ..pydantic_models.pbd import (  # noqa: F401
     PbdDetails,
     PbdEnergyOverview,
     PbdEnergyHistory,
     PbdAlarms,
 )
-from .plant import (  # noqa: F401
+from ..pydantic_models.plant import (  # noqa: F401
     PlantList,
     PlantDetails,
     PlantEnergyOverview,
@@ -72,12 +72,12 @@ from .plant import (  # noqa: F401
     PlantPower,
     PlantInfo,
 )
-from .smart_meter import (  # noqa: F401
+from ..pydantic_models.smart_meter import (  # noqa: F401
     SmartMeterList,
     SmartMeterEnergyOverview,
     SmartMeterEnergyHistory,
 )
-from .spa import (  # noqa: F401
+from ..pydantic_models.spa import (  # noqa: F401
     SpaSettingRead,
     SpaSettingWrite,
     SpaDetails,
@@ -85,7 +85,7 @@ from .spa import (  # noqa: F401
     SpaEnergyHistory,
     SpaAlarms,
 )
-from .sph import (  # noqa: F401
+from ..pydantic_models.sph import (  # noqa: F401
     SphSettingRead,
     SphSettingWrite,
     SphDetails,
@@ -93,7 +93,7 @@ from .sph import (  # noqa: F401
     SphEnergyHistory,
     SphAlarms,
 )
-from .storage import (  # noqa: F401
+from ..pydantic_models.storage import (  # noqa: F401
     StorageSettingRead,
     StorageSettingWrite,
     StorageDetails,
@@ -101,13 +101,13 @@ from .storage import (  # noqa: F401
     StorageEnergyHistory,
     StorageAlarms,
 )
-from .user import (  # noqa: F401
+from ..pydantic_models.user import (  # noqa: F401
     UserRegistration,
     UserModification,
     UsernameAvailabilityCheck,
     UserList,
 )
-from .vpp import (  # noqa: F401
+from ..pydantic_models.vpp import (  # noqa: F401
     VppSoc,
     VppWrite,
 )

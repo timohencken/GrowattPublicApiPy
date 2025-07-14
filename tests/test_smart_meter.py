@@ -1,9 +1,9 @@
 import unittest
 from unittest import skip
 from growatt_public_api import GrowattApiSession
-from smart_meter import SmartMeter
+from growatt_public_api.smart_meter import SmartMeter
 
-TEST_FILE = "smart_meter.smart_meter"
+TEST_FILE = "growatt_public_api.smart_meter.smart_meter"
 
 
 class TestSmartMeter(unittest.TestCase):

@@ -3,9 +3,9 @@ from datetime import timedelta
 from unittest.mock import patch
 
 from growatt_public_api import GrowattApiSession, Device
-from min import Min
-from pydantic_models import MinDetails
-from pydantic_models.api_v4 import (
+from growatt_public_api.min import Min
+from growatt_public_api.pydantic_models import MinDetails
+from growatt_public_api.pydantic_models.api_v4 import (
     MinDetailsV4,
     MinDetailsDataV4,
     MinDetailDataV4,
@@ -18,7 +18,7 @@ from pydantic_models.api_v4 import (
     SettingWriteV4,
     SettingReadVppV4,
 )
-from pydantic_models.min import (
+from growatt_public_api.pydantic_models.min import (
     MinDetailData,
     MinTlxSettingsData,
     MinEnergyOverview,
@@ -36,8 +36,8 @@ from pydantic_models.min import (
 )
 
 
-TEST_FILE = "min.min"
-TEST_FILE_V4 = "api_v4.api_v4"
+TEST_FILE = "growatt_public_api.min.min"
+TEST_FILE_V4 = "growatt_public_api.api_v4.api_v4"
 
 
 # noinspection DuplicatedCode

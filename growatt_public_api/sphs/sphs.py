@@ -1,20 +1,15 @@
 from datetime import date
 from typing import Union, List, Optional
-
-import truststore
-
-from api_v4 import ApiV4
-from growatt_public_api import DeviceType
-from pydantic_models.api_v4 import (
+from ..api_v4 import ApiV4
+from ..growatt_types import DeviceType
+from ..pydantic_models.api_v4 import (
     SphsEnergyHistoryV4,
     SphsEnergyHistoryMultipleV4,
     SettingWriteV4,
     SphsDetailsV4,
     SphsEnergyV4,
 )
-
-truststore.inject_into_ssl()
-from session import GrowattApiSession  # noqa: E402
+from ..session import GrowattApiSession
 
 
 class Sphs:

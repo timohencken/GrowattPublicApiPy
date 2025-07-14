@@ -8,8 +8,8 @@ from growatt_public_api import (
     Device,
     DeviceType,
 )
-from pydantic_models import PlantInfo
-from pydantic_models.device import (
+from growatt_public_api.pydantic_models import PlantInfo
+from growatt_public_api.pydantic_models.device import (
     DeviceCreateDate,
     DeviceBasicData,
     DataloggerValidation,
@@ -19,9 +19,9 @@ from pydantic_models.device import (
     DeviceDataloggerData,
     DeviceTypeInfo,
 )
-from pydantic_models.plant import PlantInfoData
+from growatt_public_api.pydantic_models.plant import PlantInfoData
 
-TEST_FILE = "device.device"
+TEST_FILE = "growatt_public_api.device.device"
 
 
 # noinspection DuplicatedCode

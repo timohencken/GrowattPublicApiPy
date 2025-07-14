@@ -5,12 +5,8 @@ import tempfile
 from datetime import timedelta, datetime
 from pathlib import Path
 from typing import Optional, Literal, Self
-import truststore
 from loguru import logger
-
-
-truststore.inject_into_ssl()
-import requests  # noqa: E402
+import requests
 
 
 class GrowattApiSession:

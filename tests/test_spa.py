@@ -4,7 +4,7 @@ from unittest import skip
 from unittest.mock import patch
 
 from growatt_public_api import GrowattApiSession, Device
-from pydantic_models.api_v4 import (
+from growatt_public_api.pydantic_models.api_v4 import (
     SpaDetailsV4,
     SpaDetailsDataV4,
     SpaDetailDataV4,
@@ -17,7 +17,7 @@ from pydantic_models.api_v4 import (
     SettingReadVppV4,
     SettingWriteV4,
 )
-from pydantic_models.spa import (
+from growatt_public_api.pydantic_models.spa import (
     SpaAlarm,
     SpaAlarmsData,
     SpaAlarms,
@@ -32,10 +32,10 @@ from pydantic_models.spa import (
     SpaSettingRead,
     SpaSettingWrite,
 )
-from spa import Spa
+from growatt_public_api.spa import Spa
 
-TEST_FILE = "spa.spa"
-TEST_FILE_V4 = "api_v4.api_v4"
+TEST_FILE = "growatt_public_api.spa.spa"
+TEST_FILE_V4 = "growatt_public_api.api_v4.api_v4"
 
 
 # noinspection DuplicatedCode
