@@ -29,10 +29,83 @@ This package aims to
 
 
 # Implementation status
-## ***Alpha***: The library is in an early stage of development and is not yet feature complete.
-
-## Reading/writing settings seems not to work. All tries I did returned "error code 1: SYSTEM_ERROR" :(
+## ***Alpha***: The library is roughly feature-complete, but not yet proven to be working for users other than me.
+### Note:
+Reading/writing settings seems not to work. All tries I did returned "error code 1: SYSTEM_ERROR" :(
 (But still I was able to set my inverter to standby mode, so it seems to work despite the error message)
+
+
+# Usage
+## Installation
+This package is available at [PiPy](https://pypi.org/project/growatt-public-api) and can be installed using pip:
+```shell
+pip install growatt-public-api
+```
+
+## Login
+The API requires token authentication. The token can be retrieved via
+* Growatt Android/iOS app "ShinePhone"
+  * go to "Me" -> your username -> "API Token"
+  * copy your token or request an new one
+* Growatt web frontend at [openapi.growatt.com](http://openapi.growatt.com/)
+  * login
+  * click your username in the upper right corner
+  * go to "Account Management" -> "API Token"
+  * copy your token or request a new one
+
+Pass the token when creating the API object
+```python
+from growatt_api import GrowattApi
+
+api = GrowattApi(
+    token="your_token",
+    # for using a server other than "https://openapi.growatt.com", set the optional "server_url" parameter
+    # server_url="https://openapi-cn.growatt.com",    # China
+    # server_url="https://openapi-us.growatt.com",    # North America
+    # server_url="http://openapi-au.growatt.com",     # Australia and New Zealand
+    # server_url="https://openapi.growatt.com",       # Europe and rest of world
+    # server_url="http://ess-server.atesspower.com",  # for ATESS users
+)
+```
+
+## Examples
+
+### get your plant ID
+```python
+plant_list = api.plant.list()
+plant_id = plant_list.data.plants[0].plant_id
+print(f"{plant_id=}")
+# => plant_id=1234567
+```
+
+### get your devices
+```python
+device_list = api.plant.list_devices(plant_id=plant_id)
+device_sn = device_list.data.devices[0].device_sn
+device_type = api.device.get_device_type(device_sn=device_sn)
+print(f"{device_type=}, {device_sn=}")
+# => device_type=DeviceType.MIN, device_sn='BZP0000000'
+```
+
+### query device metrics
+#### Option 1: use device-specifc API explicitly
+Use the submodule matching your device type to retrieve its metrics or settings
+Note: Make sure to use `device.get_device_type()` for retrieving your device type - the internal type may differ form the marketing name.
+```python
+min_details = api.min.details(device_sn=device_sn)
+print(min_details.data.model_dump_json())
+# => {"alias":"BZP0000000","datalogger_sn":"QMN0000000000000","e_today":0.0,...}
+```
+#### Option 2: use the convenience API to automatically detect and use the correct device type
+Here, retrieve the correct decive API's instance by using `api.api_for_device(device_sn=device_sn)`.
+In following calls, the device_sn does not need to be supplied anymore.
+```python
+my_device = api.api_for_device(device_sn=device_sn)
+# my_device will be of type `Min` for MIN devices with device_sn pre-set
+min_details = my_device.details()
+print(min_details.data.model_dump_json())
+# => {"alias":"BZP0000000","datalogger_sn":"QMN0000000000000","e_today":0.0,...}
+```
 
 # Submodules and methods
 
@@ -383,79 +456,6 @@ This package aims to
   * historical data `env_sensor.metrics_history()`
     * Note: historical data seems to be restricted to 95 days - for earlier dates, API does not return anything
 
-# Usage
-## Installation
-This package is available at [PiPy](https://pypi.org/project/growatt-public-api) and can be installed using pip:
-```shell
-pip install growatt-public-api
-```
-
-## Login
-The API requires token authentication. The token can be retrieved via
-* Growatt Android/iOS app "ShinePhone"
-  * go to "Me" -> your username -> "API Token"
-  * copy your token or request an new one
-* Growatt web frontend at [openapi.growatt.com](http://openapi.growatt.com/)
-  * login
-  * click your username in the upper right corner
-  * go to "Account Management" -> "API Token"
-  * copy your token or request a new one
-
-Pass the token when creating the API object
-```python
-from growatt_api import GrowattApi
-
-api = GrowattApi(
-    token="your_token",
-    # for using a server other than "https://openapi.growatt.com", set the optional "server_url" parameter
-    # server_url="https://openapi-cn.growatt.com",    # China
-    # server_url="https://openapi-us.growatt.com",    # North America
-    # server_url="http://openapi-au.growatt.com",     # Australia and New Zealand
-    # server_url="https://openapi.growatt.com",       # Europe and rest of world
-    # server_url="http://ess-server.atesspower.com",  # for ATESS users
-)
-```
-
-## Examples
-
-### get your plant ID
-```python
-plant_list = api.plant.list()
-plant_id = plant_list.data.plants[0].plant_id
-print(f"{plant_id=}")
-# => plant_id=1234567
-```
-
-### get your devices
-```python
-device_list = api.plant.list_devices(plant_id=plant_id)
-device_sn = device_list.data.devices[0].device_sn
-device_type = api.device.get_device_type(device_sn=device_sn)
-print(f"{device_type=}, {device_sn=}")
-# => device_type=DeviceType.MIN, device_sn='BZP0000000'
-```
-
-### query device metrics
-#### Option 1: use device-specifc API explicitly
-Use the submodule matching your device type to retrieve its metrics or settings
-Note: Make sure to use `device.get_device_type()` for retrieving your device type - the internal type may differ form the marketing name.
-```python
-min_details = api.min.details(device_sn=device_sn)
-print(min_details.data.model_dump_json())
-# => {"alias":"BZP0000000","datalogger_sn":"QMN0000000000000","e_today":0.0,...}
-```
-#### Option 2: use the convenience API to automatically detect and use the correct device type
-Here, retrieve the correct decive API's instance by using `api.api_for_device(device_sn=device_sn)`.
-In following calls, the device_sn does not need to be supplied anymore.
-```python
-my_device = api.api_for_device(device_sn=device_sn)
-# my_device will be of type `Min` for MIN devices with device_sn pre-set
-min_details = my_device.details()
-print(min_details.data.model_dump_json())
-# => {"alias":"BZP0000000","datalogger_sn":"QMN0000000000000","e_today":0.0,...}
-```
-
-
 # Contribution guidelines
 If you see any bugs or improvement ideas, I would love to see a contribution from you.
 
@@ -475,8 +475,6 @@ Your options include
 * run code for different inverter types
   * I have a NEO (=MIN) inverter for testing, and I found some devices on the test environments, but some device types remain untested.
   * just try to run the code for your inverter model and check the pydantic models are valid
-* refactoring
-  * while I like the idea of using single files for each inverter type, I think there might be a better way to do this ;)
 * anything else you can think of
 
 
