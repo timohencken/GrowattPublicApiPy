@@ -491,8 +491,8 @@ To the best of our knowledge only the settings functions perform modifications t
 * TODO: generate & publish docs
 
 # Changelog
-* 2025.07.13 (alpha)
-  * packaging & deploy to [PyPi](https://pypi.org/project/growatt-public-api/)
+* 2025.07.14 (alpha)
+  * packaging & deploy to [PyPi](https://pypi.org/project/growatt-public-api)
   * removed truststore SSL certificate injection
 * 2025.07.11 (pre-alpha)
   * moved common pydantic models (e.g. `GrowattTimeCalendar`) to common module
