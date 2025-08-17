@@ -39,6 +39,7 @@ class DeviceType(Enum):
             96: cls.STORAGE,
             218: cls.WIT,
             260: cls.SPHS,
+            1000: cls.NOAH,
         }
         return mapper.get(device_type)
 

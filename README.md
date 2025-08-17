@@ -406,7 +406,7 @@ print(min_details.data.model_dump_json())
     * write vpp schedules
       * `sphs.setting_write_vpp_param()` (using new API)
 
-## Noah (DeviceType.NOAH)
+## NOAH (DeviceType.NOAH - NOAH/NEXA)
 *Note: Noah devices are not supported by APIv1 endpoints - only v4 endpoints available*
 * general device data
   * read device data
@@ -473,7 +473,7 @@ Your options include
 
 # Contribution ideas
 * run code for different inverter types
-  * I have a NEO (=MIN) inverter for testing, and I found some devices on the test environments, but some device types remain untested.
+  * I have a NEO (=MIN) and NEXA (=NOAH) inverter for testing, and I found some devices on the test environments, but some device types remain untested.
   * just try to run the code for your inverter model and check the pydantic models are valid
 * anything else you can think of
 
@@ -491,6 +491,8 @@ To the best of our knowledge only the settings functions perform modifications t
 * TODO: generate & publish docs
 
 # Changelog
+* 2025.08.17 (alpha)
+  * added NOAH/NEXA support (verified with real NEXA-2000 device)
 * 2025.07.14 (alpha)
   * packaging & deploy to [PyPi](https://pypi.org/project/growatt-public-api)
   * removed truststore SSL certificate injection
