@@ -1137,36 +1137,51 @@ class ApiV4:
                 'error_msg': 'SUCCESSFUL_OPERATION'}
 
             NoahDetailsV4:
-            {   'data': {   'noah': [   {   'address': 1,
+            {   'data': {   'noah': [   {   'ac_couple_power_control': 1,
+                                            'address': 1,
                                             'alias': None,
+                                            'allow_grid_charging': 0,
+                                            'ammeter_unbind': 0,
+                                            'anti_backflow_enable': 0,
+                                            'anti_backflow_power_percentage': 0,
+                                            'associated_inv_man_and_model': 0,
                                             'associated_inv_sn': None,
-                                            'bms_version': '213005',
+                                            'bms_version': '213007',
                                             'charging_soc_high_limit': 100.0,
-                                            'charging_soc_low_limit': 0.0,
+                                            'charging_soc_low_limit': 10.0,
                                             'component_power': 0.0,
                                             'datalogger_sn': None,
-                                            'default_power': 200.0,
-                                            'device_sn': '0PVPOXIEGENGHUI1',
+                                            'default_ac_couple_power': 100,
+                                            'default_mode': 0,
+                                            'default_power': 100.0,
+                                            'device_sn': '0HVR...',
+                                            'device_to_grid_power': 0,
+                                            'eastron_ammeter_control_pair': 0,
                                             'ebm_order_num': 0,
-                                            'fw_version': None,
-                                            'last_update_time': 1720667148000,
-                                            'last_update_time_text': datetime.datetime(2024, 7, 11, 11, 5, 48),
+                                            'fw_version': '230010',
+                                            'grid_connection_control': 0,
+                                            'grid_to_device_power': 826.0,
+                                            'last_update_time': datetime.datetime(2025, 8, 16, 8, 29, 44, tzinfo=TzInfo(UTC)),
+                                            'last_update_time_text': datetime.datetime(2025, 8, 16, 16, 29, 44),
                                             'location': None,
-                                            'lost': False,
-                                            'model': 'Noah 2000',
-                                            'mppt_version': '212004',
-                                            'ota_device_type_code_high': 'PB',
-                                            'ota_device_type_code_low': 'FU',
-                                            'pd_version': '211005',
-                                            'port_name': 'ShinePano-0PVPOXIEGENGHUI1',
+                                            'lost': True,
+                                            'man_name': None,
+                                            'model': None,
+                                            'model_name': None,
+                                            'mppt_version': '232010',
+                                            'ota_device_type_code_high': 'PC',
+                                            'ota_device_type_code_low': 'GU',
+                                            'pd_version': '231007',
+                                            'port_name': 'ShinePano-0HVR...',
+                                            'shelly_flag': False,
                                             'smart_socket_power': 0.0,
-                                            'status': 0,
-                                            'sys_time': 1720660008000,
+                                            'status': -1,
+                                            'sys_time': datetime.datetime(2025, 8, 16, 0, 33, 39, tzinfo=TzInfo(UTC)),
                                             'temp_type': 0,
                                             'time1_enable': True,
                                             'time1_end': datetime.time(23, 59),
-                                            'time1_mode': 0,
-                                            'time1_power': 400.0,
+                                            'time1_mode': 2,
+                                            'time1_power': 0.0,
                                             'time1_start': datetime.time(0, 0),
                                             'time2_enable': False,
                                             'time2_end': datetime.time(0, 0),
@@ -1207,7 +1222,8 @@ class ApiV4:
                                             'time9_end': datetime.time(0, 0),
                                             'time9_mode': 0,
                                             'time9_power': 200.0,
-                                            'time9_start': datetime.time(0, 0)}]},
+                                            'time9_start': datetime.time(0, 0),
+                                            'timezone': 2}]},
                 'error_code': 0,
                 'error_msg': 'SUCCESSFUL_OPERATION'}
         """
@@ -3155,50 +3171,84 @@ class ApiV4:
                 'error_msg': 'SUCCESSFUL_OPERATION'}
 
             NoahEnergyV4
-            Note: NOAH documentation is VERY incomplete
-                  (see https://www.showdoc.com.cn/2540838290984246/11315141402697236 - json shows SPH-S instead).
-                  Therefore, attributes listed here are possible not complete.
-                  A real NOAH device would be required to find the correct attributes
-            {   'data': {   'noah': [   {   'battery1_protect_status': None,
-                                            'battery1_serial_num': None,
-                                            'battery1_soc': None,
-                                            'battery1_temp': None,
-                                            'battery1_warn_status': None,
-                                            'battery2_protect_status': None,
-                                            'battery2_serial_num': None,
-                                            'battery2_soc': None,
-                                            'battery2_temp': None,
-                                            'battery2_warn_status': None,
-                                            'battery3_protect_status': None,
-                                            'battery3_serial_num': None,
-                                            'battery3_soc': None,
-                                            'battery3_temp': None,
-                                            'battery3_warn_status': None,
-                                            'battery4_protect_status': None,
-                                            'battery4_serial_num': None,
-                                            'battery4_soc': None,
-                                            'battery4_temp': None,
-                                            'battery4_warn_status': None,
-                                            'battery_package_quantity': None,
-                                            'datalogger_sn': None,
-                                            'device_sn': None,
-                                            'eac_month': None,
-                                            'eac_today': None,
-                                            'eac_total': None,
-                                            'eac_year': None,
-                                            'fault_status': None,
-                                            'heating_status': None,
-                                            'is_Again': None,
-                                            'mppt_protect_status': None,
-                                            'pac': None,
-                                            'pd_warn_status': None,
-                                            'ppv': None,
-                                            'status': None,
-                                            'time': None,
-                                            'total_battery_pack_charging_power': None,
-                                            'total_battery_pack_charging_status': None,
-                                            'total_battery_pack_soc': None,
-                                            'work_mode': None}]},
+            {   'data': {   'devices': [   {   'ac_couple_protect_status': 4,
+                                               'ac_couple_warn_status': 4,
+                                               'battery1_protect_status': 0,
+                                               'battery1_serial_num': '0HVR...',
+                                               'battery1_soc': 10,
+                                               'battery1_temp': 41.0,
+                                               'battery1_temp_f': 105.8,
+                                               'battery1_warn_status': 0,
+                                               'battery2_protect_status': 0,
+                                               'battery2_serial_num': None,
+                                               'battery2_soc': 0,
+                                               'battery2_temp': 0.0,
+                                               'battery2_temp_f': 32.0,
+                                               'battery2_warn_status': 0,
+                                               'battery3_protect_status': 0,
+                                               'battery3_serial_num': None,
+                                               'battery3_soc': 0,
+                                               'battery3_temp': 0.0,
+                                               'battery3_temp_f': 32.0,
+                                               'battery3_warn_status': 0,
+                                               'battery4_protect_status': 0,
+                                               'battery4_serial_num': None,
+                                               'battery4_soc': 0,
+                                               'battery4_temp': 0.0,
+                                               'battery4_temp_f': 32.0,
+                                               'battery4_warn_status': 0,
+                                               'battery_cycles': 1,
+                                               'battery_package_quantity': 1,
+                                               'battery_soh': 100,
+                                               'charge_soc_limit': 100,
+                                               'ct_flag': 1,
+                                               'ct_self_power': 270.0,
+                                               'datalogger_sn': None,
+                                               'device_sn': '0HVR...',
+                                               'discharge_soc_limit': 10,
+                                               'eac_month': 2.0,
+                                               'eac_today': 1.1,
+                                               'eac_total': 2.0,
+                                               'eac_year': 2.0,
+                                               'fault_status': 0,
+                                               'heating_status': 0,
+                                               'household_load_apart_from_groplug': 270.0,
+                                               'is_again': 0,
+                                               'max_cell_voltage': 3256.0,
+                                               'min_cell_voltage': 3253.0,
+                                               'mppt_protect_status': 0,
+                                               'off_grid_current': 0.0,
+                                               'off_grid_power': 0.0,
+                                               'off_grid_voltage': 0.0,
+                                               'on_grid_current': 0.0,
+                                               'on_grid_power': 0.0,
+                                               'on_grid_voltage': 1.1,
+                                               'on_off_grid': 0,
+                                               'pac': 0.0,
+                                               'pd_warn_status': 0,
+                                               'ppv': 0.0,
+                                               'pv1_current': 0.0,
+                                               'pv1_temp': 33.3,
+                                               'pv1_voltage': 7.29,
+                                               'pv2_current': 0.0,
+                                               'pv2_temp': 33.3,
+                                               'pv2_voltage': 7.23,
+                                               'pv3_current': 0.17,
+                                               'pv3_temp': 33.7,
+                                               'pv3_voltage': 7.29,
+                                               'pv4_current': 0.23,
+                                               'pv4_temp': 33.7,
+                                               'pv4_voltage': 16.73,
+                                               'settable_time_period': 0,
+                                               'status': 6,
+                                               'system_temp': 33.4,
+                                               'time': datetime.datetime(2025, 8, 16, 8, 31, 54, 234000, tzinfo=TzInfo(UTC)),
+                                               'time_str': datetime.datetime(2025, 8, 16, 16, 31, 54),
+                                               'total_battery_pack_charging_power': 0,
+                                               'total_battery_pack_charging_status': 0,
+                                               'total_battery_pack_soc': 10,
+                                               'total_household_load': 270.0,
+                                               'work_mode': 2}]},
                 'error_code': 0,
                 'error_msg': 'SUCCESSFUL_OPERATION'}
         """
@@ -3234,11 +3284,6 @@ class ApiV4:
         elif device_type == DeviceType.SPHS:
             return SphsEnergyV4.model_validate(response)
         elif device_type == DeviceType.NOAH:
-            logger.warning(
-                "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
-            )
-            logger.warning("please send following output to a developer:")
-            logger.warning(f"NOAH energy dump:\n{response}")
             return NoahEnergyV4.model_validate(response)
         else:
             raise ValueError(f"Unknown device type: {device_type}")
@@ -3317,11 +3362,6 @@ class ApiV4:
         elif device_type == DeviceType.SPHS:
             return SphsEnergyHistoryV4.model_validate(response)
         elif device_type == DeviceType.NOAH:
-            logger.warning(
-                "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
-            )
-            logger.warning("please send following output to a developer:")
-            logger.warning(f"NOAH energy history dump:\n{response}")
             return NoahEnergyHistoryV4.model_validate(response)
         else:
             raise ValueError(f"Unknown device type: {device_type}")
@@ -3402,11 +3442,6 @@ class ApiV4:
         elif device_type == DeviceType.SPHS:
             return SphsEnergyHistoryMultipleV4.model_validate(response)
         elif device_type == DeviceType.NOAH:
-            logger.warning(
-                "NOAH documentation in missing/incomplete in API docs. A real device would be needed for finding correct attributes"
-            )
-            logger.warning("please send following output to a developer:")
-            logger.warning(f"NOAH energy history dump:\n{response}")
             return NoahEnergyHistoryMultipleV4.model_validate(response)
         else:
             raise ValueError(f"Unknown device type: {device_type}")

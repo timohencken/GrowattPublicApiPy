@@ -1,8 +1,10 @@
+import os
 import unittest
 from datetime import time
 from unittest import skip
 from unittest.mock import patch
 
+from growatt_public_api.growatt_api import GrowattApi
 from loguru import logger
 
 from growatt_public_api import GrowattApiSession, Device, Noah
@@ -35,23 +37,30 @@ class TestNoah(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        return  # "Currently no environmental sensor found in test environment"
-
-        # init API
-        gas = GrowattApiSession.using_test_server_v4()
-        # init
-        cls.api = Noah(session=gas)
-        # get a device
-        try:
-            api_device = Device(session=gas)
-            _devices = api_device.list()
-            sn_list = [x.device_sn for x in _devices.data.data if x.device_type == "noah"]
-            cls.device_sn = sn_list[0]
-        except IndexError:
-            # unfortunately, there is no NOAH device available at the test APIs :(
-            logger.error("No NOAH device found in test API")
-        except AttributeError:
-            cls.device_sn = ""
+        API_TOKEN = os.environ.get("GROWATTAPITOKEN")
+        if API_TOKEN:
+            api = GrowattApi(token=API_TOKEN)
+            cls.api = api.noah
+            devices = api.device.list()
+            # get first NOAH device
+            noah_device_sns = [d.device_sn for d in devices.data.data if d.device_type == "noah"]
+            assert len(noah_device_sns) > 0, "No NOAH device found"
+            cls.device_sn = noah_device_sns[0]
+        else:
+            # init API
+            gas = GrowattApiSession.using_test_server_v4()
+            # init
+            cls.api = Noah(session=gas)
+            # get a device
+            try:
+                api_device = Device(session=gas)
+                _devices = api_device.list()
+                sn_list = [x.device_sn for x in _devices.data.data if x.device_type == "noah"]
+                cls.device_sn = sn_list[0]
+            except (IndexError, AttributeError):
+                # unfortunately, there is no NOAH device available at the test APIs :(
+                logger.error("No NOAH device found in test API")
+                cls.device_sn = ""
 
     @skip("no NOAH device available on test servers")
     def test_details_v4(self):
