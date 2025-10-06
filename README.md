@@ -432,6 +432,8 @@ print(min_details.data.model_dump_json())
     * `noah.setting_write_on_off()` (using new API)
     * `noah.setting_write_active_power()` (using new API)
     * `noah.setting_write_vpp_param()` (using new API)
+  * assign inverter to noah system
+    * `noah.setting_write_assign_inverter()` (using new API)
   * VPP (VirtualPowerPlant) settings
     * read vpp schedules
       * `noah.setting_read_vpp_param()` (using new API)
@@ -497,9 +499,6 @@ To the best of our knowledge only the settings functions perform modifications t
 # TODOs
 * TODO: generate & publish docs
 * add missing endpoints
-  * Assign Inverter to NOAH
-    * `new-api/setDevice`
-    * https://www.showdoc.com.cn/2598832417617967/11558661385169048
   * Set grid charging allowed (NOAH)
     * `new-api/setGridCharge`
     * https://www.showdoc.com.cn/2598832417617967/11558677502514466
@@ -662,7 +661,8 @@ To the best of our knowledge only the settings functions perform modifications t
 
 # Changelog
 * TBA
-  * added endpoint `power` (new API) to inverter, min, noah, max, spa, sph, wit
+  * added `power()` (new API) to inverter, min, noah, max, spa, sph, wit
+  * added `setting_write_assign_inverter()` (new API) to noah
 * 2025.08.17 (alpha)
   * added NOAH/NEXA support (verified with real NEXA-2000 device)
 * 2025.07.14 (alpha)

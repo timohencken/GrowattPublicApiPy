@@ -259,3 +259,23 @@ class TestNoah(unittest.TestCase):
             SettingWriteV4.model_fields.keys()
         )  # aliased and non-aliased params
         self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+    @skip("no NOAH device available on test servers")  # do not test write functions on production server
+    def setting_write_assign_inverter(self):
+        with patch(f"{TEST_FILE_V4}.SettingWriteV4", wraps=SettingWriteV4) as mock_pyd_model:
+            self.api.setting_write_assign_inverter(
+                device_sn=self.device_sn,
+                inverter_sn="NYR0N9W15U",
+                inverter_model_id="0x0105",
+                inverter_brand_name="Growatt",
+                inverter_model_name="NEO 2000M-X2",
+                inverter_type=0,
+            )
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in SettingWriteV4.model_fields.items()} | set(
+            SettingWriteV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")

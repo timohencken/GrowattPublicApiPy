@@ -485,3 +485,55 @@ class Noah:
             power_watt=power_watt,
             enabled=enabled,
         )
+
+    def setting_write_assign_inverter(
+        self,
+        device_sn: str,
+        inverter_sn: str,  # e.g. "NYR0N9W15U"
+        inverter_model_id: str,  # e.g. "0x0105"
+        inverter_brand_name: str,  # e.g. "Growatt"
+        inverter_model_name: str,  # e.g. "NEO 2000M-X2"
+        inverter_type: int = 0,  # e.g. # 0
+    ) -> SettingWriteV4:
+        """
+        Set Noah Device
+        Set the device's associated inverter and other third-party devices according to the device type noah and the device's SN.
+        https://www.showdoc.com.cn/2598832417617967/11558661385169048
+
+        Values to use for inverter_* parameters can be obtained from https://www.showdoc.com.cn/p/469a02fee3555b1661a25ecfed1cd821
+
+        !!! WARNING !!! this endpoint was neither tried out, tested nor verified! Use at your own risk!
+
+        Note:
+        * This API is only applicable to NOAH device type
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list()) -- This API is only applicable to NOAH device type
+            inverter_sn (str): Serial number of inverter to assign to NOAH device
+            inverter_model_id (str): Model ID of inverter in hex format, e.g. "0x0105" - see https://www.showdoc.com.cn/p/469a02fee3555b1661a25ecfed1cd821
+            inverter_brand_name (str): Manufacturer of inverter, e.g. "Growatt" - see https://www.showdoc.com.cn/p/469a02fee3555b1661a25ecfed1cd821
+            inverter_model_name (str): Model name of inverter, e.g. "NEO 2000M-X2" - see https://www.showdoc.com.cn/p/469a02fee3555b1661a25ecfed1cd821
+            inverter_type (int) = 0  # 0=inverter - see https://www.showdoc.com.cn/p/469a02fee3555b1661a25ecfed1cd821
+
+        Returns:
+            SettingWriteV4
+
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        return self._api_v4.setting_write_assign_inverter(
+            device_sn=self._device_sn(device_sn),
+            device_type=DeviceType.NOAH,
+            inverter_sn=inverter_sn,
+            inverter_model_id=inverter_model_id,
+            inverter_brand_name=inverter_brand_name,
+            inverter_model_name=inverter_model_name,
+            inverter_type=inverter_type,
+        )
