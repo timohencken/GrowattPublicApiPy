@@ -41,6 +41,7 @@ from ..pydantic_models.api_v4 import (
     NoahEnergyHistoryMultipleV4,
     SettingWriteV4,
     SettingReadVppV4,
+    PowerV4,
 )
 from ..session.growatt_api_session import GrowattApiSession
 
@@ -3287,6 +3288,41 @@ class ApiV4:
             return NoahEnergyV4.model_validate(response)
         else:
             raise ValueError(f"Unknown device type: {device_type}")
+
+    def power(  # noqa: C901 'ApiV4.power' is too complex (11)
+        self,
+        device_sn: str,
+        device_type: Union[DeviceType, DeviceTypeStr],
+    ) -> PowerV4:
+        """
+        Read power
+        Read the active power percentage of the device based on the device type and SN of the device.
+        https://www.showdoc.com.cn/2598832417617967/11558661383247816
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 seconds.
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            PowerV4
+            {   'data': 40,
+                'error_code': 0,
+                'error_msg': 'success'}
+        """
+
+        device_type = self._device_type(device_type=device_type)
+
+        response = self.session.post(
+            endpoint="new-api/readPower",
+            params={
+                "deviceSn": device_sn,
+                "deviceType": device_type.value,
+            },
+        )
+
+        return PowerV4.model_validate(response)
 
     def energy_history(  # noqa: C901 'ApiV4.energy' is too complex (11)
         self,

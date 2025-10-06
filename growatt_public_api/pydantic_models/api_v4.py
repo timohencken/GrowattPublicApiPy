@@ -4420,12 +4420,7 @@ class NoahEnergyDataV4(ApiModel):
     total_battery_pack_charging_power: Union[EmptyStrToNone, int] = (
         None  # Total battery charging/discharging power, e.g. 246
     )
-    total_battery_pack_charging_status: Union[EmptyStrToNone, int] = (
-        None
-        # BIT0: Charging
-        # BIT1: Discharging, if neither, display standby
-        # e.g. 1
-    )
+    total_battery_pack_charging_status: Union[EmptyStrToNone, int] = None  # 0=Idle, 1=Charging, 2=Discharging, e.g. 0
     total_battery_pack_soc: Union[EmptyStrToNone, int] = (
         None  # Total battery pack SOC (State of Charge) percentage, e.g. 47
     )
@@ -4628,3 +4623,11 @@ class VppTimePeriodV4(ApiModel):
 
 class SettingReadVppV4(NewApiResponse):
     data: Union[EmptyStrToNone, int, float, List[VppTimePeriodV4]] = None
+
+
+# #####################################################################################################################
+# Power ###############################################################################################################
+
+
+class PowerV4(NewApiResponse):
+    data: Union[EmptyStrToNone, int, float] = None

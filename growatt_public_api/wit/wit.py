@@ -10,6 +10,7 @@ from ..pydantic_models.api_v4 import (
     WitEnergyHistoryMultipleV4,
     SettingReadVppV4,
     SettingWriteV4,
+    PowerV4,
 )
 
 from ..session import GrowattApiSession
@@ -738,6 +739,30 @@ class Wit:
         """
 
         return self._api_v4.energy(device_sn=self._device_sn(device_sn), device_type=DeviceType.WIT)
+
+    def power(
+        self,
+        device_sn: Optional[str] = None,
+    ) -> PowerV4:
+        """
+        Read power
+        Read the active power percentage of the device based on the device type and SN of the device.
+        https://www.showdoc.com.cn/2598832417617967/11558661383247816
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 seconds.
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            PowerV4
+            {   'data': 40,
+                'error_code': 0,
+                'error_msg': 'success'}
+        """
+
+        return self._api_v4.power(device_sn=self._device_sn(device_sn), device_type=DeviceType.WIT)
 
     def energy_history_v4(
         self,

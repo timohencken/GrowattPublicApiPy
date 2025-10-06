@@ -14,6 +14,7 @@ from growatt_public_api.pydantic_models.api_v4 import (
     WitEnergyHistoryV4,
     WitEnergyHistoryDataV4,
     WitEnergyHistoryMultipleV4,
+    PowerV4,
 )
 
 TEST_FILE = "growatt_public_api.wit.wit"
@@ -91,6 +92,23 @@ class TestWit(unittest.TestCase):
             self.assertEqual(set(), set(raw_data["data"]["wit"][0].keys()).difference(pydantic_keys), "data_wit_0")
         else:
             self.assertEqual([], raw_data["data"]["wit"], "no data")
+
+    def test_power(self):
+        with patch(f"{TEST_FILE_V4}.PowerV4", wraps=PowerV4) as mock_pyd_model:
+            self.api.power(device_sn=self.device_sn)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in PowerV4.model_fields.items()} | set(
+            PowerV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+        # check data
+        self.assertTrue(
+            (raw_data["data"] is None) or (isinstance(raw_data["data"], int)) or (isinstance(raw_data["data"], float))
+        )
 
     def test_energy_history_v4(self):
         # get date with data

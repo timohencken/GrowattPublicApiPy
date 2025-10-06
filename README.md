@@ -176,6 +176,7 @@ print(min_details.data.model_dump_json())
   * read alarms/notification `inverter.alarms()`
 * device power/energy metrics
   * current
+    * `inverter.power()` (using new API)
     * `inverter.energy()`
     * `inverter.energy_v4()` (using new API)
     * `inverter.energy_multiple()`
@@ -221,6 +222,7 @@ print(min_details.data.model_dump_json())
   * read alarms/notification `max.alarms()`
 * device power/energy metrics
   * current
+    * `max.power()` (using new API)
     * `max.energy()`
     * `max.energy_multiple()`
     * `max.energy_v4()` (using new API)
@@ -244,6 +246,7 @@ print(min_details.data.model_dump_json())
   * read alarms/notification `sph.alarms()`
 * device power/energy metrics
   * current
+    * `sph.power()` (using new API)
     * `sph.energy()`
     * `sph.energy_multiple()`
     * `sph.energy_v4()` (using new API)
@@ -278,6 +281,7 @@ print(min_details.data.model_dump_json())
   * read alarms/notification `spa.alarms()`
 * device power/energy metrics
   * current
+    * `spa.power()` (using new API)
     * `spa.energy()`
     * `spa.energy_multiple()`
     * `spa.energy_v4()` (using new API)
@@ -310,6 +314,7 @@ print(min_details.data.model_dump_json())
   * read alarms/notification `min.alarms()`
 * device power/energy metrics
   * current
+    * `min.power()` (using new API)
     * `min.energy()`
     * `min.energy_v4()` (using new API)
     * `min.energy_multiple()`
@@ -369,6 +374,7 @@ print(min_details.data.model_dump_json())
     * `wit.details_v4()` (using new API)
 * device power/energy metrics
   * current
+    * `wit.power()` (using new API)
     * `wit.energy_v4()` (using new API)
   * historical data
     * `wit.energy_history_v4()` (using new API)
@@ -413,6 +419,7 @@ print(min_details.data.model_dump_json())
     * `noah.details_v4()` (using new API)
 * device power/energy metrics
   * current
+    * `noah.power()` (using new API)
     * `noah.energy_v4()` (using new API)
   * historical data
     * `noah.energy_history_v4()` (using new API)
@@ -489,8 +496,173 @@ To the best of our knowledge only the settings functions perform modifications t
 
 # TODOs
 * TODO: generate & publish docs
+* add missing endpoints
+  * Assign Inverter to NOAH
+    * `new-api/setDevice`
+    * https://www.showdoc.com.cn/2598832417617967/11558661385169048
+  * Set grid charging allowed (NOAH)
+    * `new-api/setGridCharge`
+    * https://www.showdoc.com.cn/2598832417617967/11558677502514466
+  * Set Off-Grid allowed (NOAH)
+    * `new-api/setOffGrid`
+    * https://www.showdoc.com.cn/2598832417617967/11558677526814378
+  * Get WiFi signal strength
+    * `new-api/getWiFiSignalByDevice`
+    * https://www.showdoc.com.cn/2598832417617967/11558704404033100
+  * Set VPP parameters (new)
+    * `new-api/setNewVppParameter`
+    * https://www.showdoc.com.cn/2598832417617967/11558779194508962
+    * cannot see any difference to the "old" endpoint `new-api/setVppParameter`
+  * Clear VPP time period
+    * `new-api/removeVppTimePeriod`
+    * https://www.showdoc.com.cn/2598832417617967/11558779224942201
+  * Nexa endpoints from App
+    * check if the following request urls should be "noah" or "nexa"
+      ```
+      response = self.session.request(
+          "POST",
+          url='https://openapi.growatt.com/v4/noahDeviceApi/noah/isPlantNoahSystem',
+          params=None,
+          data={'plantId': PLANT_ID},
+      )
+      print(response.text)
+      print(response.status_code)
+      # => {"msg":"","result":0,"obj":null}
+      # => 200
+      ```
+      * DOES NOT RETURN EXPECTED RESULT
+        * expected: `{'msg', 'result', 'obj': {'isPlantNoahSystem', 'plantId', 'isPlantHaveNoah', 'deviceSn', 'plantName'}}`
+    * ```
+      response = self.session.request(
+          "POST",
+          url='https://openapi.growatt.com/v4/noahDeviceApi/nexa/getSystemStatus',
+          params=None,
+          data={'deviceSn': 'DEVICE_SN'},
+      )
+      print(response.text)
+      print(response.status_code)
+      # => {
+      #        "msg":"",
+      #        "result":1,
+      #        "obj":{
+      #            "loadPower":"123",
+      #            "groplugPower":"0",
+      #            "workMode":"2",
+      #            "soc":"50",
+      #            "eastronStatus":"-1",
+      #            "batteryNum":"1",
+      #            "profitToday":"0",
+      #            "acCoupleEnable":"1",
+      #            "pac":"0",
+      #            "alias":"NEXA",
+      #            "otherPower":"0",
+      #            "gridPower":"123",
+      #            "chargePower":"123",
+      #            "associatedInvSn":"",
+      #            "plantId":"PLANT_ID",
+      #            "disChargePower":"0",
+      #            "eacTotal":"12.3",
+      #            "eacToday":"0",
+      #            "isHaveCt":"true",
+      #            "onOffGrid":"0",
+      #            "ppv":"123",
+      #            "profitTotal":"12.34",
+      #            "moneyUnit":"€",
+      #            "groplugNum":"0",
+      #            "status":"6"
+      #        }
+      #    }
+      # => 200
+      ```
+      * app calls every 6 seconds
+    * ```
+      response = self.session.request(
+          "POST",
+          url='https://openapi.growatt.com/v4/noahDeviceApi/nexa/getNexaInfoBySn',
+          params=None,
+          data={'deviceSn': 'DEVICE_SN'},
+      )
+      print(response.text)
+      print(response.status_code)
+      # => {"msg":"","result":1,"obj":{"unitKeyList":["RMB","EUR","GBP","USD","AUD","BGN","BRC","CAD","CHF","CZK","DKK","HKD","HRK","HUF","IDR","NIS","INR","JPY","KRW","MXN","MYR","NOK","NZD","PHP","PLN","RON","RUB","SEK","SGD","THB","TRY","ZAR","AED","AFN","ALL","AMD","ANG","AOA","ARP","AWG","AZN","BAM","BBD","BDT","BHD","BIF","BND","BOB","BSD","BTN","BWP","BYN","BZD","CDF","CLP","COP","CRC","CUP","CVE","DJF","DOP","DZD","EGP","ERN","ETB","FJD","FKP","GEL","GHS","GIP","GMD","GNF","GTQ","GYD","HNL","HTG","IQD","IRR","ISK","JMD","JOD","KES","KGS","KHR","KMF","KPW","KWD","KYD","KZT","LAK","LBP","LKR","LRD","LSL","LYD","MAD","MDL","MGA","MKD","BUK","MNT","MOP","MRU","MUR","MVR","MWK","MZN","NAD","NGN","NIO","NPR","OMR","PAB","PEN","PGK","PKR","PYG","QAR","RSD","RWF","SAR","SBD","SCR","SDG","SHP","SLL","SOS","SRD","SSP","STN","SVC","SYP","SZL","TJS","TMT","TND","TOP","TTD","TWD","TZS","UAH","UGX","UYU","UZS","VEF","VND","VUV","WST","XAF","XCD","XOF","XPF","YER","ZMW","BMD","THP"],"unitList":{"FJD":"FJD","MXN":"MXN","SCR":"SCR","CDF":"CDF","BBD":"BBD","GTQ":"GTQ","CLP":"CLP","HNL":"HNL","UGX":"UGX","ZAR":"ZAR","TND":"TND","STN":"STN","BSD":"BSD","SLL":"SLL","SDG":"SDG","IQD":"IQD","CUP":"CUP","GMD":"GMD","TWD":"TWD","RSD":"RSD","DOP":"DOP","KMF":"KMF","MYR":"MYR","FKP":"FKP","XOF":"XOF","GEL":"GEL","UYU":"UYU","MAD":"MAD","CVE":"CVE","TOP":"TOP","AZN":"AZN","OMR":"OMR","PGK":"PGK","SEK":"SEK","KES":"KES","BTN":"BTN","UAH":"UAH","GNF":"GNF","ARP":"ARP","ERN":"ERN","MZN":"MZN","SVC":"SVC","QAR":"QAR","IRR":"IRR","THB":"THB","UZS":"UZS","XPF":"XPF","MRU":"MRU","BDT":"BDT","LYD":"LYD","BMD":"BMD","PHP":"PHP","KWD":"KWD","BUK":"BUK","THP":"THP","RUB":"RUB","PYG":"PYG","ISK":"ISK","JMD":"JMD","COP":"COP","RMB":"RMB","USD":"USD","MKD":"MKD","DZD":"DZD","PAB":"PAB","SGD":"SGD","ETB":"ETB","KGS":"KGS","SOS":"SOS","VEF":"VEF","VUV":"VUV","LAK":"LAK","BND":"BND","XAF":"XAF","LRD":"LRD","CHF":"CHF","HRK":"HRK","ALL":"ALL","DJF":"DJF","ZMW":"ZMW","TZS":"TZS","VND":"VND","AUD":"AUD","GHS":"GHS","GYD":"GYD","KPW":"KPW","BOB":"BOB","KHR":"KHR","MDL":"MDL","IDR":"IDR","KYD":"KYD","AMD":"AMD","TRY":"TRY","BWP":"BWP","SHP":"SHP","LBP":"LBP","TJS":"TJS","JOD":"JOD","HKD":"HKD","AED":"AED","RWF":"RWF","EUR":"EUR","LSL":"LSL","DKK":"DKK","CAD":"CAD","BGN":"BGN","NOK":"NOK","MUR":"MUR","SYP":"SYP","GIP":"GIP","RON":"RON","LKR":"LKR","NGN":"NGN","CZK":"CZK","CRC":"CRC","PKR":"PKR","XCD":"XCD","ANG":"ANG","HTG":"HTG","BHD":"BHD","KZT":"KZT","SRD":"SRD","SZL":"SZL","SAR":"SAR","TTD":"TTD","YER":"YER","MVR":"MVR","AFN":"AFN","INR":"INR","KRW":"KRW","AWG":"AWG","NPR":"NPR","JPY":"JPY","MNT":"MNT","PLN":"PLN","AOA":"AOA","GBP":"GBP","SBD":"SBD","BYN":"BYN","HUF":"HUF","BIF":"BIF","MWK":"MWK","MGA":"MGA","BZD":"BZD","BAM":"BAM","EGP":"EGP","MOP":"MOP","NAD":"NAD","SSP":"SSP","BRC":"BRC","NIO":"NIO","PEN":"PEN","NIS":"NIS","NZD":"NZD","WST":"WST","TMT":"TMT"},"noah":{"acCouple":"true","time_segment":[{"time_segment3":"2_0:0_23:59_0_0"}],"workMode":"2","antiBackflowEnable":"1","acCouplePowerControl":"1","ammeterModel":"Shelly Pro 3EM","acCoupleEnable":"1","deviceSn":"DEVICE_SN","safety":1,"alias":"NEXA 2000","ammeterSn":"149618405023988","model":"NEXA 2000","shellyList":[],"gridSet":"1","antiBackflowPowerPercentage":"0","tempType":"0","batSns":["DEVICE_SN","0HYR40ZR23FT0007"],"safetyList":[{"safetyCorrespondNum":1,"countryAndArea":"German"},{"safetyCorrespondNum":2,"countryAndArea":"Netherlands"},{"safetyCorrespondNum":3,"countryAndArea":"Belgium"},{"safetyCorrespondNum":4,"countryAndArea":"French"},{"safetyCorrespondNum":5,"countryAndArea":"EN 50549-1"}],"plantId":"PLANT_ID","chargingSocHighLimit":"100","version":"11.10.09.07.9000.4017","chargingSocLowLimit":"10","formulaMoney":"0.4","ctType":"0","allowGridCharging":"1","defaultMode":"0","smartPlan":"true","safetyEnable":"true","defaultACCouplePower":"100","gridConnectionControl":"0","plantName":"Solarzaun","moneyUnitText":"EUR"},"plantList":[{"plantId":"PLANT_ID","plantImgName":"","plantName":"Solarzaun"}]}}
+      # => 200
+      ```
+    * chart 5min data
+      ```
+      response = self.session.request(
+          "POST",
+          url='https://openapi.growatt.com/v4/noahDeviceApi/nexa/getNexaChartData',
+          params=None,
+          data={
+              'deviceSn': 'DEVICE_SN',
+              'date': '2025-10-01'
+          },
+      )
+      print(response.text)
+      print(response.status_code)
+      # => {"msg":"","result":1,"obj":{"01:55":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"18:50":{"totalHouseholdLoad":"403","pac":"0","ppv":"0"},"02:25":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"08:05":{"totalHouseholdLoad":"557","pac":"0","ppv":"0"},"02:20":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"07:35":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"08:00":{"totalHouseholdLoad":"775","pac":"0","ppv":"0"},"20:10":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"07:30":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"01:50":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"14:15":{"totalHouseholdLoad":"216","pac":"0","ppv":"333.5"},"13:45":{"totalHouseholdLoad":"260","pac":"0","ppv":"220"},"20:05":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"19:25":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"14:10":{"totalHouseholdLoad":"65488","pac":"0","ppv":"341"},"19:20":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"13:40":{"totalHouseholdLoad":"301.5","pac":"0","ppv":"163.5"},"18:55":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"02:15":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"01:45":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"19:30":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"07:25":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"20:25":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"06:55":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"02:10":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"20:20":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"01:40":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"07:20":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"14:25":{"totalHouseholdLoad":"131","pac":"0","ppv":"291"},"06:50":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"13:55":{"totalHouseholdLoad":"138","pac":"0","ppv":"294"},"20:15":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"13:50":{"totalHouseholdLoad":"264.5","pac":"0","ppv":"280.5"},"19:35":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"14:20":{"totalHouseholdLoad":"65458.5","pac":"0","ppv":"337"},"02:45":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"03:15":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"02:40":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"03:10":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"08:25":{"totalHouseholdLoad":"412","pac":"0","ppv":"0"},"07:55":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"08:20":{"totalHouseholdLoad":"536","pac":"0","ppv":"36"},"07:50":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"13:25":{"totalHouseholdLoad":"156","pac":"0","ppv":"319.5"},"12:55":{"totalHouseholdLoad":"873.5","pac":"0","ppv":"257"},"18:35":{"totalHouseholdLoad":"1376","pac":"0","ppv":"0"},"19:05":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"13:20":{"totalHouseholdLoad":"242","pac":"0","ppv":"311.5"},"18:30":{"totalHouseholdLoad":"2446","pac":"0","ppv":"0"},"12:50":{"totalHouseholdLoad":"296.5","pac":"0","ppv":"258"},"19:00":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"03:05":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"18:40":{"totalHouseholdLoad":"373","pac":"0","ppv":"0"},"02:35":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"08:15":{"totalHouseholdLoad":"505.5","pac":"0","ppv":"30.5"},"02:30":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"07:45":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"03:00":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"20:00":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"08:10":{"totalHouseholdLoad":"552","pac":"0","ppv":"13.5"},"13:35":{"totalHouseholdLoad":"216.5","pac":"0","ppv":"275.5"},"07:40":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"14:05":{"totalHouseholdLoad":"65521.5","pac":"0","ppv":"336"},"18:45":{"totalHouseholdLoad":"456.5","pac":"0","ppv":"0"},"19:15":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"14:00":{"totalHouseholdLoad":"272.5","pac":"0","ppv":"356.5"},"19:10":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"13:30":{"totalHouseholdLoad":"137","pac":"0","ppv":"361"},"00:45":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"23:45":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"01:10":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"01:15":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"05:55":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"06:25":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"00:40":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"05:50":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"23:40":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"06:20":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"12:35":{"totalHouseholdLoad":"311","pac":"0","ppv":"232.5"},"13:00":{"totalHouseholdLoad":"237","pac":"0","ppv":"295"},"13:05":{"totalHouseholdLoad":"167.5","pac":"0","ppv":"290"},"17:45":{"totalHouseholdLoad":"4928","pac":"0","ppv":"0"},"18:15":{"totalHouseholdLoad":"336","pac":"0","ppv":"0"},"12:30":{"totalHouseholdLoad":"291","pac":"0","ppv":"245"},"17:40":{"totalHouseholdLoad":"2401.5","pac":"0","ppv":"21"},"18:10":{"totalHouseholdLoad":"1416.5","pac":"0","ppv":"28.5"},"23:55":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"01:00":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"17:50":{"totalHouseholdLoad":"1816.5","pac":"0","ppv":"0"},"01:05":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"06:15":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"00:35":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"05:45":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"00:30":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"05:40":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"23:50":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"06:10":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"12:45":{"totalHouseholdLoad":"307","pac":"0","ppv":"243"},"13:15":{"totalHouseholdLoad":"213","pac":"0","ppv":"294"},"17:55":{"totalHouseholdLoad":"2388","pac":"0","ppv":"47"},"18:25":{"totalHouseholdLoad":"411","pac":"0","ppv":"0"},"13:10":{"totalHouseholdLoad":"721.5","pac":"0","ppv":"298"},"18:20":{"totalHouseholdLoad":"1410.5","pac":"0","ppv":"0"},"12:40":{"totalHouseholdLoad":"333","pac":"0","ppv":"225.5"},"01:35":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"02:05":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"22:55":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"02:00":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"23:25":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"06:45":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"07:15":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"07:10":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"01:30":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"06:40":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"22:50":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"23:20":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"11:45":{"totalHouseholdLoad":"275.5","pac":"0","ppv":"149"},"12:10":{"totalHouseholdLoad":"376.5","pac":"0","ppv":"196.5"},"12:15":{"totalHouseholdLoad":"206","pac":"0","ppv":"246.5"},"16:50":{"totalHouseholdLoad":"291.5","pac":"0","ppv":"121"},"17:25":{"totalHouseholdLoad":"110","pac":"0","ppv":"76.5"},"16:55":{"totalHouseholdLoad":"341","pac":"0","ppv":"110.5"},"17:20":{"totalHouseholdLoad":"243.5","pac":"0","ppv":"81"},"11:40":{"totalHouseholdLoad":"279.5","pac":"0","ppv":"159"},"00:55":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"23:35":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"07:05":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"01:25":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"06:35":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"01:20":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"06:30":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"07:00":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"00:50":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"23:30":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"11:55":{"totalHouseholdLoad":"234.5","pac":"0","ppv":"201.5"},"18:05":{"totalHouseholdLoad":"2371","pac":"0","ppv":"21"},"12:25":{"totalHouseholdLoad":"219.5","pac":"0","ppv":"243"},"17:35":{"totalHouseholdLoad":"223","pac":"0","ppv":"54"},"11:50":{"totalHouseholdLoad":"328","pac":"0","ppv":"165"},"12:20":{"totalHouseholdLoad":"310","pac":"0","ppv":"244"},"17:30":{"totalHouseholdLoad":"285","pac":"0","ppv":"63"},"18:00":{"totalHouseholdLoad":"270","pac":"0","ppv":"47"},"00:00":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"23:00":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"00:05":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"05:15":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"22:35":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"23:05":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"05:10":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"04:45":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"04:40":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"09:55":{"totalHouseholdLoad":"153","pac":"0","ppv":"173"},"22:30":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"11:20":{"totalHouseholdLoad":"1980","pac":"0","ppv":"147"},"10:55":{"totalHouseholdLoad":"120","pac":"0","ppv":"290"},"09:50":{"totalHouseholdLoad":"184.5","pac":"0","ppv":"152.5"},"11:25":{"totalHouseholdLoad":"32814","pac":"0","ppv":"159.5"},"17:05":{"totalHouseholdLoad":"359","pac":"0","ppv":"108.5"},"17:00":{"totalHouseholdLoad":"367","pac":"0","ppv":"104"},"16:30":{"totalHouseholdLoad":"97","pac":"0","ppv":"211"},"16:35":{"totalHouseholdLoad":"32730.5","pac":"0","ppv":"182.5"},"10:50":{"totalHouseholdLoad":"115","pac":"0","ppv":"318"},"23:10":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"22:45":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"04:35":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"23:15":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"05:05":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"05:00":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"09:45":{"totalHouseholdLoad":"161","pac":"0","ppv":"148"},"22:40":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"04:30":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"09:40":{"totalHouseholdLoad":"132.5","pac":"0","ppv":"140.5"},"12:00":{"totalHouseholdLoad":"145.5","pac":"0","ppv":"246"},"12:05":{"totalHouseholdLoad":"259","pac":"0","ppv":"228"},"17:15":{"totalHouseholdLoad":"175","pac":"0","ppv":"88"},"11:35":{"totalHouseholdLoad":"239","pac":"0","ppv":"163"},"16:40":{"totalHouseholdLoad":"65473","pac":"0","ppv":"175"},"16:45":{"totalHouseholdLoad":"120","pac":"0","ppv":"176"},"11:30":{"totalHouseholdLoad":"149","pac":"0","ppv":"172"},"17:10":{"totalHouseholdLoad":"329.5","pac":"0","ppv":"100"},"21:40":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"22:10":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"00:20":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"06:05":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"00:25":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"22:15":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"06:00":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"05:35":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"21:45":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"05:30":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"10:30":{"totalHouseholdLoad":"204.5","pac":"0","ppv":"247"},"16:15":{"totalHouseholdLoad":"65396","pac":"0","ppv":"195.5"},"11:00":{"totalHouseholdLoad":"43","pac":"0","ppv":"331"},"10:35":{"totalHouseholdLoad":"164.5","pac":"0","ppv":"253"},"11:05":{"totalHouseholdLoad":"42","pac":"0","ppv":"369"},"15:40":{"totalHouseholdLoad":"1720","pac":"0","ppv":"226.5"},"15:45":{"totalHouseholdLoad":"499","pac":"0","ppv":"232.5"},"16:10":{"totalHouseholdLoad":"32637","pac":"0","ppv":"214.5"},"22:20":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"21:50":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"00:10":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"00:15":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"05:25":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"22:25":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"04:55":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"21:55":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"04:50":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"05:20":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"11:10":{"totalHouseholdLoad":"125","pac":"0","ppv":"265"},"16:25":{"totalHouseholdLoad":"65282.5","pac":"0","ppv":"193"},"10:45":{"totalHouseholdLoad":"234.5","pac":"0","ppv":"260"},"11:15":{"totalHouseholdLoad":"32409.5","pac":"0","ppv":"149.5"},"16:20":{"totalHouseholdLoad":"65278","pac":"0","ppv":"169"},"15:50":{"totalHouseholdLoad":"3540","pac":"0","ppv":"198"},"15:55":{"totalHouseholdLoad":"2181.5","pac":"0","ppv":"222"},"10:40":{"totalHouseholdLoad":"252","pac":"0","ppv":"248"},"20:50":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"03:35":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"04:05":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"03:30":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"10:05":{"totalHouseholdLoad":"95","pac":"0","ppv":"182.5"},"21:25":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"04:00":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"09:15":{"totalHouseholdLoad":"236","pac":"0","ppv":"59"},"20:55":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"08:45":{"totalHouseholdLoad":"197","pac":"0","ppv":"53.5"},"21:20":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"09:10":{"totalHouseholdLoad":"192","pac":"0","ppv":"71.5"},"08:40":{"totalHouseholdLoad":"196.5","pac":"0","ppv":"46"},"15:25":{"totalHouseholdLoad":"75","pac":"0","ppv":"273.5"},"10:10":{"totalHouseholdLoad":"113","pac":"0","ppv":"178"},"10:15":{"totalHouseholdLoad":"166.5","pac":"0","ppv":"201.5"},"14:50":{"totalHouseholdLoad":"400.5","pac":"0","ppv":"219"},"14:55":{"totalHouseholdLoad":"65420","pac":"0","ppv":"253"},"15:20":{"totalHouseholdLoad":"208","pac":"0","ppv":"267"},"22:00":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"02:55":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"03:25":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"22:05":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"03:20":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"09:05":{"totalHouseholdLoad":"164.5","pac":"0","ppv":"80"},"08:35":{"totalHouseholdLoad":"166","pac":"0","ppv":"45"},"21:35":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"09:00":{"totalHouseholdLoad":"242","pac":"0","ppv":"63"},"02:50":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"21:30":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"10:20":{"totalHouseholdLoad":"286.5","pac":"0","ppv":"229"},"08:30":{"totalHouseholdLoad":"373","pac":"0","ppv":"0"},"16:05":{"totalHouseholdLoad":"438","pac":"0","ppv":"230"},"15:35":{"totalHouseholdLoad":"172","pac":"0","ppv":"208"},"10:25":{"totalHouseholdLoad":"218","pac":"0","ppv":"243"},"15:30":{"totalHouseholdLoad":"167","pac":"0","ppv":"243"},"16:00":{"totalHouseholdLoad":"695.5","pac":"0","ppv":"222"},"19:40":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"04:25":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"04:20":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"20:35":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"03:55":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"09:35":{"totalHouseholdLoad":"127","pac":"0","ppv":"125"},"21:00":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"03:50":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"20:30":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"15:05":{"totalHouseholdLoad":"65402","pac":"0","ppv":"274"},"09:30":{"totalHouseholdLoad":"225","pac":"0","ppv":"112"},"14:35":{"totalHouseholdLoad":"169.5","pac":"0","ppv":"260"},"15:00":{"totalHouseholdLoad":"988.5","pac":"0","ppv":"260.5"},"19:45":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"14:30":{"totalHouseholdLoad":"161","pac":"0","ppv":"273"},"19:50":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"03:45":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"04:15":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"21:15":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"04:10":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"20:45":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"09:25":{"totalHouseholdLoad":"200","pac":"0","ppv":"97.5"},"08:55":{"totalHouseholdLoad":"213.5","pac":"0","ppv":"59"},"21:10":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"03:40":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"20:40":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"09:20":{"totalHouseholdLoad":"237.5","pac":"0","ppv":"69.5"},"15:15":{"totalHouseholdLoad":"32991","pac":"0","ppv":"266.5"},"10:00":{"totalHouseholdLoad":"153.5","pac":"0","ppv":"199"},"08:50":{"totalHouseholdLoad":"233","pac":"0","ppv":"58"},"14:45":{"totalHouseholdLoad":"609","pac":"0","ppv":"206.5"},"21:05":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"},"14:40":{"totalHouseholdLoad":"65492","pac":"0","ppv":"241"},"15:10":{"totalHouseholdLoad":"32802.5","pac":"0","ppv":"287"},"19:55":{"totalHouseholdLoad":"0","pac":"0","ppv":"0"}}}
+      # => 200
+      ```
+      * seems to return previos day, so do request with date+1
+      * daily data (other url and params!)
+        ```
+        response = self.session.request(
+            "POST",
+            url='https://openapi.growatt.com/v4/noahDeviceApi/nexa/getDataChart',
+            params=None,
+            data={
+                'deviceSn': 'DEVICE_SN',
+                'dateTime': '2025-10-01',
+                'dateType': 1
+            },
+        )
+        print(response.text)
+        print(response.status_code)
+        # => {"msg":"","result":1,"obj":{"22":"0","01":"0.2","23":"0","02":"0","24":"0","03":"0","25":"0","04":"0","26":"0","05":"0","27":"0","06":"0","28":"0","07":"0","29":"0","08":"0","09":"0","30":"0","31":"0","10":"0","11":"0","12":"0","13":"0","14":"0","15":"0","16":"0","17":"0","18":"0","19":"0","20":"0","21":"0"}}
+        # => 200
+        ```
+      * monthly data: `'dateTime': '2025-10-01', 'dateType': 2`
+      * yearly data: `'dateTime': '2025-10-01', 'dateType': 3`
+    * ```
+      response = self.session.request(
+          "POST",
+          url='https://openapi.growatt.com/v4/noahDeviceApi/nexa/checkUpgradeNexa',
+          params=None,
+          data={
+              'deviceSn': 'DEVICE_SN',
+          },
+      )
+      print(response.text)
+      print(response.status_code)
+      # => {"msg":"","result":1,"obj":{"checkUpgradeNoah":false,"currVersion":"11.10.09.07.9000.4017","newVersion":"11.10.09.07.9000.4017","status":"6"}}
+      # => 200
+      ```
+    * ```
+      response = self.session.request(
+          "POST",
+          url='https://openapi.growatt.com/v4/noahDeviceApi/nexa/set',
+          params=None,
+          data={
+              'serialNum': 'DEVICE_SN',
+              'type': 'ac_couple_enable',
+              'param1': 1,
+          },
+          # headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
+      )
+      print(response.text)
+      print(response.status_code)
+      # => {"msg":"505","result":0,"obj":null}
+      # => 200
+      # => COULDN'T GET IT WORKING
+      ```
+    * for noah see
+      * https://github.com/search?q=repo%3Amtrossbach%2Fnoah-mqtt%20noahDeviceApi&type=code
+      * https://github.com/indykoning/PyPi_GrowattServer/blob/45e3fce44c32be16eec6cc049549a78b1e11233f/growattServer/base_api.py#L871
+      *
 
 # Changelog
+* TBA
+  * added endpoint `power` (new API) to inverter, min, noah, max, spa, sph, wit
 * 2025.08.17 (alpha)
   * added NOAH/NEXA support (verified with real NEXA-2000 device)
 * 2025.07.14 (alpha)
