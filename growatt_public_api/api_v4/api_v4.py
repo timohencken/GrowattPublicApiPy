@@ -4111,3 +4111,50 @@ class ApiV4:
         )
 
         return SettingWriteV4.model_validate(response)
+
+    def setting_write_grid_charging(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: str,
+        device_type: Union[DeviceType, DeviceTypeStr],
+        grid_charging: bool,
+    ) -> SettingWriteV4:
+        """
+        Set whether to allow charging from the grid
+        Set whether to allow charging from the grid of the device based on the device type noah and the SN of the device.
+        https://www.showdoc.com.cn/2598832417617967/11558677502514466
+
+        Note:
+        * This API is only applicable to NOAH device type
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list())
+            grid_charging (bool): True=enabled, False=disabled
+
+        Returns:
+            SettingWriteV4
+
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        device_type = self._device_type(device_type=device_type)
+
+        if device_type != DeviceType.NOAH:
+            raise AttributeError("This API is only applicable to NOAH device type")
+
+        response = self.session.post(
+            endpoint="new-api/setPower",
+            params={
+                "deviceSn": device_sn,
+                "deviceType": device_type.value,
+                "value": int(bool(grid_charging)),
+            },
+        )
+
+        return SettingWriteV4.model_validate(response)

@@ -431,6 +431,7 @@ print(min_details.data.model_dump_json())
   * write settings value
     * `noah.setting_write_on_off()` (using new API)
     * `noah.setting_write_active_power()` (using new API)
+    * `noah.setting_write_grid_charging()` (using new API)
     * `noah.setting_write_vpp_param()` (using new API)
   * assign inverter to noah system
     * `noah.setting_write_assign_inverter()` (using new API)
@@ -663,6 +664,7 @@ To the best of our knowledge only the settings functions perform modifications t
 * TBA
   * added `power()` (new API) to inverter, min, noah, max, spa, sph, wit
   * added `setting_write_assign_inverter()` (new API) to noah
+  * added `setting_write_grid_charging()` (new API) to noah
 * 2025.08.17 (alpha)
   * added NOAH/NEXA support (verified with real NEXA-2000 device)
 * 2025.07.14 (alpha)

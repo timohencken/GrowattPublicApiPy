@@ -537,3 +537,38 @@ class Noah:
             inverter_model_name=inverter_model_name,
             inverter_type=inverter_type,
         )
+
+    def setting_write_grid_charging(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: str,
+        grid_charging: bool,
+    ) -> SettingWriteV4:
+        """
+        Set whether to allow charging from the grid
+        Set whether to allow charging from the grid of the device based on the device type noah and the SN of the device.
+        https://www.showdoc.com.cn/2598832417617967/11558677502514466
+
+        Note:
+        * This API is only applicable to NOAH device type
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            grid_charging (bool): True=enabled, False=disabled
+
+        Returns:
+            SettingWriteV4
+
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        return self._api_v4.setting_write_grid_charging(
+            device_sn=self._device_sn(device_sn),
+            device_type=DeviceType.NOAH,
+            grid_charging=grid_charging,
+        )
