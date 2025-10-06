@@ -8,6 +8,7 @@ from ..pydantic_models.api_v4 import (
     SettingWriteV4,
     SphsDetailsV4,
     SphsEnergyV4,
+    WifiStrengthV4,
 )
 from ..session import GrowattApiSession
 
@@ -438,4 +439,31 @@ class Sphs:
             device_sn=self._device_sn(device_sn),
             device_type=DeviceType.SPHS,
             active_power=active_power_percent,
+        )
+
+    def wifi_strength(  # noqa: C901 'ApiV4.power' is too complex (11)
+        self,
+        device_sn: str,
+    ) -> WifiStrengthV4:
+        """
+        Get the collector signal value
+        Get the network signal value of the collector through the SN of the device
+        https://www.showdoc.com.cn/2598832417617967/11558704404033100
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 seconds.
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            WifiStrengthV4
+            {   'data': -46,
+                'error_code': 0,
+                'error_msg': 'success'}
+        """
+
+        return self._api_v4.wifi_strength(
+            device_sn=self._device_sn(device_sn),
+            device_type=DeviceType.SPHS,
         )

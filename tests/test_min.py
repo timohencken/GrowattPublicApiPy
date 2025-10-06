@@ -19,6 +19,7 @@ from growatt_public_api.pydantic_models.api_v4 import (
     SettingWriteV4,
     SettingReadVppV4,
     PowerV4,
+    WifiStrengthV4,
 )
 from growatt_public_api.pydantic_models.min import (
     MinDetailData,
@@ -485,6 +486,55 @@ class TestMin(unittest.TestCase):
         )  # aliased and non-aliased params
         self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
 
+    def test_setting_write_vpp_param_new(self):
+        """
+        This endpoint cannot be tested using the v1 test server (test.growatt.com), since it returns 404
+        This endpoint is only available on the v4 test server (183.62.216.35:8081) and on the official server (openapi.growatt.com)
+        """
+        # use SPH device from v4 server
+        api_server_v4 = Min(session=GrowattApiSession.using_test_server_v4())
+        device_sn = "AQM1234567"  # actually not MIN but SPH -- but works fine
+
+        # test it
+        with patch(f"{TEST_FILE_V4}.SettingWriteV4", wraps=SettingWriteV4) as mock_pyd_model:
+            api_server_v4.setting_write_vpp_param_new(
+                device_sn=device_sn,
+                parameter_id="set_param_2",  # On off command
+                value=1,  # 1 = power on (default)
+            )
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in SettingWriteV4.model_fields.items()} | set(
+            SettingWriteV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+    def test_setting_clear_vpp_time_period(self):
+        """
+        This endpoint cannot be tested using the v1 test server (test.growatt.com), since it returns 404
+        This endpoint is only available on the v4 test server (183.62.216.35:8081) and on the official server (openapi.growatt.com)
+        """
+        # use SPH device from v4 server
+        api_server_v4 = Min(session=GrowattApiSession.using_test_server_v4())
+        device_sn = "AQM1234567"  # actually not MIN but SPH -- but works fine
+
+        # test it
+        with patch(f"{TEST_FILE_V4}.SettingWriteV4", wraps=SettingWriteV4) as mock_pyd_model:
+            api_server_v4.setting_clear_vpp_time_period(
+                device_sn=device_sn,
+                parameter_id="set_param_2",  # On off command
+            )
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in SettingWriteV4.model_fields.items()} | set(
+            SettingWriteV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
     def test_settings(self):
         with patch(f"{TEST_FILE}.MinSettings", wraps=MinSettings) as mock_pyd_model:
             self.api.settings(device_sn=self.device_sn)
@@ -502,3 +552,23 @@ class TestMin(unittest.TestCase):
             MinTlxSettingsData.model_fields.keys()
         )
         self.assertEqual(set(), set(raw_data["data"].keys()).difference(pydantic_keys), "data")
+
+    def test_wifi_strength(self):
+        if self.device_sn_real is None:
+            self.skipTest(
+                "No real MIN device available, no MIN device on test server v4, endpoint not supported on test server v1"
+            )
+
+        with patch(f"{TEST_FILE_V4}.WifiStrengthV4", wraps=WifiStrengthV4) as mock_pyd_model:
+            self.api_real.wifi_strength(device_sn=self.device_sn_real)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in PowerV4.model_fields.items()} | set(
+            PowerV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+        # check pydantic conversion works
+        WifiStrengthV4.model_validate(raw_data)

@@ -9,6 +9,7 @@ from ..pydantic_models.api_v4 import (
     NoahEnergyHistoryMultipleV4,
     SettingWriteV4,
     PowerV4,
+    WifiStrengthV4,
 )
 from ..session.growatt_api_session import GrowattApiSession  # noqa: E402
 
@@ -512,7 +513,6 @@ class Noah:
 
         Args:
             device_sn (str): Inverter serial number
-            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list()) -- This API is only applicable to NOAH device type
             inverter_sn (str): Serial number of inverter to assign to NOAH device
             inverter_model_id (str): Model ID of inverter in hex format, e.g. "0x0105" - see https://www.showdoc.com.cn/p/469a02fee3555b1661a25ecfed1cd821
             inverter_brand_name (str): Manufacturer of inverter, e.g. "Growatt" - see https://www.showdoc.com.cn/p/469a02fee3555b1661a25ecfed1cd821
@@ -571,4 +571,66 @@ class Noah:
             device_sn=self._device_sn(device_sn),
             device_type=DeviceType.NOAH,
             grid_charging=grid_charging,
+        )
+
+    def setting_write_off_grid(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: str,
+        off_grid: bool,
+    ) -> SettingWriteV4:
+        """
+        Setting off-grid enable
+        Setting off-grid enable of the device based on the device type noah and the SN of the device
+        https://www.showdoc.com.cn/2598832417617967/11558677526814378
+
+        Note:
+        * This API is only applicable to NOAH device type
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Inverter serial number
+            off_grid (bool): True=enabled, False=disabled
+
+        Returns:
+            SettingWriteV4
+
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        return self._api_v4.setting_write_off_grid(
+            device_sn=self._device_sn(device_sn),
+            device_type=DeviceType.NOAH,
+            off_grid=off_grid,
+        )
+
+    def wifi_strength(  # noqa: C901 'ApiV4.power' is too complex (11)
+        self,
+        device_sn: str,
+    ) -> WifiStrengthV4:
+        """
+        Get the collector signal value
+        Get the network signal value of the collector through the SN of the device
+        https://www.showdoc.com.cn/2598832417617967/11558704404033100
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 seconds.
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            WifiStrengthV4
+            {   'data': -46,
+                'error_code': 0,
+                'error_msg': 'success'}
+        """
+
+        return self._api_v4.wifi_strength(
+            device_sn=self._device_sn(device_sn),
+            device_type=DeviceType.NOAH,
         )

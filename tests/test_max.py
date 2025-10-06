@@ -17,6 +17,7 @@ from growatt_public_api.pydantic_models.api_v4 import (
     MaxEnergyHistoryMultipleV4,
     SettingWriteV4,
     PowerV4,
+    WifiStrengthV4,
 )
 from growatt_public_api.pydantic_models.max import (
     MaxAlarmsData,
@@ -411,3 +412,18 @@ class TestMax(unittest.TestCase):
             SettingWriteV4.model_fields.keys()
         )  # aliased and non-aliased params
         self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+    def test_wifi_strength(self):
+        with patch(f"{TEST_FILE_V4}.WifiStrengthV4", wraps=WifiStrengthV4) as mock_pyd_model:
+            self.api_v4.wifi_strength(device_sn=self.device_sn_v4)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in PowerV4.model_fields.items()} | set(
+            PowerV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+        # check pydantic conversion works
+        WifiStrengthV4.model_validate(raw_data)

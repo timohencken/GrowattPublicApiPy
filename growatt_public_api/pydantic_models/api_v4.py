@@ -4631,3 +4631,11 @@ class SettingReadVppV4(NewApiResponse):
 
 class PowerV4(NewApiResponse):
     data: Union[EmptyStrToNone, int, float] = None
+
+
+# #####################################################################################################################
+# WiFi ###############################################################################################################
+
+
+class WifiStrengthV4(NewApiResponse):
+    data: Union[EmptyStrToNone, int, float] = None

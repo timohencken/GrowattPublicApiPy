@@ -173,6 +173,7 @@ print(min_details.data.model_dump_json())
   * read device data
     * `inverter.details()`
     * `inverter.details_v4()` (using new API)
+    * `inverter.wifi_strength()` (using new API)
   * read alarms/notification `inverter.alarms()`
 * device power/energy metrics
   * current
@@ -219,6 +220,7 @@ print(min_details.data.model_dump_json())
   * read device data
     * `max.details()`
     * `max.details_v4()` (using new API)
+    * `max.wifi_strength()` (using new API)
   * read alarms/notification `max.alarms()`
 * device power/energy metrics
   * current
@@ -243,6 +245,7 @@ print(min_details.data.model_dump_json())
   * read device data
     * `sph.details()`
     * `sph.details_v4()` (using new API)
+    * `sph.wifi_strength()` (using new API)
   * read alarms/notification `sph.alarms()`
 * device power/energy metrics
   * current
@@ -272,12 +275,15 @@ print(min_details.data.model_dump_json())
       * `sph.setting_write_vpp_now()`
       * `sph.setting_write_vpp_schedule()`
       * `sph.setting_write_vpp_param()` (using new API)
+      * `sph.setting_write_vpp_param_new()` (using new API)
+      * `sph.setting_clear_vpp_time_period()` (using new API)
 
 ## SPA (DeviceType.SPA)
 * general device data
   * read device data
     * `spa.details()`
     * `spa.details_v4()` (using new API)
+    * `spa.wifi_strength()` (using new API)
   * read alarms/notification `spa.alarms()`
 * device power/energy metrics
   * current
@@ -305,12 +311,15 @@ print(min_details.data.model_dump_json())
       * `spa.setting_write_vpp_now()`
       * `spa.setting_write_vpp_schedule()`
       * `spa.setting_write_vpp_param()` (using new API)
+      * `spa.setting_write_vpp_param_new()` (using new API)
+      * `spa.setting_clear_vpp_time_period()` (using new API)
 
 ## MIN (DeviceType.MIN - TLX/MIN/MAC/MOD-XH/MID-XH/NEO)
 * general device data
   * read device data
     * `min.details()`
     * `min.details_v4()` (using new API)
+    * `min.wifi_strength()` (using new API)
   * read alarms/notification `min.alarms()`
 * device power/energy metrics
   * current
@@ -339,6 +348,8 @@ print(min_details.data.model_dump_json())
       * `min.setting_write_vpp_now()`
       * `min.setting_write_vpp_schedule()`
       * `min.setting_write_vpp_param()` (using new API)
+      * `min.setting_write_vpp_param_new()` (using new API)
+      * `min.setting_clear_vpp_time_period()` (using new API)
 
 ## PCS (DeviceType.PCS)
 * general device data
@@ -372,6 +383,7 @@ print(min_details.data.model_dump_json())
 * general device data
   * read device data
     * `wit.details_v4()` (using new API)
+    * `wit.wifi_strength()` (using new API)
 * device power/energy metrics
   * current
     * `wit.power()` (using new API)
@@ -389,12 +401,15 @@ print(min_details.data.model_dump_json())
       * `wit.setting_read_vpp_param()` (using new API)
     * write vpp schedules
       * `wit.setting_write_vpp_param()` (using new API)
+      * `wit.setting_write_vpp_param_new()` (using new API)
+      * `wit.setting_clear_vpp_time_period()` (using new API)
 
 ## SPH-S (DeviceType.SPHS)
 *Note: SPH-S devices are not supported by APIv1 endpoints - only v4 endpoints available*
 * general device data
   * read device data
     * `sphs.details_v4()` (using new API)
+    * `sphs.wifi_strength()` (using new API)
 * device power/energy metrics
   * current
     * `sphs.energy_v4()` (using new API)
@@ -417,6 +432,7 @@ print(min_details.data.model_dump_json())
 * general device data
   * read device data
     * `noah.details_v4()` (using new API)
+    * `noah.wifi_strength()` (using new API)
 * device power/energy metrics
   * current
     * `noah.power()` (using new API)
@@ -432,6 +448,7 @@ print(min_details.data.model_dump_json())
     * `noah.setting_write_on_off()` (using new API)
     * `noah.setting_write_active_power()` (using new API)
     * `noah.setting_write_grid_charging()` (using new API)
+    * `noah.setting_write_off_grid()` (using new API)
     * `noah.setting_write_vpp_param()` (using new API)
   * assign inverter to noah system
     * `noah.setting_write_assign_inverter()` (using new API)
@@ -500,22 +517,6 @@ To the best of our knowledge only the settings functions perform modifications t
 # TODOs
 * TODO: generate & publish docs
 * add missing endpoints
-  * Set grid charging allowed (NOAH)
-    * `new-api/setGridCharge`
-    * https://www.showdoc.com.cn/2598832417617967/11558677502514466
-  * Set Off-Grid allowed (NOAH)
-    * `new-api/setOffGrid`
-    * https://www.showdoc.com.cn/2598832417617967/11558677526814378
-  * Get WiFi signal strength
-    * `new-api/getWiFiSignalByDevice`
-    * https://www.showdoc.com.cn/2598832417617967/11558704404033100
-  * Set VPP parameters (new)
-    * `new-api/setNewVppParameter`
-    * https://www.showdoc.com.cn/2598832417617967/11558779194508962
-    * cannot see any difference to the "old" endpoint `new-api/setVppParameter`
-  * Clear VPP time period
-    * `new-api/removeVppTimePeriod`
-    * https://www.showdoc.com.cn/2598832417617967/11558779224942201
   * Nexa endpoints from App
     * check if the following request urls should be "noah" or "nexa"
       ```
@@ -662,9 +663,13 @@ To the best of our knowledge only the settings functions perform modifications t
 
 # Changelog
 * TBA
-  * added `power()` (new API) to inverter, min, noah, max, spa, sph, wit
+  * added `wifi_strength()` (new API) to inverter, noah, max, min, spa, sph, sph-s, wit
+  * added `power()` (new API) to inverter, max, min, noah, spa, sph, wit
   * added `setting_write_assign_inverter()` (new API) to noah
   * added `setting_write_grid_charging()` (new API) to noah
+  * added `setting_write_off_grid()` (new API) to noah
+  * added `setting_write_vpp_param_new()` (using new API) to min, spa, sph, wit
+  * added `setting_clear_vpp_time_period()` (using new API) to min, spa, sph, wit
 * 2025.08.17 (alpha)
   * added NOAH/NEXA support (verified with real NEXA-2000 device)
 * 2025.07.14 (alpha)
