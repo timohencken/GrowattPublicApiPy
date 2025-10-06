@@ -435,6 +435,7 @@ print(min_details.data.model_dump_json())
     * `noah.wifi_strength()` (using new API)
 * device power/energy metrics
   * current
+    * `noah.status()` (using APP API)
     * `noah.power()` (using new API)
     * `noah.energy_v4()` (using new API)
   * historical data
@@ -518,68 +519,16 @@ To the best of our knowledge only the settings functions perform modifications t
 * TODO: generate & publish docs
 * add missing endpoints
   * Nexa endpoints from App
-    * check if the following request urls should be "noah" or "nexa"
-      ```
-      response = self.session.request(
-          "POST",
-          url='https://openapi.growatt.com/v4/noahDeviceApi/noah/isPlantNoahSystem',
-          params=None,
-          data={'plantId': PLANT_ID},
-      )
-      print(response.text)
-      print(response.status_code)
-      # => {"msg":"","result":0,"obj":null}
-      # => 200
-      ```
-      * DOES NOT RETURN EXPECTED RESULT
-        * expected: `{'msg', 'result', 'obj': {'isPlantNoahSystem', 'plantId', 'isPlantHaveNoah', 'deviceSn', 'plantName'}}`
     * ```
-      response = self.session.request(
-          "POST",
-          url='https://openapi.growatt.com/v4/noahDeviceApi/nexa/getSystemStatus',
-          params=None,
-          data={'deviceSn': 'DEVICE_SN'},
-      )
-      print(response.text)
-      print(response.status_code)
-      # => {
-      #        "msg":"",
-      #        "result":1,
-      #        "obj":{
-      #            "loadPower":"123",
-      #            "groplugPower":"0",
-      #            "workMode":"2",
-      #            "soc":"50",
-      #            "eastronStatus":"-1",
-      #            "batteryNum":"1",
-      #            "profitToday":"0",
-      #            "acCoupleEnable":"1",
-      #            "pac":"0",
-      #            "alias":"NEXA",
-      #            "otherPower":"0",
-      #            "gridPower":"123",
-      #            "chargePower":"123",
-      #            "associatedInvSn":"",
-      #            "plantId":"PLANT_ID",
-      #            "disChargePower":"0",
-      #            "eacTotal":"12.3",
-      #            "eacToday":"0",
-      #            "isHaveCt":"true",
-      #            "onOffGrid":"0",
-      #            "ppv":"123",
-      #            "profitTotal":"12.34",
-      #            "moneyUnit":"€",
-      #            "groplugNum":"0",
-      #            "status":"6"
-      #        }
-      #    }
-      # => 200
+      /noahDeviceApi/noah/getBatteryData
+      "deviceSn": {serialNumber},
       ```
-      * app calls every 6 seconds
     * ```
       response = self.session.request(
           "POST",
           url='https://openapi.growatt.com/v4/noahDeviceApi/nexa/getNexaInfoBySn',
+          #                                  /noahDeviceApi/noah/getNoahInfoBySn
+          # see https://github.com/indykoning/PyPi_GrowattServer/blob/45e3fce44c32be16eec6cc049549a78b1e11233f/growattServer/base_api.py#L909
           params=None,
           data={'deviceSn': 'DEVICE_SN'},
       )
@@ -638,24 +587,6 @@ To the best of our knowledge only the settings functions perform modifications t
       # => {"msg":"","result":1,"obj":{"checkUpgradeNoah":false,"currVersion":"11.10.09.07.9000.4017","newVersion":"11.10.09.07.9000.4017","status":"6"}}
       # => 200
       ```
-    * ```
-      response = self.session.request(
-          "POST",
-          url='https://openapi.growatt.com/v4/noahDeviceApi/nexa/set',
-          params=None,
-          data={
-              'serialNum': 'DEVICE_SN',
-              'type': 'ac_couple_enable',
-              'param1': 1,
-          },
-          # headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"}
-      )
-      print(response.text)
-      print(response.status_code)
-      # => {"msg":"505","result":0,"obj":null}
-      # => 200
-      # => COULDN'T GET IT WORKING
-      ```
     * for noah see
       * https://github.com/search?q=repo%3Amtrossbach%2Fnoah-mqtt%20noahDeviceApi&type=code
       * https://github.com/indykoning/PyPi_GrowattServer/blob/45e3fce44c32be16eec6cc049549a78b1e11233f/growattServer/base_api.py#L871
@@ -668,8 +599,9 @@ To the best of our knowledge only the settings functions perform modifications t
   * added `setting_write_assign_inverter()` (new API) to noah
   * added `setting_write_grid_charging()` (new API) to noah
   * added `setting_write_off_grid()` (new API) to noah
-  * added `setting_write_vpp_param_new()` (using new API) to min, spa, sph, wit
-  * added `setting_clear_vpp_time_period()` (using new API) to min, spa, sph, wit
+  * added `setting_write_vpp_param_new()` (new API) to min, spa, sph, wit
+  * added `setting_clear_vpp_time_period()` (new API) to min, spa, sph, wit
+  * added `status()` (APP API) to noah
 * 2025.08.17 (alpha)
   * added NOAH/NEXA support (verified with real NEXA-2000 device)
 * 2025.07.14 (alpha)

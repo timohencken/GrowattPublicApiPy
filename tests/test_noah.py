@@ -330,3 +330,13 @@ class TestNoah(unittest.TestCase):
             self.assertIn(param, pydantic_keys)
         # check pydantic conversion works
         WifiStrengthV4.model_validate(raw_data)
+
+    def test_status_v1(self):  # FIXME name
+        if self.device_sn is None:
+            self.skipTest("no NOAH device available")
+
+        # FIXME this is just for debugging
+
+        self.api.status_v1(device_sn=self.device_sn)
+
+        raise NotImplementedError

@@ -1,7 +1,11 @@
 from datetime import date, time
 from typing import Union, List, Optional
+
+from loguru import logger
+
 from ..api_v4 import ApiV4
 from ..growatt_types import DeviceType
+from ..pydantic_models.noah import NoahStatus
 from ..pydantic_models.api_v4 import (
     NoahDetailsV4,
     NoahEnergyV4,
@@ -12,6 +16,7 @@ from ..pydantic_models.api_v4 import (
     WifiStrengthV4,
 )
 from ..session.growatt_api_session import GrowattApiSession  # noqa: E402
+from ..device import Device
 
 
 class Noah:
@@ -23,11 +28,13 @@ class Noah:
     session: GrowattApiSession
     _api_v4: ApiV4
     device_sn: Optional[str] = None
+    _noah_or_nexa_cache: dict = None
 
     def __init__(self, session: GrowattApiSession, device_sn: Optional[str] = None) -> None:
         self.session = session
         self._api_v4 = ApiV4(session)
         self.device_sn = device_sn
+        self._noah_or_nexa_cache = {}
 
     def _device_sn(self, device_sn: Optional[Union[str, List[str]]]) -> Union[str, List[str]]:
         """
@@ -37,6 +44,96 @@ class Noah:
         if device_sn is None:
             raise AttributeError("device_sn must be provided")
         return device_sn
+
+    def _noah_or_nexa(self, device_sn: Optional[str] = None):
+        """
+        determine if device is Noah or Nexa
+
+        this is required to get the right URLs for some endpoints, e.g.
+        * /noahDeviceApi/noah/getSystemStatus
+        * /noahDeviceApi/nexa/getSystemStatus
+
+        Web API uses /noahDeviceApi/noah/isPlantNoahSystem which is not available using token authentication
+
+        returns
+         "noah" | "nexa"
+        """
+        device_sn = self._device_sn(device_sn)
+        if device_sn not in self._noah_or_nexa_cache:
+            device_api = Device(session=self.session)
+            device_type_info = device_api.type_info(device_sn=self._device_sn(device_sn))
+            model_name = device_type_info.model or ""
+            model_name = model_name.lower()
+            model_name = model_name.split(" ")[0]
+            if model_name in ["noah", "nexa"]:
+                self._noah_or_nexa_cache[device_sn] = model_name
+            else:
+                raise ValueError(f"unknown model name '{model_name}' for device_sn '{device_sn}'")
+        return self._noah_or_nexa_cache[device_sn]
+
+    def status(
+        self,
+        device_sn: Optional[str] = None,
+    ):
+        """
+        Noah/Nexa status data
+        Retrieve basic status/energy metrics by device SN.
+        ! not part of official API documentation, but reverse-engineered from APP API calls
+          * /noahDeviceApi/nexa/getSystemStatus
+          * /noahDeviceApi/noah/getSystemStatus
+
+        Rate limit(s):
+        * There seems to be no rate limit for this endpoint
+        * Mobile app calls this endpoint every 6 seconds
+
+        Args:
+            device_sn (Union[str, List[str]]): Inverter serial number or list of (multiple) inverter serial numbers (max 100)
+
+        Returns:
+            NoahStatus
+            {'msg': None,
+             'result': 1,
+             'obj': {'ac_couple_power_control': 1,
+                     'alias': 'NEXA 2000',
+                     'associated_inv_sn': None,
+                     'battery_package_quantity': 2,
+                     'total_battery_pack_charging_power': 0,
+                     'total_battery_pack_discharging_power': 0,
+                     'eac_today': 0.8,
+                     'eac_total': 116.8,
+                     'eastron_status': -1,
+                     'grid_power': 3490.0,
+                     'groplug_num': 0,
+                     'groplug_power': 0,
+                     'ct_flag': True,
+                     'load_power': 3490.0,
+                     'currency': '€',
+                     'on_off_grid': 0,
+                     'other_power': 0.0,
+                     'pac': 0.0,
+                     'plant_id': 12345678,
+                     'ppv': 0.0,
+                     'money_today': 0.32,
+                     'money_total': 46.72,
+                     'total_battery_pack_soc': 10,
+                     'status': 6,
+                     'work_mode': 2}}
+        """
+
+        device_sn = self._device_sn(device_sn)
+        noah_or_nexa = self._noah_or_nexa(device_sn=device_sn)
+
+        response = self.session.post(
+            endpoint=f"noahDeviceApi/{noah_or_nexa}/getSystemStatus",
+            data={
+                "deviceSn": self._device_sn(device_sn),
+            },
+        )
+
+        logger.warning(f"This endpoint is under development and might change in future releases! Use at your own risk!")
+        logger.debug(response)
+
+        return NoahStatus.model_validate(response)
 
     def details_v4(
         self,

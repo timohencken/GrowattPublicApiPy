@@ -4425,7 +4425,9 @@ class NoahEnergyDataV4(ApiModel):
         None  # Total battery pack SOC (State of Charge) percentage, e.g. 47
     )
     total_household_load: Union[EmptyStrToNone, float] = None  # e.g. 65451.0
-    work_mode: Union[EmptyStrToNone, int] = None  # Current time period working mode, e.g. 2
+    work_mode: Union[EmptyStrToNone, int] = (
+        None  # Current time period working mode (0=Load-First, 1=Battery-First, 2=Smart), e.g. 2
+    )
 
 
 def _noah_energy_overview_data_to_camel(snake: str) -> str:
