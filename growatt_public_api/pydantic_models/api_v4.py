@@ -196,6 +196,7 @@ class StorageDetailDataV4(ApiModel):
     bat_low_to_uti_volt: Union[EmptyStrToNone, float] = None  # e.g. 46.0
     battery_type: Union[EmptyStrToNone, int] = None  # e.g. 0
     battery_undervoltage_cutoff_point: Union[EmptyStrToNone, float] = None  # e.g. 42.0
+    bms_version: Union[EmptyStrToNone, str] = None  # e.g. None
     bulk_charge_volt: Union[EmptyStrToNone, float] = None  # e.g. 0
     buzzer_en: Union[EmptyStrToNone, int] = None  # e.g. 1
     charge_config: Union[EmptyStrToNone, int] = None  # e.g. 0
@@ -208,6 +209,7 @@ class StorageDetailDataV4(ApiModel):
     )
     debug_enable: Union[EmptyStrToNone, bool] = None  # e.g. 0
     device_type: Union[EmptyStrToNone, int] = None  # e.g. 3
+    dsp_version: Union[EmptyStrToNone, str] = None  # e.g. None
     dtc: Union[EmptyStrToNone, int] = None  # e.g. 20105
     feed_uti_high_voltage_loss: Union[EmptyStrToNone, float] = None  # e.g. 0
     feed_uti_high_frequency_loss: Union[EmptyStrToNone, float] = None  # e.g. 0.0
@@ -229,6 +231,7 @@ class StorageDetailDataV4(ApiModel):
     li_battery_protocol_type: Union[EmptyStrToNone, int] = None  # e.g. 0
     location: Union[EmptyStrToNone, str] = None  # Address, e.g. ""
     lost: Union[EmptyStrToNone, bool] = None  # Device online status (0: Online, 1: Offline), e.g. True
+    m3_version: Union[EmptyStrToNone, str] = None  # e.g. None
     mains_to_battery_operat_point: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     manual_start_en: Union[EmptyStrToNone, float] = None  # e.g. 0
     max_charge_curr: Union[EmptyStrToNone, float] = None  # e.g. 1000
@@ -2002,6 +2005,7 @@ def _storage_energy_to_camel(snake: str) -> str:
         "e_gen_discharge_power": "eGenDischrPower",
         "e_gen_discharge_power1": "eGenDischrPower1",
         "e_gen_discharge_power2": "eGenDischrPower2",
+        "e_gen_discharge_power3": "eGenDischrPower3",
         "e_gen_discharge_today": "eGenDischrToday",
         "e_gen_discharge_total": "eGenDischrTotal",
         "eac_discharge_today": "eacDisChargeToday",
@@ -2028,14 +2032,18 @@ def _storage_energy_to_camel(snake: str) -> str:
         "max_min_soc": "maxminSoc",
         "output_current": "outPutCurrent",
         "output_current2": "outPutCurrent2",
+        "output_current3": "outPutCurrent3",
         "output_power": "outPutPower",
         "output_power1": "outPutPower1",
         "output_power2": "outPutPower2",
+        "output_power3": "outPutPower3",
         "output_volt": "outPutVolt",
         "output_volt2": "outPutVolt2",
+        "output_volt3": "outPutVolt3",
         "p_ac_input": "pAcInPut",
         "p_ac_input1": "pAcInPut1",
         "p_ac_input2": "pAcInPut2",
+        "p_ac_input3": "pAcInPut3",
         "p_ac_output": "pAcOutPut",
         "protect_pack_id": "protectPackID",
         "rate_va": "rateVA",
@@ -2205,6 +2213,7 @@ class StorageEnergyDataV4(ApiModel):
     e_gen_discharge_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     e_gen_discharge_power1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     e_gen_discharge_power2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    e_gen_discharge_power3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     e_gen_discharge_today: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     e_gen_discharge_total: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     e_to_grid_today: Union[EmptyStrToNone, float] = None  # Today's energy (user-to-grid) (kWh), e.g. 250.5
@@ -2243,12 +2252,15 @@ class StorageEnergyDataV4(ApiModel):
     gen_current: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     gen_current1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     gen_current2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    gen_current3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     gen_volt: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     gen_volt2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    gen_volt3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     hardware_version: Union[EmptyStrToNone, int] = None  # e.g. 0
     i_ac_charge: Union[EmptyStrToNone, float] = None  # AC charging current, e.g. 0.0
     i_ac_charge1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     i_ac_charge2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    i_ac_charge3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     i_charge: Union[EmptyStrToNone, float] = None  # PV end charging current (A), e.g. 0.0
     i_charge_pv1: Union[EmptyStrToNone, float] = None  # PV1 charging current, e.g. 0.0
     i_charge_pv2: Union[EmptyStrToNone, float] = None  # PV2 charging current, e.g. 0.0
@@ -2268,6 +2280,7 @@ class StorageEnergyDataV4(ApiModel):
     load_percent: Union[EmptyStrToNone, float] = None  # Load percentage, e.g. 12.5
     load_percent1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     load_percent2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    load_percent3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     lost: Union[EmptyStrToNone, bool] = None  # e.g. True
     manual_start_en: Union[EmptyStrToNone, float] = None  # e.g. 0
     manufacture: Union[EmptyStrToNone, int] = None  # e.g. 0
@@ -2293,15 +2306,19 @@ class StorageEnergyDataV4(ApiModel):
     normal_power: Union[EmptyStrToNone, int] = None  # Current power (W), e.g. 0
     output_current: Union[EmptyStrToNone, float] = None  # Output current, e.g. 2.7
     output_current2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    output_current3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     output_power: Union[EmptyStrToNone, float] = None  # Output power, e.g. 498.0
     output_power1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     output_power2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    output_power3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     output_volt: Union[EmptyStrToNone, float] = None  # Output voltage, e.g. 229.8
     output_volt2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    output_volt3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     p_ac_charge: Union[EmptyStrToNone, float] = None  # AC charging power, e.g. 0.0
     p_ac_input: Union[EmptyStrToNone, float] = None  # AC input energy, e.g. 0.0
     p_ac_input1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     p_ac_input2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    p_ac_input3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     p_ac_output: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     p_bat: Union[EmptyStrToNone, float] = None  # e.g. 534.0
     p_charge: Union[EmptyStrToNone, float] = None  # Charging power (W), e.g. 0.0
@@ -2354,6 +2371,7 @@ class StorageEnergyDataV4(ApiModel):
     v_bus: Union[EmptyStrToNone, float] = None  # e.g. 171.6999969482422
     v_grid: Union[EmptyStrToNone, float] = None  # Mains voltage, e.g. 0
     v_grid2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    v_grid3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     vac: Union[EmptyStrToNone, float] = None  # Grid voltage (V), e.g. 226.5
     vac_Text: Union[EmptyStrToNone, str] = None  # e.g. '226.5 V'
     vpv: Union[EmptyStrToNone, float] = None  # Input PV voltage (V), e.g. 161.39999389648438
@@ -4058,8 +4076,28 @@ class WitEnergyV4(NewApiResponse):
 
 def _sphs_energy_to_camel(snake: str) -> str:
     override = {
+        "bat_depower_reason": "batDePowerReason",
+        "bat_protect1to2": "batProtect1To2",
+        "bat_protect3to4": "batProtect3To4",
+        "bat_warn_info1to2": "batWarnInfo1To2",
+        "bms_charge_energy": "bmschgEnergy",
+        "bms_cycle_cnt": "bmscycleCnt",
+        "bms_delta_volt": "bmsdeltaVolt",
+        "bms_dsg_energy": "bmsdsgEnergy",
+        "bms_gauge_fcc": "bmsgaugeFCC",
+        "bms_gauge_rm": "bmsgaugeRM",
+        "bms_info": "bmsinfo",
+        "bms_max_charge_current": "bmsmaxChargeCurr",
+        "bms_max_discharge_current": "bmsmaxDischargeCurr",
+        "bms_pack_info": "bmspackInfo",
+        "bms_request_type": "bmsrequestType",
+        "bms_sn": "bmssn",
         "bms_soc": "bmsSOC",
         "bms_soh": "bmsSOH",
+        "bms_status": "bmsstatus",
+        "bms_version": "bmsversion",
+        "charge_bat_number": "chgBatNumber",
+        "discharge_bat_number": "dsgBatNumber",
         "datalogger_sn": "dataLogSn",
         "e_charge1_today": "echarge1Today",
         "e_charge1_total": "echarge1Total",
@@ -4084,6 +4122,14 @@ def _sphs_energy_to_camel(snake: str) -> str:
         "e_to_grid_total": "etoGridTotal",
         "e_to_user_today": "etoUserToday",
         "e_to_user_total": "etoUserTotal",
+        "lcd_fault_num": "lcdfaultNum",
+        "lcd_version": "lcdversion",
+        "lcd_warning_num": "lcdwarnNum",
+        "max_cell_volt": "maxCellVol",
+        "max_soc": "maxSOC",
+        "min_cell_volt": "minCellVol",
+        "min_soc": "minSOC",
+        "protect_pack_id": "protectPackID",
         "p_self": "pself",
         "p_system": "psystem",
         "device_sn": "serialNum",  # align with other endpoints using "deviceSn" instead
@@ -4099,20 +4145,43 @@ class SphsEnergyDataV4(ApiModel):
     )
 
     again: Union[EmptyStrToNone, bool] = None  # e.g. False
+    bat_depower_reason: Union[EmptyStrToNone, int] = None  # e.g. 0
     bat_power: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bat_protect1to2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bat_protect3to4: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bat_protect5: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bat_warn_info1to2: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bat_warn_info3: Union[EmptyStrToNone, int] = None  # e.g. 0
     bms_battery_curr: Union[EmptyStrToNone, float] = None  # Battery current, e.g. 0.0
     bms_battery_temp: Union[EmptyStrToNone, float] = None  # Battery temperature, e.g. 35.3
     bms_battery_volt: Union[EmptyStrToNone, float] = None  # Battery voltage, e.g. 5.34
+    bms_charge_energy: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     bms_constant_volt: Union[EmptyStrToNone, float] = None  # Battery constant voltage point, e.g. 5.68
+    bms_cycle_cnt: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bms_delta_volt: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_dsg_energy: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_gauge_fcc: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_gauge_rm: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_info: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bms_max_charge_current: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_max_discharge_current: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    bms_pack_info: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bms_request_type: Union[EmptyStrToNone, int] = None  # e.g. 0
+    bms_sn: Union[EmptyStrToNone, str] = None  # e.g. None
     bms_soc: Union[EmptyStrToNone, int] = None  # BDC2 battery capacity, e.g. 100
     bms_soh: Union[EmptyStrToNone, int] = None  # BMS battery health index, e.g. 0
+    bms_status: Union[EmptyStrToNone, int] = None  # e.g. 0
     bms_using_cap: Union[EmptyStrToNone, float] = None  # BMS battery capacity, e.g. 2000
+    bms_version: Union[EmptyStrToNone, str] = None  # e.g. None
     calendar: Union[EmptyStrToNone, datetime.datetime] = None  # Time, e.g. 1716965431997
+    charge_bat_number: Union[EmptyStrToNone, int] = None  # e.g. 0
     chip_type: Union[EmptyStrToNone, int] = None  # e.g. 0
     datalogger_sn: Union[EmptyStrToNone, str] = None  # e.g. 'VC41010123438079'
     day_map: Union[EmptyStrToNone, Any] = None  # , e.g. None
     dc_temp: Union[EmptyStrToNone, float] = None  # e.g. 56.7
     device_type: Union[EmptyStrToNone, int] = None  # e.g. 0
+    do_status: Union[EmptyStrToNone, int] = None  # e.g. 0
+    discharge_bat_number: Union[EmptyStrToNone, int] = None  # e.g. 0
     e_to_grid_hour: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     e_to_grid_month: Union[EmptyStrToNone, float] = None  # e.g. 5.7
     e_to_grid_year: Union[EmptyStrToNone, float] = None  # e.g. 6.4
@@ -4177,11 +4246,26 @@ class SphsEnergyDataV4(ApiModel):
     ipv1: Union[EmptyStrToNone, float] = None  # PV1 input current, e.g. 0.0
     ipv2: Union[EmptyStrToNone, float] = None  # PV2 input current, e.g. 0.0
     ipv3: Union[EmptyStrToNone, float] = None  # PV3 input current, e.g. 2.7
+    lcd_fault_num: Union[EmptyStrToNone, int] = None  # e.g. 0
+    lcd_version: Union[EmptyStrToNone, str] = None  # e.g. None
+    lcd_warning_num: Union[EmptyStrToNone, int] = None  # e.g. 0
     load_power1: Union[EmptyStrToNone, float] = None  # e.g. 760.0
     load_power2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     lost: Union[EmptyStrToNone, bool] = None  # e.g. True
+    max_cell_volt: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    max_soc: Union[EmptyStrToNone, int] = None  # e.g. 0
+    max_temp_cell: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    max_temp_cell_no: Union[EmptyStrToNone, int] = None  # e.g. 0
+    max_volt_cell_no: Union[EmptyStrToNone, int] = None  # e.g. 0
+    min_cell_volt: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    min_soc: Union[EmptyStrToNone, int] = None  # e.g. 0
+    min_temp_cell: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    min_temp_cell_no: Union[EmptyStrToNone, int] = None  # e.g. 0
+    min_volt_cell_no: Union[EmptyStrToNone, int] = None  # e.g. 0
+    module_num: Union[EmptyStrToNone, int] = None  # e.g. 0
     m1_version: Union[EmptyStrToNone, Any] = None  # e.g. None
     m2_version: Union[EmptyStrToNone, Any] = None  # e.g. None
+    nbus_voltage: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     pac: Union[EmptyStrToNone, float] = None  # Inverter output power, e.g. 888.0
     pac1: Union[EmptyStrToNone, float] = None  # Inverter apparent power 1, e.g. 0.0
     pac2: Union[EmptyStrToNone, float] = None  # Inverter apparent power 2, e.g. 0.0
@@ -4190,6 +4274,7 @@ class SphsEnergyDataV4(ApiModel):
     pac_to_grid_total: Union[EmptyStrToNone, float] = None  # Total power flowing back from the grid, e.g. 0.0
     pac_to_user_r: Union[EmptyStrToNone, float] = None  # Grid forward power, e.g. 0.0
     pac_to_user_total: Union[EmptyStrToNone, float] = None  # Total power flowing to the grid, e.g. 0.0
+    pbus_voltage: Union[EmptyStrToNone, float] = None  # e.g. 0.0
     pcharge1: Union[EmptyStrToNone, float] = None  # Battery charge power, e.g. 0.0
     pdischarge1: Union[EmptyStrToNone, float] = None  # Battery discharge power, e.g. 0.0
     pex: Union[EmptyStrToNone, float] = None  # e.g. 888.0
@@ -4202,6 +4287,7 @@ class SphsEnergyDataV4(ApiModel):
     ppv2: Union[EmptyStrToNone, float] = None  # PV2 input power, e.g. 0.0
     ppv3: Union[EmptyStrToNone, float] = None  # PV3 input power, e.g. 948.0
     ppv_text: Union[EmptyStrToNone, str] = None  # e.g. '948.0 W'
+    protect_pack_id: Union[EmptyStrToNone, int] = None  # e.g. 0
     priority_choose: Union[EmptyStrToNone, float] = None  # e.g. 0
     p_self: Union[EmptyStrToNone, float] = None  # e.g. 942.0
     p_system: Union[EmptyStrToNone, float] = None  # e.g. 942.0
@@ -4227,6 +4313,10 @@ class SphsEnergyDataV4(ApiModel):
     sys_status: Union[EmptyStrToNone, int] = None  # e.g. 3
     system_fault: Union[EmptyStrToNone, int] = None  # e.g. 0
     system_warn: Union[EmptyStrToNone, int] = None  # e.g. 0
+    temp1: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    temp2: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    temp3: Union[EmptyStrToNone, float] = None  # e.g. 0.0
+    total_cell_number: Union[EmptyStrToNone, int] = None  # e.g. 0
     time: Union[EmptyStrToNone, datetime.datetime] = None  # e.g. '2024-05-29 14:50:31'
     time_total: Union[EmptyStrToNone, float] = None  # Total operating time, e.g. 0.0.5
     ups_fac: Union[EmptyStrToNone, float] = None  # Emergency power frequency, e.g. 50.0

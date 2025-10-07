@@ -545,6 +545,11 @@ To the best of our knowledge only the settings functions perform modifications t
   * renamed methods
     * `settings_write_vpp_now()` -> `setting_write_vpp_now()` (min, spa, sph)
     * `settings_write_vpp_schedule()` -> `setting_write_vpp_schedule()` (min, spa, sph)
+  * added new attributes returned by API
+    * SphsEnergyDataV4 (44 attributes added)
+    * StorageDetailsV4 (3 attributes added)
+    * StorageEnergyV4 (10 attributes added)
+  * verified all endpoints still work and pydantic models are still valid
 * 2025.08.17 (alpha)
   * added NOAH/NEXA support (verified with real NEXA-2000 device)
 * 2025.07.14 (alpha)
