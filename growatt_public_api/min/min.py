@@ -10,6 +10,8 @@ from ..pydantic_models.api_v4 import (
     MinEnergyHistoryMultipleV4,
     SettingWriteV4,
     SettingReadVppV4,
+    PowerV4,
+    WifiStrengthV4,
 )
 from ..pydantic_models.min import (
     MinSettingRead,
@@ -876,6 +878,65 @@ class Min:
             device_type=DeviceType.MIN,
             parameter_id=parameter_id,
             value=value,
+        )
+
+    def setting_write_vpp_param_new(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        parameter_id: str,
+        value: Union[int, str],
+        device_sn: Optional[str] = None,
+    ) -> SettingWriteV4:
+        """
+        see setting_write_vpp_param()
+        """
+
+        return self._api_v4.setting_write_vpp_param_new(
+            device_sn=self._device_sn(device_sn),
+            device_type=DeviceType.MIN,
+            parameter_id=parameter_id,
+            value=value,
+        )
+
+    def setting_clear_vpp_time_period(  # noqa: C901 'ApiV4.energy' is too complex (11)
+        self,
+        device_sn: str,
+        parameter_id: str,
+    ) -> SettingWriteV4:
+        """
+        Clear the time period parameters set by VPP
+        Clear the time period parameters set by VPP, and only support deleting time period parameters.
+        https://www.showdoc.com.cn/2598832417617967/11558779224942201
+
+        Note:
+        * The current interface only supports sph, spa, min, wit device types.
+          The specific models are as follows:
+          * MIN 2500-6000TL-XH US
+          * MIN 2500-6000TL-XH
+
+        Rate limit(s):
+        * The maximum frequency is once every 5 seconds.
+
+        Allowed/known values for vpp_param:
+        * see self.setting_write_vpp_param()
+        * or self.setting_write_vpp_param_new()
+
+        Args:
+            device_sn (str): Inverter serial number
+            parameter_id (str): Set parameter enumeration, example: set_param_1
+
+        Returns:
+            SettingWriteV4
+
+            {   'data': None,
+                'error_code': 0,
+                'error_msg': 'PARAMETER_SETTING_SUCCESSFUL'}
+
+        """
+
+        return self._api_v4.setting_clear_vpp_time_period(
+            device_sn=self._device_sn(device_sn),
+            device_type=DeviceType.MIN,
+            parameter_id=parameter_id,
         )
 
     def details(
@@ -1881,6 +1942,30 @@ class Min:
 
         return self._api_v4.energy(device_sn=self._device_sn(device_sn), device_type=DeviceType.MIN)
 
+    def power(
+        self,
+        device_sn: Optional[str] = None,
+    ) -> PowerV4:
+        """
+        Read power
+        Read the active power percentage of the device based on the device type and SN of the device.
+        https://www.showdoc.com.cn/2598832417617967/11558661383247816
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 seconds.
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            PowerV4
+            {   'data': 40,
+                'error_code': 0,
+                'error_msg': 'success'}
+        """
+
+        return self._api_v4.power(device_sn=self._device_sn(device_sn), device_type=DeviceType.MIN)
+
     def energy_multiple(
         self,
         device_sn: Optional[Union[str, List[str]]] = None,
@@ -2611,7 +2696,7 @@ class Min:
 
         return self._api_vpp.soc(device_sn=self._device_sn(device_sn))
 
-    def settings_write_vpp_now(
+    def setting_write_vpp_now(
         self,
         time_: time,
         percentage: int,
@@ -2658,7 +2743,7 @@ class Min:
             percentage=percentage,
         )
 
-    def settings_write_vpp_schedule(
+    def setting_write_vpp_schedule(
         self, schedules: List[Tuple[int, time, time]], device_sn: Optional[str] = None
     ) -> VppWrite:
         """
@@ -2701,3 +2786,30 @@ class Min:
         """
 
         return self._api_vpp.write_multiple(device_sn=self._device_sn(device_sn), schedules=schedules)
+
+    def wifi_strength(  # noqa: C901 'ApiV4.power' is too complex (11)
+        self,
+        device_sn: str,
+    ) -> WifiStrengthV4:
+        """
+        Get the collector signal value
+        Get the network signal value of the collector through the SN of the device
+        https://www.showdoc.com.cn/2598832417617967/11558704404033100
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 seconds.
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            WifiStrengthV4
+            {   'data': -46,
+                'error_code': 0,
+                'error_msg': 'success'}
+        """
+
+        return self._api_v4.wifi_strength(
+            device_sn=self._device_sn(device_sn),
+            device_type=DeviceType.MIN,
+        )

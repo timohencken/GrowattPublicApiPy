@@ -15,6 +15,8 @@ from growatt_public_api.pydantic_models.api_v4 import (
     InverterEnergyHistoryDataV4,
     InverterEnergyHistoryMultipleV4,
     SettingWriteV4,
+    PowerV4,
+    WifiStrengthV4,
 )
 from growatt_public_api.pydantic_models.inverter import (
     InverterAlarmsData,
@@ -169,6 +171,23 @@ class TestInverter(unittest.TestCase):
             self.assertEqual(set(), set(raw_data["data"]["inv"][0].keys()).difference(pydantic_keys), "data_inv_0")
         else:
             self.assertEqual([], raw_data["data"]["inv"], "no data")
+
+    def test_power(self):
+        with patch(f"{TEST_FILE_V4}.PowerV4", wraps=PowerV4) as mock_pyd_model:
+            self.api_v4.power(device_sn=self.device_sn_v4)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in PowerV4.model_fields.items()} | set(
+            PowerV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+        # check data
+        self.assertTrue(
+            (raw_data["data"] is None) or (isinstance(raw_data["data"], int)) or (isinstance(raw_data["data"], float))
+        )
 
     def test_energy_history(self):
         # get date with data
@@ -389,3 +408,21 @@ class TestInverter(unittest.TestCase):
             SettingWriteV4.model_fields.keys()
         )  # aliased and non-aliased params
         self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+    def test_wifi_strength(self):
+        if self.device_sn is None:
+            self.skipTest("no NOAH device available")
+
+        with patch(f"{TEST_FILE_V4}.WifiStrengthV4", wraps=WifiStrengthV4) as mock_pyd_model:
+            self.api_v4.wifi_strength(device_sn=self.device_sn_v4)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in PowerV4.model_fields.items()} | set(
+            PowerV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+        # check pydantic conversion works
+        WifiStrengthV4.model_validate(raw_data)

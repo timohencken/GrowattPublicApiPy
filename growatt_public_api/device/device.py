@@ -195,6 +195,7 @@ class Device:
         96 = Storage
         218 = WIT
         260 = SPH-S
+        1000 = NOAH
 
         Rate limit(s):
         * The acquisition frequency is once every 5 minutes

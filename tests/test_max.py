@@ -16,6 +16,8 @@ from growatt_public_api.pydantic_models.api_v4 import (
     MaxEnergyHistoryDataV4,
     MaxEnergyHistoryMultipleV4,
     SettingWriteV4,
+    PowerV4,
+    WifiStrengthV4,
 )
 from growatt_public_api.pydantic_models.max import (
     MaxAlarmsData,
@@ -46,6 +48,8 @@ class TestMax(unittest.TestCase):
 
     api: Max = None
     device_sn: str = None
+    api_v4: Max = None
+    device_sn_v4: str = None
 
     @classmethod
     def setUpClass(cls):
@@ -61,6 +65,9 @@ class TestMax(unittest.TestCase):
             cls.device_sn = sn_list[0]
         except AttributeError:
             cls.device_sn = "SASF819012"
+        # init api v4
+        cls.api_v4 = Max(session=GrowattApiSession.using_test_server_v4())
+        cls.device_sn_v4 = "QXHLD7F0C9"
 
     def test_alarms(self):
         with patch(f"{TEST_FILE}.MaxAlarms", wraps=MaxAlarms) as mock_pyd_model:
@@ -172,6 +179,23 @@ class TestMax(unittest.TestCase):
             self.assertEqual(set(), set(raw_data["data"]["max"][0].keys()).difference(pydantic_keys), "data_max_0")
         else:
             self.assertEqual([], raw_data["data"]["max"], "no data")
+
+    def test_power(self):
+        with patch(f"{TEST_FILE_V4}.PowerV4", wraps=PowerV4) as mock_pyd_model:
+            self.api_v4.power(device_sn=self.device_sn_v4)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in PowerV4.model_fields.items()} | set(
+            PowerV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+        # check data
+        self.assertTrue(
+            (raw_data["data"] is None) or (isinstance(raw_data["data"], int)) or (isinstance(raw_data["data"], float))
+        )
 
     def test_energy_history(self):
         # get date with data
@@ -388,3 +412,18 @@ class TestMax(unittest.TestCase):
             SettingWriteV4.model_fields.keys()
         )  # aliased and non-aliased params
         self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+    def test_wifi_strength(self):
+        with patch(f"{TEST_FILE_V4}.WifiStrengthV4", wraps=WifiStrengthV4) as mock_pyd_model:
+            self.api_v4.wifi_strength(device_sn=self.device_sn_v4)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in PowerV4.model_fields.items()} | set(
+            PowerV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+        # check pydantic conversion works
+        WifiStrengthV4.model_validate(raw_data)

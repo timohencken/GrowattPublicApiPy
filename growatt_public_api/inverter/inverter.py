@@ -7,6 +7,8 @@ from ..pydantic_models.api_v4 import (
     InverterEnergyHistoryV4,
     InverterEnergyHistoryMultipleV4,
     SettingWriteV4,
+    PowerV4,
+    WifiStrengthV4,
 )
 from ..pydantic_models.inverter import (
     InverterSettingWrite,
@@ -816,6 +818,30 @@ class Inverter:
 
         return self._api_v4.energy(device_sn=self._device_sn(device_sn), device_type=DeviceType.INVERTER)
 
+    def power(
+        self,
+        device_sn: Optional[str] = None,
+    ) -> PowerV4:
+        """
+        Read power
+        Read the active power percentage of the device based on the device type and SN of the device.
+        https://www.showdoc.com.cn/2598832417617967/11558661383247816
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 seconds.
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            PowerV4
+            {   'data': 40,
+                'error_code': 0,
+                'error_msg': 'success'}
+        """
+
+        return self._api_v4.power(device_sn=self._device_sn(device_sn), device_type=DeviceType.INVERTER)
+
     def energy_multiple(
         self,
         device_sn: Optional[Union[str, List[str]]] = None,
@@ -1306,3 +1332,30 @@ class Inverter:
         )
 
         return InverterAlarms.model_validate(response)
+
+    def wifi_strength(  # noqa: C901 'ApiV4.power' is too complex (11)
+        self,
+        device_sn: str,
+    ) -> WifiStrengthV4:
+        """
+        Get the collector signal value
+        Get the network signal value of the collector through the SN of the device
+        https://www.showdoc.com.cn/2598832417617967/11558704404033100
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 seconds.
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            WifiStrengthV4
+            {   'data': -46,
+                'error_code': 0,
+                'error_msg': 'success'}
+        """
+
+        return self._api_v4.wifi_strength(
+            device_sn=self._device_sn(device_sn),
+            device_type=DeviceType.INVERTER,
+        )

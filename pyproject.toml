@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "growatt_public_api"
-version = "2025.08.17"
+version = "2025.10.07"
 authors = [
   { name="Timo Hencken", email="github@hencken.de" },
 ]
@@ -20,7 +20,6 @@ license-files = ["LICEN[CS]E*"]
 
 dependencies = [
   "loguru>0.7",
-  "truststore>=0.10.1",
   "pydantic>=2.0,<2.9", # stay compatible with homeassistant_api which currently requires >=2.0,<2.9",
   "requests>=2.27.1,<3.0.0", # stay compatible with homeassistant_api which currently requires ^2.27.1",
 ]

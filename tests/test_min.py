@@ -1,8 +1,9 @@
+import os
 import unittest
 from datetime import timedelta
 from unittest.mock import patch
 
-from growatt_public_api import GrowattApiSession, Device
+from growatt_public_api import GrowattApiSession, Device, GrowattApi
 from growatt_public_api.min import Min
 from growatt_public_api.pydantic_models import MinDetails
 from growatt_public_api.pydantic_models.api_v4 import (
@@ -17,6 +18,8 @@ from growatt_public_api.pydantic_models.api_v4 import (
     MinEnergyHistoryMultipleV4,
     SettingWriteV4,
     SettingReadVppV4,
+    PowerV4,
+    WifiStrengthV4,
 )
 from growatt_public_api.pydantic_models.min import (
     MinDetailData,
@@ -49,6 +52,8 @@ class TestMin(unittest.TestCase):
 
     api: Min = None
     device_sn: str = None
+    api_real: Min = None
+    device_sn_real: str = None
 
     @classmethod
     def setUpClass(cls):
@@ -66,6 +71,20 @@ class TestMin(unittest.TestCase):
             cls.device_sn = (
                 "RUK0CAE00J"  # 'RUK0CAE00J', 'EVK0BHX111', 'GRT0010086', 'TAG1234567', 'YYX1235113', 'GRT1235003'
             )
+
+        # cannot use v4 test server as no MIN exists there
+        # but we can use production server if user owns a MIN device
+        API_TOKEN = os.environ.get("GROWATTAPITOKEN")
+        if API_TOKEN:
+            api = GrowattApi(token=API_TOKEN)
+            cls.api_real = api.min
+            _devices = api.device.list()
+            # get first MIN device
+            sn_list = [d.device_sn for d in _devices.data.data if d.device_type == "min"]
+            if len(sn_list) > 0:
+                cls.device_sn_real = sn_list[0]
+            else:
+                print("No MIN device found on production server - skipping tests")
 
     def test_alarms(self):
         with patch(f"{TEST_FILE}.MinAlarms", wraps=MinAlarms) as mock_pyd_model:
@@ -182,6 +201,28 @@ class TestMin(unittest.TestCase):
             self.assertEqual(set(), set(raw_data["data"]["min"][0].keys()).difference(pydantic_keys), "data_min_0")
         else:
             self.assertEqual([], raw_data["data"]["min"], "no data")
+
+    def test_power(self):
+        if self.device_sn_real is None:
+            self.skipTest(
+                "No real MIN device available, no MIN device on test server v4, endpoint not supported on test server v1"
+            )
+
+        with patch(f"{TEST_FILE_V4}.PowerV4", wraps=PowerV4) as mock_pyd_model:
+            self.api_real.power(device_sn=self.device_sn_real)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in PowerV4.model_fields.items()} | set(
+            PowerV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+        # check data
+        self.assertTrue(
+            (raw_data["data"] is None) or (isinstance(raw_data["data"], int)) or (isinstance(raw_data["data"], float))
+        )
 
     def test_energy_history(self):
         # get date with data
@@ -445,6 +486,55 @@ class TestMin(unittest.TestCase):
         )  # aliased and non-aliased params
         self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
 
+    def test_setting_write_vpp_param_new(self):
+        """
+        This endpoint cannot be tested using the v1 test server (test.growatt.com), since it returns 404
+        This endpoint is only available on the v4 test server (183.62.216.35:8081) and on the official server (openapi.growatt.com)
+        """
+        # use SPH device from v4 server
+        api_server_v4 = Min(session=GrowattApiSession.using_test_server_v4())
+        device_sn = "AQM1234567"  # actually not MIN but SPH -- but works fine
+
+        # test it
+        with patch(f"{TEST_FILE_V4}.SettingWriteV4", wraps=SettingWriteV4) as mock_pyd_model:
+            api_server_v4.setting_write_vpp_param_new(
+                device_sn=device_sn,
+                parameter_id="set_param_2",  # On off command
+                value=1,  # 1 = power on (default)
+            )
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in SettingWriteV4.model_fields.items()} | set(
+            SettingWriteV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+    def test_setting_clear_vpp_time_period(self):
+        """
+        This endpoint cannot be tested using the v1 test server (test.growatt.com), since it returns 404
+        This endpoint is only available on the v4 test server (183.62.216.35:8081) and on the official server (openapi.growatt.com)
+        """
+        # use SPH device from v4 server
+        api_server_v4 = Min(session=GrowattApiSession.using_test_server_v4())
+        device_sn = "AQM1234567"  # actually not MIN but SPH -- but works fine
+
+        # test it
+        with patch(f"{TEST_FILE_V4}.SettingWriteV4", wraps=SettingWriteV4) as mock_pyd_model:
+            api_server_v4.setting_clear_vpp_time_period(
+                device_sn=device_sn,
+                parameter_id="set_param_2",  # On off command
+            )
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in SettingWriteV4.model_fields.items()} | set(
+            SettingWriteV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
     def test_settings(self):
         with patch(f"{TEST_FILE}.MinSettings", wraps=MinSettings) as mock_pyd_model:
             self.api.settings(device_sn=self.device_sn)
@@ -462,3 +552,23 @@ class TestMin(unittest.TestCase):
             MinTlxSettingsData.model_fields.keys()
         )
         self.assertEqual(set(), set(raw_data["data"].keys()).difference(pydantic_keys), "data")
+
+    def test_wifi_strength(self):
+        if self.device_sn_real is None:
+            self.skipTest(
+                "No real MIN device available, no MIN device on test server v4, endpoint not supported on test server v1"
+            )
+
+        with patch(f"{TEST_FILE_V4}.WifiStrengthV4", wraps=WifiStrengthV4) as mock_pyd_model:
+            self.api_real.wifi_strength(device_sn=self.device_sn_real)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in PowerV4.model_fields.items()} | set(
+            PowerV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+        # check pydantic conversion works
+        WifiStrengthV4.model_validate(raw_data)

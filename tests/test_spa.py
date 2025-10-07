@@ -16,6 +16,8 @@ from growatt_public_api.pydantic_models.api_v4 import (
     SpaEnergyHistoryDataV4,
     SettingReadVppV4,
     SettingWriteV4,
+    PowerV4,
+    WifiStrengthV4,
 )
 from growatt_public_api.pydantic_models.spa import (
     SpaAlarm,
@@ -182,6 +184,23 @@ class TestSpa(unittest.TestCase):
             self.assertEqual(set(), set(raw_data["data"]["spa"][0].keys()).difference(pydantic_keys), "data_spa_0")
         else:
             self.assertEqual([], raw_data["data"]["spa"], "no data")
+
+    def test_power(self):
+        with patch(f"{TEST_FILE_V4}.PowerV4", wraps=PowerV4) as mock_pyd_model:
+            self.api.power(device_sn=self.device_sn)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in PowerV4.model_fields.items()} | set(
+            PowerV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+        # check data
+        self.assertTrue(
+            (raw_data["data"] is None) or (isinstance(raw_data["data"], int)) or (isinstance(raw_data["data"], float))
+        )
 
     @skip(
         "We have a SPA in v4 test env (sn=CHENYINSHU), but it returns 'error_permission_denied' when using v1 API calls"
@@ -438,3 +457,59 @@ class TestSpa(unittest.TestCase):
             SettingWriteV4.model_fields.keys()
         )  # aliased and non-aliased params
         self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+    def test_setting_write_vpp_param_new(self):
+        """
+        This endpoint cannot be tested using the v1 test server (test.growatt.com), since it returns 404
+        This endpoint is only available on the v4 test server (183.62.216.35:8081) and on the official server (openapi.growatt.com)
+        """
+        # test it
+        with patch(f"{TEST_FILE_V4}.SettingWriteV4", wraps=SettingWriteV4) as mock_pyd_model:
+            self.api.setting_write_vpp_param_new(
+                device_sn=self.device_sn,
+                parameter_id="set_param_2",  # On off command
+                value=1,  # 1 = power on (default)
+            )
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in SettingWriteV4.model_fields.items()} | set(
+            SettingWriteV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+    def test_setting_clear_vpp_time_period(self):
+        """
+        This endpoint cannot be tested using the v1 test server (test.growatt.com), since it returns 404
+        This endpoint is only available on the v4 test server (183.62.216.35:8081) and on the official server (openapi.growatt.com)
+        """
+        # test it
+        with patch(f"{TEST_FILE_V4}.SettingWriteV4", wraps=SettingWriteV4) as mock_pyd_model:
+            self.api.setting_clear_vpp_time_period(
+                device_sn=self.device_sn,
+                parameter_id="set_param_2",  # On off command
+            )
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in SettingWriteV4.model_fields.items()} | set(
+            SettingWriteV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+    def test_wifi_strength(self):
+        with patch(f"{TEST_FILE_V4}.WifiStrengthV4", wraps=WifiStrengthV4) as mock_pyd_model:
+            self.api.wifi_strength(device_sn=self.device_sn)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in PowerV4.model_fields.items()} | set(
+            PowerV4.model_fields.keys()
+        )  # aliased and non-aliased params
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+        # check pydantic conversion works
+        WifiStrengthV4.model_validate(raw_data)
