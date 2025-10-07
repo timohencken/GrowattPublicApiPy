@@ -2,8 +2,6 @@ import datetime
 from datetime import date, time
 from typing import Union, List, Optional, Literal
 
-from loguru import logger
-
 from ..api_v4 import ApiV4
 from ..growatt_types import DeviceType
 from ..pydantic_models.noah import (
@@ -91,7 +89,7 @@ class Noah:
           * /noahDeviceApi/noah/getSystemStatus
 
         Rate limit(s):
-        * There seems to be no rate limit for this endpoint
+        * There seems to be no rate limit for this endpoint, but do not call it too often to avoid being blocked
         * Mobile app calls this endpoint every 6 seconds
 
         Args:
@@ -103,31 +101,31 @@ class Noah:
                       'alias': 'NEXA 2000',
                       'associated_inv_sn': None,
                       'battery_package_quantity': 2,
-                      'total_battery_pack_charging_power': 0.0,
-                      'total_battery_pack_discharging_power': 0.0,
-                      'eac_today': 0.8,
-                      'eac_total': 116.8,
+                      'total_battery_pack_charging_power': 112.0,  # (+)=charging, (-)=discharging
+                      'eac_today': 1.4,
+                      'eac_total': 118.2,
                       'eastron_status': -1,
-                      'grid_power': 0.0,
+                      'ct_self_power': 387.0,   # Power drawn from grid (measured by smart meter) (+)=from grid, (-)=to grid
                       'groplug_num': 0,
-                      'groplug_power': 0.0,
+                      'groplug_power': 0.0,     # Probably power measured by groplug
                       'ct_flag': True,
-                      'load_power': 0.0,
+                      'total_household_load': 387.0,  # Household power consumption
                       'currency': '€',
                       'on_off_grid': 0,
-                      'other_power': 0.0,
-                      'pac': 0.0,
+                      'other_power': 0.0,       # ??? during observation period always == pac
+                      'pac': 0.0,               # AC in/output power (+)=AC-charging, (-)=Nexa/Noah power output
                       'plant_id': 12345678,
-                      'ppv': 0.0,
-                      'money_today': 0.32,
-                      'money_total': 46.72,
-                      'total_battery_pack_soc': 10,
-                      'status': -1,
+                      'ppv': 112.0,             # Photovoltaic power
+                      'money_today': 0.56,
+                      'money_total': 47.28,
+                      'total_battery_pack_soc': 11,
+                      'status': 6,
                       'work_mode': 2},
              'error_code': 0,
              'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
+        # noinspection DuplicatedCode
         device_sn = self._device_sn(device_sn)
         noah_or_nexa = self._noah_or_nexa(device_sn=device_sn)
 
@@ -138,15 +136,15 @@ class Noah:
             },
         )
 
-        logger.warning(f"This endpoint is under development and might change in future releases! Use at your own risk!")
-        logger.debug(response)
-        # FIXME map power_* to correct entities
-
         # transfer to data structure resembling v4 API
         _error_code = 0 if response.get("result") == 1 else 1
         _msg = response.get("msg")
         _msg = _msg or ("SUCCESSFUL_OPERATION" if _error_code == 0 else "SYSTEM_ERROR")
         _data = response.get("obj", {})
+        # charge/discharge power is returned separately, but in v4 API it is a single value (positive=charging, negative=discharging)
+        _data["total_battery_pack_charging_power"] = float(_data.get("chargePower") or 0.0) - float(
+            _data.get("disChargePower") or 0.0
+        )
 
         return NoahStatus.model_validate(
             {
@@ -168,7 +166,7 @@ class Noah:
           * /noahDeviceApi/nexa/getBatteryData
 
         Rate limit(s):
-        * There seems to be no rate limit for this endpoint
+        * There seems to be no rate limit for this endpoint, but do not call it too often to avoid being blocked
 
         Args:
             device_sn (Optional[str]): Inverter serial number
@@ -197,6 +195,7 @@ class Noah:
              'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
+        # noinspection DuplicatedCode
         device_sn = self._device_sn(device_sn)
         noah_or_nexa = self._noah_or_nexa(device_sn=device_sn)
 
@@ -249,7 +248,7 @@ class Noah:
           * /noahDeviceApi/nexa/getNexaInfoBySn
 
         Rate limit(s):
-        * There seems to be no rate limit for this endpoint
+        * There seems to be no rate limit for this endpoint, but do not call it too often to avoid being blocked
 
         Args:
             device_sn (Optional[str]): Inverter serial number
@@ -367,7 +366,7 @@ class Noah:
         * contains fix for Nexa has integer overflow on negative values for total_household_load
 
         Rate limit(s):
-        * There seems to be no rate limit for this endpoint
+        * There seems to be no rate limit for this endpoint, but do not call it too often to avoid being blocked
 
         Args:
             device_sn (Optional[str]): Inverter serial number
@@ -464,7 +463,7 @@ class Noah:
           * /noahDeviceApi/nexa/getDataChart
 
         Rate limit(s):
-        * There seems to be no rate limit for this endpoint
+        * There seems to be no rate limit for this endpoint, but do not call it too often to avoid being blocked
 
         Args:
             device_sn (Optional[str]): Inverter serial number
@@ -1156,7 +1155,7 @@ class Noah:
           * /noahDeviceApi/nexa/checkUpgradeNexa
 
         Rate limit(s):
-        * There seems to be no rate limit for this endpoint
+        * There seems to be no rate limit for this endpoint, but do not call it too often to avoid being blocked
 
         Args:
             device_sn (Optional[str]): Inverter serial number

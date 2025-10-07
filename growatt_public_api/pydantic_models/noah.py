@@ -23,22 +23,13 @@ def _noah_status_data_to_camel(snake: str) -> str:
     override = {
         "battery_package_quantity": "batteryNum",
         "ac_couple_power_control": "acCoupleEnable",
-        "total_battery_pack_charging_power": "chargePower",
-        "total_battery_pack_discharging_power": "disChargePower",
         "ct_flag": "isHaveCt",
         "currency": "moneyUnit",
         "money_today": "profitToday",
         "money_total": "profitTotal",
         "total_battery_pack_soc": "soc",
-        # FIXME: assign
-        # * "total_household_load"
-        # * "household_load_apart_from_groplug"
-        # * "ct_self_power"
-        # to
-        # * "loadPower"
-        # * "groplugPower"
-        # * "gridPower"
-        # * "otherPower"
+        "total_household_load": "loadPower",
+        "ct_self_power": "gridPower",
     }
     return override.get(snake, to_camel(snake=snake))
 
@@ -61,21 +52,24 @@ class NoahStatusData(ApiModel):
     associated_inv_sn: Union[EmptyStrToNone, str] = None  # Associated Inverter, e.g. None
     battery_package_quantity: Union[EmptyStrToNone, int] = None  # Number of parallel battery packs, e.g. '2'
     total_battery_pack_charging_power: Union[EmptyStrToNone, float] = None  # Total battery charging power, e.g. '0'
-    total_battery_pack_discharging_power: Union[EmptyStrToNone, float] = (
-        None  # Total battery discharging power, e.g. '0'
-    )
     eac_today: Union[EmptyStrToNone, float] = None  # Daily power generation, e.g. '0.8'
     eac_total: Union[EmptyStrToNone, float] = None  # Total power generation, e.g. '116.7'
     eastron_status: Union[EmptyStrToNone, int] = None  # e.g. '-1'
-    grid_power: Union[EmptyStrToNone, float] = None  # e.g. '620'  # FIXME assign (see above)
+    ct_self_power: Union[EmptyStrToNone, float] = (
+        None  # power taken from grid measured by (shelly) smart meter e.g. '620'
+    )
     groplug_num: Union[EmptyStrToNone, int] = None  # e.g. '0'
-    groplug_power: Union[EmptyStrToNone, float] = None  # e.g. '0'  # FIXME assign (see above)
+    groplug_power: Union[EmptyStrToNone, float] = None  # e.g. '0'
     ct_flag: Union[EmptyStrToNone, bool] = None  # e.g. 'true'
-    load_power: Union[EmptyStrToNone, float] = None  # e.g. '620'  # FIXME assign (see above)
+    total_household_load: Union[EmptyStrToNone, float] = (
+        None  # Household consumption (minus third party inverter power) e.g. '620'
+    )
     currency: Union[EmptyStrToNone, str] = None  # e.g. '€'
     on_off_grid: Union[EmptyStrToNone, int] = None  # e.g. '0'
-    other_power: Union[EmptyStrToNone, float] = None  # e.g. '0'  # FIXME assign (see above)
-    pac: Union[EmptyStrToNone, float] = None  # BUCK (=step-down) output power, e.g. '0'
+    other_power: Union[EmptyStrToNone, float] = None  # e.g. '0'
+    pac: Union[EmptyStrToNone, float] = (
+        None  # BUCK (=step-down) output power - (-)=Output/(+)=AC-Charge - power in/output from Nexa, e.g. '0'
+    )
     plant_id: Union[EmptyStrToNone, int] = None  # e.g. '12345678'
     ppv: Union[EmptyStrToNone, float] = None  # Photovoltaic power (W), e.g. '0'
     money_today: Union[EmptyStrToNone, float] = None  # Income today in "currency", e.g. '0.32'
