@@ -2696,7 +2696,7 @@ class Min:
 
         return self._api_vpp.soc(device_sn=self._device_sn(device_sn))
 
-    def settings_write_vpp_now(
+    def setting_write_vpp_now(
         self,
         time_: time,
         percentage: int,
@@ -2743,7 +2743,7 @@ class Min:
             percentage=percentage,
         )
 
-    def settings_write_vpp_schedule(
+    def setting_write_vpp_schedule(
         self, schedules: List[Tuple[int, time, time]], device_sn: Optional[str] = None
     ) -> VppWrite:
         """

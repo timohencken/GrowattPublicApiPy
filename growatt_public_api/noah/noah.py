@@ -1,11 +1,19 @@
+import datetime
 from datetime import date, time
-from typing import Union, List, Optional
+from typing import Union, List, Optional, Literal
 
 from loguru import logger
 
 from ..api_v4 import ApiV4
 from ..growatt_types import DeviceType
-from ..pydantic_models.noah import NoahStatus
+from ..pydantic_models.noah import (
+    NoahStatus,
+    NoahBatteryStatus,
+    NoahSettings,
+    NoahPowerChart,
+    NoahEnergyChart,
+    NoahFirmwareInfo,
+)
 from ..pydantic_models.api_v4 import (
     NoahDetailsV4,
     NoahEnergyV4,
@@ -74,7 +82,7 @@ class Noah:
     def status(
         self,
         device_sn: Optional[str] = None,
-    ):
+    ) -> NoahStatus:
         """
         Noah/Nexa status data
         Retrieve basic status/energy metrics by device SN.
@@ -91,33 +99,33 @@ class Noah:
 
         Returns:
             NoahStatus
-            {'msg': None,
-             'result': 1,
-             'obj': {'ac_couple_power_control': 1,
-                     'alias': 'NEXA 2000',
-                     'associated_inv_sn': None,
-                     'battery_package_quantity': 2,
-                     'total_battery_pack_charging_power': 0,
-                     'total_battery_pack_discharging_power': 0,
-                     'eac_today': 0.8,
-                     'eac_total': 116.8,
-                     'eastron_status': -1,
-                     'grid_power': 3490.0,
-                     'groplug_num': 0,
-                     'groplug_power': 0,
-                     'ct_flag': True,
-                     'load_power': 3490.0,
-                     'currency': '€',
-                     'on_off_grid': 0,
-                     'other_power': 0.0,
-                     'pac': 0.0,
-                     'plant_id': 12345678,
-                     'ppv': 0.0,
-                     'money_today': 0.32,
-                     'money_total': 46.72,
-                     'total_battery_pack_soc': 10,
-                     'status': 6,
-                     'work_mode': 2}}
+            {'data': {'ac_couple_power_control': 1,
+                      'alias': 'NEXA 2000',
+                      'associated_inv_sn': None,
+                      'battery_package_quantity': 2,
+                      'total_battery_pack_charging_power': 0.0,
+                      'total_battery_pack_discharging_power': 0.0,
+                      'eac_today': 0.8,
+                      'eac_total': 116.8,
+                      'eastron_status': -1,
+                      'grid_power': 0.0,
+                      'groplug_num': 0,
+                      'groplug_power': 0.0,
+                      'ct_flag': True,
+                      'load_power': 0.0,
+                      'currency': '€',
+                      'on_off_grid': 0,
+                      'other_power': 0.0,
+                      'pac': 0.0,
+                      'plant_id': 12345678,
+                      'ppv': 0.0,
+                      'money_today': 0.32,
+                      'money_total': 46.72,
+                      'total_battery_pack_soc': 10,
+                      'status': -1,
+                      'work_mode': 2},
+             'error_code': 0,
+             'error_msg': 'SUCCESSFUL_OPERATION'}
         """
 
         device_sn = self._device_sn(device_sn)
@@ -132,8 +140,412 @@ class Noah:
 
         logger.warning(f"This endpoint is under development and might change in future releases! Use at your own risk!")
         logger.debug(response)
+        # FIXME map power_* to correct entities
 
-        return NoahStatus.model_validate(response)
+        # transfer to data structure resembling v4 API
+        _error_code = 0 if response.get("result") == 1 else 1
+        _msg = response.get("msg")
+        _msg = _msg or ("SUCCESSFUL_OPERATION" if _error_code == 0 else "SYSTEM_ERROR")
+        _data = response.get("obj", {})
+
+        return NoahStatus.model_validate(
+            {
+                "data": _data,
+                "error_code": _error_code,
+                "error_msg": _msg,
+            }
+        )
+
+    def battery_status(
+        self,
+        device_sn: Optional[str] = None,
+    ) -> NoahBatteryStatus:
+        """
+        Noah/Nexa battery data
+        Retrieve basic status/energy metrics by device SN.
+        ! not part of official API documentation, but reverse-engineered from APP API calls
+          * /noahDeviceApi/noah/getBatteryData
+          * /noahDeviceApi/nexa/getBatteryData
+
+        Rate limit(s):
+        * There seems to be no rate limit for this endpoint
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            NoahBatteryStatus
+            {'data': {'battery1_serial_num': '0HVR...',
+                      'battery1_soc': 9,
+                      'battery1_temp': 15.0,
+                      'battery1_temp_f': 59.0,
+                      'battery2_serial_num': '0HYR...',
+                      'battery2_soc': 12,
+                      'battery2_temp': 11.0,
+                      'battery2_temp_f': 51.8,
+                      'battery3_serial_num': None,
+                      'battery3_soc': None,
+                      'battery3_temp': None,
+                      'battery3_temp_f': None,
+                      'battery4_serial_num': None,
+                      'battery4_soc': None,
+                      'battery4_temp': None,
+                      'battery4_temp_f': None,
+                      'battery_package_quantity': 2,
+                      'time': datetime.datetime(2025, 10, 6, 18, 12, 44)},
+             'error_code': 0,
+             'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        device_sn = self._device_sn(device_sn)
+        noah_or_nexa = self._noah_or_nexa(device_sn=device_sn)
+
+        response = self.session.post(
+            endpoint=f"noahDeviceApi/{noah_or_nexa}/getBatteryData",
+            data={
+                "deviceSn": self._device_sn(device_sn),
+            },
+        )
+
+        # transfer to data structure resembling v4 API
+        _error_code = 0 if response.get("result") == 1 else 1
+        _msg = response.get("msg")
+        _msg = _msg or ("SUCCESSFUL_OPERATION" if _error_code == 0 else "SYSTEM_ERROR")
+        _temp_type = response.get("obj", {}).get("tempType")  # e.g. "°C"
+        _data = {
+            "time": response.get("obj", {}).get("time"),
+        }
+        for _bat_num, _bat_data in enumerate(response.get("obj", {}).get("batter", []), start=1):
+            _data[f"battery{_bat_num}_serial_num"] = _bat_data.get("serialNum")
+            _data[f"battery{_bat_num}_soc"] = _bat_data.get("soc")
+            _temp = _temp_c = _temp_f = _bat_data.get("temp")
+            if "F" in _temp_type and _temp:
+                # convert to celsius
+                _temp_c = (float(_temp) - 32) / 1.8
+            _data[f"battery{_bat_num}_temp"] = float(_temp_c) if _temp_c else None
+            if "C" in _temp_type and _temp:
+                # convert to fahrenheit
+                _temp_f = (float(_temp) * 1.8) + 32
+            _data[f"battery{_bat_num}_temp_f"] = float(_temp_f) if _temp_c else None
+            _data["battery_package_quantity"] = _bat_num
+
+        return NoahBatteryStatus.model_validate(
+            {
+                "data": _data,
+                "error_code": _error_code,
+                "error_msg": _msg,
+            }
+        )
+
+    def settings(
+        self,
+        device_sn: Optional[str] = None,
+    ) -> NoahSettings:
+        """
+        Noah/Nexa settings
+        Retrieve basic settings by device SN.
+        ! not part of official API documentation, but reverse-engineered from APP API calls
+          * /noahDeviceApi/noah/getNoahInfoBySn
+          * /noahDeviceApi/nexa/getNexaInfoBySn
+
+        Rate limit(s):
+        * There seems to be no rate limit for this endpoint
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            NoahSettings
+            {'data': {'ac_couple': True,
+                      'ac_couple_enable': 1,
+                      'ac_couple_power_control': 1,
+                      'alias': 'NEXA 2000',
+                      'allow_grid_charging': 1,
+                      'ammeter_model': 'Shelly Pro 3EM',
+                      'ammeter_sn': '123456789012345',
+                      'anti_backflow_enable': 1,
+                      'anti_backflow_power_percentage': 0,
+                      'bat_sns': ['0HVR...', '0HYR...'],
+                      'charging_soc_high_limit': 100.0,
+                      'charging_soc_low_limit': 10.0,
+                      'ct_type': 0,
+                      'currency_list': ['RMB', 'EUR', 'GBP', 'USD', ...],
+                      'default_ac_couple_power': 100,
+                      'default_mode': 0,
+                      'device_sn': '0HVR...',
+                      'formula_money': 0.4,
+                      'grid_connection_control': 0,
+                      'grid_set': 1,
+                      'model': 'NEXA 2000',
+                      'currency': 'EUR',
+                      'plant_id': 12345678,
+                      'plant_name': 'Solar plant',
+                      'plant_list': [{'plant_id': 12345678,
+                                      'plant_img_name': None,
+                                      'plant_name': 'Solar plant'}],
+                      'safety': 1,
+                      'safety_enable': True,
+                      'safety_list': [{'country_and_area': 'German',
+                                       'safety_correspond_num': 1},
+                                      {'country_and_area': 'Netherlands',
+                                       'safety_correspond_num': 2},
+                                      {'country_and_area': 'Belgium',
+                                       'safety_correspond_num': 3},
+                                      {'country_and_area': 'French',
+                                       'safety_correspond_num': 4},
+                                      {'country_and_area': 'EN 50549-1',
+                                       'safety_correspond_num': 5}],
+                      'shelly_list': [],
+                      'smart_plan': True,
+                      'temp_type': 0,
+                      'time_segments': {'time_segment1': None,
+                                        'time_segment2': None,
+                                        'time_segment3': {'work_mode': 2,
+                                                          'start_time': datetime.time(0, 0),
+                                                          'end_time': datetime.time(23, 59),
+                                                          'power': 0,
+                                                          'days': [0]},
+                                        'time_segment4': None,
+                                        'time_segment5': None,
+                                        'time_segment6': None,
+                                        'time_segment7': None,
+                                        'time_segment8': None,
+                                        'time_segment9': None},
+                      'version': '11.10.09.07.9000.4017',
+                      'work_mode': 2},
+             'error_code': 0,
+             'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        device_sn = self._device_sn(device_sn)
+        noah_or_nexa = self._noah_or_nexa(device_sn=device_sn)
+
+        response = self.session.post(
+            endpoint=(
+                # /noahDeviceApi/noah/getNoahInfoBySn
+                # /noahDeviceApi/nexa/getNexaInfoBySn
+                f"noahDeviceApi/{noah_or_nexa}/get{noah_or_nexa.capitalize()}InfoBySn"
+            ),
+            data={
+                "deviceSn": self._device_sn(device_sn),
+            },
+        )
+
+        # transfer to data structure resembling v4 API
+        _error_code = 0 if response.get("result") == 1 else 1
+        _msg = response.get("msg")
+        _msg = _msg or ("SUCCESSFUL_OPERATION" if _error_code == 0 else "SYSTEM_ERROR")
+        # add noah data
+        _data = response.get("obj", {}).get("noah", {})
+        # add top-level data
+        _data["currency_list"] = response.get("obj", {}).get("unitKeyList", {})
+        _data["plant_list"] = response.get("obj", {}).get("plantList", {})
+
+        return NoahSettings.model_validate(
+            {
+                "data": _data,
+                "error_code": _error_code,
+                "error_msg": _msg,
+            }
+        )
+
+    def power_chart(
+        self,
+        device_sn: Optional[str] = None,
+        date_: Optional[date] = None,
+    ) -> NoahPowerChart:
+        """
+        Noah/Nexa power chart
+        Retrieve power data for one day by device SN.
+        ! not part of official API documentation, but reverse-engineered from APP API calls
+          * /noahDeviceApi/noah/getNoahChartData
+          * /noahDeviceApi/nexa/getNexaChartData
+
+        Notes:
+        * data is returned in 5-minute intervals
+        * Nexa reports "pac" (load power) as 0.0 all the time, even when load is present
+        * contains fix for Nexa has integer overflow on negative values for total_household_load
+
+        Rate limit(s):
+        * There seems to be no rate limit for this endpoint
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+            date_ (Optional[date]): date to retrieve - defaults to today
+
+        Returns:
+            NoahPowerChart
+            {'data': [{'time': datetime.datetime(2025, 10, 4, 0, 0),
+                       'pac': 0.0,
+                       'ppv': 0.0,
+                       'total_household_load': 0.0},
+                      {'time': datetime.datetime(2025, 10, 4, 0, 5),
+                       'pac': 0.0,
+                       'ppv': 0.0,
+                       'total_household_load': 0.0},
+                        ...
+                      {'time': datetime.datetime(2025, 10, 4, 16, 30),
+                       'pac': 0.0,
+                       'ppv': 165.5,
+                       'total_household_load': 416.0},
+                      {'time': datetime.datetime(2025, 10, 4, 16, 35),
+                       'pac': 0.0,
+                       'ppv': 191.0,
+                       'total_household_load': 115.0},
+                        ...
+                      {'time': datetime.datetime(2025, 10, 4, 23, 55),
+                       'pac': 0.0,
+                       'ppv': 0.0,
+                       'total_household_load': 0.0}],
+             'error_code': 0,
+             'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        device_sn = self._device_sn(device_sn)
+        noah_or_nexa = self._noah_or_nexa(device_sn=device_sn)
+        date_ = date_ or datetime.date.today()
+
+        response = self.session.post(
+            endpoint=(
+                # /noahDeviceApi/noah/getNoahChartData
+                # /noahDeviceApi/nexa/getNexaChartData
+                f"noahDeviceApi/{noah_or_nexa}/get{noah_or_nexa.capitalize()}ChartData"
+            ),
+            data={
+                "deviceSn": self._device_sn(device_sn),
+                # endpoint retrieves data for yesterday, so in order to get data for the day requested, we add a day
+                "date": (date_ + datetime.timedelta(days=1)).strftime("%Y-%m-%d"),
+            },
+        )
+
+        # transfer to data structure resembling v4 API
+        _error_code = 0 if response.get("result") == 1 else 1
+        _msg = response.get("msg")
+        _msg = _msg or ("SUCCESSFUL_OPERATION" if _error_code == 0 else "SYSTEM_ERROR")
+        _date_string = date_.strftime("%Y-%m-%d")
+        _data = []
+        for _time_string in sorted(response.get("obj", {}).keys()):
+            _data_item = response.get("obj", {}).get(_time_string, {}).copy()
+            _data_item["time"] = f"{_date_string} {_time_string}"  # make it datetime
+            _data.append(_data_item)
+
+        npc = NoahPowerChart.model_validate(
+            {
+                "data": _data,
+                "error_code": _error_code,
+                "error_msg": _msg,
+            }
+        )
+
+        # nexa has integer overflow on negative values for total_household_load
+        for entry in npc.data:
+            if not entry.total_household_load:
+                continue
+            elif entry.total_household_load > 50000.0:
+                # fix overflow by subtracting 65536.0
+                entry.total_household_load -= 65536.0
+            elif entry.total_household_load > 25000.0:
+                # as chart data shows mean values, still values like 32755.5 can occur
+                entry.total_household_load -= 65536.0 / 2.0
+
+        return npc
+
+    def energy_chart(
+        self,
+        device_sn: Optional[str] = None,
+        date_: Optional[date] = None,
+        period: Optional[Literal["day", "month", "year"]] = None,
+    ) -> NoahEnergyChart:
+        """
+        Noah/Nexa energy chart
+        Retrieve energy data per day/month/year for one month/year/total by device SN.
+        ! not part of official API documentation, but reverse-engineered from APP API calls
+          * /noahDeviceApi/nexa/getDataChart
+          * /noahDeviceApi/nexa/getDataChart
+
+        Rate limit(s):
+        * There seems to be no rate limit for this endpoint
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+            date_ (Optional[date]): date to retrieve - defaults to today
+            period: ("day" | "month" | "year"): Get data per day (one month) / month (one year) / year - defaults to "day
+
+        Returns:
+            NoahEnergyChart
+            period="day":
+            {'data': [{'time': datetime.date(2025, 10, 1), 'epv': 5.1},
+                      ...
+                      {'time': datetime.date(2025, 10, 31), 'epv': 0.0}],
+             'error_code': 0,
+             'error_msg': 'SUCCESSFUL_OPERATION'}
+
+            period="month":
+            {'data': [{'time': datetime.date(2025, 1, 1), 'epv': 3.0},
+                      ...
+                      {'time': datetime.date(2025, 12, 1), 'epv': 0.0}],
+             'error_code': 0,
+             'error_msg': 'SUCCESSFUL_OPERATION'}
+
+            period="year":
+            {'data': [{'time': datetime.date(2020, 1, 1), 'epv': 0.0},
+                      ...
+                      {'time': datetime.date(2025, 1, 1), 'epv': 123.4}],
+             'error_code': 0,
+             'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        device_sn = self._device_sn(device_sn)
+        noah_or_nexa = self._noah_or_nexa(device_sn=device_sn)
+        date_ = date_ or datetime.date.today()
+        period = period or "day"
+        assert period in ["day", "month", "year"], f"invalid period {period}"
+        if period == "year":
+            date_type = 3
+            date_string = date_.strftime("%Y-01-01")
+        elif period == "month":
+            date_type = 2
+            date_string = date_.strftime("%Y-01-01")
+        else:
+            date_type = 1
+            date_string = date_.strftime("%Y-%m-01")
+
+        response = self.session.post(
+            endpoint=(
+                # /noahDeviceApi/noah/getDataChart
+                # /noahDeviceApi/nexa/getDataChart
+                f"noahDeviceApi/{noah_or_nexa}/getDataChart"
+            ),
+            data={
+                "deviceSn": self._device_sn(device_sn),
+                # endpoint retrieves data for yesterday, so in order to get data for the day requested, we add a day
+                "dateTime": date_string,
+                "dateType": date_type,
+            },
+        )
+
+        # transfer to data structure resembling v4 API
+        _error_code = 0 if response.get("result") == 1 else 1
+        _msg = response.get("msg")
+        _msg = _msg or ("SUCCESSFUL_OPERATION" if _error_code == 0 else "SYSTEM_ERROR")
+        _data = []
+        for _time_string in sorted(response.get("obj", {}).keys()):
+            _data_item = {"epv": response.get("obj", {}).get(_time_string)}
+            if period == "year":
+                _data_item["time"] = f"{_time_string:>04}-01-01"  # make a date from "01"
+            elif period == "month":
+                _data_item["time"] = f"{date_.strftime('%Y')}-{_time_string:>02}-01"  # make a date from "01"
+            else:
+                _data_item["time"] = f"{date_.strftime('%Y-%m')}-{_time_string:>02}"  # make a date from "01"
+            _data.append(_data_item)
+
+        return NoahEnergyChart.model_validate(
+            {
+                "data": _data,
+                "error_code": _error_code,
+                "error_msg": _msg,
+            }
+        )
 
     def details_v4(
         self,
@@ -730,4 +1142,58 @@ class Noah:
         return self._api_v4.wifi_strength(
             device_sn=self._device_sn(device_sn),
             device_type=DeviceType.NOAH,
+        )
+
+    def firmware_info(
+        self,
+        device_sn: Optional[str] = None,
+    ) -> NoahFirmwareInfo:
+        """
+        Noah/Nexa firmware version
+        Retrieve current and latest firmware version
+        ! not part of official API documentation, but reverse-engineered from APP API calls
+          * /noahDeviceApi/noah/checkUpgradeNoah
+          * /noahDeviceApi/nexa/checkUpgradeNexa
+
+        Rate limit(s):
+        * There seems to be no rate limit for this endpoint
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            NoahFirmwareInfo
+            {'data': {'update_available': False,
+                      'current_version': '11.10.09.07.9000.4017',
+                      'latest_version': '11.10.09.07.9000.4017',
+                      'status': 6},
+             'error_code': 0,
+             'error_msg': 'SUCCESSFUL_OPERATION'}
+        """
+
+        device_sn = self._device_sn(device_sn)
+        noah_or_nexa = self._noah_or_nexa(device_sn=device_sn)
+        response = self.session.post(
+            endpoint=(
+                # /noahDeviceApi/noah/checkUpgradeNoah
+                # /noahDeviceApi/nexa/checkUpgradeNexa
+                f"noahDeviceApi/{noah_or_nexa}/checkUpgrade{noah_or_nexa.capitalize()}"
+            ),
+            data={
+                "deviceSn": device_sn,
+            },
+        )
+
+        # transfer to data structure resembling v4 API
+        _error_code = 0 if response.get("result") == 1 else 1
+        _msg = response.get("msg")
+        _msg = _msg or ("SUCCESSFUL_OPERATION" if _error_code == 0 else "SYSTEM_ERROR")
+        _data = response.get("obj", {})
+
+        return NoahFirmwareInfo.model_validate(
+            {
+                "data": _data,
+                "error_code": _error_code,
+                "error_msg": _msg,
+            }
         )

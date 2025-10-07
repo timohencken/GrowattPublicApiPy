@@ -22,6 +22,15 @@ from growatt_public_api.pydantic_models.api_v4 import (
     PowerV4,
     WifiStrengthV4,
 )
+from growatt_public_api.pydantic_models.noah import (
+    NoahStatus,
+    NoahBatteryStatus,
+    NoahSettings,
+    NoahPowerChart,
+    NoahEnergyChart,
+    NoahFirmwareInfo,
+)
+
 
 TEST_FILE = "growatt_public_api.noah.noah"
 TEST_FILE_V4 = "growatt_public_api.api_v4.api_v4"
@@ -331,12 +340,110 @@ class TestNoah(unittest.TestCase):
         # check pydantic conversion works
         WifiStrengthV4.model_validate(raw_data)
 
-    def test_status_v1(self):  # FIXME name
+    def test_status(self):
         if self.device_sn is None:
             self.skipTest("no NOAH device available")
 
-        # FIXME this is just for debugging
+        with patch(f"{TEST_FILE}.NoahStatus", wraps=NoahStatus) as mock_pyd_model:
+            self.api.status(device_sn=self.device_sn)
 
-        self.api.status_v1(device_sn=self.device_sn)
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
 
-        raise NotImplementedError
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in NoahStatus.model_fields.items()} | set(
+            NoahStatus.model_fields.keys()
+        )  # aliased and non-aliased params
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+        # check pydantic conversion works
+        NoahStatus.model_validate(raw_data)
+
+    def test_battery_status(self):
+        if self.device_sn is None:
+            self.skipTest("no NOAH device available")
+
+        with patch(f"{TEST_FILE}.NoahBatteryStatus", wraps=NoahBatteryStatus) as mock_pyd_model:
+            self.api.battery_status(device_sn=self.device_sn)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in NoahBatteryStatus.model_fields.items()} | set(
+            NoahBatteryStatus.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+        # check pydantic conversion works
+        NoahBatteryStatus.model_validate(raw_data)
+
+    def test_settings(self):
+        if self.device_sn is None:
+            self.skipTest("no NOAH device available")
+
+        with patch(f"{TEST_FILE}.NoahSettings", wraps=NoahSettings) as mock_pyd_model:
+            self.api.settings(device_sn=self.device_sn)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in NoahSettings.model_fields.items()} | set(
+            NoahSettings.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+        # check pydantic conversion works
+        NoahSettings.model_validate(raw_data)
+
+    def test_power_chart(self):
+        if self.device_sn is None:
+            self.skipTest("no NOAH device available")
+
+        with patch(f"{TEST_FILE}.NoahPowerChart", wraps=NoahPowerChart) as mock_pyd_model:
+            self.api.power_chart(device_sn=self.device_sn)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in NoahPowerChart.model_fields.items()} | set(
+            NoahPowerChart.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+        # check pydantic conversion works
+        NoahPowerChart.model_validate(raw_data)
+
+    def test_energy_chart(self):
+        if self.device_sn is None:
+            self.skipTest("no NOAH device available")
+
+        with patch(f"{TEST_FILE}.NoahEnergyChart", wraps=NoahEnergyChart) as mock_pyd_model:
+            self.api.energy_chart(device_sn=self.device_sn)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in NoahEnergyChart.model_fields.items()} | set(
+            NoahEnergyChart.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+        # check pydantic conversion works
+        NoahEnergyChart.model_validate(raw_data)
+
+    def test_firmware_version(self):
+        if self.device_sn is None:
+            self.skipTest("no NOAH device available")
+
+        with patch(f"{TEST_FILE}.NoahFirmwareInfo", wraps=NoahFirmwareInfo) as mock_pyd_model:
+            self.api.firmware_info(device_sn=self.device_sn)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        # check parameters are included in pydantic model
+        pydantic_keys = {v.alias for k, v in NoahFirmwareInfo.model_fields.items()} | set(
+            NoahFirmwareInfo.model_fields.keys()
+        )  # aliased and non-aliased params
+        self.assertEqual(set(), set(raw_data.keys()).difference(pydantic_keys), "root")
+
+        # check pydantic conversion works
+        NoahFirmwareInfo.model_validate(raw_data)
