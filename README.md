@@ -526,7 +526,10 @@ To the best of our knowledge only the settings functions perform modifications t
 * TODO: generate & publish docs
 
 # Changelog
-* TBA
+* 2025.10.07 (beta)
+  * decided to switch status from alpha to beta
+    * all documented endpoints implemented
+    * verified with real devices (MIN, NEXA)
   * added missing endpoints from new API docs
     * `wifi_strength()` (inverter, noah, max, min, spa, sph, sph-s, wit)
     * `power()` (inverter, max, min, noah, spa, sph, wit)
