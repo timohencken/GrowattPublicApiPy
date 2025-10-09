@@ -526,6 +526,8 @@ To the best of our knowledge only the settings functions perform modifications t
 * TODO: generate & publish docs
 
 # Changelog
+* 2025.10.09 (beta)
+  * (internal) init device-specific APIs on demand
 * 2025.10.07 (beta)
   * decided to switch status from alpha to beta
     * all documented endpoints implemented

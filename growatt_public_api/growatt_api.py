@@ -25,25 +25,25 @@ from .noah.noah import Noah
 
 class GrowattApi:
     session: GrowattApiSession
-    user: User
-    plant: Plant
-    datalogger: Datalogger
-    device: Device
-    inverter: Inverter
-    storage: Storage
-    min: Min
-    max: Max
-    sph: Sph
-    spa: Spa
-    pcs: Pcs
-    hps: Hps
-    pbd: Pbd
-    smart_meter: SmartMeter
-    env_sensor: EnvSensor
-    groboost: Groboost
-    wit: Wit
-    sphs: Sphs
-    noah: Noah
+    _user: User = None
+    _plant: Plant = None
+    _datalogger: Datalogger = None
+    _device: Device = None
+    _inverter: Inverter = None
+    _storage: Storage = None
+    _min: Min = None
+    _max: Max = None
+    _sph: Sph = None
+    _spa: Spa = None
+    _pcs: Pcs = None
+    _hps: Hps = None
+    _pbd: Pbd = None
+    _smart_meter: SmartMeter = None
+    _env_sensor: EnvSensor = None
+    _groboost: Groboost = None
+    _wit: Wit = None
+    _sphs: Sphs = None
+    _noah: Noah = None
 
     """
     API documents:
@@ -66,25 +66,6 @@ class GrowattApi:
         assert token
 
         self.session = GrowattApiSession(token=token, server_url=server_url, use_cache=use_cache)
-        self.user = User(self.session)
-        self.plant = Plant(self.session)
-        self.datalogger = Datalogger(self.session)
-        self.device = Device(self.session)
-        self.inverter = Inverter(self.session)
-        self.storage = Storage(self.session)
-        self.min = Min(self.session)
-        self.max = Max(self.session)
-        self.sph = Sph(self.session)
-        self.spa = Spa(self.session)
-        self.pcs = Pcs(self.session)
-        self.hps = Hps(self.session)
-        self.pbd = Pbd(self.session)
-        self.smart_meter = SmartMeter(self.session)
-        self.env_sensor = EnvSensor(self.session)
-        self.groboost = Groboost(self.session)
-        self.wit = Wit(self.session)
-        self.sphs = Sphs(self.session)
-        self.noah = Noah(self.session)
 
     @classmethod
     def using_test_server_v1(cls) -> Self:
@@ -107,6 +88,124 @@ class GrowattApi:
             # test token from official API docs https://www.showdoc.com.cn/2540838290984246/11292912972201443
             token="wa265d2h1og0873ml07142r81564hho6",  # gitleaks:allow
         )
+
+    # ##############################################################################
+    # init specific apis on demand
+    @property
+    def user(self):
+        if self._user is None:
+            self._user = User(self.session)
+        return self._user
+
+    @property
+    def plant(self):
+        if self._plant is None:
+            self._plant = Plant(self.session)
+        return self._plant
+
+    @property
+    def datalogger(self):
+        if self._datalogger is None:
+            self._datalogger = Datalogger(self.session)
+        return self._datalogger
+
+    @property
+    def device(self):
+        if self._device is None:
+            self._device = Device(self.session)
+        return self._device
+
+    @property
+    def inverter(self):
+        if self._inverter is None:
+            self._inverter = Inverter(self.session)
+        return self._inverter
+
+    @property
+    def storage(self):
+        if self._storage is None:
+            self._storage = Storage(self.session)
+        return self._storage
+
+    @property
+    def min(self):
+        if self._min is None:
+            self._min = Min(self.session)
+        return self._min
+
+    @property
+    def max(self):
+        if self._max is None:
+            self._max = Max(self.session)
+        return self._max
+
+    @property
+    def sph(self):
+        if self._sph is None:
+            self._sph = Sph(self.session)
+        return self._sph
+
+    @property
+    def spa(self):
+        if self._spa is None:
+            self._spa = Spa(self.session)
+        return self._spa
+
+    @property
+    def pcs(self):
+        if self._pcs is None:
+            self._pcs = Pcs(self.session)
+        return self._pcs
+
+    @property
+    def hps(self):
+        if self._hps is None:
+            self._hps = Hps(self.session)
+        return self._hps
+
+    @property
+    def pbd(self):
+        if self._pbd is None:
+            self._pbd = Pbd(self.session)
+        return self._pbd
+
+    @property
+    def smart_meter(self):
+        if self._smart_meter is None:
+            self._smart_meter = SmartMeter(self.session)
+        return self._smart_meter
+
+    @property
+    def env_sensor(self):
+        if self._env_sensor is None:
+            self._env_sensor = EnvSensor(self.session)
+        return self._env_sensor
+
+    @property
+    def groboost(self):
+        if self._groboost is None:
+            self._groboost = Groboost(self.session)
+        return self._groboost
+
+    @property
+    def wit(self):
+        if self._wit is None:
+            self._wit = Wit(self.session)
+        return self._wit
+
+    @property
+    def sphs(self):
+        if self._sphs is None:
+            self._sphs = Sphs(self.session)
+        return self._sphs
+
+    @property
+    def noah(self):
+        if self._noah is None:
+            self._noah = Noah(self.session)
+        return self._noah
+
+    # ##############################################################################
 
     def api_for_device(  # noqa: C901 'GrowattApi.api_for_device' is too complex (14)
         self, device_sn: str, device_type: Optional[DeviceType] = None
