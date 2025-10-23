@@ -526,6 +526,10 @@ To the best of our knowledge only the settings functions perform modifications t
 * TODO: generate & publish docs
 
 # Changelog
+* 2025.10.23 (beta)
+  * fix noah/api_v4 `setting_write_time_period()` endpoint
+    * fix swapped battery/load first
+    * add "smart" work mode
 * 2025.10.09 (beta)
   * (internal) init device-specific APIs on demand
 * 2025.10.07 (beta)

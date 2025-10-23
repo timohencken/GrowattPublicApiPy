@@ -2,6 +2,7 @@ from .growatt_types import (  # noqa: F401
     DeviceType,
     GrowattCountry,
     PlantType,
+    WorkMode,
 )
 from .growatt_api import GrowattApi  # noqa: F401
 from .user import User  # noqa: F401
