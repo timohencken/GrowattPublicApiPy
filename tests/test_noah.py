@@ -7,7 +7,7 @@ from unittest.mock import patch
 from growatt_public_api.growatt_api import GrowattApi
 from loguru import logger
 
-from growatt_public_api import GrowattApiSession, Device, Noah
+from growatt_public_api import GrowattApiSession, Device, Noah, WorkMode
 from growatt_public_api.pydantic_models.api_v4 import (
     SettingWriteV4,
     NoahDetailsV4,
@@ -257,7 +257,7 @@ class TestNoah(unittest.TestCase):
                 time_period_nr=1,
                 start_time=time(8, 0),
                 end_time=time(12, 0),
-                load_priority=True,
+                work_mode=WorkMode.LOAD_FIRST,
                 power_watt=800,
                 enabled=False,
             )

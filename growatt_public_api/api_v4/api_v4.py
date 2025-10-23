@@ -2,7 +2,7 @@ import datetime
 import json
 from typing import Optional, Literal, List, Union
 from loguru import logger
-from ..growatt_types import DeviceType
+from ..growatt_types import DeviceType, WorkMode
 from ..pydantic_models.api_v4 import (
     InverterDetailsV4,
     StorageDetailsV4,
@@ -3708,7 +3708,7 @@ class ApiV4:
         time_period_nr: int,
         start_time: datetime.time,
         end_time: datetime.time,
-        load_priority: bool,
+        work_mode: Union[int, WorkMode],
         power_watt: int,
         enabled: bool,
     ) -> SettingWriteV4:
@@ -3731,7 +3731,7 @@ class ApiV4:
             time_period_nr (int): time period number - range 1 ~ 9
             start_time (datetime.time): period start time
             end_time (datetime.time): period end time
-            load_priority (bool): priority setting - True = load priority, False = battery priority
+            work_mode (Union[int, WorkMode]): working mode setting - 0 = battery priority, 1 = load priority, 2 = smart mode
             power_watt (int): output power - range 0 ~ 800 W
             enabled (bool): time period switch - True = on, False = off
 
@@ -3761,12 +3761,10 @@ class ApiV4:
             enable = 0
             log_txt = "Disabling"
         log_txt += f" {device_type} device '{device_sn}' time period {time_period_nr} from {start_time} to {end_time} with {power_watt} W"
-        if load_priority:
-            mode = 1
-            log_txt += " (load priority)"
-        else:
-            mode = 0
-            log_txt += " (battery priority)"
+        # ensure we have a valid WorkMode (if int is supplied)
+        work_mode = WorkMode(work_mode)
+        log_txt += f" ({work_mode.name} mode)"
+        mode = work_mode.value
 
         response = self.session.post(
             endpoint="new-api/setTimeSegment",

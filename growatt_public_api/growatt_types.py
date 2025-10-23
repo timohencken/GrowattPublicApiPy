@@ -358,3 +358,13 @@ class GrowattCountry(Enum):
     YEMEN = "Yemen"
     ZAMBIA = "Zambia"
     ZIMBABWE = "Zimbabwe"
+
+
+class WorkMode(Enum):
+    """
+    to be used for api_v4.setting_write_time_period()
+    """
+
+    LOAD_FIRST = 0
+    BATTERY_FIRST = 1
+    SMART_SELF_CONSUMPTION = 2

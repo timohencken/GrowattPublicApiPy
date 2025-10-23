@@ -3,7 +3,7 @@ from datetime import date, time
 from typing import Union, List, Optional, Literal
 
 from ..api_v4 import ApiV4
-from ..growatt_types import DeviceType
+from ..growatt_types import DeviceType, WorkMode
 from ..pydantic_models.noah import (
     NoahStatus,
     NoahBatteryStatus,
@@ -954,15 +954,17 @@ class Noah:
         time_period_nr: int,
         start_time: time,
         end_time: time,
-        load_priority: bool,
+        work_mode: Union[int, WorkMode],
         power_watt: int,
         enabled: bool,
         device_sn: Optional[str] = None,
     ) -> SettingWriteV4:
         """
-        Set the lower limit of the discharge SOC using "new-api" endpoint
-        Set the lower limit of the discharge SOC of the device based on the device type noah and the SN of the device.
-        https://www.showdoc.com.cn/2540838290984246/11330751643769012
+        Set the time period and mode
+        Set the time period and machine mode of the device based on the device type noah and the SN of the device.
+        The interface returns data only for devices that the secret token has permission to access.
+        Information for devices without permission will not be returned.
+        https://www.showdoc.com.cn/2540838290984246/11330752683972660
 
         Rate limit(s):
         * The maximum frequency is once every 5 seconds.
@@ -972,7 +974,7 @@ class Noah:
             time_period_nr (int): time period number - range 1 ~ 9
             start_time (datetime.time): period start time
             end_time (datetime.time): period end time
-            load_priority (bool): priority setting - True = load priority, False = battery priority
+            work_mode (Union[int, WorkMode]): working mode setting - 0 = battery priority, 1 = load priority, 2 = smart mode
             power_watt (int): output power - range 0 ~ 800 W
             enabled (bool): time period switch - True = on, False = off
 
@@ -990,7 +992,7 @@ class Noah:
             time_period_nr=time_period_nr,
             start_time=start_time,
             end_time=end_time,
-            load_priority=load_priority,
+            work_mode=work_mode,
             power_watt=power_watt,
             enabled=enabled,
         )
