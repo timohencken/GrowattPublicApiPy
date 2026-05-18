@@ -9,6 +9,7 @@ from ..pydantic_models.api_v4 import (
     SettingWriteV4,
     PowerV4,
     WifiStrengthV4,
+    PowerRealtimeV4,
 )
 from ..pydantic_models.inverter import (
     InverterSettingWrite,
@@ -841,6 +842,27 @@ class Inverter:
         """
 
         return self._api_v4.power(device_sn=self._device_sn(device_sn), device_type=DeviceType.INVERTER)
+
+    def power_realtime(
+        self,
+        device_sn: Optional[str] = None,
+    ) -> PowerRealtimeV4:
+        """
+        Query high-frequency data
+        Query high-frequency data of a specific device based on its serial number and device type.
+        https://www.showdoc.com.cn/2540838290984246/11559060626625550
+
+        Info:
+        * For all devices I tried, the endpoint returned only {'code': 0, 'data': None, 'message': 'SUCCESSFUL_OPERATION'}
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            PowerRealtimeV4
+        """
+
+        return self._api_v4.power_realtime(device_sn=self._device_sn(device_sn), device_type=DeviceType.INVERTER)
 
     def energy_multiple(
         self,

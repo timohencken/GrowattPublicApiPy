@@ -17,6 +17,7 @@ from growatt_public_api.pydantic_models.api_v4 import (
     StorageEnergyHistoryMultipleV4,
     SettingWriteV4,
     WifiStrengthV4,
+    PowerRealtimeV4,
 )
 from growatt_public_api.pydantic_models.storage import (
     StorageAlarmsData,
@@ -182,6 +183,20 @@ class TestStorage(unittest.TestCase):
             )
         else:
             self.assertEqual([], raw_data["data"]["storage"], "no data")
+
+    def test_power_realtime(self):
+        with patch(f"{TEST_FILE_V4}.PowerRealtimeV4", wraps=PowerRealtimeV4) as mock_pyd_model:
+            self.api.power_realtime(device_sn=self.device_sn)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        pydantic_keys = {v.alias for k, v in PowerRealtimeV4.model_fields.items()} | set(
+            PowerRealtimeV4.model_fields.keys()
+        )
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+
+        PowerRealtimeV4.model_validate(raw_data)
 
     @skip(
         "We have a STORAGE in v4 test env (sn=KHMOCM5688), but it returns 'error_permission_denied' when using v1 API calls"

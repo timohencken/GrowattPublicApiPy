@@ -173,5 +173,8 @@ cython_debug/
 # Workbooks (local analysis/notes)
 .workbooks/
 
+# Local Copilot instructions (project-local, never commit)
+.github/copilot-instructions.md
+
 # extragit sta
 _not_to_git/

@@ -178,6 +178,7 @@ print(min_details.data.model_dump_json())
 * device power/energy metrics
   * current
     * `inverter.power()` (using new API)
+    * `inverter.power_realtime()` (using new API)
     * `inverter.energy()`
     * `inverter.energy_v4()` (using new API)
     * `inverter.energy_multiple()`
@@ -202,6 +203,7 @@ print(min_details.data.model_dump_json())
   * read alarms/notification `storage.alarms()`
 * device power/energy metrics
   * current
+    * `storage.power_realtime()` (using new API)
     * `storage.energy()`
     * `storage.energy_v4()` (using new API)
   * historical data
@@ -226,6 +228,7 @@ print(min_details.data.model_dump_json())
 * device power/energy metrics
   * current
     * `max.power()` (using new API)
+    * `max.power_realtime()` (using new API)
     * `max.energy()`
     * `max.energy_multiple()`
     * `max.energy_v4()` (using new API)
@@ -251,6 +254,7 @@ print(min_details.data.model_dump_json())
 * device power/energy metrics
   * current
     * `sph.power()` (using new API)
+    * `sph.power_realtime()` (using new API)
     * `sph.energy()`
     * `sph.energy_multiple()`
     * `sph.energy_v4()` (using new API)
@@ -289,6 +293,7 @@ print(min_details.data.model_dump_json())
 * device power/energy metrics
   * current
     * `spa.power()` (using new API)
+    * `spa.power_realtime()` (using new API)
     * `spa.energy()`
     * `spa.energy_multiple()`
     * `spa.energy_v4()` (using new API)
@@ -325,6 +330,7 @@ print(min_details.data.model_dump_json())
 * device power/energy metrics
   * current
     * `min.power()` (using new API)
+    * `min.power_realtime()` (using new API)
     * `min.energy()`
     * `min.energy_v4()` (using new API)
     * `min.energy_multiple()`
@@ -388,6 +394,7 @@ print(min_details.data.model_dump_json())
 * device power/energy metrics
   * current
     * `wit.power()` (using new API)
+    * `wit.power_realtime()` (using new API)
     * `wit.energy_v4()` (using new API)
   * historical data
     * `wit.energy_history_v4()` (using new API)
@@ -413,6 +420,7 @@ print(min_details.data.model_dump_json())
     * `sphs.wifi_strength()` (using new API)
 * device power/energy metrics
   * current
+    * `sphs.power_realtime()` (using new API)
     * `sphs.energy_v4()` (using new API)
   * historical data
     * `sphs.energy_history_v4()` (using new API)
@@ -439,6 +447,7 @@ print(min_details.data.model_dump_json())
     * `noah.status()` (using APP API)
     * `noah.battery_status()` (using APP API)
     * `noah.power()` (using new API)
+    * `noah.power_realtime()` (using new API)
     * `noah.energy_v4()` (using new API)
   * historical data
     * `noah.energy_history_v4()` (using new API)
@@ -525,15 +534,15 @@ To the best of our knowledge only the settings functions perform modifications t
 
 # TODOs
 * TODO: generate & publish docs
-* add new endpoint /new-api/queryDfcData - https://www.showdoc.com.cn/2540838290984246/11559060626625550
 * add new endpoint /new-api/queryDeviceInfoParam - https://www.showdoc.com.cn/2540838290984246/11559060626973442
 
 # Changelog
-* 2026.05.15 (beta)
+* 2026.05.18 (beta)
   * align v4 readPower handling with real API behavior
     * `api_v4.power()` now raises an exception for unsupported types (`storage`, `sph-s`)
   * added missing endpoints from new API docs
-    * `storage.wifi_strength()` (storage)
+    * `wifi_strength()` (storage)
+    * `power_realtime()` (inverter, max, min, noah, spa, sph, sph-s, storage, wit)
 * 2025.10.23 (beta)
   * fix noah/api_v4 `setting_write_time_period()` endpoint
     * fix swapped battery/load first

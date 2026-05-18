@@ -13,6 +13,7 @@ Edit this code or set you own API key as environment variable "GROWATTAPITOKEN" 
 # init API
 SERVER_URL = None  # default
 API_TOKEN = os.environ.get("GROWATTAPITOKEN")
+NEXASN = os.environ.get("NEXASN")
 if API_TOKEN:
     api = GrowattApi(server_url=SERVER_URL, token=API_TOKEN)
 else:
@@ -28,12 +29,18 @@ for device in devices.data.data:
     # get device type
     device_types[device.device_sn] = api.device.get_device_type(device_sn=device.device_sn)
     logger.info(f"* device type: {device_types[device.device_sn].name}, device sn: {device.device_sn}")
-# select first NOAH device
-device = [d for d in devices.data.data if d.device_type == "noah"][0]
+
+# select first NEXA device
+noah_devices = [d for d in devices.data.data if d.device_type == "noah"]
+if NEXASN:
+    noah_devices = [d for d in noah_devices if d.device_sn == NEXASN]
+if not noah_devices:
+    raise RuntimeError("No NOAH device found.")
+device = noah_devices[0]
+my_device_api = api.api_for_device(device_sn=device.device_sn)
 
 # get device details
 logger.info(f"Retrieving details of '{device_types[device.device_sn].name}' device '{device.device_sn}'...")
-my_device_api = api.api_for_device(device_sn=device.device_sn)
 device_details = my_device_api.details_v4().data.devices[0]
 logger.info(
     f"* alias: {device_details.alias}, firmware version: {device_details.fw_version}, model: {device_details.model or device_details.model_name}, default power: {device_details.default_power}W, updated: {device_details.last_update_time_text}"

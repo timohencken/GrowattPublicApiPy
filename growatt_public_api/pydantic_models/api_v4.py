@@ -4718,6 +4718,42 @@ class SettingReadVppV4(NewApiResponse):
 
 
 # #####################################################################################################################
+# Power realtime ######################################################################################################
+
+
+class PowerRealtimeBatteryDataV4(ApiModel):
+    index: Union[EmptyStrToNone, int] = None
+    soc: Union[EmptyStrToNone, int] = None
+    charge_power: Union[EmptyStrToNone, int, float] = None
+    discharge_power: Union[EmptyStrToNone, int, float] = None
+    ibat: Union[EmptyStrToNone, int, float] = None
+    vbat: Union[EmptyStrToNone, int, float] = None
+
+
+class PowerRealtimeDataV4(ApiModel):
+    active_power: Union[EmptyStrToNone, int, float] = None
+    bat_power: Union[EmptyStrToNone, int, float] = None
+    battery_list: List[PowerRealtimeBatteryDataV4] = []
+    battery_status: Union[EmptyStrToNone, int] = None
+    pac: Union[EmptyStrToNone, int, float] = None
+    pay_load_power: Union[EmptyStrToNone, int, float] = None
+    ppv: Union[EmptyStrToNone, int, float] = None
+    priority: Union[EmptyStrToNone, int] = None
+    rever_active_power: Union[EmptyStrToNone, int, float] = None
+    serial_num: Union[EmptyStrToNone, str] = None
+    soc: Union[EmptyStrToNone, int] = None
+    status: Union[EmptyStrToNone, int] = None
+    utc_time: Union[EmptyStrToNone, datetime.datetime] = None
+    vac1: Union[EmptyStrToNone, int, float] = None
+    vac2: Union[EmptyStrToNone, int, float] = None
+    vac3: Union[EmptyStrToNone, int, float] = None
+
+
+class PowerRealtimeV4(NewApiResponse):
+    data: Union[EmptyStrToNone, PowerRealtimeDataV4] = None
+
+
+# #####################################################################################################################
 # Power ###############################################################################################################
 
 
