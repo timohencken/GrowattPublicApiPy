@@ -170,5 +170,8 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+# Workbooks (local analysis/notes)
+.workbooks/
+
 # extragit sta
 _not_to_git/

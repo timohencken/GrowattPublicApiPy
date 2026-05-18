@@ -3301,11 +3301,15 @@ class ApiV4:
         Read the active power percentage of the device based on the device type and SN of the device.
         https://www.showdoc.com.cn/2598832417617967/11558661383247816
 
+        Note:
+        * This API is not applicable to storage (API returns WRONG_DEVICE_TYPE)
+
         Rate limit(s):
         * The retrieval frequency is once every 5 seconds.
 
         Args:
-            device_sn (Optional[str]): Inverter serial number
+            device_sn (str): Device serial number
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list())
 
         Returns:
             PowerV4
@@ -3315,6 +3319,9 @@ class ApiV4:
         """
 
         device_type = self._device_type(device_type=device_type)
+
+        if device_type == DeviceType.STORAGE:
+            raise AttributeError(f"This endpoint is not available for device type {device_type.value}")
 
         response = self.session.post(
             endpoint="new-api/readPower",

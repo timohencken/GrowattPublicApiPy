@@ -524,8 +524,12 @@ To the best of our knowledge only the settings functions perform modifications t
 
 # TODOs
 * TODO: generate & publish docs
+* add new endpoint /new-api/queryDfcData - https://www.showdoc.com.cn/2540838290984246/11559060626625550
+* add new endpoint /new-api/queryDeviceInfoParam - https://www.showdoc.com.cn/2540838290984246/11559060626973442
 
 # Changelog
+* 2026.05.15 (beta)
+  * TBA
 * 2025.10.23 (beta)
   * fix noah/api_v4 `setting_write_time_period()` endpoint
     * fix swapped battery/load first
