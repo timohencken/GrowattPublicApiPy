@@ -8,6 +8,7 @@ from ..pydantic_models.api_v4 import (
     StorageEnergyHistoryV4,
     StorageEnergyHistoryMultipleV4,
     SettingWriteV4,
+    WifiStrengthV4,
 )
 from ..pydantic_models.storage import (
     StorageSettingRead,
@@ -1326,3 +1327,30 @@ class Storage:
             response_parsed.error_msg += " (or type != 2 - check with plant.list_devices())"
 
         return response_parsed
+
+    def wifi_strength(
+        self,
+        device_sn: str,
+    ) -> WifiStrengthV4:
+        """
+        Get the collector signal value
+        Get the network signal value of the collector through the SN of the device
+        https://www.showdoc.com.cn/2598832417617967/11558704404033100
+
+        Rate limit(s):
+        * The retrieval frequency is once every 5 seconds.
+
+        Args:
+            device_sn (str): Storage serial number
+
+        Returns:
+            WifiStrengthV4
+            {   'data': -46,
+                'error_code': 0,
+                'error_msg': 'success'}
+        """
+
+        return self._api_v4.wifi_strength(
+            device_sn=self._device_sn(device_sn),
+            device_type=DeviceType.STORAGE,
+        )

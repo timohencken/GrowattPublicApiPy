@@ -198,6 +198,7 @@ print(min_details.data.model_dump_json())
   * read device data
     * `storage.details()`
     * `storage.details_v4()` (using new API)
+    * `storage.wifi_strength()` (using new API)
   * read alarms/notification `storage.alarms()`
 * device power/energy metrics
   * current
@@ -529,7 +530,10 @@ To the best of our knowledge only the settings functions perform modifications t
 
 # Changelog
 * 2026.05.15 (beta)
-  * TBA
+  * align v4 readPower handling with real API behavior
+    * `api_v4.power()` now raises an exception for unsupported types (`storage`, `sph-s`)
+  * added missing endpoints from new API docs
+    * `storage.wifi_strength()` (storage)
 * 2025.10.23 (beta)
   * fix noah/api_v4 `setting_write_time_period()` endpoint
     * fix swapped battery/load first
