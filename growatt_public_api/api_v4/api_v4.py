@@ -3302,7 +3302,7 @@ class ApiV4:
         https://www.showdoc.com.cn/2598832417617967/11558661383247816
 
         Note:
-        * This API is not applicable to storage (API returns WRONG_DEVICE_TYPE)
+        * This API is not applicable to storage and sph-s (API returns WRONG_DEVICE_TYPE)
 
         Rate limit(s):
         * The retrieval frequency is once every 5 seconds.
@@ -3320,7 +3320,7 @@ class ApiV4:
 
         device_type = self._device_type(device_type=device_type)
 
-        if device_type == DeviceType.STORAGE:
+        if device_type in [DeviceType.STORAGE, DeviceType.SPHS]:
             raise AttributeError(f"This endpoint is not available for device type {device_type.value}")
 
         response = self.session.post(
