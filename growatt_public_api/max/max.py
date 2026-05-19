@@ -11,6 +11,7 @@ from ..pydantic_models.api_v4 import (
     PowerV4,
     WifiStrengthV4,
     PowerRealtimeV4,
+    DeviceInfoV4,
 )
 from ..pydantic_models.max import (
     MaxSettingRead,
@@ -1049,6 +1050,41 @@ class Max:
         """
 
         return self._api_v4.power_realtime(device_sn=self._device_sn(device_sn), device_type=DeviceType.MAX)
+
+    def device_info(
+        self,
+        device_sn: Optional[str] = None,
+    ) -> DeviceInfoV4:
+        """
+        Query partial additional device information
+        Query partial additional device information based on its serial number and device type.
+        https://www.showdoc.com.cn/2540838290984246/11559060626973442
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            DeviceInfoV4
+
+        Example:
+            {
+                'data': {
+                    'device_sn': 'QXHLD7F0C9',
+                    'device_type': 'max',
+                    'device_model': 'MOD 10KTL3-X',
+                    'datalogger_model': 'ShineGPRS-X2',
+                    'battery_model': None,
+                    'nominal_power': 10000,
+                    'battery_capacity': 0.0,
+                    'battery_nominal_power': 0.0,
+                    'has_battery': False
+                },
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'
+            }
+        """
+
+        return self._api_v4.device_info(device_sn=self._device_sn(device_sn), device_type=DeviceType.MAX)
 
     def energy_multiple(
         self,

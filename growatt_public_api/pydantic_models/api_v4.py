@@ -4754,6 +4754,39 @@ class PowerRealtimeV4(NewApiResponse):
 
 
 # #####################################################################################################################
+# Additional device info ################################################################################################
+
+
+def _device_info_data_v4_to_camel(snake: str) -> str:
+    override = {
+        "nominal_power": "norminalPower",
+    }
+    return override.get(snake, to_camel(snake=snake))
+
+
+class DeviceInfoDataV4(ApiModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        populate_by_name=True,
+        alias_generator=_device_info_data_v4_to_camel,
+    )
+
+    device_sn: Union[EmptyStrToNone, str] = None
+    device_type: Union[EmptyStrToNone, str] = None
+    device_model: Union[EmptyStrToNone, str] = None
+    datalogger_model: Union[EmptyStrToNone, str] = None
+    battery_model: Union[EmptyStrToNone, str] = None
+    nominal_power: Union[EmptyStrToNone, int, float] = None
+    battery_capacity: Union[EmptyStrToNone, int, float] = None
+    battery_nominal_power: Union[EmptyStrToNone, int, float] = None
+    has_battery: Union[EmptyStrToNone, bool] = None
+
+
+class DeviceInfoV4(NewApiResponse):
+    data: Union[EmptyStrToNone, DeviceInfoDataV4] = None
+
+
+# #####################################################################################################################
 # Power ###############################################################################################################
 
 

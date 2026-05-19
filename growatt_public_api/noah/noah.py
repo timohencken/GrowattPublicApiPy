@@ -21,6 +21,7 @@ from ..pydantic_models.api_v4 import (
     PowerV4,
     WifiStrengthV4,
     PowerRealtimeV4,
+    DeviceInfoV4,
 )
 from ..session.growatt_api_session import GrowattApiSession  # noqa: E402
 from ..device import Device
@@ -808,6 +809,60 @@ class Noah:
         """
 
         return self._api_v4.power_realtime(device_sn=self._device_sn(device_sn), device_type=DeviceType.NOAH)
+
+    def device_info(
+        self,
+        device_sn: Optional[str] = None,
+    ) -> DeviceInfoV4:
+        """
+        Query partial additional device information
+        Query partial additional device information based on its serial number and device type.
+        https://www.showdoc.com.cn/2540838290984246/11559060626973442
+
+        Info:
+            I tried Nexa and Noah - both do not report a battery (although they have one/multiple attached)
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            DeviceInfoV4
+
+        Examples:
+            {
+                'data': {
+                    'device_sn': 'NEXA123',
+                    'device_type': 'noah',
+                    'device_model': 'NEXA 2000',
+                    'datalogger_model': 'NEXA 2000',
+                    'battery_model': None,
+                    'nominal_power': 800,
+                    'battery_capacity': 0.0,
+                    'battery_nominal_power': 0.0,
+                    'has_battery': False
+                },
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'
+            }
+
+            {
+                'data': {
+                    'device_sn': 'NOAH123',
+                    'device_type': 'noah',
+                    'device_model': 'NOAH 2000 ',
+                    'datalogger_model': 'NOAH 2000 ',
+                    'battery_model': None,
+                    'nominal_power': 800,
+                    'battery_capacity': 0.0,
+                    'battery_nominal_power': 0.0,
+                    'has_battery': False
+                },
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'
+            }
+        """
+
+        return self._api_v4.device_info(device_sn=self._device_sn(device_sn), device_type=DeviceType.NOAH)
 
     def energy_history_v4(
         self,

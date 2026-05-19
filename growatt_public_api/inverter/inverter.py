@@ -10,6 +10,7 @@ from ..pydantic_models.api_v4 import (
     PowerV4,
     WifiStrengthV4,
     PowerRealtimeV4,
+    DeviceInfoV4,
 )
 from ..pydantic_models.inverter import (
     InverterSettingWrite,
@@ -863,6 +864,41 @@ class Inverter:
         """
 
         return self._api_v4.power_realtime(device_sn=self._device_sn(device_sn), device_type=DeviceType.INVERTER)
+
+    def device_info(
+        self,
+        device_sn: Optional[str] = None,
+    ) -> DeviceInfoV4:
+        """
+        Query partial additional device information
+        Query partial additional device information based on its serial number and device type.
+        https://www.showdoc.com.cn/2540838290984246/11559060626973442
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            DeviceInfoV4
+
+        Example:
+            {
+                'data': {
+                    'device_sn': 'NHB691514F',
+                    'device_type': 'inv',
+                    'device_model': 'Growatt 25000 UE',
+                    'datalogger_model': 'Shine4G-S2',
+                    'battery_model': None,
+                    'nominal_power': 25000,
+                    'battery_capacity': 0.0,
+                    'battery_nominal_power': 0.0,
+                    'has_battery': False
+                },
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'
+            }
+        """
+
+        return self._api_v4.device_info(device_sn=self._device_sn(device_sn), device_type=DeviceType.INVERTER)
 
     def energy_multiple(
         self,

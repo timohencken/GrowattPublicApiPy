@@ -173,6 +173,7 @@ print(min_details.data.model_dump_json())
   * read device data
     * `inverter.details()`
     * `inverter.details_v4()` (using new API)
+    * `inverter.device_info()` (using new API)
     * `inverter.wifi_strength()` (using new API)
   * read alarms/notification `inverter.alarms()`
 * device power/energy metrics
@@ -199,6 +200,7 @@ print(min_details.data.model_dump_json())
   * read device data
     * `storage.details()`
     * `storage.details_v4()` (using new API)
+    * `storage.device_info()` (using new API)
     * `storage.wifi_strength()` (using new API)
   * read alarms/notification `storage.alarms()`
 * device power/energy metrics
@@ -223,6 +225,7 @@ print(min_details.data.model_dump_json())
   * read device data
     * `max.details()`
     * `max.details_v4()` (using new API)
+    * `max.device_info()` (using new API)
     * `max.wifi_strength()` (using new API)
   * read alarms/notification `max.alarms()`
 * device power/energy metrics
@@ -249,6 +252,7 @@ print(min_details.data.model_dump_json())
   * read device data
     * `sph.details()`
     * `sph.details_v4()` (using new API)
+    * `sph.device_info()` (using new API)
     * `sph.wifi_strength()` (using new API)
   * read alarms/notification `sph.alarms()`
 * device power/energy metrics
@@ -288,6 +292,7 @@ print(min_details.data.model_dump_json())
   * read device data
     * `spa.details()`
     * `spa.details_v4()` (using new API)
+    * `spa.device_info()` (using new API)
     * `spa.wifi_strength()` (using new API)
   * read alarms/notification `spa.alarms()`
 * device power/energy metrics
@@ -325,6 +330,7 @@ print(min_details.data.model_dump_json())
   * read device data
     * `min.details()`
     * `min.details_v4()` (using new API)
+    * `min.device_info()` (using new API)
     * `min.wifi_strength()` (using new API)
   * read alarms/notification `min.alarms()`
 * device power/energy metrics
@@ -390,6 +396,7 @@ print(min_details.data.model_dump_json())
 * general device data
   * read device data
     * `wit.details_v4()` (using new API)
+    * `wit.device_info()` (using new API)
     * `wit.wifi_strength()` (using new API)
 * device power/energy metrics
   * current
@@ -417,6 +424,7 @@ print(min_details.data.model_dump_json())
 * general device data
   * read device data
     * `sphs.details_v4()` (using new API)
+    * `sphs.device_info()` (using new API)
     * `sphs.wifi_strength()` (using new API)
 * device power/energy metrics
   * current
@@ -441,6 +449,7 @@ print(min_details.data.model_dump_json())
 * general device data
   * read device data
     * `noah.details_v4()` (using new API)
+    * `noah.device_info()` (using new API)
     * `noah.wifi_strength()` (using new API)
 * device power/energy metrics
   * current
@@ -534,7 +543,6 @@ To the best of our knowledge only the settings functions perform modifications t
 
 # TODOs
 * TODO: generate & publish docs
-* add new endpoint /new-api/queryDeviceInfoParam - https://www.showdoc.com.cn/2540838290984246/11559060626973442
 
 # Changelog
 * 2026.05.18 (beta)
@@ -543,6 +551,7 @@ To the best of our knowledge only the settings functions perform modifications t
   * added missing endpoints from new API docs
     * `wifi_strength()` (storage)
     * `power_realtime()` (inverter, max, min, noah, spa, sph, sph-s, storage, wit)
+    * `device_info()` (inverter, max, min, noah, spa, sph, sph-s, storage, wit)
 * 2025.10.23 (beta)
   * fix noah/api_v4 `setting_write_time_period()` endpoint
     * fix swapped battery/load first

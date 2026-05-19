@@ -21,6 +21,7 @@ from growatt_public_api.pydantic_models.api_v4 import (
     PowerV4,
     WifiStrengthV4,
     PowerRealtimeV4,
+    DeviceInfoV4,
 )
 from growatt_public_api.pydantic_models.min import (
     MinDetailData,
@@ -245,6 +246,23 @@ class TestMin(unittest.TestCase):
 
         # check pydantic conversion works for documented payload variations
         PowerRealtimeV4.model_validate(raw_data)
+
+    def test_device_info(self):
+        if self.device_sn_real is None:
+            self.skipTest(
+                "No real MIN device available, no MIN device on test server v4, endpoint not supported on test server v1"
+            )
+
+        with patch(f"{TEST_FILE_V4}.DeviceInfoV4", wraps=DeviceInfoV4) as mock_pyd_model:
+            self.api_real.device_info(device_sn=self.device_sn_real)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        pydantic_keys = {v.alias for k, v in DeviceInfoV4.model_fields.items()} | set(DeviceInfoV4.model_fields.keys())
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+
+        DeviceInfoV4.model_validate(raw_data)
 
     def test_energy_history(self):
         # get date with data

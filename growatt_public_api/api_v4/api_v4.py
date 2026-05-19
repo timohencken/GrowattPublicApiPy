@@ -45,6 +45,7 @@ from ..pydantic_models.api_v4 import (
     PowerV4,
     WifiStrengthV4,
     PowerRealtimeV4,
+    DeviceInfoV4,
 )
 from ..session.growatt_api_session import GrowattApiSession
 
@@ -3364,6 +3365,51 @@ class ApiV4:
         )
 
         return PowerRealtimeV4.model_validate(response)
+
+    def device_info(
+        self,
+        device_sn: str,
+        device_type: Union[DeviceType, DeviceTypeStr],
+    ) -> DeviceInfoV4:
+        """
+        Query partial additional device information
+        Query partial additional device information based on its serial number and device type.
+        https://www.showdoc.com.cn/2540838290984246/11559060626973442
+
+        Args:
+            device_sn (str): Device serial number
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list())
+
+        Returns:
+            DeviceInfoV4
+
+        Example:
+            {
+                "code": 0,
+                "data": {
+                  "device_sn": "SPA0B2300X",          # Device serial number
+                  "device_type": "min",               # Device type
+                  "device_model": "XXX",              # Device model
+                  "datalogger_model": "ShineWiFi-X",  # Datalogger model
+                  "battery_model": "XXXX",            # Battery model
+                  "nominal_power": 6000,              # Device nominal power (W)
+                  "battery_capacity": 6.5,            # Battery nominal capacity (kWh)
+                  "battery_nominal_power": 3000.0,     # Battery nominal power (W)
+                  "has_battery": true                 # Whether the device has a battery
+            }
+        """
+
+        device_type = self._device_type(device_type=device_type)
+
+        response = self.session.post(
+            endpoint="new-api/queryDeviceInfoParam",
+            params={
+                "deviceSn": device_sn,
+                "deviceType": device_type.value,
+            },
+        )
+
+        return DeviceInfoV4.model_validate(response)
 
     def power(  # noqa: C901 'ApiV4.power' is too complex (11)
         self,
