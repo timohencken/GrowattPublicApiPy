@@ -545,7 +545,7 @@ To the best of our knowledge only the settings functions perform modifications t
 * TODO: generate & publish docs
 
 # Changelog
-* 2026.05.18 (beta)
+* 2026.05.19 (beta)
   * align v4 readPower handling with real API behavior
     * `api_v4.power()` now raises an exception for unsupported types (`storage`, `sph-s`)
   * added missing endpoints from new API docs
