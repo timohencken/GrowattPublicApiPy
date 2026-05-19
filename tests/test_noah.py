@@ -21,6 +21,8 @@ from growatt_public_api.pydantic_models.api_v4 import (
     NoahEnergyHistoryMultipleV4,
     PowerV4,
     WifiStrengthV4,
+    PowerRealtimeV4,
+    DeviceInfoV4,
 )
 from growatt_public_api.pydantic_models.noah import (
     NoahStatus,
@@ -147,6 +149,38 @@ class TestNoah(unittest.TestCase):
         self.assertTrue(
             (raw_data["data"] is None) or (isinstance(raw_data["data"], int)) or (isinstance(raw_data["data"], float))
         )
+
+    def test_power_realtime(self):
+        if not self.device_sn:
+            self.skipTest("no NOAH device available")
+
+        with patch(f"{TEST_FILE_V4}.PowerRealtimeV4", wraps=PowerRealtimeV4) as mock_pyd_model:
+            self.api.power_realtime(device_sn=self.device_sn)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        pydantic_keys = {v.alias for k, v in PowerRealtimeV4.model_fields.items()} | set(
+            PowerRealtimeV4.model_fields.keys()
+        )
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+
+        PowerRealtimeV4.model_validate(raw_data)
+
+    def test_device_info(self):
+        if not self.device_sn:
+            self.skipTest("no NOAH device available")
+
+        with patch(f"{TEST_FILE_V4}.DeviceInfoV4", wraps=DeviceInfoV4) as mock_pyd_model:
+            self.api.device_info(device_sn=self.device_sn)
+
+        raw_data = mock_pyd_model.model_validate.call_args.args[0]
+
+        pydantic_keys = {v.alias for k, v in DeviceInfoV4.model_fields.items()} | set(DeviceInfoV4.model_fields.keys())
+        for param in set(raw_data.keys()):
+            self.assertIn(param, pydantic_keys)
+
+        DeviceInfoV4.model_validate(raw_data)
 
     def test_energy_history_v4(self):
         if self.device_sn is None:

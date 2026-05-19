@@ -9,6 +9,8 @@ from ..pydantic_models.api_v4 import (
     SphsDetailsV4,
     SphsEnergyV4,
     WifiStrengthV4,
+    PowerRealtimeV4,
+    DeviceInfoV4,
 )
 from ..session import GrowattApiSession
 
@@ -467,3 +469,59 @@ class Sphs:
             device_sn=self._device_sn(device_sn),
             device_type=DeviceType.SPHS,
         )
+
+    def power_realtime(
+        self,
+        device_sn: Optional[str] = None,
+    ) -> PowerRealtimeV4:
+        """
+        Query high-frequency data
+        Query high-frequency data of a specific device based on its serial number and device type.
+        https://www.showdoc.com.cn/2540838290984246/11559060626625550
+
+        Info:
+        * For all devices I tried, the endpoint returned only {'code': 0, 'data': None, 'message': 'SUCCESSFUL_OPERATION'}
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            PowerRealtimeV4
+        """
+
+        return self._api_v4.power_realtime(device_sn=self._device_sn(device_sn), device_type=DeviceType.SPHS)
+
+    def device_info(
+        self,
+        device_sn: Optional[str] = None,
+    ) -> DeviceInfoV4:
+        """
+        Query partial additional device information
+        Query partial additional device information based on its serial number and device type.
+        https://www.showdoc.com.cn/2540838290984246/11559060626973442
+
+        Args:
+            device_sn (Optional[str]): Inverter serial number
+
+        Returns:
+            DeviceInfoV4
+
+        Example:
+            {
+                'data': {
+                    'device_sn': 'EFP0N1J023',
+                    'device_type': 'sph-s',
+                    'device_model': 'S10000H-48',
+                    'datalogger_model': None,
+                    'battery_model': None,
+                    'nominal_power': 15000,
+                    'battery_capacity': 0.0,
+                    'battery_nominal_power': 0.0,
+                    'has_battery': False
+                },
+                'error_code': 0,
+                'error_msg': 'SUCCESSFUL_OPERATION'
+            }
+        """
+
+        return self._api_v4.device_info(device_sn=self._device_sn(device_sn), device_type=DeviceType.SPHS)

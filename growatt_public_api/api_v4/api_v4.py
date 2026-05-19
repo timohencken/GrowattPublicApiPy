@@ -44,6 +44,8 @@ from ..pydantic_models.api_v4 import (
     SettingReadVppV4,
     PowerV4,
     WifiStrengthV4,
+    PowerRealtimeV4,
+    DeviceInfoV4,
 )
 from ..session.growatt_api_session import GrowattApiSession
 
@@ -3291,6 +3293,124 @@ class ApiV4:
         else:
             raise ValueError(f"Unknown device type: {device_type}")
 
+    def power_realtime(
+        self,
+        device_sn: str,
+        device_type: Union[DeviceType, DeviceTypeStr],
+    ) -> PowerRealtimeV4:
+        """
+        Query high-frequency data
+        Query high-frequency data of a specific device based on its serial number and device type.
+        https://www.showdoc.com.cn/2540838290984246/11559060626625550
+
+        Info:
+        * For all devices I tried, the endpoint returned only {'code': 0, 'data': None, 'message': 'SUCCESSFUL_OPERATION'}
+
+        Args:
+            device_sn (str): Device serial number
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list())
+
+        Returns:
+            PowerRealtimeV4
+
+        Example:
+            {
+                "code": 0,                                  # API status code, 0 indicates success
+                "data": {
+                    "activePower": 0.00,                    # Grid import power (positive value), unit: W
+                    "batPower": -4816.00,                   # Total battery charge/discharge power (positive = charging, negative = discharging, 0 = idle), unit: W
+                    "batteryList": [
+                        {
+                            "chargePower": 0.00,            # Battery charging power, unit: W
+                            "dischargePower": 2511.00,      # Battery discharging power, unit: W
+                            "ibat": -6.40,                  # Battery current (low-voltage side), unit: A
+                            "index": 1,                     # Battery index (starting from 1)
+                            "soc": 100,                     # Battery State of Charge (percentage)
+                            "vbat": 376.50                  # Battery voltage (low-voltage side), unit: V
+                        },
+                        {
+                            "chargePower": 0.00,
+                            "dischargePower": 2305.00,
+                            "ibat": -6.10,
+                            "index": 2,
+                            "soc": 100,
+                            "vbat": 375.80
+                        }
+                    ],
+                    "batteryStatus": 3,                     # Overall battery status
+                    "pac": 4562.80,                         # AC output power, unit: W
+                    "payLoadPower": 365.90,                 # Total load power (calculated value), unit: W
+                    "ppv": 0.00,                            # PV generation power, unit: W
+                    "priority": 2,                          # Operating priority
+                    "reverActivePower": 4450.10,            # Feed-in power, unit: W
+                    "serialNum": "DLP0DA7888",              # Device serial number
+                    "soc": 100,                             # Average battery SOC
+                    "status": 6,                            # Device operating status code
+                    "utcTime": "2026-02-25 00:10:01",       # Timestamp in UTC (offset +00:00), formatted as yyyy-MM-dd HH:mm:ss
+                    "vac1": 234.64,                         # Phase voltage 1
+                    "vac2": 235.04,                         # Phase voltage 2
+                    "vac3": 234.17                          # Phase voltage 3
+                }
+            }
+        """
+
+        device_type = self._device_type(device_type=device_type)
+
+        response = self.session.post(
+            endpoint="new-api/queryDfcData",
+            params={
+                "deviceSn": device_sn,
+                "deviceType": device_type.value,
+            },
+        )
+
+        return PowerRealtimeV4.model_validate(response)
+
+    def device_info(
+        self,
+        device_sn: str,
+        device_type: Union[DeviceType, DeviceTypeStr],
+    ) -> DeviceInfoV4:
+        """
+        Query partial additional device information
+        Query partial additional device information based on its serial number and device type.
+        https://www.showdoc.com.cn/2540838290984246/11559060626973442
+
+        Args:
+            device_sn (str): Device serial number
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list())
+
+        Returns:
+            DeviceInfoV4
+
+        Example:
+            {
+                "code": 0,
+                "data": {
+                  "device_sn": "SPA0B2300X",          # Device serial number
+                  "device_type": "min",               # Device type
+                  "device_model": "XXX",              # Device model
+                  "datalogger_model": "ShineWiFi-X",  # Datalogger model
+                  "battery_model": "XXXX",            # Battery model
+                  "nominal_power": 6000,              # Device nominal power (W)
+                  "battery_capacity": 6.5,            # Battery nominal capacity (kWh)
+                  "battery_nominal_power": 3000.0,     # Battery nominal power (W)
+                  "has_battery": true                 # Whether the device has a battery
+            }
+        """
+
+        device_type = self._device_type(device_type=device_type)
+
+        response = self.session.post(
+            endpoint="new-api/queryDeviceInfoParam",
+            params={
+                "deviceSn": device_sn,
+                "deviceType": device_type.value,
+            },
+        )
+
+        return DeviceInfoV4.model_validate(response)
+
     def power(  # noqa: C901 'ApiV4.power' is too complex (11)
         self,
         device_sn: str,
@@ -3301,11 +3421,15 @@ class ApiV4:
         Read the active power percentage of the device based on the device type and SN of the device.
         https://www.showdoc.com.cn/2598832417617967/11558661383247816
 
+        Note:
+        * This API is not applicable to storage and sph-s (API returns WRONG_DEVICE_TYPE)
+
         Rate limit(s):
         * The retrieval frequency is once every 5 seconds.
 
         Args:
-            device_sn (Optional[str]): Inverter serial number
+            device_sn (str): Device serial number
+            device_type (Union[DeviceType, DeviceTypeStr]): Device type (as returned by list())
 
         Returns:
             PowerV4
@@ -3315,6 +3439,9 @@ class ApiV4:
         """
 
         device_type = self._device_type(device_type=device_type)
+
+        if device_type in [DeviceType.STORAGE, DeviceType.SPHS]:
+            raise AttributeError(f"This endpoint is not available for device type {device_type.value}")
 
         response = self.session.post(
             endpoint="new-api/readPower",
