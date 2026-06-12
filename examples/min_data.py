@@ -90,7 +90,7 @@ logger.info(
     f"* PV power:    {energy.ppv:5.1f} W ({energy.ppv1:5.1f} + {energy.ppv2:5.1f} + {energy.ppv3:5.1f} + {energy.ppv4:5.1f})"
 )
 logger.info(f"* PV voltage:  {energy.vpv1:5.1f} V / {energy.vpv2:5.1f} V / {energy.vpv3:5.1f} V / {energy.vpv4:5.1f} V")
-logger.info(f"* PV current:  {energy.vpv1:5.1f} A / {energy.vpv2:5.1f} A / {energy.vpv3:5.1f} A / {energy.vpv4:5.1f} A")
+logger.info(f"* PV current:  {energy.ipv1:5.1f} A / {energy.ipv2:5.1f} A / {energy.ipv3:5.1f} A / {energy.ipv4:5.1f} A")
 logger.info(
     f"* Temperature: {energy.temp1:4.1f} °C / {energy.temp2:4.1f} °C / {energy.temp3:4.1f} °C / {energy.temp4:4.1f} °C / {energy.temp5:4.1f} °C"
 )
